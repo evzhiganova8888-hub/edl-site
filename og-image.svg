@@ -1,0 +1,49 @@
+<svg viewBox="0 0 1200 630" width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#1A1B2E"/>
+
+  <!-- Subtle grid texture (very faint) -->
+  <g opacity="0.04" stroke="#F5F5F0" stroke-width="0.5">
+    <line x1="0" y1="105" x2="1200" y2="105"/>
+    <line x1="0" y1="210" x2="1200" y2="210"/>
+    <line x1="0" y1="315" x2="1200" y2="315"/>
+    <line x1="0" y1="420" x2="1200" y2="420"/>
+    <line x1="0" y1="525" x2="1200" y2="525"/>
+  </g>
+
+  <!-- EDL wordmark top-left -->
+  <text x="80" y="120"
+        font-family="Inter, -apple-system, system-ui, sans-serif"
+        font-size="40" font-weight="600" letter-spacing="-0.03em"
+        fill="#F5F5F0">EDL</text>
+
+  <!-- Lime accent line -->
+  <line x1="80" y1="150" x2="180" y2="150"
+        stroke="#C8FF00" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Headline (3 lines) -->
+  <text x="80" y="290"
+        font-family="Inter, -apple-system, system-ui, sans-serif"
+        font-size="76" font-weight="600" letter-spacing="-0.03em"
+        fill="#F5F5F0">Бизнес, которым</text>
+  <text x="80" y="380"
+        font-family="Inter, -apple-system, system-ui, sans-serif"
+        font-size="76" font-weight="600" letter-spacing="-0.03em"
+        fill="#F5F5F0">можно управлять</text>
+  <text x="80" y="470"
+        font-family="Inter, -apple-system, system-ui, sans-serif"
+        font-size="76" font-weight="600" letter-spacing="-0.03em">
+    <tspan fill="#F5F5F0">с </tspan><tspan fill="#C8FF00">телефона</tspan>
+  </text>
+
+  <!-- URL bottom-right -->
+  <text x="1120" y="565" text-anchor="end"
+        font-family="Inter, -apple-system, system-ui, sans-serif"
+        font-size="22" font-weight="400" letter-spacing="-0.01em"
+        fill="#888893">elephantdreams.ru</text>
+
+  <!-- Tag bottom-left -->
+  <text x="80" y="565"
+        font-family="Inter, -apple-system, system-ui, sans-serif"
+        font-size="20" font-weight="500" letter-spacing="0.05em"
+        fill="#888893">ОПЕРАЦИОННАЯ СИСТЕМА БИЗНЕСА</text>
+</svg>

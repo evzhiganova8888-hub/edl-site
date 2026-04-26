@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 640" fill="none" role="img" aria-label="Утренняя сводка EDL в Telegram">
+  <defs>
+    <linearGradient id="phoneGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="oklch(0.18 0.025 250)"/>
+      <stop offset="1" stop-color="oklch(0.13 0.03 255)"/>
+    </linearGradient>
+    <linearGradient id="screenGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="oklch(0.10 0.02 255)"/>
+      <stop offset="1" stop-color="oklch(0.08 0.025 255)"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+  </defs>
+
+  <!-- Phone frame -->
+  <rect x="20" y="20" width="440" height="600" rx="44" fill="url(#phoneGradient)" stroke="oklch(0.25 0.022 250)" stroke-width="1"/>
+  <rect x="28" y="28" width="424" height="584" rx="38" fill="url(#screenGradient)"/>
+
+  <!-- Notch -->
+  <rect x="200" y="36" width="80" height="22" rx="11" fill="oklch(0.06 0.025 255)"/>
+
+  <!-- Status bar -->
+  <text x="56" y="78" font-family="Geist, system-ui" font-size="13" font-weight="600" fill="oklch(0.96 0.005 250)">8:30</text>
+  <g transform="translate(380, 68)">
+    <!-- Signal -->
+    <rect x="0" y="6" width="3" height="4" rx="0.5" fill="oklch(0.96 0.005 250)"/>
+    <rect x="5" y="4" width="3" height="6" rx="0.5" fill="oklch(0.96 0.005 250)"/>
+    <rect x="10" y="2" width="3" height="8" rx="0.5" fill="oklch(0.96 0.005 250)"/>
+    <rect x="15" y="0" width="3" height="10" rx="0.5" fill="oklch(0.96 0.005 250)"/>
+    <!-- Wifi -->
+    <path d="M 28 7 Q 33 2, 38 7 M 30 9 Q 33 6, 36 9" stroke="oklch(0.96 0.005 250)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <!-- Battery -->
+    <rect x="46" y="2" width="22" height="10" rx="2" stroke="oklch(0.96 0.005 250)" stroke-width="1" fill="none"/>
+    <rect x="48" y="4" width="16" height="6" rx="1" fill="oklch(0.92 0.22 122)"/>
+    <rect x="69" y="5" width="2" height="4" rx="0.5" fill="oklch(0.96 0.005 250)"/>
+  </g>
+
+  <!-- Telegram chat header -->
+  <rect x="36" y="100" width="408" height="56" fill="oklch(0.13 0.03 255)"/>
+  <line x1="36" y1="156" x2="444" y2="156" stroke="oklch(0.25 0.022 250)" stroke-width="0.5"/>
+
+  <!-- Back arrow -->
+  <path d="M 56 128 L 50 122 M 56 128 L 50 134 M 50 128 L 64 128" stroke="oklch(0.96 0.005 250)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+
+  <!-- Bot avatar -->
+  <circle cx="84" cy="128" r="14" fill="oklch(0.13 0.03 255)" stroke="oklch(0.96 0.005 250)" stroke-width="1"/>
+  <path d="M 76 134 C 76 124, 92 124, 92 134" stroke="oklch(0.92 0.22 122)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+  <circle cx="84" cy="128" r="10" stroke="oklch(0.96 0.005 250 / 0.3)" stroke-width="0.5" fill="none"/>
+
+  <!-- Bot name -->
+  <text x="108" y="124" font-family="Geist, system-ui" font-size="14" font-weight="600" fill="oklch(0.96 0.005 250)">EDL Operations</text>
+  <text x="108" y="139" font-family="Geist, system-ui" font-size="11" fill="oklch(0.55 0.015 250)">в сети</text>
+
+  <!-- Time stamp center -->
+  <text x="240" y="180" font-family="Geist, system-ui" font-size="11" font-weight="500" fill="oklch(0.55 0.015 250)" text-anchor="middle">сегодня · 8:30</text>
+
+  <!-- Message bubble 1: morning summary header -->
+  <rect x="50" y="200" width="320" height="56" rx="14" fill="oklch(0.16 0.025 252)"/>
+  <text x="66" y="222" font-family="Geist, system-ui" font-size="12" font-weight="600" fill="oklch(0.92 0.22 122)" letter-spacing="0.06em">УТРЕННЯЯ СВОДКА · 27 АПР</text>
+  <text x="66" y="244" font-family="Geist, system-ui" font-size="13" fill="oklch(0.96 0.005 250)">Доброе утро. Вот пульс месяца:</text>
+
+  <!-- Message bubble 2: stats -->
+  <rect x="50" y="266" width="340" height="120" rx="14" fill="oklch(0.16 0.025 252)"/>
+
+  <!-- Stat row 1 -->
+  <text x="66" y="290" font-family="Geist Mono, monospace" font-size="11" fill="oklch(0.55 0.015 250)" letter-spacing="0.04em">ВЫРУЧКА</text>
+  <text x="370" y="290" font-family="Geist, system-ui" font-size="13" font-weight="600" fill="oklch(0.96 0.005 250)" text-anchor="end">485 000 ₽</text>
+  <rect x="66" y="296" width="304" height="2" rx="1" fill="oklch(0.20 0.025 252)"/>
+  <rect x="66" y="296" width="194" height="2" rx="1" fill="oklch(0.92 0.22 122)"/>
+
+  <!-- Stat row 2 -->
+  <text x="66" y="324" font-family="Geist Mono, monospace" font-size="11" fill="oklch(0.55 0.015 250)" letter-spacing="0.04em">ЛИДОВ В РАБОТЕ</text>
+  <text x="370" y="324" font-family="Geist, system-ui" font-size="13" font-weight="600" fill="oklch(0.96 0.005 250)" text-anchor="end">12</text>
+  <rect x="66" y="330" width="304" height="2" rx="1" fill="oklch(0.20 0.025 252)"/>
+  <rect x="66" y="330" width="240" height="2" rx="1" fill="oklch(0.96 0.005 250)"/>
+
+  <!-- Stat row 3 -->
+  <text x="66" y="358" font-family="Geist Mono, monospace" font-size="11" fill="oklch(0.55 0.015 250)" letter-spacing="0.04em">КОНВЕРСИЯ</text>
+  <text x="370" y="358" font-family="Geist, system-ui" font-size="13" font-weight="600" fill="oklch(0.96 0.005 250)" text-anchor="end">38%</text>
+  <rect x="66" y="364" width="304" height="2" rx="1" fill="oklch(0.20 0.025 252)"/>
+  <rect x="66" y="364" width="115" height="2" rx="1" fill="oklch(0.96 0.005 250)"/>
+
+  <!-- Message bubble 3: priority alert -->
+  <rect x="50" y="396" width="360" height="80" rx="14" fill="oklch(0.16 0.025 252)" stroke="oklch(0.92 0.22 122 / 0.3)" stroke-width="1"/>
+
+  <circle cx="68" cy="416" r="4" fill="oklch(0.92 0.22 122)"/>
+  <text x="82" y="420" font-family="Geist Mono, monospace" font-size="11" font-weight="600" fill="oklch(0.92 0.22 122)" letter-spacing="0.06em">HOT · НОВЫЙ ЛИД</text>
+
+  <text x="66" y="442" font-family="Geist, system-ui" font-size="13" fill="oklch(0.96 0.005 250)">Karpov.Courses · диагностика</text>
+  <text x="66" y="460" font-family="Geist, system-ui" font-size="12" fill="oklch(0.72 0.012 250)">Иван назначен · ответ до 10:00</text>
+
+  <!-- Message bubble 4: focus of the day -->
+  <rect x="50" y="486" width="320" height="64" rx="14" fill="oklch(0.16 0.025 252)"/>
+  <text x="66" y="508" font-family="Geist Mono, monospace" font-size="11" fill="oklch(0.55 0.015 250)" letter-spacing="0.06em">ФОКУС ДНЯ</text>
+  <text x="66" y="528" font-family="Geist, system-ui" font-size="13" fill="oklch(0.96 0.005 250)">Защита диагностики</text>
+  <text x="66" y="544" font-family="Geist, system-ui" font-size="12" fill="oklch(0.72 0.012 250)">Островок · 14:00</text>
+
+  <!-- Bottom input bar -->
+  <rect x="36" y="572" width="408" height="40" fill="oklch(0.13 0.03 255)"/>
+  <rect x="56" y="582" width="320" height="22" rx="11" fill="oklch(0.18 0.025 250)"/>
+  <text x="68" y="597" font-family="Geist, system-ui" font-size="11" fill="oklch(0.45 0.018 250)">Сообщение боту...</text>
+
+  <!-- Send button -->
+  <circle cx="404" cy="593" r="14" fill="oklch(0.92 0.22 122)"/>
+  <path d="M 398 593 L 410 593 M 405 588 L 410 593 L 405 598" stroke="oklch(0.13 0.03 255)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+
+  <!-- Home indicator -->
+  <rect x="190" y="600" width="100" height="4" rx="2" fill="oklch(0.96 0.005 250 / 0.4)"/>
+</svg>

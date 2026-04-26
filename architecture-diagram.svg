@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 720" fill="none" role="img" aria-label="Архитектура EDL из четырёх слоёв" class="arch-svg">
+  <defs>
+    <linearGradient id="archAccent" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="oklch(0.92 0.22 122)"/>
+      <stop offset="1" stop-color="oklch(0.86 0.21 122)"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Layer 1: Inputs -->
+  <g class="arch-layer" data-arch-layer="1">
+    <rect x="60" y="40" width="480" height="120" rx="12" fill="oklch(0.96 0.005 250)" stroke="oklch(0.88 0.012 250)" stroke-width="1.5"/>
+    <text x="84" y="76" font-family="Geist Mono, monospace" font-size="12" font-weight="500" fill="oklch(0.45 0.018 250)" letter-spacing="0.12em">01 · ВХОДЫ</text>
+    <text x="84" y="116" font-family="Plus Jakarta Sans, system-ui" font-size="22" font-weight="700" fill="oklch(0.18 0.025 250)" letter-spacing="-0.025em">Формы, заявки, импорты</text>
+    <text x="84" y="142" font-family="Geist, system-ui" font-size="13" fill="oklch(0.45 0.018 250)">Calendly · TG-канал · LinkedIn · реферальные</text>
+
+    <!-- Mini icons -->
+    <g transform="translate(440, 88)">
+      <rect x="0" y="0" width="40" height="40" rx="6" fill="oklch(0.92 0.22 122 / 0.12)"/>
+      <rect x="8" y="10" width="24" height="2" rx="1" fill="oklch(0.45 0.018 250)"/>
+      <rect x="8" y="16" width="20" height="2" rx="1" fill="oklch(0.45 0.018 250)"/>
+      <rect x="8" y="22" width="24" height="2" rx="1" fill="oklch(0.45 0.018 250)"/>
+      <rect x="8" y="28" width="14" height="2" rx="1" fill="oklch(0.92 0.22 122)"/>
+    </g>
+  </g>
+
+  <!-- Connector 1→2 -->
+  <g class="arch-connector" data-arch-connector="1">
+    <line x1="300" y1="160" x2="300" y2="200" stroke="oklch(0.92 0.22 122)" stroke-width="1.5" stroke-dasharray="2 4"/>
+    <polygon points="296,196 300,204 304,196" fill="oklch(0.92 0.22 122)"/>
+  </g>
+
+  <!-- Layer 2: Processor -->
+  <g class="arch-layer" data-arch-layer="2">
+    <rect x="60" y="200" width="480" height="120" rx="12" fill="oklch(0.96 0.005 250)" stroke="oklch(0.88 0.012 250)" stroke-width="1.5"/>
+    <text x="84" y="236" font-family="Geist Mono, monospace" font-size="12" font-weight="500" fill="oklch(0.45 0.018 250)" letter-spacing="0.12em">02 · ОБРАБОТЧИК</text>
+    <text x="84" y="276" font-family="Plus Jakarta Sans, system-ui" font-size="22" font-weight="700" fill="oklch(0.18 0.025 250)" letter-spacing="-0.025em">Apps Script + AI-логика</text>
+    <text x="84" y="302" font-family="Geist, system-ui" font-size="13" fill="oklch(0.45 0.018 250)">Маршрутизация · приоритезация · валидация</text>
+
+    <!-- Mini icon: gears -->
+    <g transform="translate(440, 248)">
+      <rect x="0" y="0" width="40" height="40" rx="6" fill="oklch(0.92 0.22 122 / 0.12)"/>
+      <circle cx="14" cy="20" r="6" stroke="oklch(0.45 0.018 250)" stroke-width="1.5" fill="none"/>
+      <circle cx="14" cy="20" r="2" fill="oklch(0.45 0.018 250)"/>
+      <circle cx="26" cy="20" r="4" stroke="oklch(0.92 0.22 122)" stroke-width="1.5" fill="none"/>
+      <circle cx="26" cy="20" r="1.5" fill="oklch(0.92 0.22 122)"/>
+    </g>
+  </g>
+
+  <!-- Connector 2→3 -->
+  <g class="arch-connector" data-arch-connector="2">
+    <line x1="300" y1="320" x2="300" y2="360" stroke="oklch(0.92 0.22 122)" stroke-width="1.5" stroke-dasharray="2 4"/>
+    <polygon points="296,356 300,364 304,356" fill="oklch(0.92 0.22 122)"/>
+  </g>
+
+  <!-- Layer 3: CRM -->
+  <g class="arch-layer" data-arch-layer="3">
+    <rect x="60" y="360" width="480" height="120" rx="12" fill="oklch(0.96 0.005 250)" stroke="oklch(0.88 0.012 250)" stroke-width="1.5"/>
+    <text x="84" y="396" font-family="Geist Mono, monospace" font-size="12" font-weight="500" fill="oklch(0.45 0.018 250)" letter-spacing="0.12em">03 · CRM</text>
+    <text x="84" y="436" font-family="Plus Jakarta Sans, system-ui" font-size="22" font-weight="700" fill="oklch(0.18 0.025 250)" letter-spacing="-0.025em">Единый источник правды</text>
+    <text x="84" y="462" font-family="Geist, system-ui" font-size="13" fill="oklch(0.45 0.018 250)">Лиды · сделки · клиенты · история</text>
+
+    <!-- Mini icon: spreadsheet -->
+    <g transform="translate(440, 408)">
+      <rect x="0" y="0" width="40" height="40" rx="6" fill="oklch(0.92 0.22 122 / 0.12)"/>
+      <line x1="6" y1="14" x2="34" y2="14" stroke="oklch(0.45 0.018 250)" stroke-width="0.8"/>
+      <line x1="6" y1="22" x2="34" y2="22" stroke="oklch(0.45 0.018 250)" stroke-width="0.8"/>
+      <line x1="6" y1="30" x2="34" y2="30" stroke="oklch(0.45 0.018 250)" stroke-width="0.8"/>
+      <line x1="20" y1="8" x2="20" y2="34" stroke="oklch(0.45 0.018 250)" stroke-width="0.8"/>
+      <rect x="6" y="6" width="14" height="8" rx="1" fill="oklch(0.92 0.22 122 / 0.5)"/>
+    </g>
+  </g>
+
+  <!-- Connector 3→4 -->
+  <g class="arch-connector" data-arch-connector="3">
+    <line x1="300" y1="480" x2="300" y2="520" stroke="oklch(0.92 0.22 122)" stroke-width="1.5" stroke-dasharray="2 4"/>
+    <polygon points="296,516 300,524 304,516" fill="oklch(0.92 0.22 122)"/>
+  </g>
+
+  <!-- Layer 4: Telegram bot (highlighted - dark) -->
+  <g class="arch-layer arch-layer--final" data-arch-layer="4">
+    <rect x="60" y="520" width="480" height="160" rx="12" fill="oklch(0.13 0.03 255)" stroke="oklch(0.92 0.22 122)" stroke-width="1.5"/>
+    <text x="84" y="556" font-family="Geist Mono, monospace" font-size="12" font-weight="500" fill="oklch(0.92 0.22 122)" letter-spacing="0.12em">04 · ИНТЕРФЕЙС ФАУНДЕРА</text>
+    <text x="84" y="600" font-family="Plus Jakarta Sans, system-ui" font-size="26" font-weight="700" fill="oklch(0.96 0.005 250)" letter-spacing="-0.025em">Telegram-бот</text>
+    <text x="84" y="630" font-family="Geist, system-ui" font-size="14" fill="oklch(0.72 0.012 250)">Утренние сводки · push на лиды · команды</text>
+    <text x="84" y="652" font-family="Geist, system-ui" font-size="14" fill="oklch(0.72 0.012 250)">управления · отчёты · фокусы дня</text>
+
+    <!-- Mini icon: telegram -->
+    <g transform="translate(440, 568)">
+      <rect x="0" y="0" width="40" height="40" rx="6" fill="oklch(0.92 0.22 122 / 0.16)"/>
+      <path d="M 8 18 L 30 8 L 24 32 L 18 24 L 8 18 Z" stroke="oklch(0.92 0.22 122)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+      <path d="M 18 24 L 24 18" stroke="oklch(0.92 0.22 122)" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>
