@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDL · Карта инфраструктуры</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ─── TOKENS (синхронизировано с сайтом elephantdreams.ru) ─── */
+:root {
+  --brand-navy:        #1A1B2E;
+  --brand-navy-deep:   #11121F;
+  --brand-navy-soft:   #2A2B40;
+
+  --bg-primary:        #FAF9F6;
+  --bg-elevated:       #FFFFFF;
+  --bg-tinted:         #F2F0EA;
+
+  --text-primary:      #15151D;
+  --text-secondary:    #4A4A52;
+  --text-tertiary:     #888893;
+  --text-on-dark:      #F5F5F0;
+  --text-on-dark-soft: #B5B5BD;
+
+  --accent:            #C8FF00;
+  --accent-hover:      #B6E600;
+  --accent-soft:       rgba(200, 255, 0, 0.12);
+
+  --border-subtle:     #E8E7E2;
+  --border-medium:     #D4D3CE;
+  --border-strong:     #15151D;
+  --border-on-dark:    rgba(245, 245, 240, 0.12);
+
+  /* Status — приглушённые, для светлой темы */
+  --color-green:       #2D7A4E;
+  --color-green-bg:    rgba(45, 122, 78, 0.06);
+  --color-amber:       #B8890B;
+  --color-amber-bg:    rgba(184, 137, 11, 0.06);
+  --color-red:         #B83A3A;
+  --color-red-bg:      rgba(184, 58, 58, 0.06);
+
+  --ff-display: 'Inter', system-ui, -apple-system, sans-serif;
+  --ff-body:    'Inter', system-ui, -apple-system, sans-serif;
+  --ff-mono:    'JetBrains Mono', ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--bg-tinted);
+  font-family: var(--ff-body);
+  color: var(--text-primary);
+  font-size: 17px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv11', 'ss01', 'ss03';
+}
+
+::selection { background: var(--accent); color: var(--text-primary); }
+
+/* ─── PRINT CONTROLS ─── */
+.print-controls {
+  position: sticky; top: 0;
+  background: var(--brand-navy);
+  color: var(--text-on-dark);
+  padding: 14px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  font-family: var(--ff-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+.print-controls a, .print-controls button {
+  background: var(--accent);
+  color: var(--text-primary);
+  padding: 10px 18px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-family: var(--ff-display);
+  font-size: 14px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 150ms ease-out;
+}
+.print-controls a:hover, .print-controls button:hover { background: var(--accent-hover); }
+
+@media print {
+  .print-controls { display: none; }
+  body { background: white; }
+  .page { page-break-after: always; box-shadow: none !important; }
+  .page:last-child { page-break-after: auto; }
+}
+
+/* ─── СТРАНИЦЫ ─── */
+.pages-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.page {
+  background: var(--bg-elevated);
+  width: 100%;
+  min-height: 1100px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 24px rgba(21, 21, 29, 0.04), 0 1px 3px rgba(21, 21, 29, 0.04);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--border-subtle);
+}
+
+.page-content {
+  padding: 60px 64px;
+  height: 100%;
+}
+
+@media (max-width: 700px) {
+  .page-content { padding: 40px 28px; }
+  .pages-container { padding: 20px 12px; }
+}
+
+/* ─── СТРАНИЦА 1: ОБЛОЖКА (тёмная, инверсия) ─── */
+.cover {
+  background: var(--brand-navy);
+  color: var(--text-on-dark);
+  position: relative;
+  overflow: hidden;
+}
+
+.cover-content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.cover-logo {
+  font-family: var(--ff-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.cover-logo em {
+  font-style: normal;
+  background: var(--accent);
+  color: var(--text-primary);
+  padding: 1px 8px;
+  border-radius: 3px;
+}
+
+.cover-eyebrow {
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  color: var(--text-on-dark-soft);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 80px;
+  margin-bottom: 24px;
+}
+
+.cover-title {
+  font-family: var(--ff-display);
+  font-size: 56px;
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--text-on-dark);
+  margin-bottom: 28px;
+}
+.cover-title em {
+  font-style: italic;
+  font-weight: 600;
+}
+.cover-name {
+  background: var(--accent);
+  color: var(--text-primary);
+  padding: 0 8px;
+  font-style: normal;
+  border-radius: 3px;
+}
+
+.cover-subtitle {
+  font-size: 19px;
+  color: var(--text-on-dark-soft);
+  line-height: 1.5;
+  max-width: 540px;
+}
+
+.cover-quote {
+  margin-top: 40px;
+  padding: 24px 28px;
+  border-left: 3px solid var(--accent);
+  background: var(--brand-navy-soft);
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 580px;
+  color: var(--text-on-dark);
+}
+
+.cover-footer {
+  margin-top: auto;
+  padding-top: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  color: var(--text-on-dark-soft);
+  letter-spacing: 0.04em;
+  border-top: 1px solid var(--border-on-dark);
+  padding-top: 24px;
+}
+
+@media (max-width: 700px) {
+  .cover-title { font-size: 38px; }
+  .cover-subtitle { font-size: 17px; }
+  .cover-eyebrow { margin-top: 48px; }
+  .cover-footer { padding-top: 40px; }
+}
+
+/* ─── ОБЩИЕ СТРАНИЦЫ (светлые) ─── */
+.page-eyebrow {
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.page-num {
+  margin-left: auto;
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+.page-title {
+  font-family: var(--ff-display);
+  font-size: 38px;
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+.page-title em {
+  font-style: italic;
+  font-weight: 600;
+}
+
+.page-lead {
+  font-size: 18px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 36px;
+  max-width: 580px;
+}
+
+/* ─── СТРАНИЦА 2: ДИАГНОЗ ─── */
+.diagnosis-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 32px 0;
+}
+.diag-card {
+  padding: 24px 20px;
+  border-radius: 6px;
+  text-align: left;
+  border: 1.5px solid;
+}
+.diag-card.green { background: var(--color-green-bg); border-color: var(--color-green); }
+.diag-card.yellow { background: var(--color-amber-bg); border-color: var(--color-amber); }
+.diag-card.red { background: var(--color-red-bg); border-color: var(--color-red); }
+
+.diag-icon {
+  font-size: 24px;
+  margin-bottom: 14px;
+  display: inline-block;
+  font-weight: 700;
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.diag-card.green .diag-icon { background: var(--color-green); color: white; }
+.diag-card.yellow .diag-icon { background: var(--color-amber); color: white; }
+.diag-card.red .diag-icon { background: var(--color-red); color: white; }
+
+.diag-label {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.diag-card.green .diag-label { color: var(--color-green); }
+.diag-card.yellow .diag-label { color: var(--color-amber); }
+.diag-card.red .diag-label { color: var(--color-red); }
+
+.diag-text {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-primary);
+}
+
+.diag-summary {
+  background: var(--brand-navy);
+  color: var(--text-on-dark);
+  padding: 32px 36px;
+  border-radius: 6px;
+  margin-top: 32px;
+}
+.diag-summary-label {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.diag-summary-text {
+  font-family: var(--ff-display);
+  font-size: 22px;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+@media (max-width: 700px) {
+  .diagnosis-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── СТРАНИЦА 3: РАСЧЁТ ПОТЕРЬ ─── */
+.losses-hero {
+  background: var(--brand-navy);
+  color: var(--text-on-dark);
+  padding: 56px 40px;
+  border-radius: 6px;
+  margin: 24px 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.losses-hero-label {
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  font-weight: 600;
+}
+.losses-hero-value {
+  font-family: var(--ff-display);
+  font-size: 92px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--text-on-dark);
+  margin-bottom: 12px;
+  font-weight: 600;
+  display: inline-block;
+  position: relative;
+}
+.losses-hero-value::after {
+  content: '';
+  display: block;
+  height: 16px;
+  background: var(--accent);
+  margin-top: -10px;
+  margin-left: -8px;
+  margin-right: -8px;
+  position: relative;
+  z-index: -1;
+}
+.losses-hero-unit {
+  font-size: 17px;
+  color: var(--text-on-dark-soft);
+  margin-top: 8px;
+}
+
+.losses-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 24px;
+}
+.loss-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  padding: 20px 24px;
+  background: var(--bg-tinted);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  align-items: center;
+}
+.loss-label {
+  font-size: 15px;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+.loss-value {
+  font-family: var(--ff-display);
+  font-size: 24px;
+  color: var(--text-primary);
+  font-weight: 600;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+@media (max-width: 700px) {
+  .losses-hero-value { font-size: 60px; }
+  .losses-hero { padding: 36px 24px; }
+}
+
+/* ─── СТРАНИЦА 4: УЗКИЕ МЕСТА ─── */
+.bottlenecks {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+.bottleneck {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 20px;
+  padding: 24px;
+  border-radius: 6px;
+  border: 1.5px solid;
+  background: var(--bg-elevated);
+}
+.bottleneck.red { border-color: var(--color-red); }
+.bottleneck.orange { border-color: var(--color-amber); }
+.bottleneck.yellow { border-color: var(--border-subtle); }
+
+.bottleneck-num {
+  font-family: var(--ff-display);
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.bottleneck.red .bottleneck-num { color: var(--color-red); }
+.bottleneck.orange .bottleneck-num { color: var(--color-amber); }
+.bottleneck.yellow .bottleneck-num { color: var(--text-tertiary); }
+
+.bottleneck-title {
+  font-family: var(--ff-display);
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.bottleneck-text {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+.bottleneck-risk {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-red);
+  font-weight: 600;
+}
+
+/* ─── СТРАНИЦА 5: РЕКОМЕНДАЦИИ ─── */
+.recommendations {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 24px 0;
+}
+.reco {
+  background: var(--bg-elevated);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 24px 28px;
+  position: relative;
+}
+.reco::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  width: 4px; height: 100%;
+  background: var(--accent);
+  border-radius: 6px 0 0 6px;
+}
+.reco-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 3px;
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-weight: 600;
+  background: var(--bg-tinted);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+.reco-tag.with-us {
+  background: var(--accent);
+  color: var(--text-primary);
+  border-color: var(--accent);
+}
+
+.reco-title {
+  font-family: var(--ff-display);
+  font-size: 19px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.reco-text {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.reco-disclaimer {
+  margin-top: 24px;
+  padding: 18px 22px;
+  background: var(--accent-soft);
+  border-left: 3px solid var(--text-primary);
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+/* ─── СТРАНИЦА 6: ВИТРИНА ─── */
+.showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin: 24px 0;
+}
+.showcase-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 22px;
+}
+.showcase-mock {
+  width: 100%;
+  height: 140px;
+  background: var(--brand-navy);
+  border-radius: 4px;
+  margin-bottom: 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  text-align: center;
+  padding: 16px;
+  letter-spacing: 0.04em;
+}
+.showcase-title {
+  font-family: var(--ff-display);
+  font-size: 16px;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.showcase-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.showcase-quote {
+  margin-top: 24px;
+  padding: 28px 32px;
+  background: var(--brand-navy);
+  color: var(--text-on-dark);
+  border-radius: 6px;
+  font-family: var(--ff-display);
+  font-size: 22px;
+  line-height: 1.4;
+  text-align: center;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.showcase-quote em {
+  color: var(--accent);
+  font-style: italic;
+}
+
+@media (max-width: 700px) {
+  .showcase-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── СТРАНИЦА 7: CTA (тёмная) ─── */
+.cta-page {
+  background: var(--brand-navy);
+  color: var(--text-on-dark);
+}
+.cta-page .page-title { color: var(--text-on-dark); }
+.cta-page .page-eyebrow {
+  color: var(--text-on-dark-soft);
+  border-bottom-color: var(--border-on-dark);
+}
+.cta-page .page-num { color: var(--text-on-dark-soft); }
+.cta-page .page-lead { color: var(--text-on-dark-soft); }
+
+.funnel {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.funnel-step {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 20px;
+  align-items: center;
+  padding: 24px;
+  background: var(--brand-navy-soft);
+  border: 1px solid var(--border-on-dark);
+  border-radius: 6px;
+}
+.funnel-step.highlight {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+.funnel-num {
+  font-family: var(--ff-display);
+  font-size: 32px;
+  line-height: 1;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.funnel-title {
+  font-family: var(--ff-display);
+  font-size: 17px;
+  color: var(--text-on-dark);
+  margin-bottom: 4px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.funnel-desc {
+  font-size: 14px;
+  color: var(--text-on-dark-soft);
+  line-height: 1.5;
+}
+.funnel-price {
+  font-family: var(--ff-mono);
+  font-size: 13px;
+  color: var(--accent);
+  white-space: nowrap;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.cta-bigbutton {
+  display: block;
+  width: 100%;
+  background: var(--accent);
+  color: var(--text-primary);
+  padding: 22px;
+  border-radius: 4px;
+  text-align: center;
+  font-family: var(--ff-display);
+  font-size: 18px;
+  text-decoration: none;
+  margin-top: 32px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: background 150ms ease-out;
+}
+.cta-bigbutton:hover { background: var(--accent-hover); }
+
+.cta-contacts {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.cta-contact-card {
+  padding: 18px 22px;
+  background: var(--brand-navy-soft);
+  border: 1px solid var(--border-on-dark);
+  border-radius: 6px;
+}
+.cta-contact-label {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.cta-contact-value {
+  font-size: 14px;
+  color: var(--text-on-dark);
+  word-break: break-all;
+}
+
+/* Sub-ICP блок */
+.subicp-banner {
+  background: var(--accent-soft);
+  border: 1.5px solid var(--accent);
+  border-radius: 6px;
+  padding: 28px 32px;
+  margin-bottom: 24px;
+}
+.subicp-banner-title {
+  font-family: var(--ff-display);
+  font-size: 22px;
+  color: var(--text-on-dark);
+  margin-bottom: 12px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.subicp-banner-text {
+  font-size: 15px;
+  color: var(--text-on-dark);
+  line-height: 1.6;
+}
+
+</style>
+</head>
+<body>
+
+<!-- ═══ Контролы (печать) ═══ -->
+<div class="print-controls">
+  <span>EDL · Карта инфраструктуры</span>
+  <button onclick="window.print()">↓ Скачать как PDF</button>
+</div>
+
+<div class="pages-container">
+
+  <!-- ═════ СТРАНИЦА 1 — ОБЛОЖКА ═════ -->
+  <div class="page cover">
+    <div class="page-content cover-content">
+      <div class="cover-logo"><em>EDL</em> Operations Diagnostic</div>
+
+      <div class="cover-eyebrow" id="cover-eyebrow">Карта инфраструктуры бизнеса</div>
+      <h1 class="cover-title" id="cover-title">
+        <span id="cover-name" class="cover-name">Ваше имя</span>,<br>
+        <em>вот что мы увидели</em>
+      </h1>
+      <p class="cover-subtitle" id="cover-subtitle">
+        По вашим ответам мы собрали персональную карту узких мест
+        в инфраструктуре вашего бизнеса.
+      </p>
+
+      <div class="cover-quote">
+        Мы не делаем «типовые» отчёты. Этот документ собран по вашим
+        ответам и применим только к вашему контексту.
+      </div>
+
+      <div class="cover-footer">
+        <span id="cover-date">26 апреля 2026</span>
+        <span>Elephant Dreams Lab</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═════ СТРАНИЦА 2 — ДИАГНОЗ В КАРТИНКЕ ═════ -->
+  <div class="page">
+    <div class="page-content">
+      <div class="page-eyebrow">
+        Диагноз
+        <span class="page-num">2 / 7</span>
+      </div>
+      <h2 class="page-title">Где у вас сейчас <em>зелёный, жёлтый, красный</em></h2>
+      <p class="page-lead">
+        Мы разложили вашу инфраструктуру на три зоны. Зелёное — то, что у вас уже работает.
+        Жёлтое — требует внимания в ближайшие месяцы. Красное — горящие точки, теряющие
+        деньги и время прямо сейчас.
+      </p>
+
+      <div class="diagnosis-grid">
+        <div class="diag-card green">
+          <div class="diag-icon">✓</div>
+          <div class="diag-label">Зелёная зона</div>
+          <div class="diag-text" id="diag-green">У вас есть команда и работающие продукты — это не у всех на этой стадии.</div>
+        </div>
+        <div class="diag-card yellow">
+          <div class="diag-icon">!</div>
+          <div class="diag-label">Жёлтая зона</div>
+          <div class="diag-text" id="diag-yellow">Процессы есть, но в основном в голове. Это работает на текущем размере.</div>
+        </div>
+        <div class="diag-card red">
+          <div class="diag-icon">⚠</div>
+          <div class="diag-label">Красная зона</div>
+          <div class="diag-text" id="diag-red">Информация размазана. Принимаете решения в неполной картине.</div>
+        </div>
+      </div>
+
+      <div class="diag-summary">
+        <div class="diag-summary-label">Главный вывод</div>
+        <div class="diag-summary-text" id="diag-summary">
+          Вы — узкое горлышко системы. Без вашего личного включения процессы стопорятся.
+          Это нормальная стадия для вашего масштаба, но дальше расти так уже дорого.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═════ СТРАНИЦА 3 — РАСЧЁТ ПОТЕРЬ ═════ -->
+  <div class="page">
+    <div class="page-content">
+      <div class="page-eyebrow">
+        Расчёт потерь
+        <span class="page-num">3 / 7</span>
+      </div>
+      <h2 class="page-title">Сколько это стоит вам <em>в деньгах</em></h2>
+      <p class="page-lead">
+        По вашим ответам мы прикинули, во что обходится текущая ситуация.
+        Это не маркетинговая цифра — это арифметика на ваших данных.
+      </p>
+
+      <div class="losses-hero">
+        <div class="losses-hero-label">Совокупная стоимость текущей ситуации</div>
+        <div class="losses-hero-value" id="loss-total">—</div>
+        <div class="losses-hero-unit">в год, в нынешнем режиме</div>
+      </div>
+
+      <div class="losses-breakdown" id="loss-breakdown">
+        <!-- Заполняется JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ═════ СТРАНИЦА 4 — КАРТА УЗКИХ МЕСТ ═════ -->
+  <div class="page">
+    <div class="page-content">
+      <div class="page-eyebrow">
+        Узкие места
+        <span class="page-num">4 / 7</span>
+      </div>
+      <h2 class="page-title">Пять точек, где <em>вы теряете больше всего</em></h2>
+      <p class="page-lead">
+        Это не общие «5 признаков плохого менеджмента». Это конкретно ваши узкие места —
+        выведенные из ваших ответов и приоритизированные по риску.
+      </p>
+
+      <div class="bottlenecks" id="bottlenecks">
+        <!-- Заполняется JS по ветке -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ═════ СТРАНИЦА 5 — РЕКОМЕНДАЦИИ ═════ -->
+  <div class="page">
+    <div class="page-content">
+      <div class="page-eyebrow">
+        Что делать
+        <span class="page-num">5 / 7</span>
+      </div>
+      <h2 class="page-title">Три действия для <em>первого месяца</em></h2>
+      <p class="page-lead">
+        Не гайд «как изменить всё за неделю». Три конкретных шага, которые
+        можно сделать в течение месяца — и от которых зависит большая часть результата.
+      </p>
+
+      <div class="recommendations" id="recommendations">
+        <!-- Заполняется JS -->
+      </div>
+
+      <div class="reco-disclaimer">
+        Это не общие советы из интернета. Каждая рекомендация выведена из ваших ответов
+        и применима к вашему контексту. Если что-то не подходит — это нормально, мы
+        обсудим на демо.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═════ СТРАНИЦА 6 — ВИТРИНА EDL ═════ -->
+  <div class="page">
+    <div class="page-content">
+      <div class="page-eyebrow">
+        Как это выглядит у нас
+        <span class="page-num">6 / 7</span>
+      </div>
+      <h2 class="page-title">Та инфраструктура, которую <em>мы строим клиентам</em> — мы строим её и для себя</h2>
+      <p class="page-lead">
+        Мы не теоретики, продающие «правильные» процессы. Мы сами живём в той системе,
+        которую предлагаем вам. За один день в апреле 2026 мы собрали себе всю операционку.
+        Вот несколько кадров.
+      </p>
+
+      <div class="showcase-grid">
+        <div class="showcase-card">
+          <div class="showcase-mock">[ скриншот: утренняя сводка в Telegram ]</div>
+          <div class="showcase-title">Утренний пульс с телефона</div>
+          <div class="showcase-desc">Цели месяца, тревоги, задачи на сегодня — всё в одном сообщении в 8:30.</div>
+        </div>
+        <div class="showcase-card">
+          <div class="showcase-mock">[ скриншот: CRM с лидами по приоритету ]</div>
+          <div class="showcase-title">Лиды распределены автоматически</div>
+          <div class="showcase-desc">Бот сам определяет приоритет, шлёт в нужный чат, отслеживает SLA.</div>
+        </div>
+        <div class="showcase-card">
+          <div class="showcase-mock">[ скриншот: дашборд с метриками ]</div>
+          <div class="showcase-title">Один пульс — все метрики</div>
+          <div class="showcase-desc">Без обхода руководителей. Цифры обновляются сами.</div>
+        </div>
+        <div class="showcase-card">
+          <div class="showcase-mock">[ скриншот: AI-ассистент в боте ]</div>
+          <div class="showcase-title">AI-помощник для фаундера</div>
+          <div class="showcase-desc">Спрашиваешь «где сейчас нужна помощь команде» — получаешь анализ.</div>
+        </div>
+      </div>
+
+      <div class="showcase-quote">
+        Это построено для нас. <em>Можем построить для вас</em> за 3-4 недели.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═════ СТРАНИЦА 7 — CTA ═════ -->
+  <div class="page cta-page">
+    <div class="page-content">
+      <div class="page-eyebrow">
+        Что дальше
+        <span class="page-num">7 / 7</span>
+      </div>
+      <h2 class="page-title">Один <em>прямой путь</em></h2>
+      <p class="page-lead">
+        Мы не любим воронки с десятью точками касания. У нас три шага — и каждый
+        даёт понятный результат, прежде чем переходить к следующему.
+      </p>
+
+      <div id="subicp-block" style="display:none;">
+        <div class="subicp-banner">
+          <div class="subicp-banner-title">Сейчас вы в более ранней стадии</div>
+          <div class="subicp-banner-text">
+            Вы заполнили честно — спасибо. Сейчас наша инфраструктура для вас избыточна,
+            мы работаем с компаниями от 30 млн ₽/год. Но когда дорастёте — возвращайтесь.
+            А пока — подпишитесь на наш Telegram, там разборы и инструменты, которые могут
+            пригодиться уже сейчас.
+          </div>
+        </div>
+        <a href="https://t.me/elephantdreamscommunity" class="cta-bigbutton" target="_blank" rel="noopener">
+          Перейти в Telegram-канал EDL →
+        </a>
+      </div>
+
+      <div id="main-funnel-block">
+        <div class="funnel">
+          <div class="funnel-step highlight">
+            <div class="funnel-num">01</div>
+            <div>
+              <div class="funnel-title">Бесплатное демо системы (30 минут)</div>
+              <div class="funnel-desc">Live screenshare нашей реальной операционки. Без презентаций. Сразу станет ясно, как это адаптировать под вас.</div>
+            </div>
+            <div class="funnel-price">0 ₽</div>
+          </div>
+          <div class="funnel-step">
+            <div class="funnel-num">02</div>
+            <div>
+              <div class="funnel-title">Диагностика инфраструктуры</div>
+              <div class="funnel-desc">3-5 дней работы. На выходе — документ с roadmap и быстрыми победами.</div>
+            </div>
+            <div class="funnel-price">25-30 тыс ₽</div>
+          </div>
+          <div class="funnel-step">
+            <div class="funnel-num">03</div>
+            <div>
+              <div class="funnel-title">AI Operations Sprint</div>
+              <div class="funnel-desc">3-4 недели. Соберём дашборды, бот в Telegram, AI-помощников. Под вашу команду и процессы.</div>
+            </div>
+            <div class="funnel-price">от 150 тыс ₽</div>
+          </div>
+        </div>
+
+        <a href="https://calendly.com/evzhiganova8888/30min" class="cta-bigbutton" target="_blank" rel="noopener">
+          Записаться на бесплатное демо →
+        </a>
+      </div>
+
+      <div class="cta-contacts">
+        <div class="cta-contact-card">
+          <div class="cta-contact-label">Telegram-канал</div>
+          <div class="cta-contact-value">t.me/elephantdreamscommunity</div>
+        </div>
+        <div class="cta-contact-card">
+          <div class="cta-contact-label">Прямой контакт</div>
+          <div class="cta-contact-value">@evzhiganova</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   PDF v2.0 — рендер по URL-параметрам
+   
+   Параметры из URL (или из POST-payload в Apps Script):
+   ?branch=a&name=Иван&revenue=30-100m&a1=25&a4=head,chats&...
+   
+   Скрипт читает параметры и заполняет:
+   - имя/дату на обложке
+   - диагноз по ветке
+   - расчёт потерь по формулам
+   - 5 узких мест
+   - 3 рекомендации
+   ═══════════════════════════════════════════════════════════════ */
+
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var branch = params.get('branch') || 'a';
+  var name = params.get('name') || 'Друг';
+  var revenue = params.get('revenue') || '';
+
+  // === Установка имени и даты ===
+  document.getElementById('cover-name').textContent = name;
+  var months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+  var d = new Date();
+  document.getElementById('cover-date').textContent = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+
+  // === Контент по веткам ===
+  var BRANCH_CONFIG = {
+    a: {
+      eyebrow: 'Узкое горлышко: руководитель',
+      title: ', <em>вы — главный человек</em><br>в системе',
+      diag: {
+        green: 'У вас есть собранная команда, доходящая выручка и работающий продукт. Это уже доказательство, что вы как руководитель тянете больше среднего.',
+        yellow: 'Процессы существуют, но многие из них держатся на вашем личном внимании. Это нормально для текущего масштаба, но дорого для следующего.',
+        red: 'Без вашего включения значительная часть бизнеса замирает. 3 дня вашего отсутствия — это паузы, переспросы и потерянные клиенты.'
+      },
+      summary: 'Вы — точка отказа всей системы. Это значит, что любой ваш ресурс (отпуск, болезнь, фокус на стратегии) обходится бизнесу в реальные деньги. Дальнейший рост без перестройки роли руководителя будет идти всё дороже.',
+      bottlenecks: [
+        { color: 'red', title: 'Управление в режиме «прорабства»', text: 'Большая часть вашего времени уходит на оперативные дела, не на стратегию. Это значит, что компания растёт там, где вы успеваете лично контролировать.', risk: 'Риск выгорания + замедление роста' },
+        { color: 'red', title: 'Знания живут в голове', text: 'Ключевая информация о клиентах, процессах, договорённостях — у вас в памяти. Передача этого новому сотруднику стоит месяцы.', risk: 'Риск потери при болезни / уходе' },
+        { color: 'orange', title: 'Команда в режиме ожидания', text: 'Сотрудники привыкли спрашивать вас по любому поводу. Это снижает их инициативу и удваивает вашу нагрузку.', risk: 'Низкий ROI на найм' },
+        { color: 'orange', title: 'Стратегия в подвешенном состоянии', text: 'Времени на стратегию и видение остаётся столько, сколько остаётся после операционки. Обычно — мало.', risk: 'Бизнес растёт по инерции' },
+        { color: 'yellow', title: 'Нет системы делегирования', text: 'Вы знаете, что задачи можно отдать. Но непонятно — кому, как, и где гарантия что не сломают.', risk: 'Запас по эффективности не использован' }
+      ],
+      recommendations: [
+        { tag: 'self', tagLabel: 'Можно начать самостоятельно', title: 'Запишите свои 10 типовых решений', text: 'Какие 10 решений вы принимаете чаще всего? Опишите для каждого — какие данные вам нужны и кто мог бы принимать его без вас. Это первый шаг к делегированию.' },
+        { tag: 'team', tagLabel: 'Обсудить с командой', title: 'Назначьте «дежурного» на 1 день в неделю', text: 'Один день в неделю команда не может писать вам по операционке. Должна разруливать сама. Это шок, но через месяц вы увидите, на сколько процентов реально нужны.' },
+        { tag: 'with-us', tagLabel: 'Сделать вместе с EDL', title: 'Соберите операционную систему руководителя', text: 'Утренний дайджест ключевых метрик. Бот, который пушит вас только при критичных событиях. Дашборд, в котором вся компания за 5 минут.' }
+      ]
+    },
+    b: {
+      eyebrow: 'Команда без руля',
+      title: ', <em>команда есть</em>,<br>но без вас не движется',
+      diag: {
+        green: 'У вас есть команда — это значит, что вы прошли стадию «всё делаю сам». Не у всех получается.',
+        yellow: 'У сотрудников есть зоны работы, но нет ясных зон ответственности на бумаге. Каждый делает то, что попросили в чате.',
+        red: 'Команда не действует без вашего слова. Это значит вы стали «диспетчером» в собственной компании.'
+      },
+      summary: 'Команда есть, но она работает в режиме «мы — руки, вы — мозг». Любая инициатива требует вашего одобрения. Это блокирует и команду, и вас. Чтобы расти дальше, нужно превратить это в «мы — мозг, вы — стратег».',
+      bottlenecks: [
+        { color: 'red', title: 'Нет ясных зон ответственности', text: 'Каждый знает что делать, но не знает за что отвечает. Когда что-то ломается — все смотрят на руководителя.', risk: 'Команда не растёт по самостоятельности' },
+        { color: 'red', title: 'Задачи живут в чатах', text: 'Чаты — это не система задач. Вы не видите загрузку команды, не отслеживаете прогресс, теряете решения через 3 дня.', risk: 'Хаос растёт нелинейно от размера команды' },
+        { color: 'orange', title: 'Повторяющиеся вопросы', text: 'Команда переспрашивает одно и то же, потому что нет места, где это записано. Это потеря часов с обеих сторон.', risk: 'Часы фаундера = деньги' },
+        { color: 'orange', title: 'Нет регулярных синков', text: 'Если общение хаотичное и реактивное — команда не понимает приоритетов. Это рождает суету и дрейф.', risk: 'Команда работает не над тем' },
+        { color: 'yellow', title: 'Нет системы передачи знаний', text: 'Опытный сотрудник уходит — уносит контекст. Новый приходит — учится 2 месяца. Это потеря на ровном месте.', risk: 'Любой найм — лотерея' }
+      ],
+      recommendations: [
+        { tag: 'self', tagLabel: 'Можно начать самостоятельно', title: 'Зафиксируйте зоны ответственности на бумаге', text: 'У каждого члена команды должна быть одна страница: что я делаю, за что я отвечаю, где границы моей зоны. Это снимает 60% повторяющихся вопросов.' },
+        { tag: 'team', tagLabel: 'Внедрить с командой', title: 'Один таск-трекер на всех', text: 'Не Trello для одних и Notion для других. Одно место, где живут задачи компании. Все ходят туда. Чаты — для общения, не для работы.' },
+        { tag: 'with-us', tagLabel: 'Сделать вместе с EDL', title: 'Соберите CRM + бот для команды', text: 'CRM, в которой видно загрузку команды и движение сделок. Бот в Telegram, который шлёт напоминания и фиксирует решения. Регулярные синки на автомате.' }
+      ]
+    },
+    c: {
+      eyebrow: 'Время на отчёты',
+      title: ', <em>пока отчёт соберёшь</em><br>— уже вечер',
+      diag: {
+        green: 'У вас есть несколько руководителей направлений и работающие команды. Это уровень бизнеса, которому уже нужна нормальная аналитика.',
+        yellow: 'Данные собираются, но в разных местах. Чтобы получить общую картину — нужен ручной труд каждый раз.',
+        red: 'Принятие решений «по ощущению» — это плата за отсутствие единого пульса. Каждое такое решение — потенциальная ошибка.'
+      },
+      summary: 'У вас не проблема с данными — данные есть. У вас проблема с их сборкой в одну картину. Часы вашего времени уходят на то, что должна делать система. Это легко исправить, и эффект будет очевиден на первой неделе.',
+      bottlenecks: [
+        { color: 'red', title: 'Данные размазаны по сервисам', text: 'CRM, 1С, Google-таблицы, чаты, головы руководителей — каждый источник содержит часть правды. Полная картина существует только если её собрать вручную.', risk: 'Решения на неполных данных' },
+        { color: 'red', title: 'Сбор отчётов = опрос команды', text: 'Чтобы понять что происходит сегодня, вы делаете обход руководителей. Это часы вашего времени, плюс часы их времени.', risk: 'Двойная потеря' },
+        { color: 'orange', title: 'Решения «по ощущению»', text: 'Когда нет данных — решаете интуитивно. Иногда попадаете, иногда нет. На вашем масштабе цена ошибки уже большая.', risk: 'Случайное качество решений' },
+        { color: 'orange', title: 'Нет общего пульса бизнеса', text: 'Команда не видит как они движутся к цели. Это снижает их фокус и долгосрочную мотивацию.', risk: 'Дрейф команды' },
+        { color: 'yellow', title: 'Реактивный режим управления', text: 'Видите проблемы только когда они случились. Превентивное управление невозможно без преднамеренного мониторинга.', risk: 'Тушите пожары вместо роста' }
+      ],
+      recommendations: [
+        { tag: 'self', tagLabel: 'Можно начать самостоятельно', title: 'Запишите 5 цифр, которые хочется видеть утром', text: 'Какие 5 чисел вам критично знать каждое утро? Не «всё подряд», а 5. Это станет ТЗ для будущего дашборда.' },
+        { tag: 'team', tagLabel: 'Обсудить с руководителями', title: 'Установите формат еженедельной сводки', text: 'Каждый руководитель в пятницу присылает один абзац: что сделано, что в работе, где затыки. Это ритуал, который окупается за неделю.' },
+        { tag: 'with-us', tagLabel: 'Сделать вместе с EDL', title: 'Соберите операционный пульс', text: 'Один дашборд с теми 5 цифрами. Утренняя сводка в Telegram-бот. Автоматический сбор из ваших источников. 3-4 недели работы — потом самостоятельно.' }
+      ]
+    },
+    d: {
+      eyebrow: 'AI без головной боли',
+      title: ', <em>хочется автоматизировать</em>,<br>а не усложнить',
+      diag: {
+        green: 'Вы понимаете, что ИИ — инструмент, не магия. Это правильная позиция — лучше, чем «давайте всё на AI».',
+        yellow: 'Какие-то инструменты команда уже пробовала. Но без системы внедрения они становятся «ещё одним сервисом».',
+        red: 'Нет ясной стратегии: с чего начать, что замерять, как окупать. Без этого ИИ-проекты буксуют.'
+      },
+      summary: 'Главный риск — не «не внедрить», а «внедрить плохо». Плохой ИИ-проект делает компанию хаотичнее, не проще. Правильный — снимает рутину незаметно. Для этого нужно начать с одной задачи и довести её до результата.',
+      bottlenecks: [
+        { color: 'red', title: 'Нет точки старта', text: 'Возможностей много, и от этого ступор. Команда не знает с чего начать, и не начинает. Конкуренты — тоже, но они хотя бы пробуют.', risk: 'Отставание накапливается' },
+        { color: 'orange', title: 'Команда не делает повторяющиеся задачи через AI', text: 'То, что Claude/ChatGPT может ускорить в 5 раз — команда делает руками. Часы людей дороже, чем подписка на AI.', risk: 'Ежемесячная переплата' },
+        { color: 'orange', title: 'Нет владельца AI-инициатив', text: 'Никто в команде не отвечает за внедрение. Каждый пробует сам, без системы.', risk: 'Энергия рассеивается' },
+        { color: 'yellow', title: 'Страх «новой головной боли»', text: 'Логичный страх — внедрите что-то, оно сломается, придётся чинить. Решение — точечные внедрения с критерием успеха.', risk: 'Парализующий перфекционизм' },
+        { color: 'yellow', title: 'Незрелая инфраструктура', text: 'Без CRM и дашбордов AI на ровном месте не помогает. Сначала — операционная база.', risk: 'AI поверх хаоса = больше хаоса' }
+      ],
+      recommendations: [
+        { tag: 'self', tagLabel: 'Можно начать самостоятельно', title: 'Найдите одну повторяющуюся задачу', text: 'Какая ручная задача в команде повторяется чаще всего? Не та, которую интересно автоматизировать, а та, которая болит. С неё начинайте.' },
+        { tag: 'team', tagLabel: 'Эксперимент с командой', title: 'Один человек — один AI-эксперимент', text: 'Назначьте одного сотрудника попробовать AI-инструмент на конкретной задаче. Бюджет — 0₽ (используем существующие чаты Claude/ChatGPT). Через месяц — результат.' },
+        { tag: 'with-us', tagLabel: 'Сделать вместе с EDL', title: 'Соберём AI-помощников под ваши задачи', text: 'Не «давайте подключим AI», а «давайте уберём вот эти 3 рутины». Конкретные задачи, измеримый эффект, окупаемость за 2-3 месяца.' }
+      ]
+    },
+    e: {
+      eyebrow: 'Плато выручки',
+      title: ', <em>выросли</em>,<br>а дальше непонятно',
+      diag: {
+        green: 'Бизнес доехал до текущего размера — это уже немало. У вас есть команда, выручка, продукт.',
+        yellow: 'Все составные части есть, но они не синхронизированы. Каждая работает на своём пределе.',
+        red: 'Главное — нет ясного диагноза, что чинить. Без этого любые попытки роста — лотерея.'
+      },
+      summary: 'Плато — это сигнал, что текущая модель достигла предела. Не значит «всё плохо». Значит — нужно либо менять модель, либо признать что больше не вырастем. Хорошая новость — для роста с 80 до 150 нужно перестроить 1-2 элемента, не всё.',
+      bottlenecks: [
+        { color: 'red', title: 'Нет ясного главного приоритета', text: 'Когда не растём — ищем по всем направлениям. Это распыляет ресурс и ничего не двигает. Нужен один главный фокус на квартал.', risk: 'Силы тратятся, рост не идёт' },
+        { color: 'red', title: 'Старые процессы не масштабируются', text: 'Что работало на 30 млн — не работает на 80. Что работает на 80 — не работает на 150. Каждый прыжок требует перестройки.', risk: 'Размер ломает компанию изнутри' },
+        { color: 'orange', title: 'Команда не готова к следующей стадии', text: 'Люди, которые помогли вырасти — часто не те, кто поможет вырасти дальше. Это болезненная часть роста.', risk: 'Кадровая инерция' },
+        { color: 'orange', title: 'Продукт работает, но не растёт в чек', text: 'Лиды есть, конверсия есть, чек не растёт. Это значит — у вас не проблема с продажами, а с продуктом и его упаковкой.', risk: 'Потолок выручки = потолок чека' },
+        { color: 'yellow', title: 'Нет данных для решений', text: 'Решения о следующем шаге принимаете на интуиции. На вашем масштабе цена ошибки уже большая.', risk: 'Дорогие эксперименты' }
+      ],
+      recommendations: [
+        { tag: 'self', tagLabel: 'Можно начать самостоятельно', title: 'Запишите 3 гипотезы про плато', text: 'Не «что в принципе можно сделать», а 3 конкретные гипотезы — почему рост остановился. У вас есть интуиция, она часто права.' },
+        { tag: 'team', tagLabel: 'Сессия с ключевыми людьми', title: 'Соберите 3-х ключевых сотрудников на 2 часа', text: 'Одна задача: что мы делаем не так? Без проектов, без планов. Только честный разговор. Из этого родятся следующие шаги.' },
+        { tag: 'with-us', tagLabel: 'Сделать вместе с EDL', title: 'Аудит и стратегия выхода из плато', text: 'Внешний взгляд на ваш бизнес. Карта точек для роста. План на 3-6 месяцев с одним главным приоритетом и измеримыми целями.' }
+      ]
+    }
+  };
+
+  // Sub-ICP — особый случай, использует одну из веток (a/b/c/d/e) но с другим финалом
+  var isSubIcp = revenue === 'sub30m';
+  if (isSubIcp) {
+    document.getElementById('subicp-block').style.display = 'block';
+    document.getElementById('main-funnel-block').style.display = 'none';
+  }
+
+  var config = BRANCH_CONFIG[branch] || BRANCH_CONFIG.a;
+
+  // === Заполняем обложку ===
+  document.getElementById('cover-eyebrow').textContent = config.eyebrow;
+  document.getElementById('cover-title').innerHTML = '<span class="cover-name">' + name + '</span>' + config.title;
+
+  // === Диагноз ===
+  document.getElementById('diag-green').textContent = config.diag.green;
+  document.getElementById('diag-yellow').textContent = config.diag.yellow;
+  document.getElementById('diag-red').textContent = config.diag.red;
+  document.getElementById('diag-summary').textContent = config.summary;
+
+  // === Расчёт потерь ===
+  computeLosses(branch);
+
+  // === Bottlenecks ===
+  var blEl = document.getElementById('bottlenecks');
+  blEl.innerHTML = '';
+  config.bottlenecks.forEach(function(b, i) {
+    var div = document.createElement('div');
+    div.className = 'bottleneck ' + b.color;
+    div.innerHTML =
+      '<div class="bottleneck-num">' + (i + 1).toString().padStart(2, '0') + '</div>' +
+      '<div>' +
+      '<div class="bottleneck-title">' + b.title + '</div>' +
+      '<div class="bottleneck-text">' + b.text + '</div>' +
+      '<div class="bottleneck-risk">Риск: ' + b.risk + '</div>' +
+      '</div>';
+    blEl.appendChild(div);
+  });
+
+  // === Рекомендации ===
+  var rcEl = document.getElementById('recommendations');
+  rcEl.innerHTML = '';
+  config.recommendations.forEach(function(r) {
+    var div = document.createElement('div');
+    div.className = 'reco';
+    div.innerHTML =
+      '<div class="reco-tag ' + r.tag + '">' + r.tagLabel + '</div>' +
+      '<div class="reco-title">' + r.title + '</div>' +
+      '<div class="reco-text">' + r.text + '</div>';
+    rcEl.appendChild(div);
+  });
+
+  // ═══════════════════════════════════════════════════════════════
+  // РАСЧЁТ ПОТЕРЬ ПО ВЕТКАМ
+  // ═══════════════════════════════════════════════════════════════
+  function computeLosses(branch) {
+    var hero = document.getElementById('loss-total');
+    var breakdown = document.getElementById('loss-breakdown');
+    breakdown.innerHTML = '';
+
+    var rows = [];
+    var total = 0;
+
+    if (branch === 'a') {
+      var hours = parseInt(params.get('a1'), 10) || 20;
+      var yearHours = hours * 50; // с учётом отпуска
+      var hourlyRate = 250000 / 160; // 250к зарплата сеньора / 160 часов
+      var founderTimeCost = Math.round(yearHours * hourlyRate);
+
+      // 3 дня выпадения = 24 часа простоя команды размером 5 = 120 часов потерь
+      var blockageCost = 50 * 120 * 24 * 1500; // 1500₽ средняя ставка
+      blockageCost = Math.round(blockageCost / 50); // годовая оценка
+
+      total = founderTimeCost;
+      hero.textContent = formatMoney(total);
+      rows = [
+        { label: 'Часы фаундера в операционке (' + hours + ' ч/нед × 50 нед)', value: formatMoney(founderTimeCost) },
+        { label: 'Эквивалент в зарплате senior-продакта', value: '~' + Math.round(yearHours * hourlyRate / 12 / 1000) + ' тыс ₽/мес' },
+        { label: 'Свободных недель в году, которые сейчас в операционке', value: Math.round(yearHours / 40) + ' недель' }
+      ];
+    }
+    else if (branch === 'b') {
+      var hoursB = parseInt(params.get('b6'), 10) || 8;
+      var yearHoursB = hoursB * 50;
+      var hourlyRateB = 300000 / 160;
+      var costB = Math.round(yearHoursB * hourlyRateB);
+
+      // Команда тоже теряет — каждое переспрашивание = 30 мин ожидания
+      // freq * 30 мин * размер команды = часов в неделю
+      var teamSize = parseInt((params.get('b1') || '4-10').split('-')[0], 10) || 5;
+      var teamLoss = Math.round(yearHoursB * 0.5 * teamSize * 1500);
+
+      total = costB + teamLoss;
+      hero.textContent = formatMoney(total);
+      rows = [
+        { label: 'Ваше время на повторяющиеся вопросы команды (' + hoursB + ' ч/нед)', value: formatMoney(costB) },
+        { label: 'Время команды на ожидании ответа (~' + teamSize + ' человек)', value: formatMoney(teamLoss) },
+        { label: 'Это эквивалент полной зарплаты на', value: Math.round(total / 300000 * 12) + ' месяцев' }
+      ];
+    }
+    else if (branch === 'c') {
+      var hoursC = parseInt(params.get('c4'), 10) || 6;
+      var yearHoursC = hoursC * 50;
+      var hourlyRateC = 300000 / 160;
+      var costC = Math.round(yearHoursC * hourlyRateC);
+
+      // Решения «по ощущению» — оценка в 5% выручки как риск
+      var revenueAvg = revenue === '30-100m' ? 65000000 : (revenue === '100-150m' ? 125000000 : 50000000);
+      var decisionRisk = Math.round(revenueAvg * 0.03);
+
+      total = costC + decisionRisk;
+      hero.textContent = formatMoney(total);
+      rows = [
+        { label: 'Часы на сбор отчётов (' + hoursC + ' ч/нед × 50 нед)', value: formatMoney(costC) },
+        { label: 'Риск неоптимальных решений (~3% от выручки)', value: formatMoney(decisionRisk) },
+        { label: 'Можно собрать в дашборд за', value: '3-4 недели' }
+      ];
+    }
+    else if (branch === 'd') {
+      var hoursD = parseInt(params.get('d6'), 10) || 60;
+      var yearHoursD = hoursD * 12;
+      var hourlyRateD = 200000 / 160; // middle
+      var costD = Math.round(yearHoursD * hourlyRateD);
+
+      // С AI можно убрать 60-70% — берём 65%
+      var savingsD = Math.round(costD * 0.65);
+
+      total = costD;
+      hero.textContent = formatMoney(total);
+      rows = [
+        { label: 'Часы команды на рутину (' + hoursD + ' ч/мес × 12)', value: formatMoney(costD) },
+        { label: 'Можно автоматизировать в среднем на 65%', value: formatMoney(savingsD) + '/год' },
+        { label: 'Окупаемость инфраструктуры', value: '3-6 месяцев' }
+      ];
+    }
+    else if (branch === 'e') {
+      // Для плато считаем «упущенный рост»
+      var revenueE = revenue === '100-150m' ? 125000000 : 65000000;
+      var stagnantGrowth = Math.round(revenueE * 0.20); // упущенные 20%
+
+      total = stagnantGrowth;
+      hero.textContent = formatMoney(total);
+      rows = [
+        { label: 'Упущенный рост (если бы выходили на 20% в год)', value: formatMoney(stagnantGrowth) + '/год' },
+        { label: 'Каждый месяц плато', value: formatMoney(Math.round(stagnantGrowth / 12)) },
+        { label: 'Этого хватит на', value: 'найм senior-команды + аудит + перестройку' }
+      ];
+    }
+
+    rows.forEach(function(r) {
+      var div = document.createElement('div');
+      div.className = 'loss-row';
+      div.innerHTML = '<div class="loss-label">' + r.label + '</div><div class="loss-value">' + r.value + '</div>';
+      breakdown.appendChild(div);
+    });
+  }
+
+  function formatMoney(n) {
+    if (n < 0) n = 0;
+    if (n >= 1000000) return (n / 1000000).toFixed(1).replace('.0', '') + ' млн ₽';
+    if (n >= 1000) return Math.round(n / 1000) + ' тыс ₽';
+    return n + ' ₽';
+  }
+
+})();
+</script>
+
+</body>
+</html>
