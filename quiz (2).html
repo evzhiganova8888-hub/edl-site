@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>EDL · Диагностика инфраструктуры</title>
+<meta name="description" content="5 минут. Узнайте, где ваш бизнес теряет время, деньги и управляемость.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ─── TOKENS (синхронизировано с сайтом elephantdreams.ru) ─── */
+:root {
+  /* Brand */
+  --brand-navy:        #1A1B2E;
+  --brand-navy-deep:   #11121F;
+  --brand-navy-soft:   #2A2B40;
+
+  /* Surface */
+  --bg-primary:        #FAF9F6;
+  --bg-elevated:       #FFFFFF;
+  --bg-tinted:         #F2F0EA;
+
+  /* Text */
+  --text-primary:      #15151D;
+  --text-secondary:    #4A4A52;
+  --text-tertiary:     #888893;
+  --text-on-dark:      #F5F5F0;
+  --text-on-dark-soft: #B5B5BD;
+
+  /* Accent (лайм — как на сайте) */
+  --accent:            #C8FF00;
+  --accent-hover:      #B6E600;
+  --accent-active:     #A4CC00;
+  --accent-soft:       rgba(200, 255, 0, 0.12);
+
+  /* Borders */
+  --border-subtle:     #E8E7E2;
+  --border-medium:     #D4D3CE;
+  --border-strong:     #15151D;
+
+  /* Status colors */
+  --color-green:       #2D7A4E;
+  --color-amber:       #B8890B;
+  --color-red:         #B83A3A;
+
+  /* Type families */
+  --ff-display: 'Inter', system-ui, -apple-system, sans-serif;
+  --ff-body:    'Inter', system-ui, -apple-system, sans-serif;
+  --ff-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  /* Transitions */
+  --t-fast:   150ms ease-out;
+  --t-medium: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--ff-body);
+  font-size: 17px;
+  line-height: 1.5;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-feature-settings: 'cv11', 'ss01', 'ss03';
+}
+
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input, textarea, select { font-family: inherit; }
+
+::selection { background: var(--accent); color: var(--text-primary); }
+
+:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ─── КОНТЕЙНЕР ─── */
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 24px 80px;
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* НА СТАРТОВОМ ЭКРАНЕ — больше воздуха сверху */
+body.is-start .app {
+  padding-top: 64px;
+}
+
+/* ─── ХЕДЕР И ПРОГРЕСС — скрыты на стартовом экране ─── */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+body.is-start .header,
+body.is-start .progress { display: none; }
+
+.logo {
+  font-family: var(--ff-display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+.logo em {
+  font-style: normal;
+  background: var(--accent);
+  padding: 1px 8px;
+  border-radius: 3px;
+}
+.progress-meta {
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ─── ПРОГРЕСС-БАР ─── */
+.progress {
+  width: 100%;
+  height: 3px;
+  background: var(--border-subtle);
+  margin-bottom: 40px;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--text-primary);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 0%;
+}
+
+/* ─── ЭКРАНЫ ─── */
+.screen {
+  display: none;
+  animation: slideIn 0.35s ease;
+  flex: 1;
+}
+.screen.active { display: flex; flex-direction: column; }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── ТИПОГРАФИКА ─── */
+.eyebrow {
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.h1 {
+  font-family: var(--ff-display);
+  font-size: clamp(32px, 5.5vw, 48px);
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+}
+.h1 em {
+  font-style: italic;
+  font-weight: 600;
+}
+
+/* СТАРТ — крупнее H1 */
+.h1.h1-start {
+  font-size: clamp(40px, 7vw, 60px);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  margin-bottom: 22px;
+}
+
+.h2 {
+  font-family: var(--ff-display);
+  font-size: clamp(24px, 4vw, 32px);
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+}
+.h2 em {
+  font-style: italic;
+  font-weight: 600;
+}
+
+.lead {
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-bottom: 36px;
+}
+
+/* СТАРТ — lead крупнее */
+.lead.lead-start {
+  font-size: 21px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-bottom: 0;
+}
+
+.q-hint {
+  font-size: 15px;
+  color: var(--text-tertiary);
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+
+/* ─── ОПЦИИ (radio) ─── */
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+.option {
+  background: var(--bg-elevated);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all var(--t-fast);
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  text-align: left;
+  width: 100%;
+  color: var(--text-primary);
+}
+.option:hover {
+  border-color: var(--text-primary);
+  background: var(--bg-elevated);
+}
+.option:active { transform: translateY(1px); }
+.option.selected {
+  border-color: var(--text-primary);
+  background: var(--accent-soft);
+}
+.option-radio {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-medium);
+  flex-shrink: 0;
+  margin-top: 2px;
+  position: relative;
+  transition: all var(--t-fast);
+  background: var(--bg-elevated);
+}
+.option.selected .option-radio {
+  border-color: var(--text-primary);
+  background: var(--text-primary);
+}
+.option.selected .option-radio::after {
+  content: '';
+  position: absolute;
+  top: 4px; left: 4px;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.option-content { flex: 1; }
+.option-title {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+}
+.option-hint {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+/* ─── ЧЕКБОКСЫ ─── */
+.option-check {
+  width: 18px; height: 18px;
+  border-radius: 3px;
+  border: 1.5px solid var(--border-medium);
+  flex-shrink: 0;
+  margin-top: 2px;
+  position: relative;
+  transition: all var(--t-fast);
+  background: var(--bg-elevated);
+}
+.option.selected .option-check {
+  border-color: var(--text-primary);
+  background: var(--text-primary);
+}
+.option.selected .option-check::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 6px;
+  width: 4px; height: 9px;
+  border-right: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  transform: rotate(45deg);
+}
+
+/* ─── ТЕКСТОВЫЕ ПОЛЯ ─── */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.field-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--bg-elevated);
+  border: 1.5px solid var(--border-medium);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 16px;
+  outline: none;
+  transition: border-color var(--t-fast), background var(--t-fast);
+  -webkit-appearance: none;
+  resize: vertical;
+  font-family: var(--ff-body);
+}
+.field-input:focus {
+  border-color: var(--text-primary);
+}
+.field-input::placeholder { color: var(--text-tertiary); }
+textarea.field-input { min-height: 110px; line-height: 1.5; }
+
+/* ─── СЛАЙДЕР ─── */
+.slider-wrap {
+  margin-bottom: 28px;
+  padding: 32px 28px;
+  background: var(--bg-elevated);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: 8px;
+  text-align: center;
+}
+.slider-value {
+  font-family: var(--ff-display);
+  font-size: 64px;
+  line-height: 1;
+  color: var(--text-primary);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+  display: inline-block;
+  position: relative;
+}
+.slider-value::after {
+  content: '';
+  display: block;
+  height: 12px;
+  background: var(--accent);
+  margin-top: -8px;
+  margin-left: -4px;
+  margin-right: -4px;
+  position: relative;
+  z-index: -1;
+}
+.slider-label {
+  font-family: var(--ff-mono);
+  font-size: 13px;
+  color: var(--text-tertiary);
+  margin-bottom: 24px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: var(--border-subtle);
+  border-radius: 2px;
+  outline: none;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid var(--text-primary);
+  transition: transform var(--t-fast);
+}
+.slider::-webkit-slider-thumb:hover { transform: scale(1.1); }
+.slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid var(--text-primary);
+}
+.slider-marks {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 12px;
+  letter-spacing: 0.04em;
+}
+
+/* ─── КНОПКИ ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--ff-display);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  padding: 14px 24px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--t-fast);
+  white-space: nowrap;
+  min-height: 48px;
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--text-primary);
+  width: 100%;
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+.btn-primary:active:not(:disabled) {
+  background: var(--accent-active);
+  transform: translateY(1px);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* СТАРТ — кнопка крупнее */
+.btn-primary.btn-start {
+  font-size: 18px;
+  min-height: 60px;
+  padding: 18px 28px;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1.5px solid var(--text-primary);
+}
+.btn-secondary:hover {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+}
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 36px;
+}
+.btn-back {
+  flex-shrink: 0;
+  padding: 14px 18px;
+  font-size: 18px;
+}
+
+/* ─── START SCREEN — переработано ─── */
+.start-tag {
+  display: inline-block;
+  padding: 6px 12px;
+  background: var(--bg-tinted);
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+  text-transform: uppercase;
+}
+
+/* Полоса "10 вопросов, 5 минут" — отдельная, по центру между h1 и пунктами */
+.start-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 36px 0;
+  padding: 14px 20px;
+  background: var(--bg-tinted);
+  border-radius: 6px;
+  font-family: var(--ff-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  text-align: center;
+}
+.start-meta .dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.start-features {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 36px;
+}
+.start-feature {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: border-color var(--t-fast);
+}
+.start-feature:hover {
+  border-color: var(--border-medium);
+}
+.start-feature-icon {
+  font-family: var(--ff-mono);
+  font-size: 13px;
+  color: var(--text-tertiary);
+  font-weight: 500;
+  min-width: 24px;
+  letter-spacing: 0.04em;
+}
+.start-feature-text {
+  font-size: 16px;
+  color: var(--text-primary);
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+@media (min-width: 768px) {
+  .start-feature-text { font-size: 17px; }
+}
+
+/* Подсказка под кнопкой про гаджет */
+.start-gadget-hint {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-tertiary);
+  line-height: 1.55;
+}
+
+/* ─── FINAL SCREEN ─── */
+.contact-form {
+  background: var(--bg-elevated);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 32px 28px;
+  margin-bottom: 24px;
+}
+.field-label {
+  display: block;
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.field-required { color: var(--color-red); }
+
+/* ─── SUCCESS / RESULT SCREEN ─── */
+.success-icon {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin: 0 auto 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.result-cta-card {
+  background: var(--brand-navy);
+  color: var(--text-on-dark);
+  border-radius: 8px;
+  padding: 36px 32px;
+  margin: 32px 0;
+}
+.result-cta-card .h2 { color: var(--text-on-dark); }
+.result-cta-card .lead { color: var(--text-on-dark-soft); }
+.result-cta-card .btn-primary {
+  background: var(--accent);
+  color: var(--text-primary);
+}
+
+/* ─── ENTERPRISE ─── */
+.enterprise-banner {
+  background: var(--brand-navy);
+  color: var(--text-on-dark);
+  border-radius: 8px;
+  padding: 28px 28px;
+  margin-bottom: 28px;
+}
+.enterprise-banner .h2 { color: var(--text-on-dark); margin-bottom: 10px; }
+.enterprise-eyebrow {
+  display: inline-block;
+  padding: 5px 10px;
+  background: var(--accent);
+  color: var(--text-primary);
+  border-radius: 3px;
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* ─── ОШИБКИ ─── */
+.field-input.err { border-color: var(--color-red); }
+.error-msg {
+  color: var(--color-red);
+  font-size: 13px;
+  margin-top: 6px;
+  display: none;
+}
+.error-msg.show { display: block; }
+
+/* ─── MOBILE ─── */
+@media (max-width: 600px) {
+  .app { padding: 18px 18px 60px; }
+  body.is-start .app { padding-top: 32px; }
+  .header { margin-bottom: 24px; padding-bottom: 16px; }
+  .progress { margin-bottom: 32px; }
+  .h1 { font-size: 30px; }
+  .h1.h1-start { font-size: 34px; }
+  .h2 { font-size: 24px; }
+  .lead { font-size: 17px; margin-bottom: 28px; }
+  .lead.lead-start { font-size: 18px; }
+  .start-meta { font-size: 12px; padding: 12px 16px; margin: 28px 0; }
+  .option { padding: 16px 18px; }
+  .option-title { font-size: 15px; }
+  .option-hint { font-size: 13px; }
+  .start-feature { padding: 16px 18px; gap: 16px; }
+  .start-feature-text { font-size: 15px; }
+  .btn-primary.btn-start { font-size: 16px; min-height: 52px; }
+  .slider-wrap { padding: 24px 20px; }
+  .slider-value { font-size: 52px; }
+  .contact-form { padding: 24px 20px; }
+}
+</style>
+</head>
+<body class="is-start">
+
+<div class="app">
+
+  <!-- ═══ HEADER (скрыт на стартовом экране через body.is-start) ═══ -->
+  <div class="header">
+    <div class="logo"><em>EDL</em></div>
+    <div class="progress-meta" id="progress-meta">5 минут</div>
+  </div>
+
+  <!-- ═══ PROGRESS BAR (скрыт на стартовом экране) ═══ -->
+  <div class="progress">
+    <div class="progress-fill" id="progress-fill"></div>
+  </div>
+
+  <!-- ═══ START SCREEN ═══ -->
+  <div class="screen active" id="screen-start">
+    <div class="start-tag">Диагностика инфраструктуры бизнеса</div>
+    <h1 class="h1 h1-start">Узнайте, где ваш бизнес <em>теряет время и деньги</em></h1>
+    <p class="lead lead-start">На выходе — персональный документ с расчётом потерь и картой узких мест в управлении.</p>
+
+    <div class="start-meta">
+      <span class="dot"></span>
+      <span>10 вопросов · 5 минут</span>
+      <span class="dot"></span>
+    </div>
+
+    <div class="start-features">
+      <div class="start-feature">
+        <div class="start-feature-icon">01</div>
+        <div class="start-feature-text">За чашечкой кофе пройдёте тест</div>
+      </div>
+      <div class="start-feature">
+        <div class="start-feature-icon">02</div>
+        <div class="start-feature-text">Получите экспресс-МРТ своего бизнеса</div>
+      </div>
+      <div class="start-feature">
+        <div class="start-feature-icon">03</div>
+        <div class="start-feature-text">Отправите команде вместо длинного брифа — в&nbsp;PDF</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-start" onclick="startQuiz()">
+      Начать диагностику
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+
+    <p class="start-gadget-hint">
+      Удобнее с десктопа в спокойной обстановке. С телефона тоже работает.
+    </p>
+  </div>
+
+  <!-- ═══ ВСЕ ОСТАЛЬНЫЕ ЭКРАНЫ ГЕНЕРИРУЮТСЯ ДИНАМИЧЕСКИ ═══ -->
+  <div id="dynamic-screens"></div>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   EDL Quiz v2.1 — логика
+   ═══════════════════════════════════════════════════════════════ */
+
+// === КОНФИГ ===
+var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbx9z6AecRYinB1eUZYQd90Y_QigU5xv6AO-uFw835shoQt-w79q1kjFzbRHWZ-CP2Z_Kg/exec';
+var TG_CHANNEL = 'https://t.me/elephantdreamscommunity';
+var CALENDLY = 'https://calendly.com/evzhiganova8888/30min';
+var TG_FOUNDER = 'https://t.me/evzhiganova';
+
+// === SESSION ===
+var SESSION_ID = 'q2_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+var STARTED_AT = Date.now();
+
+// === STATE ===
+var state = {
+  answers: {},
+  currentQ: null,
+  history: [],
+  branch: null,
+  branchQuestions: []
+};
+
+// ═══════════════════════════════════════════════════════════════
+// ВОПРОСЫ
+// ═══════════════════════════════════════════════════════════════
+var QUESTIONS = {
+
+  q1: {
+    type: 'radio',
+    eyebrow: 'Знакомство',
+    title: 'Какая годовая выручка у вашей компании сейчас?',
+    options: [
+      { value: 'sub30m', label: 'До 30 млн ₽' },
+      { value: '30-100m', label: '30 – 100 млн ₽' },
+      { value: '100-150m', label: '100 – 150 млн ₽' },
+      { value: '150m+', label: 'Больше 150 млн ₽' }
+    ]
+  },
+
+  q2: {
+    type: 'radio',
+    eyebrow: 'Главный вопрос',
+    title: 'Что для вас сейчас болит сильнее всего?',
+    options: [
+      { value: 'a', label: 'Всё на мне как на руководителе', hint: 'Без меня процессы стопорятся. Хочется делегировать, но непонятно как и кому.' },
+      { value: 'b', label: 'Команда не делает ничего без моего указания', hint: 'Пока не проверю и не приду — не сделается.' },
+      { value: 'c', label: 'Слишком много времени уходит на операционку и сбор отчётов', hint: 'У каждой команды свои пространства, информация. Пока сам не пройдёшь по руководителям — не узнаешь что у них.' },
+      { value: 'd', label: 'Хочу автоматизировать рутину, но без новой головной боли', hint: 'У нас и без этого много отчётов, команд, процессов. Хочется не ИИ ради ИИ, а чтобы новый инструмент действительно освободил моё время.' },
+      { value: 'e', label: 'Выросли, упёрлись в потолок выручки — а что дальше непонятно', hint: 'Дошли до текущего размера, и здесь застряли. Команда есть, выручка есть, но рост остановился. Не понимаю что чинить.' }
+    ]
+  },
+
+  // === ВЕТКА A — Всё на мне ===
+  a1: {
+    type: 'slider', eyebrow: 'Часы операционки',
+    title: 'Сколько часов в неделю вы лично тратите на операционные задачи?',
+    hint: 'Не на стратегию и не на ключевые продажи — а на повседневные «прорабские» дела.',
+    min: 0, max: 60, step: 1, default: 20, unit: 'часов в неделю'
+  },
+  a2: {
+    type: 'radio', eyebrow: 'Что без вас',
+    title: 'Что произойдёт, если вас не будет 3 дня — отпуск, поездка, болезнь?',
+    options: [
+      { value: 'stops', label: 'Всё остановится' },
+      { value: 'problems', label: 'Будут проблемы, но команда вытянет' },
+      { value: 'paused', label: 'Большинство задач продолжит идти, но решения подвиснут' },
+      { value: 'fine', label: 'Всё работает без меня, в принципе можно уехать на месяц' }
+    ]
+  },
+  a3: {
+    type: 'text', eyebrow: 'Делегирование',
+    title: 'Какие 3 задачи вы делегировали бы первыми, если бы было кому?',
+    hint: 'Можно списком через запятую или с новой строки.',
+    rows: 3
+  },
+  a4: {
+    type: 'multi', eyebrow: 'Где живёт информация',
+    title: 'Где сейчас живёт ключевая информация о бизнесе?',
+    hint: 'Можно выбрать несколько вариантов.',
+    options: [
+      { value: 'head', label: 'В моей голове' },
+      { value: 'chats', label: 'В чатах в Telegram / WhatsApp' },
+      { value: 'sheets', label: 'В Google-таблицах' },
+      { value: 'crm', label: 'В CRM' },
+      { value: 'kb', label: 'В Notion / Confluence / другой базе знаний' },
+      { value: 'none', label: 'Нигде системно' }
+    ]
+  },
+  a5: {
+    type: 'radio', eyebrow: 'Команда',
+    title: 'Сколько человек в команде сейчас?',
+    options: [
+      { value: '1-3', label: '1–3 человека' },
+      { value: '4-10', label: '4–10' },
+      { value: '11-25', label: '11–25' },
+      { value: '26+', label: '26 и больше' }
+    ]
+  },
+  a6: {
+    type: 'radio', eyebrow: 'Опыт',
+    title: 'Был ли у вас опыт работы с подрядчиками или внешними консультантами?',
+    options: [
+      { value: 'never', label: 'Не работал' },
+      { value: 'good', label: 'Работал, остался доволен' },
+      { value: 'mixed', label: 'Работал, опыт смешанный' },
+      { value: 'bad', label: 'Работал, был плохой опыт — больше не хочу' }
+    ]
+  },
+  a7: {
+    type: 'radio', eyebrow: 'Что важнее',
+    title: 'Если бы освободилось 15 часов в неделю — на что бы вы их потратили?',
+    options: [
+      { value: 'strategy', label: 'Стратегия и развитие компании' },
+      { value: 'products', label: 'Новые продукты, гипотезы' },
+      { value: 'family', label: 'Семья, отдых, здоровье' },
+      { value: 'self', label: 'Личное обучение и нетворк' },
+      { value: 'unsure', label: 'Не уверен, нужно подумать' }
+    ]
+  },
+  a8: {
+    type: 'text', eyebrow: 'Главный результат',
+    title: 'Что для вас будет главным результатом через 3 месяца?',
+    hint: 'Если что-то поменяется в работе — что вы хотите увидеть?',
+    rows: 3
+  },
+
+  // === ВЕТКА B — Команда без указания ===
+  b1: {
+    type: 'radio', eyebrow: 'Команда',
+    title: 'Сколько человек в команде?',
+    options: [
+      { value: '1-3', label: '1–3' },
+      { value: '4-10', label: '4–10' },
+      { value: '11-25', label: '11–25' },
+      { value: '26+', label: '26 и больше' }
+    ]
+  },
+  b2: {
+    type: 'radio', eyebrow: 'Где живут задачи',
+    title: 'Где сейчас живут задачи команды?',
+    options: [
+      { value: 'chats', label: 'В чатах (Telegram / WhatsApp / почта)' },
+      { value: 'tools', label: 'В Trello / Notion / общей таблице' },
+      { value: 'crm', label: 'В полноценной CRM или таск-трекере' },
+      { value: 'none', label: 'Нигде системно — у каждого свой способ' }
+    ]
+  },
+  b3: {
+    type: 'radio', eyebrow: 'Переспросы',
+    title: 'Сколько раз в неделю команда переспрашивает у вас одно и то же?',
+    options: [
+      { value: 'never', label: 'Почти никогда' },
+      { value: '1-3', label: '1–3 раза в неделю' },
+      { value: 'daily', label: 'Каждый день что-то' },
+      { value: 'always', label: 'Целыми днями отвечаю на одно и то же' }
+    ]
+  },
+  b4: {
+    type: 'radio', eyebrow: 'Зоны ответственности',
+    title: 'У каждого сотрудника есть зафиксированная зона ответственности?',
+    options: [
+      { value: 'all', label: 'Да, у всех на бумаге' },
+      { value: 'partial', label: 'Частично — у ключевых людей есть, у остальных нет' },
+      { value: 'verbal', label: 'В голове знаем, на бумаге нет' },
+      { value: 'blurred', label: 'Размыто — все делают всё понемногу' }
+    ]
+  },
+  b5: {
+    type: 'text', eyebrow: 'Сломанные процессы',
+    title: 'Какие 3 процесса в компании вы считаете самыми «сломанными» сейчас?',
+    rows: 3
+  },
+  b6: {
+    type: 'slider', eyebrow: 'Часы на ответы',
+    title: 'Сколько часов в неделю вы тратите на ответы команде на повторяющиеся вопросы?',
+    min: 0, max: 30, step: 1, default: 8, unit: 'часов в неделю'
+  },
+  b7: {
+    type: 'text', eyebrow: 'Без вас',
+    title: 'Если команда останется без вас на 2 недели — что сломается первым?',
+    rows: 3
+  },
+  b8: {
+    type: 'text', eyebrow: 'Главный результат',
+    title: 'Что для вас будет главным результатом через 3 месяца?',
+    rows: 3
+  },
+
+  // === ВЕТКА C — Время на отчёты ===
+  c1: {
+    type: 'radio', eyebrow: 'Структура',
+    title: 'Сколько руководителей направлений в компании сейчас?',
+    hint: 'Тех, у кого под собой есть свои сотрудники.',
+    options: [
+      { value: '1', label: '1' },
+      { value: '2-3', label: '2–3' },
+      { value: '4-6', label: '4–6' },
+      { value: '7+', label: '7 и больше' }
+    ]
+  },
+  c2: {
+    type: 'radio', eyebrow: 'Сбор статуса',
+    title: 'Чтобы понять, что происходит в компании сегодня — что вы делаете?',
+    options: [
+      { value: 'dashboard', label: 'Захожу в один дашборд / отчёт и всё вижу' },
+      { value: 'few', label: 'Открываю 2–3 разных места' },
+      { value: 'ask', label: 'Прохожу по чатам и спрашиваю руководителей' },
+      { value: 'pieces', label: 'Собираю в течение дня по кусочкам отовсюду' }
+    ]
+  },
+  c3: {
+    type: 'text', eyebrow: 'Идеальная картина',
+    title: 'Какие данные о бизнесе вы хотели бы видеть каждое утро в одной картинке?',
+    hint: 'Например: выручка месяца, лиды за неделю, остаток по проектам.',
+    rows: 4
+  },
+  c4: {
+    type: 'slider', eyebrow: 'Часы на отчёты',
+    title: 'Сколько часов в неделю вы лично тратите на сбор отчётов и опрос команды?',
+    min: 0, max: 20, step: 1, default: 6, unit: 'часов в неделю'
+  },
+  c5: {
+    type: 'multi', eyebrow: 'Где данные',
+    title: 'Где сейчас лежат данные о клиентах, оплатах, проектах, команде?',
+    hint: 'Можно выбрать несколько.',
+    options: [
+      { value: 'crm', label: 'В CRM' },
+      { value: '1c', label: 'В 1С / другой бухгалтерии' },
+      { value: 'sheets', label: 'В Excel / Google-таблицах' },
+      { value: 'chats', label: 'В чатах с командой' },
+      { value: 'heads', label: 'В голове руководителей направлений' }
+    ]
+  },
+  c6: {
+    type: 'radio', eyebrow: 'Решения вслепую',
+    title: 'Как часто вы принимаете решение «по ощущению», потому что нет данных под рукой?',
+    options: [
+      { value: 'daily', label: 'Каждый день' },
+      { value: 'weekly', label: 'Несколько раз в неделю' },
+      { value: 'monthly', label: 'Несколько раз в месяц' },
+      { value: 'rarely', label: 'Редко — обычно есть на что опираться' }
+    ]
+  },
+  c7: {
+    type: 'radio', eyebrow: 'Что важнее',
+    title: 'Если бы можно было освободить 10 часов в неделю — на что бы вы их потратили?',
+    options: [
+      { value: 'strategy', label: 'Стратегия, видение, развитие компании' },
+      { value: 'self', label: 'Личное развитие, обучение' },
+      { value: 'family', label: 'Семья, отдых' },
+      { value: 'products', label: 'Новые продукты, направления' },
+      { value: 'unsure', label: 'Не уверен, надо подумать' }
+    ]
+  },
+  c8: {
+    type: 'text', eyebrow: 'Главный результат',
+    title: 'Что для вас будет главным результатом через 3 месяца?',
+    rows: 3
+  },
+
+  // === ВЕТКА D — AI без головной боли ===
+  d1: {
+    type: 'radio', eyebrow: 'Текущий опыт',
+    title: 'Используете ли вы или команда сейчас ИИ-инструменты?',
+    options: [
+      { value: 'active', label: 'Активно — каждый день' },
+      { value: 'sometimes', label: 'Иногда, для отдельных задач' },
+      { value: 'tried', label: 'Пробовали, не прижилось' },
+      { value: 'no', label: 'Нет, не используем' }
+    ]
+  },
+  d2: {
+    type: 'text', eyebrow: 'Время команды',
+    title: 'Какие ручные задачи в бизнесе занимают у команды больше всего времени?',
+    hint: 'Те, которые повторяются и кажутся «можно как-то автоматизировать».',
+    rows: 3
+  },
+  d3: {
+    type: 'multi', eyebrow: 'Что останавливает',
+    title: 'Что вас останавливает от внедрения автоматизаций / ИИ прямо сейчас?',
+    hint: 'Можно выбрать несколько.',
+    options: [
+      { value: 'where', label: 'Не понимаю с чего начать' },
+      { value: 'time', label: 'Нет ресурса разбираться самому' },
+      { value: 'risk', label: 'Боюсь сделать неправильно и сломать процессы' },
+      { value: 'people', label: 'В команде нет человека, кто бы это вёл' },
+      { value: 'doubt', label: 'Не верю, что это реально полезно для нашего бизнеса' },
+      { value: 'cost', label: 'Дорого' }
+    ]
+  },
+  d4: {
+    type: 'multi', eyebrow: 'Что уже есть',
+    title: 'Что у вас уже есть из инфраструктуры?',
+    hint: 'Можно выбрать несколько.',
+    options: [
+      { value: 'crm', label: 'Полноценная CRM (amoCRM, Bitrix24, кастомная)' },
+      { value: 'dash', label: 'Дашборды по основным метрикам' },
+      { value: 'tg', label: 'Telegram-бот для команды или клиентов' },
+      { value: 'cabinet', label: 'Личный кабинет для клиентов' },
+      { value: 'auto', label: 'Автоматизации (n8n, Make, Zapier)' },
+      { value: 'none', label: 'Ничего из перечисленного' }
+    ]
+  },
+  d5: {
+    type: 'text', eyebrow: 'Что убрать первым',
+    title: 'Какие повторяющиеся задачи команды вы хотели бы убрать в первую очередь?',
+    rows: 3
+  },
+  d6: {
+    type: 'slider', eyebrow: 'Объём рутины',
+    title: 'Сколько человеко-часов в месяц команда тратит на работу с клиентскими запросами?',
+    hint: 'Если знаете приблизительно — нормально.',
+    min: 0, max: 200, step: 5, default: 60, unit: 'часов в месяц'
+  },
+  d7: {
+    type: 'radio', eyebrow: 'Бюджет',
+    title: 'Какой бюджет рассматриваете на внедрение?',
+    options: [
+      { value: 'undefined', label: 'Пока не определился' },
+      { value: 'sub100', label: 'До 100 тыс ₽ в месяц' },
+      { value: '100-300', label: '100 – 300 тыс ₽ в месяц' },
+      { value: '300+', label: 'Больше 300 тыс ₽ в месяц' }
+    ]
+  },
+  d8: {
+    type: 'text', eyebrow: 'Главный результат',
+    title: 'Что для вас будет главным результатом через 3 месяца?',
+    rows: 3
+  },
+
+  // === ВЕТКА E — Выросли упёрлись ===
+  e1: {
+    type: 'radio', eyebrow: 'Возраст компании',
+    title: 'Сколько лет компании на рынке?',
+    options: [
+      { value: '3-5', label: '3–5 лет' },
+      { value: '5-10', label: '5–10 лет' },
+      { value: '10+', label: '10 и больше' }
+    ]
+  },
+  e2: {
+    type: 'radio', eyebrow: 'Плато',
+    title: 'Сколько вы наблюдаете «плато» в выручке?',
+    options: [
+      { value: 'sub6m', label: 'Меньше 6 месяцев' },
+      { value: '6-12m', label: '6–12 месяцев' },
+      { value: '1-2y', label: '1–2 года' },
+      { value: '2y+', label: 'Больше 2 лет' }
+    ]
+  },
+  e3: {
+    type: 'multi', eyebrow: 'Что пробовали',
+    title: 'Что вы пробовали, чтобы выйти из плато?',
+    hint: 'Можно выбрать несколько.',
+    options: [
+      { value: 'hire', label: 'Нанимали новых людей' },
+      { value: 'product', label: 'Меняли продукт / цены' },
+      { value: 'new', label: 'Запускали новые направления' },
+      { value: 'marketing', label: 'Привлекали маркетинговых подрядчиков' },
+      { value: 'consult', label: 'Работали с консультантами' },
+      { value: 'small', label: 'Пока ничего системно — пробуем по чуть-чуть' },
+      { value: 'none', label: 'Ничего, времени не было дойти' }
+    ]
+  },
+  e4: {
+    type: 'text', eyebrow: 'Ваша гипотеза',
+    title: 'На ваш взгляд, в чём главная причина плато?',
+    rows: 3
+  },
+  e5: {
+    type: 'radio', eyebrow: 'Слабое место',
+    title: 'Где, как вам кажется, сейчас слабее всего?',
+    hint: 'Один вариант — самое слабое.',
+    options: [
+      { value: 'product', label: 'Продукт — не растём в чек, не растём в LTV' },
+      { value: 'sales', label: 'Маркетинг и продажи — мало лидов или плохая конверсия' },
+      { value: 'team', label: 'Команда — не справляется с текущими задачами' },
+      { value: 'infra', label: 'Процессы и инфраструктура — всё держится на ручном труде' },
+      { value: 'me', label: 'Я сам как руководитель — не успеваю всё охватить' },
+      { value: 'unknown', label: 'Не понимаю где слабое место — это и есть проблема' }
+    ]
+  },
+  e6: {
+    type: 'text', eyebrow: 'Цель в цифрах',
+    title: 'Что для вас «выйти из плато» означает в цифрах?',
+    hint: 'Например: «вырасти с 80 до 150 млн за год».',
+    rows: 2
+  },
+  e7: {
+    type: 'radio', eyebrow: 'Готовность',
+    title: 'Какой ресурс готовы инвестировать в перестройку?',
+    options: [
+      { value: 'money', label: 'Деньги есть, нет времени' },
+      { value: 'time', label: 'Время есть, бюджет ограничен' },
+      { value: 'careful', label: 'Есть и то и то, но осторожно' },
+      { value: 'serious', label: 'Готов на серьёзные инвестиции, если будет ясный план' }
+    ]
+  },
+  e8: {
+    type: 'text', eyebrow: 'Главный результат',
+    title: 'Что для вас будет главным результатом через 3 месяца?',
+    rows: 3
+  },
+
+  // === ENTERPRISE ===
+  ent1: {
+    type: 'text', eyebrow: 'Компания',
+    title: 'Как называется ваша компания?',
+    rows: 1
+  },
+  ent2: {
+    type: 'radio', eyebrow: 'Отрасль',
+    title: 'Какая отрасль?',
+    options: [
+      { value: 'fintech', label: 'FinTech / финансовые услуги' },
+      { value: 'edtech', label: 'EdTech / образование' },
+      { value: 'retail', label: 'RetailTech / e-commerce' },
+      { value: 'manufacturing', label: 'Промышленность / производство' },
+      { value: 'services', label: 'Профессиональные услуги' },
+      { value: 'media', label: 'Медиа / контент' },
+      { value: 'other', label: 'Другое' }
+    ]
+  },
+  ent3: {
+    type: 'radio', eyebrow: 'Команда',
+    title: 'Размер команды?',
+    options: [
+      { value: 'sub100', label: 'До 100 человек' },
+      { value: '100-500', label: '100 – 500' },
+      { value: '500-2000', label: '500 – 2000' },
+      { value: '2000+', label: '2000 и больше' }
+    ]
+  },
+  ent4: {
+    type: 'text', eyebrow: 'Главная задача',
+    title: 'Какая главная задача, с которой хотите подойти к нам?',
+    hint: 'Это ключевой вопрос — на нём Екатерина готовится к разговору.',
+    rows: 5
+  },
+  ent5: {
+    type: 'text', eyebrow: 'Подрядчики',
+    title: 'Какие подрядчики или консультанты у вас уже работают по этому направлению?',
+    hint: 'Опционально.',
+    rows: 3
+  }
+};
+
+var BRANCH_ORDER = {
+  'a': ['a1','a2','a3','a4','a5','a6','a7','a8'],
+  'b': ['b1','b2','b3','b4','b5','b6','b7','b8'],
+  'c': ['c1','c2','c3','c4','c5','c6','c7','c8'],
+  'd': ['d1','d2','d3','d4','d5','d6','d7','d8'],
+  'e': ['e1','e2','e3','e4','e5','e6','e7','e8'],
+  'enterprise': ['ent1','ent2','ent3','ent4','ent5']
+};
+
+var BRANCH_LABELS = {
+  'a': 'Всё на мне как на руководителе',
+  'b': 'Команда не делает ничего без указания',
+  'c': 'Время уходит на операционку и отчёты',
+  'd': 'Автоматизация без головной боли',
+  'e': 'Вышли на плато выручки',
+  'enterprise': 'Enterprise — разговор с фаундером',
+  'subicp': 'Ранняя стадия'
+};
+
+// ═══════════════════════════════════════════════════════════════
+// СТАРТ
+// ═══════════════════════════════════════════════════════════════
+function startQuiz() {
+  // Снимаем класс is-start с body — показывается header и progress
+  document.body.classList.remove('is-start');
+  trackEvent('quiz_start', { session_id: SESSION_ID });
+  showQuestion('q1');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ПОКАЗ ВОПРОСА
+// ═══════════════════════════════════════════════════════════════
+function showQuestion(qid) {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('dynamic-screens').innerHTML = '';
+
+  state.currentQ = qid;
+  if (state.history[state.history.length - 1] !== qid) {
+    state.history.push(qid);
+  }
+
+  var q = QUESTIONS[qid];
+  if (!q) return;
+
+  var html = buildQuestionHtml(qid, q);
+  document.getElementById('dynamic-screens').innerHTML = html;
+  document.querySelector('#dynamic-screens .screen').classList.add('active');
+  attachQuestionHandlers(qid, q);
+  updateProgress();
+  window.scrollTo(0, 0);
+}
+
+function buildQuestionHtml(qid, q) {
+  var html = '<div class="screen active" id="screen-' + qid + '">';
+
+  if (q.eyebrow) html += '<div class="eyebrow">' + q.eyebrow + '</div>';
+  html += '<h2 class="h2">' + q.title + '</h2>';
+  if (q.hint) html += '<p class="q-hint">' + q.hint + '</p>';
+
+  if (q.type === 'radio') {
+    html += '<div class="options" id="options-' + qid + '">';
+    q.options.forEach(function(opt) {
+      html += '<button class="option" data-value="' + opt.value + '">';
+      html += '<div class="option-radio"></div>';
+      html += '<div class="option-content">';
+      html += '<div class="option-title">' + opt.label + '</div>';
+      if (opt.hint) html += '<div class="option-hint">' + opt.hint + '</div>';
+      html += '</div>';
+      html += '</button>';
+    });
+    html += '</div>';
+  }
+  else if (q.type === 'multi') {
+    html += '<div class="options" id="options-' + qid + '">';
+    q.options.forEach(function(opt) {
+      html += '<button class="option" data-value="' + opt.value + '">';
+      html += '<div class="option-check"></div>';
+      html += '<div class="option-content">';
+      html += '<div class="option-title">' + opt.label + '</div>';
+      html += '</div>';
+      html += '</button>';
+    });
+    html += '</div>';
+  }
+  else if (q.type === 'text') {
+    html += '<div class="field">';
+    if (q.rows && q.rows === 1) {
+      html += '<input class="field-input" id="text-' + qid + '" type="text" placeholder="Ваш ответ">';
+    } else {
+      html += '<textarea class="field-input" id="text-' + qid + '" rows="' + (q.rows || 3) + '" placeholder="Ваш ответ"></textarea>';
+    }
+    html += '</div>';
+  }
+  else if (q.type === 'slider') {
+    var defaultVal = q.default;
+    html += '<div class="slider-wrap">';
+    html += '<div class="slider-value" id="slider-val-' + qid + '">' + defaultVal + '</div>';
+    html += '<div class="slider-label">' + q.unit + '</div>';
+    html += '<input class="slider" id="slider-' + qid + '" type="range" min="' + q.min + '" max="' + q.max + '" step="' + q.step + '" value="' + defaultVal + '">';
+    html += '<div class="slider-marks"><span>' + q.min + '</span><span>' + q.max + '+</span></div>';
+    html += '</div>';
+  }
+
+  html += '<div class="btn-row">';
+  if (state.history.length > 1) {
+    html += '<button class="btn btn-secondary btn-back" onclick="goBack()">←</button>';
+  }
+  if (q.type !== 'radio') {
+    html += '<button class="btn btn-primary" id="next-btn-' + qid + '" onclick="answerAndNext(\'' + qid + '\')">';
+    html += 'Дальше';
+    html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+    html += '</button>';
+  }
+  html += '</div>';
+
+  html += '</div>';
+  return html;
+}
+
+function attachQuestionHandlers(qid, q) {
+  if (q.type === 'radio') {
+    document.querySelectorAll('#options-' + qid + ' .option').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('#options-' + qid + ' .option').forEach(function(b) { b.classList.remove('selected'); });
+        btn.classList.add('selected');
+        var val = btn.getAttribute('data-value');
+        setTimeout(function() {
+          state.answers[qid] = val;
+          handleAnswer(qid, val);
+        }, 250);
+      });
+    });
+  }
+  else if (q.type === 'multi') {
+    document.querySelectorAll('#options-' + qid + ' .option').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        btn.classList.toggle('selected');
+      });
+    });
+  }
+  else if (q.type === 'slider') {
+    var slider = document.getElementById('slider-' + qid);
+    var valDisplay = document.getElementById('slider-val-' + qid);
+    slider.addEventListener('input', function() {
+      valDisplay.textContent = slider.value;
+    });
+  }
+}
+
+function answerAndNext(qid) {
+  var q = QUESTIONS[qid];
+  var val;
+
+  if (q.type === 'multi') {
+    var selected = [];
+    document.querySelectorAll('#options-' + qid + ' .option.selected').forEach(function(b) {
+      selected.push(b.getAttribute('data-value'));
+    });
+    val = selected;
+  }
+  else if (q.type === 'text') {
+    var input = document.getElementById('text-' + qid);
+    val = input.value.trim();
+  }
+  else if (q.type === 'slider') {
+    val = parseInt(document.getElementById('slider-' + qid).value, 10);
+  }
+
+  state.answers[qid] = val;
+  handleAnswer(qid, val);
+}
+
+function handleAnswer(qid, val) {
+  trackEvent('quiz_q_answered', { qid: qid, value: typeof val === 'object' ? val.join(',') : String(val) });
+
+  if (qid === 'q1') {
+    if (val === 'sub30m') {
+      state.branch = 'subicp';
+      showQuestion('q2');
+      return;
+    }
+    if (val === '150m+') {
+      state.branch = 'enterprise';
+      state.branchQuestions = BRANCH_ORDER['enterprise'];
+      showQuestion('ent1');
+      return;
+    }
+    showQuestion('q2');
+    return;
+  }
+
+  if (qid === 'q2') {
+    if (state.branch !== 'subicp') {
+      state.branch = val;
+    }
+    state.branchQuestions = BRANCH_ORDER[val];
+    showQuestion(state.branchQuestions[0]);
+    trackEvent('quiz_branch_selected', { branch: val });
+    return;
+  }
+
+  var idx = state.branchQuestions.indexOf(qid);
+  if (idx === -1) {
+    showFinalForm();
+    return;
+  }
+  if (idx < state.branchQuestions.length - 1) {
+    showQuestion(state.branchQuestions[idx + 1]);
+  } else {
+    if (state.branch === 'enterprise') {
+      submitEnterprise();
+    } else {
+      showFinalForm();
+    }
+  }
+}
+
+function goBack() {
+  if (state.history.length < 2) return;
+  state.history.pop();
+  var prevQid = state.history[state.history.length - 1];
+  state.history.pop();
+  showQuestion(prevQid);
+}
+
+function updateProgress() {
+  var qid = state.currentQ;
+  var total, current;
+
+  if (qid === 'q1' || qid === 'q2') {
+    total = 10;
+    current = qid === 'q1' ? 1 : 2;
+  } else if (state.branch === 'enterprise') {
+    var entIdx = BRANCH_ORDER['enterprise'].indexOf(qid);
+    total = 1 + BRANCH_ORDER['enterprise'].length;
+    current = 1 + entIdx + 1;
+  } else {
+    var idx = state.branchQuestions.indexOf(qid);
+    total = 10;
+    current = 2 + idx + 1;
+  }
+
+  var pct = Math.round((current / total) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-meta').textContent = 'Вопрос ' + current + ' из ' + total;
+}
+
+function showFinalForm() {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('dynamic-screens').innerHTML = '';
+
+  var html = '<div class="screen active" id="screen-final">';
+  html += '<div class="eyebrow">Последний шаг</div>';
+
+  if (state.branch === 'subicp') {
+    html += '<h2 class="h2">Спасибо! Подготовим для вас <em>персональный документ</em></h2>';
+    html += '<p class="lead">Мы пропустили вас полностью, потому что хотим дать вам результат. Оставьте контакты — пришлём документ с диагностикой и расчётом потерь.</p>';
+  } else {
+    html += '<h2 class="h2">Готово. Один шаг до <em>вашего диагноза</em></h2>';
+    html += '<p class="lead">Оставьте контакты — пришлём персональный документ с расчётом потерь и картой узких мест в вашей инфраструктуре. Срок — в течение часа.</p>';
+  }
+
+  html += '<div class="contact-form">';
+  html += '<div class="field">';
+  html += '<label class="field-label" for="final-name">Ваше имя <span class="field-required">*</span></label>';
+  html += '<input class="field-input" id="final-name" type="text" placeholder="Имя">';
+  html += '<div class="error-msg" id="err-name">Укажите имя</div>';
+  html += '</div>';
+
+  html += '<div class="field">';
+  html += '<label class="field-label" for="final-contact">Telegram или email <span class="field-required">*</span></label>';
+  html += '<input class="field-input" id="final-contact" type="text" placeholder="@username или you@company.ru">';
+  html += '<div class="error-msg" id="err-contact">Укажите Telegram или email</div>';
+  html += '</div>';
+
+  html += '<div class="field">';
+  html += '<label class="field-label" for="final-company">Компания <span style="color:var(--text-tertiary);font-weight:400;text-transform:none;letter-spacing:0;">(необязательно)</span></label>';
+  html += '<input class="field-input" id="final-company" type="text" placeholder="Название компании">';
+  html += '</div>';
+
+  html += '<button class="btn btn-primary" id="final-submit" onclick="submitQuiz()">';
+  html += 'Получить документ';
+  html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+  html += '</button>';
+  html += '<div style="font-size:12px;color:var(--text-tertiary);text-align:center;margin-top:14px;line-height:1.5;">Нажимая кнопку, вы соглашаетесь с обработкой персональных данных.</div>';
+  html += '</div>';
+
+  html += '</div>';
+
+  document.getElementById('dynamic-screens').innerHTML = html;
+  document.getElementById('progress-fill').style.width = '95%';
+  document.getElementById('progress-meta').textContent = 'Почти готово';
+  window.scrollTo(0, 0);
+
+  trackEvent('quiz_final_form_shown', { branch: state.branch });
+}
+
+function submitQuiz() {
+  var name = document.getElementById('final-name').value.trim();
+  var contact = document.getElementById('final-contact').value.trim();
+  var company = document.getElementById('final-company').value.trim();
+
+  var ok = true;
+  document.getElementById('err-name').classList.remove('show');
+  document.getElementById('err-contact').classList.remove('show');
+  document.getElementById('final-name').classList.remove('err');
+  document.getElementById('final-contact').classList.remove('err');
+
+  if (!name || name.length < 2) {
+    document.getElementById('err-name').classList.add('show');
+    document.getElementById('final-name').classList.add('err');
+    ok = false;
+  }
+  if (!contact || contact.length < 3) {
+    document.getElementById('err-contact').classList.add('show');
+    document.getElementById('final-contact').classList.add('err');
+    ok = false;
+  }
+  if (!ok) return;
+
+  var btn = document.getElementById('final-submit');
+  btn.disabled = true;
+  btn.innerHTML = 'Отправляем…';
+
+  var payload = buildSubmitPayload(name, contact, company);
+
+  sendToBackend(payload).then(function() {
+    showResultScreen();
+    trackEvent('quiz_submitted', { branch: state.branch });
+  }).catch(function(e) {
+    btn.disabled = false;
+    btn.innerHTML = 'Получить документ';
+    alert('Не удалось отправить. Попробуйте через минуту или напишите нам в Telegram: ' + TG_FOUNDER);
+  });
+}
+
+function buildSubmitPayload(name, contact, company) {
+  var telegram = '', work_email = '', alt_contact = '';
+  if (contact.indexOf('@') !== -1 && contact.indexOf('.') !== -1 && contact.indexOf(' ') === -1) {
+    work_email = contact;
+  } else if (contact.charAt(0) === '@' || contact.toLowerCase().indexOf('t.me') !== -1) {
+    telegram = contact;
+  } else {
+    alt_contact = contact;
+  }
+
+  var priority = '⚡ WARM';
+  if (state.branch === 'enterprise') priority = '🏛 ENTERPRISE';
+  else if (state.answers.q1 === '100-150m') priority = '🔥 HOT';
+
+  var painLabel = BRANCH_LABELS[state.branch] || '';
+  var notes = buildNotesText();
+
+  return {
+    action: 'quiz_v2_submit',
+    session_id: SESSION_ID,
+    contact_name: name,
+    company: company,
+    telegram: telegram,
+    work_email: work_email,
+    alt_contact: alt_contact,
+    revenue: state.answers.q1 || '',
+    branch: state.branch,
+    pain_label: painLabel,
+    user_notes: notes,
+    raw_answers: JSON.stringify(state.answers),
+    consent_contact: true,
+    source_channel: 'quiz_v2',
+    source_detail: 'EDL Diagnostic v2.1 (' + state.branch + ')',
+    priority: priority,
+    contour: 'EDL',
+    time_on_quiz: Math.round((Date.now() - STARTED_AT) / 1000),
+    quiz_version: 'v2.1',
+    utm_source: getUTM('utm_source'),
+    utm_medium: getUTM('utm_medium'),
+    utm_campaign: getUTM('utm_campaign')
+  };
+}
+
+function buildNotesText() {
+  var lines = [];
+  lines.push('Ветка: ' + (BRANCH_LABELS[state.branch] || state.branch));
+  lines.push('Выручка: ' + (state.answers.q1 || '—'));
+  lines.push('');
+  Object.keys(state.answers).forEach(function(qid) {
+    if (qid === 'q1' || qid === 'q2') return;
+    var q = QUESTIONS[qid];
+    if (!q) return;
+    var v = state.answers[qid];
+    if (typeof v === 'object' && v !== null && v.length !== undefined) v = v.join(', ');
+    lines.push('— ' + (q.eyebrow || qid) + ': ' + v);
+  });
+  return lines.join('\n');
+}
+
+function sendToBackend(payload) {
+  return fetch(WEBAPP_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  }).then(function() { return true; });
+}
+
+function submitEnterprise() {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('dynamic-screens').innerHTML = '';
+
+  var html = '<div class="screen active">';
+  html += '<div class="enterprise-banner">';
+  html += '<div class="enterprise-eyebrow">EDL ENTERPRISE</div>';
+  html += '<h2 class="h2" style="color:var(--text-on-dark);margin-bottom:10px;">Контактные данные для звонка</h2>';
+  html += '<p style="color:rgba(255,255,255,0.8);font-size:14px;line-height:1.55;">Екатерина свяжется с вами лично в течение 8 рабочих часов.</p>';
+  html += '</div>';
+
+  html += '<div class="contact-form">';
+  html += '<div class="field">';
+  html += '<label class="field-label" for="ent-name">Ваше имя <span class="field-required">*</span></label>';
+  html += '<input class="field-input" id="ent-name" type="text" placeholder="Имя">';
+  html += '<div class="error-msg" id="ent-err-name">Укажите имя</div>';
+  html += '</div>';
+  html += '<div class="field">';
+  html += '<label class="field-label" for="ent-role">Должность</label>';
+  html += '<input class="field-input" id="ent-role" type="text" placeholder="CEO / COO / другое">';
+  html += '</div>';
+  html += '<div class="field">';
+  html += '<label class="field-label" for="ent-contact">Telegram или email <span class="field-required">*</span></label>';
+  html += '<input class="field-input" id="ent-contact" type="text" placeholder="@username или you@company.ru">';
+  html += '<div class="error-msg" id="ent-err-contact">Укажите Telegram или email</div>';
+  html += '</div>';
+  html += '<button class="btn btn-primary" id="ent-submit" onclick="submitEnterpriseForm()">Отправить заявку</button>';
+  html += '</div>';
+  html += '</div>';
+
+  document.getElementById('dynamic-screens').innerHTML = html;
+  document.getElementById('progress-fill').style.width = '95%';
+  document.getElementById('progress-meta').textContent = 'Контакты';
+  window.scrollTo(0, 0);
+}
+
+function submitEnterpriseForm() {
+  var name = document.getElementById('ent-name').value.trim();
+  var role = document.getElementById('ent-role').value.trim();
+  var contact = document.getElementById('ent-contact').value.trim();
+
+  var ok = true;
+  document.getElementById('ent-err-name').classList.remove('show');
+  document.getElementById('ent-err-contact').classList.remove('show');
+  document.getElementById('ent-name').classList.remove('err');
+  document.getElementById('ent-contact').classList.remove('err');
+
+  if (!name || name.length < 2) {
+    document.getElementById('ent-err-name').classList.add('show');
+    document.getElementById('ent-name').classList.add('err');
+    ok = false;
+  }
+  if (!contact || contact.length < 3) {
+    document.getElementById('ent-err-contact').classList.add('show');
+    document.getElementById('ent-contact').classList.add('err');
+    ok = false;
+  }
+  if (!ok) return;
+
+  var btn = document.getElementById('ent-submit');
+  btn.disabled = true;
+  btn.innerHTML = 'Отправляем…';
+
+  var payload = buildSubmitPayload(name, contact, '');
+  payload.role = role;
+  payload.priority = '🏛 ENTERPRISE';
+
+  sendToBackend(payload).then(function() {
+    showEnterpriseSuccess();
+    trackEvent('quiz_enterprise_submitted', {});
+  }).catch(function() {
+    btn.disabled = false;
+    btn.innerHTML = 'Отправить заявку';
+    alert('Не удалось отправить. Telegram Екатерины: ' + TG_FOUNDER);
+  });
+}
+
+function showEnterpriseSuccess() {
+  document.getElementById('dynamic-screens').innerHTML = '';
+  var html = '<div class="screen active" style="text-align:center;">';
+  html += '<div class="success-icon">✓</div>';
+  html += '<h2 class="h2">Спасибо.<br>Свяжемся в течение 8 часов</h2>';
+  html += '<p class="lead" style="margin: 20px 0;">Екатерина прочитает ваш ответ и сама вам напишет — это наш стандарт работы с компаниями вашего масштаба.</p>';
+  html += '<p class="lead" style="font-size:14px;margin-bottom:24px;">Если хотите ускорить — напишите ей напрямую:</p>';
+  html += '<a href="' + TG_FOUNDER + '" class="btn btn-primary" target="_blank" rel="noopener">Открыть Telegram Екатерины</a>';
+  html += '</div>';
+  document.getElementById('dynamic-screens').innerHTML = html;
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('progress-meta').textContent = 'Готово';
+  window.scrollTo(0, 0);
+}
+
+function showResultScreen() {
+  document.getElementById('dynamic-screens').innerHTML = '';
+
+  var subicpHint = state.branch === 'subicp';
+
+  var html = '<div class="screen active" style="text-align:center;">';
+  html += '<div class="success-icon">✓</div>';
+  html += '<h2 class="h2">Спасибо!<br>Документ <em>в пути</em></h2>';
+  html += '<p class="lead" style="margin: 20px 0;">';
+  if (subicpHint) {
+    html += 'Пришлём ваш персональный диагноз в течение часа. Внутри — карта потерь, рекомендации и наш Telegram-канал.';
+  } else {
+    html += 'Пришлём ваш персональный документ на указанный контакт в течение часа. Внутри — карта узких мест, расчёт потерь и рекомендации.';
+  }
+  html += '</p>';
+
+  if (subicpHint) {
+    html += '<div class="result-cta-card">';
+    html += '<h2 class="h2" style="font-size:22px;">Подпишитесь на наш Telegram</h2>';
+    html += '<p class="lead" style="margin-bottom: 20px;">Там разборы кейсов, инструменты и заметки для растущих компаний.</p>';
+    html += '<a href="' + TG_CHANNEL + '" class="btn btn-primary" target="_blank" rel="noopener">';
+    html += '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19l-9.49 5.99-4.1-1.28c-.88-.26-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71l-4.16-3.07-2 1.95c-.23.23-.42.42-.86.42z"/></svg>';
+    html += 'Перейти в Telegram-канал';
+    html += '</a>';
+    html += '</div>';
+  } else {
+    html += '<div class="result-cta-card">';
+    html += '<h2 class="h2" style="font-size:22px;">Не ждите письма — запишитесь на демо</h2>';
+    html += '<p class="lead" style="margin-bottom: 20px;">Покажем нашу реальную систему за 30 минут. Live screenshare, без презентаций. Сразу станет ясно, как это адаптировать под вас.</p>';
+    html += '<a href="' + CALENDLY + '" class="btn btn-primary" target="_blank" rel="noopener" data-track="quiz_calendly_click">';
+    html += 'Записаться на демо';
+    html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+    html += '</a>';
+    html += '</div>';
+  }
+
+  html += '</div>';
+
+  document.getElementById('dynamic-screens').innerHTML = html;
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('progress-meta').textContent = 'Готово';
+  window.scrollTo(0, 0);
+
+  document.querySelectorAll('[data-track="quiz_calendly_click"]').forEach(function(el) {
+    el.addEventListener('click', function() {
+      trackEvent('quiz_calendly_clicked', { branch: state.branch });
+    });
+  });
+}
+
+function trackEvent(name, data) {
+  try {
+    var payload = Object.assign({}, data || {}, {
+      action: 'quiz_event',
+      event_name: name,
+      session_id: SESSION_ID,
+      ts: new Date().toISOString(),
+      page_url: window.location.href,
+      referrer: document.referrer || ''
+    });
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(payload)], { type: 'text/plain;charset=utf-8' });
+      navigator.sendBeacon(WEBAPP_URL, blob);
+    } else {
+      fetch(WEBAPP_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload),
+        keepalive: true
+      }).catch(function() {});
+    }
+  } catch (e) {}
+}
+
+function getUTM(key) {
+  var params = new URLSearchParams(window.location.search);
+  return params.get(key) || '';
+}
+
+if (typeof Object.assign !== 'function') {
+  Object.assign = function(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var src = arguments[i];
+      if (src) for (var k in src) if (Object.prototype.hasOwnProperty.call(src, k)) target[k] = src[k];
+    }
+    return target;
+  };
+}
+
+window.addEventListener('beforeunload', function() {
+  if (state.currentQ && state.currentQ !== 'success') {
+    trackEvent('quiz_abandoned', {
+      qid: state.currentQ,
+      branch: state.branch || 'none',
+      time_on_quiz: Math.round((Date.now() - STARTED_AT) / 1000)
+    });
+  }
+});
+
+trackEvent('quiz_page_view', {});
+</script>
+
+</body>
+</html>
