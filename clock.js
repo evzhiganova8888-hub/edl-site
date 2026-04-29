@@ -156,36 +156,85 @@
 
   /* ============== ЧАСТЬ 2: 3D-КАРУСЕЛЬ ============== */
 
-  function initCarousel(root) {
-    if (!root || root.__inited) return;
-    root.__inited = true;
+// === CAROUSEL · scroll-snap version ===
+function initCarousel() {
+  const carousel = document.querySelector('.carousel');
+  if (!carousel) return;
 
-    const cards = Array.from(root.querySelectorAll('.carousel__card'));
-    const dots = Array.from(root.querySelectorAll('.carousel__dot'));
-    if (cards.length < 2) return;
+  const cards = carousel.querySelectorAll('.carousel__card');
+  const dots = document.querySelectorAll('[data-carousel-dot]');
+  if (!cards.length) return;
 
-    // 3 позиции по часовой стрелке (front → back-left → back-right → front)
-    // Каждая карточка стартует в своей позиции
-    const positions = ['pos-front', 'pos-back-left', 'pos-back-right'];
-    let currentRotation = 0; // сколько раз провернули
-    let interval = null;
-    const ROTATION_MS = 4500;
+  let currentIndex = 0;
+  let timer = null;
+  const INTERVAL_MS = 4500;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function applyPositions() {
-      cards.forEach((card, i) => {
-        positions.forEach(p => card.classList.remove(p));
-        // i + currentRotation определяет какую позицию занимает карточка
-        const posIdx = (i + currentRotation) % positions.length;
-        card.classList.add(positions[posIdx]);
-      });
-      // Подсветка точки — какой dot соответствует переднему фронту
-      // Передняя карточка — та, у которой posIdx === 0, т.е. i = -currentRotation mod 3
-      const frontIdx = ((cards.length - currentRotation) % cards.length + cards.length) % cards.length;
-      dots.forEach((dot, i) => {
-        if (i === frontIdx) dot.classList.add('is-active');
-        else dot.classList.remove('is-active');
+  const goTo = (idx) => {
+    currentIndex = (idx + cards.length) % cards.length;
+    const targetCard = cards[currentIndex];
+    if (targetCard) {
+      carousel.scrollTo({
+        left: targetCard.offsetLeft,
+        behavior: reducedMotion ? 'auto' : 'smooth'
       });
     }
+    dots.forEach((d, i) => d.classList.toggle('is-active', i === currentIndex));
+  };
+
+  const next = () => goTo(currentIndex + 1);
+
+  const start = () => {
+    if (reducedMotion) return;
+    stop();
+    timer = setInterval(next, INTERVAL_MS);
+  };
+
+  const stop = () => {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+  };
+
+  // dots — клик
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      goTo(i);
+      start();
+    });
+  });
+
+  // pause on hover / focus / touch
+  carousel.addEventListener('mouseenter', stop);
+  carousel.addEventListener('mouseleave', start);
+  carousel.addEventListener('focusin', stop);
+  carousel.addEventListener('focusout', start);
+  carousel.addEventListener('touchstart', stop, { passive: true });
+
+  // sync dots с ручным скроллом (свайп)
+  let scrollTimeout;
+  carousel.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      const cardWidth = cards[0]?.offsetWidth || 1;
+      const idx = Math.round(carousel.scrollLeft / cardWidth);
+      currentIndex = Math.max(0, Math.min(cards.length - 1, idx));
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === currentIndex));
+    }, 120);
+  }, { passive: true });
+
+  // pause when tab is hidden
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop();
+    else start();
+  });
+
+  // init
+  goTo(0);
+  start();
+}
+// === /CAROUSEL ===
 
     function rotate() {
       currentRotation = (currentRotation + 1) % positions.length;
