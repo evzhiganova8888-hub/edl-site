@@ -232,49 +232,91 @@ section { padding: var(--section-py) 0; }
 .proof__head p { color: var(--fg-2); margin-bottom: 16px; max-width: 64ch; }
 
 /* Карусель */
+/* === CAROUSEL · scroll-snap version === */
 .carousel {
   position: relative;
+  display: flex;
+  gap: 0;
   width: 100%;
   max-width: 540px;
-  height: 380px;
-  margin: 0 auto clamp(40px, 6vw, 80px);
-  isolation: isolate;
+  margin: 0 auto 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  border-radius: var(--r-xl);
 }
+
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
 .carousel__card {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: min(320px, 90%);
-  transform-origin: center;
-  transition:
-    transform 1500ms var(--ease),
-    opacity 1500ms var(--ease),
-    filter 1500ms var(--ease);
-  will-change: transform, opacity;
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--r-xl);
   padding: 24px 26px;
   box-shadow: var(--shadow-lg);
-}
-.carousel__card.pos-front {
-  transform: translate(-50%, -50%) scale(1);
+  /* нейтрализуем старые position-классы из HTML, если остались */
+  position: static;
+  top: auto;
+  left: auto;
+  transform: none;
   opacity: 1;
-  z-index: 3;
-  filter: blur(0);
+  filter: none;
+  z-index: auto;
+  transition: none;
 }
-.carousel__card.pos-back-left {
-  transform: translate(calc(-50% - 130px), calc(-50% - 60px)) scale(0.62);
-  opacity: 0.4;
-  z-index: 1;
-  filter: blur(1.5px);
-}
+
+/* пустые классы из старой версии — оставляем без эффекта,
+   чтобы HTML не сломался; перебиваем любые конфликты */
+.carousel__card.pos-front,
+.carousel__card.pos-back-left,
 .carousel__card.pos-back-right {
-  transform: translate(calc(-50% + 130px), calc(-50% - 60px)) scale(0.62);
-  opacity: 0.4;
-  z-index: 2;
-  filter: blur(1.5px);
+  position: static;
+  top: auto;
+  left: auto;
+  transform: none;
+  opacity: 1;
+  filter: none;
 }
+
+.carousel__dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto clamp(40px, 6vw, 80px);
+}
+
+.carousel__dot {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: background 200ms var(--ease), transform 200ms var(--ease);
+}
+
+.carousel__dot.is-active {
+  background: var(--fg);
+  transform: scale(1.3);
+}
+
+.carousel__dot:hover {
+  background: var(--fg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel {
+    scroll-behavior: auto;
+  }
+}
+/* === /CAROUSEL === */
 
 /* Контент внутри карточек карусели */
 .carousel__head {
