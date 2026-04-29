@@ -2,549 +2,318 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#FAF9F6">
-  <title>AI Operations Sprint — за 3–4 недели соберём операционную систему · EDL</title>
-  <meta name="description" content="Соберём CRM, дашборды, Telegram-бот и AI-помощников за 3–4 недели. От 150 000 ₽. Полный доступ и видео-инструкции для команды.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>AI Operations Sprint — за 3–4 недели · EDL</title>
+  <meta name="description" content="Флагман-спринт EDL: за 3–4 недели соберём операционную систему вашего бизнеса. CRM, дашборды, Telegram-бот, AI-помощники. От 150 000 ₽.">
 
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="AI Operations Sprint — операционная система за 3–4 недели · EDL">
-  <meta property="og:description" content="CRM, дашборды, Telegram-бот, AI-помощники. От 150 000 ₽. Полный доступ.">
-  <meta property="og:url" content="https://elephantdreams.ru/sprint.html">
-  <meta property="og:locale" content="ru_RU">
-  <meta property="og:image" content="https://elephantdreams.ru/og-image.png">
-  <meta name="twitter:card" content="summary_large_image">
-
+  <link rel="canonical" href="https://elephantdreams.ru/sprint.html">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+  <meta property="og:title" content="AI Operations Sprint — флагман EDL">
+  <meta property="og:description" content="За 3–4 недели соберём операционную систему вашего бизнеса. От 150 000 ₽.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ru_RU">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <a href="#main" class="skip-link">Перейти к контенту</a>
-
-  <!-- ───── Header ───── -->
-  <header class="header">
-    <div class="container header__inner">
-      <a href="index.html" class="header__brand" aria-label="EDL · Главная">
-        <span style="font-family: var(--ff-display); font-weight: 800; font-size: var(--fs-20); letter-spacing: -0.04em;">EDL</span>
-      </a>
-
-      <nav class="header__nav" aria-label="Основная навигация">
-        <a href="index.html#approach">Подход</a>
-        <a href="sprint.html" class="is-active">Спринт</a>
-        <a href="diagnostic.html">Диагностика</a>
-        <a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener noreferrer">Telegram</a>
-      </nav>
-
-      <div class="header__actions">
-        <span class="header__lang">
-          <a href="sprint.html" class="is-active">RU</a>
-          <span aria-hidden="true">/</span>
-          <a href="en/sprint.html">EN</a>
-        </span>
-        <a href="#" class="btn btn--primary btn--small" data-cta="demo" data-cta-location="header">Записаться на демо</a>
-        <button class="header__menu-toggle" data-menu-toggle aria-label="Меню" aria-expanded="false">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
-            <line x1="4" y1="8" x2="20" y2="8"/>
-            <line x1="4" y1="16" x2="20" y2="16"/>
-          </svg>
-        </button>
-      </div>
+<!-- HEADER -->
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="/" class="site-header__logo" aria-label="EDL — на главную">EDL</a>
+    <nav class="site-header__nav" aria-label="Главное меню">
+      <a href="/#approach">Подход</a>
+      <a href="sprint.html">Спринт</a>
+      <a href="diagnostic.html">Диагностика</a>
+      <a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener">Telegram</a>
+    </nav>
+    <div class="site-header__lang">
+      <a href="/" class="is-active">RU</a><span>/</span><a href="/en/">EN</a>
     </div>
-  </header>
+    <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary site-header__cta">Записаться на демо</a>
+  </div>
+</header>
 
-  <nav class="mobile-menu" aria-label="Мобильное меню">
-    <ul>
-      <li><a href="index.html#approach">Подход</a></li>
-      <li><a href="sprint.html">Спринт</a></li>
-      <li><a href="diagnostic.html">Диагностика</a></li>
-      <li><a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener noreferrer">Telegram</a></li>
-    </ul>
-  </nav>
+<main id="main">
 
-  <main id="main">
-
-    <!-- ───── 01 · Page Hero ───── -->
-    <section class="section hero" style="min-height: 70vh;">
-      <div class="container">
-        <div style="max-width: 18ch; margin-bottom: var(--s-7);">
-          <span class="eyebrow"><span class="eyebrow__dot"></span>Флагман · 3–4 недели · от 150 000 ₽</span>
-        </div>
-        <h1 class="hero__title" style="font-size: var(--fs-display-md); margin-bottom: var(--s-6); max-width: 16ch;">
-          AI Operations<br><span class="accent">Sprint</span>
-        </h1>
-        <p class="hero__sub" style="max-width: 56ch; margin-bottom: var(--s-7);">
-          За 3–4 недели соберём операционную систему: CRM, дашборды, Telegram-бот, AI-помощники. Полный доступ. Видео-инструкции для команды.
-        </p>
-        <div class="cta-cluster">
-          <a href="#" class="btn btn--primary" data-cta="demo" data-cta-location="sprint-hero" data-magnetic>Записаться на демо системы</a>
-          <a href="#what" class="btn btn--secondary">Что внутри →</a>
-        </div>
-      </div>
-    </section>
-
-    <div class="section-bridge section-bridge--canvas-to-tinted" aria-hidden="true"></div>
-
-    <!-- ───── 02 · Что соберём (Inclusions) ───── -->
-    <section class="section section--tinted" id="what" data-reveal>
-      <div class="container">
-        <div class="section-header">
-          <span class="eyebrow"><span class="eyebrow__dot"></span>02 · Что соберём за 3–4 недели</span>
-          <h2>Состав. <span style="color: var(--text-tertiary);">Без сюрпризов.</span></h2>
-        </div>
-
-        <div class="icp-flip-grid" data-reveal-stagger>
-          <div class="icp-flip-card" data-flip>
-            <div class="icp-flip-face">
-              <div>
-                <h3 class="icp-flip-face__title">CRM-структура</h3>
-                <p class="icp-flip-face__body">Единый источник правды для лидов, сделок, клиентов и истории взаимодействий.</p>
-              </div>
-              <span class="icp-flip-face__hint">→ Подробнее</span>
-              <span class="icp-flip-face__footer">01</span>
-            </div>
-            <div class="icp-flip-face icp-flip-face--back">
-              <p class="icp-flip-face__body">
-                Google Sheets / Airtable с правильной архитектурой полей под ваш бизнес. Автоматическое попадание заявок из всех каналов: формы, Telegram, email, реферальные. Onсhange-триггеры, валидация, статусы.
-              </p>
-              <span class="icp-flip-face__footer">Что внутри</span>
-            </div>
-          </div>
-
-          <div class="icp-flip-card" data-flip>
-            <div class="icp-flip-face">
-              <div>
-                <h3 class="icp-flip-face__title">Дашборды по&nbsp;ключевым метрикам</h3>
-                <p class="icp-flip-face__body">3–5 дашбордов под ваши данные: воронка, выручка, конверсии, операционные метрики.</p>
-              </div>
-              <span class="icp-flip-face__hint">→ Подробнее</span>
-              <span class="icp-flip-face__footer">02</span>
-            </div>
-            <div class="icp-flip-face icp-flip-face--back">
-              <p class="icp-flip-face__body">
-                Looker Studio / Google Sheets-нативные графики. Реалтайм-подключение к CRM. Срезы по периодам, источникам, продуктам. На демо покажем наши собственные дашборды как пример.
-              </p>
-              <span class="icp-flip-face__footer">Что внутри</span>
-            </div>
-          </div>
-
-          <div class="icp-flip-card" data-flip>
-            <div class="icp-flip-face">
-              <div>
-                <h3 class="icp-flip-face__title">Telegram-бот для&nbsp;фаундера</h3>
-                <p class="icp-flip-face__body">Утренние сводки, push на новые лиды, команды управления, фокусы дня.</p>
-              </div>
-              <span class="icp-flip-face__hint">→ Подробнее</span>
-              <span class="icp-flip-face__footer">03</span>
-            </div>
-            <div class="icp-flip-face icp-flip-face--back">
-              <p class="icp-flip-face__body">
-                Бот в 8:30 присылает сводку: ключевые метрики, тревоги, фокус дня. Прилетает push на новый лид с приоритетом HOT/WARM. Команды управления: /часы, /отчёт, /фокус.
-              </p>
-              <span class="icp-flip-face__footer">Что внутри</span>
-            </div>
-          </div>
-
-          <div class="icp-flip-card" data-flip>
-            <div class="icp-flip-face">
-              <div>
-                <h3 class="icp-flip-face__title">AI-помощники для&nbsp;рутины</h3>
-                <p class="icp-flip-face__body">3–5 AI-помощников: обработка заявок, генерация писем, анализ диалогов, автоответы.</p>
-              </div>
-              <span class="icp-flip-face__hint">→ Подробнее</span>
-              <span class="icp-flip-face__footer">04</span>
-            </div>
-            <div class="icp-flip-face icp-flip-face--back">
-              <p class="icp-flip-face__body">
-                Welcomer (приветствует и квалифицирует лидов), Follow-up Drafter (готовит follow-up по контексту), Reply Drafter (черновики ответов клиентам), Insights Bot (находит аномалии в данных). Используем GPT-4 / Claude API.
-              </p>
-              <span class="icp-flip-face__footer">Что внутри</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="section-bridge section-bridge--tinted-to-canvas" aria-hidden="true"></div>
-
-    <!-- ───── 03 · Этапы спринта (Timeline) ───── -->
-    <section class="section" data-reveal>
-      <div class="container">
-        <div class="section-header">
-          <span class="eyebrow"><span class="eyebrow__dot"></span>03 · Этапы</span>
-          <h2>Четыре недели.<br><span style="color: var(--text-tertiary);">Прозрачные</span> чекпоинты.</h2>
-        </div>
-
-        <div class="no-list" data-reveal-stagger>
-          <div class="no-item">
-            <div class="no-item__marker">01</div>
-            <div>
-              <h3 class="no-item__title">Бриф и архитектура · 1–3 день</h3>
-              <p class="no-item__body">2 интервью с фаундером + ключевыми менеджерами. На выходе — карта процессов «как есть», описание целевой архитектуры под ваш бизнес.</p>
-            </div>
-          </div>
-          <div class="no-item">
-            <div class="no-item__marker">02</div>
-            <div>
-              <h3 class="no-item__title">CRM и автоматизация · 4–10 день</h3>
-              <p class="no-item__body">Структурируем CRM. Подключаем Apps Script, формы, импорты. Первый дашборд готов к 10-му дню. Промежуточная защита.</p>
-            </div>
-          </div>
-          <div class="no-item">
-            <div class="no-item__marker">03</div>
-            <div>
-              <h3 class="no-item__title">Telegram-бот и AI · 11–18 день</h3>
-              <p class="no-item__body">К 14-му дню работает Telegram-бот. Подключаем AI-помощников. Запускаем автоматизацию выбранного процесса.</p>
-            </div>
-          </div>
-          <div class="no-item">
-            <div class="no-item__marker">04</div>
-            <div>
-              <h3 class="no-item__title">Сборка и передача · 19–28 день</h3>
-              <p class="no-item__body">Финальная сборка. Видео-инструкции для команды. Защита системы фаундеру и команде. Передача доступов.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="section-bridge section-bridge--canvas-to-tinted" aria-hidden="true"></div>
-
-    <!-- ───── 04 · Цена и условия ───── -->
-    <section class="section section--tinted" data-reveal>
-      <div class="container">
-        <div class="section-header">
-          <span class="eyebrow"><span class="eyebrow__dot"></span>04 · Цена</span>
-          <h2>Три варианта спринта.<br><span class="headline-lime">Прозрачно.</span></h2>
-        </div>
-
-        <div class="funnel-grid" data-reveal-stagger>
-          <div class="funnel-card">
-            <div class="funnel-card__num">Базовый</div>
-            <h3 class="funnel-card__title">Sprint Lite</h3>
-            <div class="funnel-card__meta">
-              <span class="funnel-card__price">150 000&nbsp;₽</span>
-              <span class="funnel-card__time">3 недели</span>
-            </div>
-            <p class="funnel-card__body">
-              CRM + 2 дашборда + Telegram-бот + 3 AI-помощника + автоматизация одного процесса. Подходит большинству бизнесов.
-            </p>
-          </div>
-
-          <div class="funnel-card funnel-card--featured">
-            <div class="funnel-card__badge">Типовой</div>
-            <div class="funnel-card__num">Стандарт</div>
-            <h3 class="funnel-card__title">Sprint Standard</h3>
-            <div class="funnel-card__meta">
-              <span class="funnel-card__price">180 000&nbsp;₽</span>
-              <span class="funnel-card__time">3–4 недели</span>
-            </div>
-            <p class="funnel-card__body">
-              CRM + 4–5 дашбордов + бот + 5 AI-помощников + 2 автоматизации. Подходит, если в бизнесе несколько источников лидов и сложная воронка.
-            </p>
-          </div>
-
-          <div class="funnel-card">
-            <div class="funnel-card__num">Расширенный</div>
-            <h3 class="funnel-card__title">Sprint Pro</h3>
-            <div class="funnel-card__meta">
-              <span class="funnel-card__price">220 000&nbsp;₽</span>
-              <span class="funnel-card__time">4 недели</span>
-            </div>
-            <p class="funnel-card__body">
-              Всё из Standard + интеграция с внешними системами (бухгалтерия, склад, мессенджеры) + кастомные AI-сценарии под нишу.
-            </p>
-          </div>
-        </div>
-
-        <p class="funnel-footnote">
-          <strong>Платёж:</strong> 50% при старте, 50% после защиты. Договор фиксирует сроки и состав до старта работ.
-        </p>
-      </div>
-    </section>
-
-    <div class="section-bridge section-bridge--tinted-to-canvas" aria-hidden="true"></div>
-
-    <!-- ───── 05 · Команда на проекте ───── -->
-    <section class="section" data-reveal>
-      <div class="container">
-        <div class="section-header">
-          <span class="eyebrow"><span class="eyebrow__dot"></span>05 · Команда на проекте</span>
-          <h2>Кто работает над вашим спринтом</h2>
-        </div>
-
-        <div class="team-leaders-v2" data-reveal-stagger>
-          <article class="leader-v2 leader-v2--lead">
-            <div class="leader-v2__num">PL</div>
-            <div>
-              <h3 class="leader-v2__name">Продакт-лид</h3>
-              <p class="leader-v2__role">Ведёт проект, отвечает за архитектуру решения и финальный результат.</p>
-            </div>
-            <div class="leader-v2__tags">
-              <span class="leader-v2__tag">5+ лет PM</span>
-              <span class="leader-v2__tag">Полный цикл</span>
-            </div>
-          </article>
-
-          <article class="leader-v2">
-            <div class="leader-v2__num">DEV</div>
-            <div>
-              <h3 class="leader-v2__name">Разработчик автоматизаций</h3>
-              <p class="leader-v2__role">Apps Script, интеграции, AI-помощники, Telegram-бот.</p>
-            </div>
-            <div class="leader-v2__tags">
-              <span class="leader-v2__tag">JS / Apps Script</span>
-              <span class="leader-v2__tag">AI APIs</span>
-            </div>
-          </article>
-
-          <article class="leader-v2">
-            <div class="leader-v2__num">A</div>
-            <div>
-              <h3 class="leader-v2__name">Аналитик</h3>
-              <p class="leader-v2__role">Дашборды, метрики, чистка и подготовка данных, отчётность.</p>
-            </div>
-            <div class="leader-v2__tags">
-              <span class="leader-v2__tag">Looker / Sheets</span>
-              <span class="leader-v2__tag">SQL</span>
-            </div>
-          </article>
-        </div>
-
-        <p style="max-width: 60ch; color: var(--text-secondary); font-size: var(--fs-18); line-height: 1.5; margin-top: var(--s-7);">
-          В сложных случаях подключается <strong style="color: var(--text-primary);">Екатерина Жиганова</strong> — на бриф, на финальную защиту, на ключевые архитектурные решения. Не больше двух проектов параллельно — это значит, наша команда полностью включена в ваш проект.
-        </p>
-      </div>
-    </section>
-
-    <div class="section-bridge section-bridge--canvas-to-tinted" aria-hidden="true"></div>
-
-    <!-- ───── 06 · Growth Plan ───── -->
-    <section class="section section--tinted" id="growth" data-reveal>
-      <div class="container">
-        <div class="section-header">
-          <span class="eyebrow"><span class="eyebrow__dot"></span>06 · После спринта</span>
-          <h2>Growth Plan.<br><span style="color: var(--text-tertiary);">Опционально.</span></h2>
-          <p class="lead">После спринта система требует поддержки и развития. Мы остаёмся рядом.</p>
-        </div>
-
-        <div class="funnel-grid" data-reveal-stagger>
-          <div class="funnel-card">
-            <div class="funnel-card__num">Base</div>
-            <h3 class="funnel-card__title">Базовая поддержка</h3>
-            <div class="funnel-card__meta">
-              <span class="funnel-card__price">50 000&nbsp;₽/мес</span>
-              <span class="funnel-card__time">от 3 мес</span>
-            </div>
-            <p class="funnel-card__body">
-              Еженедельный 30-мин синк, мониторинг 3 ключевых метрик, Slack-консультации.
-            </p>
-          </div>
-
-          <div class="funnel-card funnel-card--featured">
-            <div class="funnel-card__badge">Популярный</div>
-            <div class="funnel-card__num">Standard</div>
-            <h3 class="funnel-card__title">Стандарт</h3>
-            <div class="funnel-card__meta">
-              <span class="funnel-card__price">75 000&nbsp;₽/мес</span>
-              <span class="funnel-card__time">от 3 мес</span>
-            </div>
-            <p class="funnel-card__body">
-              Всё из Base + 5 метрик, 1 мини-спринт в квартал, приоритетная поддержка.
-            </p>
-          </div>
-
-          <div class="funnel-card">
-            <div class="funnel-card__num">Pro</div>
-            <h3 class="funnel-card__title">Расширенный</h3>
-            <div class="funnel-card__meta">
-              <span class="funnel-card__price">110 000&nbsp;₽/мес</span>
-              <span class="funnel-card__time">от 3 мес</span>
-            </div>
-            <p class="funnel-card__body">
-              Всё из Standard + 2 R&D-апдейта в квартал, участие в product-review.
-            </p>
-          </div>
-        </div>
-
-        <p class="funnel-footnote">
-          Минимум 3 месяца. Решение принимается в&nbsp;конце спринта.
-        </p>
-      </div>
-    </section>
-
-    <div class="section-bridge section-bridge--tinted-to-canvas" aria-hidden="true"></div>
-
-    <!-- ───── 07 · FAQ ───── -->
-    <section class="section" data-reveal>
-      <div class="container">
-        <div class="section-header">
-          <span class="eyebrow"><span class="eyebrow__dot"></span>07 · Вопросы по спринту</span>
-          <h2>Что важно знать до&nbsp;старта</h2>
-        </div>
-
-        <div class="faq">
-          <div class="faq-item">
-            <button class="faq-item__trigger" data-faq-id="involvement" aria-expanded="false">
-              <span>Сколько моего времени нужно?</span>
-              <span class="faq-item__icon" aria-hidden="true"></span>
-            </button>
-            <div class="faq-item__content">
-              <div class="faq-item__inner">
-                <p>Реалистично — <em>4–6 часов в&nbsp;неделю</em> фаундера в течение спринта.</p>
-                <p>Это: 2 созвона по часу + быстрые ответы в&nbsp;чате + одна финальная защита. Команды клиента — больше: они проходят онбординг, мы записываем им видео-инструкции.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-item__trigger" data-faq-id="data" aria-expanded="false">
-              <span>А если у нас нет данных в порядке?</span>
-              <span class="faq-item__icon" aria-hidden="true"></span>
-            </button>
-            <div class="faq-item__content">
-              <div class="faq-item__inner">
-                <p>Это норма. У <em>80%</em> наших клиентов данные «не в порядке»: разрозненные таблицы, дубли, нет единой структуры.</p>
-                <p>В первые 5 дней спринта мы как раз разбираемся с этим. Вычищаем, объединяем, нормализуем. Если объём очень большой — обсуждаем дополнительный объём работ заранее, фиксируем в договоре.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-item__trigger" data-faq-id="who-owns" aria-expanded="false">
-              <span>Кому принадлежит результат?</span>
-              <span class="faq-item__icon" aria-hidden="true"></span>
-            </button>
-            <div class="faq-item__content">
-              <div class="faq-item__inner">
-                <p>Полностью вам.</p>
-                <p>Все скрипты, шаблоны, инструкции, доступы — переходят к вам. Без привязки к нашей команде. Можете дальше развивать систему сами или с другой командой.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-item__trigger" data-faq-id="ai-cost" aria-expanded="false">
-              <span>Сколько стоит работа AI-помощников после спринта?</span>
-              <span class="faq-item__icon" aria-hidden="true"></span>
-            </button>
-            <div class="faq-item__content">
-              <div class="faq-item__inner">
-                <p>Зависит от объёма. Типичный кейс — <em>3 000–8 000 ₽/мес</em> за все AI-помощники вместе.</p>
-                <p>Используем GPT-4 / Claude API напрямую — оплата по токенам. Подключаем ваш аккаунт OpenAI/Anthropic, чтобы прозрачно видеть расход. Без посредников и наценок.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-item__trigger" data-faq-id="urgent" aria-expanded="false">
-              <span>Можно стартовать срочно?</span>
-              <span class="faq-item__icon" aria-hidden="true"></span>
-            </button>
-            <div class="faq-item__content">
-              <div class="faq-item__inner">
-                <p>В течение <em>2–3 рабочих дней</em> после оплаты при условии, что наша команда свободна.</p>
-                <p>Для срочного старта — обсуждение в день созвона. Если команда занята, предложим конкретную дату начала.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="section-bridge section-bridge--canvas-to-deep" aria-hidden="true"></div>
-
-    <!-- ───── 08 · Final CTA ───── -->
-    <section class="section section--deep final-cta" data-reveal>
-      <div class="container">
-        <span class="eyebrow"><span class="eyebrow__dot"></span>08 · Дальше</span>
-        <h2 class="final-cta__title">Покажу, как&nbsp;это <span style="color: var(--accent-lime);">работает у&nbsp;вас</span></h2>
-        <p class="final-cta__sub">
-          На демо обсудим вашу ситуацию: какие процессы автоматизируем, какие AI-помощники нужны, какой пакет спринта подходит.
-        </p>
-        <a href="#" class="btn btn--primary" data-cta="demo" data-cta-location="sprint-final" data-magnetic>Записаться на демо системы</a>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ───── Footer ───── -->
-  <footer class="footer">
+  <!-- HERO -->
+  <section class="product-hero">
     <div class="container">
-      <div class="footer__grid">
-        <div>
-          <div class="footer__brand-name">EDL</div>
-          <p class="footer__brand-sub">
-            Elephant Dreams Lab. Собираем фаундерам операционную систему бизнеса. Чтобы было прозрачно. Чтобы можно было управлять с одного экрана.
-          </p>
+      <div class="product-hero__inner">
+        <span class="product-hero__tag">⚡ Флагман</span>
+        <h1 class="product-hero__title">AI Operations Sprint —<br>операционная система за 3–4 недели</h1>
+        <p class="product-hero__lead">
+          За 3–4 недели соберём работающую инфраструктуру управления: единая CRM, дашборды, Telegram-бот для фаундера, AI-помощники для команды. Передаём с полным доступом и видео-инструкциями.
+        </p>
+
+        <div class="product-hero__meta">
+          <div class="product-hero__meta-item">
+            <span class="product-hero__meta-label">Цена</span>
+            <span class="product-hero__meta-value">от 150 000 ₽</span>
+          </div>
+          <div class="product-hero__meta-item">
+            <span class="product-hero__meta-label">Сроки</span>
+            <span class="product-hero__meta-value">3–4 недели</span>
+          </div>
+          <div class="product-hero__meta-item">
+            <span class="product-hero__meta-label">Команда EDL</span>
+            <span class="product-hero__meta-value">3 человека</span>
+          </div>
+          <div class="product-hero__meta-item">
+            <span class="product-hero__meta-label">Ваше время</span>
+            <span class="product-hero__meta-value">4–6 ч/нед</span>
+          </div>
         </div>
 
-        <div>
-          <span class="footer__col-title">Услуги</span>
-          <ul class="footer__list">
-            <li><a href="sprint.html">AI Operations Sprint</a></li>
-            <li><a href="diagnostic.html">Диагностика</a></li>
-            <li><a href="sprint.html#growth">Growth Plan</a></li>
-          </ul>
+        <div class="hero__cta-row">
+          <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary">Записаться на демо</a>
+          <span class="hero__cta-secondary">Сначала проверить себя? <a href="diagnostic.html">Диагностика 25 000 ₽ →</a></span>
         </div>
-
-        <div>
-          <span class="footer__col-title">Команда</span>
-          <ul class="footer__list">
-            <li><a href="index.html#approach">Подход</a></li>
-            <li><a href="index.html#proof">Наша система</a></li>
-            <li><a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener noreferrer">Канал в Telegram</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <span class="footer__col-title">Контакты</span>
-          <ul class="footer__list">
-            <li><a href="https://t.me/evzhiganova8888" target="_blank" rel="noopener noreferrer">Telegram</a></li>
-            <li><a href="mailto:hello@elephantdreams.ru">hello@elephantdreams.ru</a></li>
-            <li><a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener noreferrer">Calendly</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="footer__bottom">
-        <span>© 2026, Elephant Dreams Lab</span>
-        <span class="footer__lang">
-          <a href="sprint.html" class="is-active">RU</a>
-          <span aria-hidden="true">·</span>
-          <a href="en/sprint.html">EN</a>
-        </span>
       </div>
     </div>
-  </footer>
+  </section>
 
-  <!-- Sticky mobile CTA -->
-  <div class="sticky-cta">
-    <a href="#" class="btn btn--primary" data-cta="demo" data-cta-location="sticky-mobile">Записаться на демо</a>
-  </div>
-
-  <!-- Calendly Modal -->
-  <div id="calendly-modal" class="modal" hidden role="dialog" aria-labelledby="modal-title" aria-modal="true">
-    <div class="modal__overlay" data-modal-close></div>
-    <div class="modal__content">
-      <button class="modal__close" data-modal-close aria-label="Закрыть">×</button>
-      <div class="modal__header">
-        <h2 class="modal__title" id="modal-title">Демо системы EDL</h2>
-        <p class="modal__sub">30 минут. Не односторонний рассказ, а совместное обсуждение вашей точки развития.</p>
+  <!-- WHAT'S INSIDE -->
+  <section class="product-section">
+    <div class="container">
+      <div class="product-section__head">
+        <span class="eyebrow">01 · Что внутри</span>
+        <h2>Что соберём за 3–4 недели</h2>
+        <p>Не «концепцию» и не «дорожную карту» — рабочую инфраструктуру, которая стоит на ваших данных и работает каждый день.</p>
       </div>
-      <div class="calendly-inline-widget"
-           data-url="https://calendly.com/evzhiganova8888/30min"
-           style="min-width:320px;">
+
+      <div class="product-list">
+
+        <div class="product-item">
+          <div class="product-item__num">01<strong>CRM</strong></div>
+          <div>
+            <h3>Единая CRM с автоматической приоритизацией</h3>
+            <p>Все лиды попадают в одну таблицу из всех каналов: лендинг, Calendly, LinkedIn, Telegram, рекомендации. Каждый получает оценку HOT / WARM / COLD автоматически. Менеджер видит, что брать в первую очередь.</p>
+            <ul class="product-item-list">
+              <li>Pipeline со статусами и lead score</li>
+              <li>Авто-маршрутизация ответственному</li>
+              <li>История касаний и next action в одном месте</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="product-item">
+          <div class="product-item__num">02<strong>ДАШБОРДЫ</strong></div>
+          <div>
+            <h3>Бизнес одним экраном</h3>
+            <p>Видите главное за 30 секунд: лиды вчера, HOT в работе, выручка месяца, конверсии воронки, нагрузка команды. Можно собрать отдельные дашборды под маркетинг, продажи, finance.</p>
+            <ul class="product-item-list">
+              <li>Founder OS — главный пульт</li>
+              <li>Marketing dashboard — лиды по источникам</li>
+              <li>Sales pipeline — динамика сделок</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="product-item">
+          <div class="product-item__num">03<strong>TELEGRAM-БОТ</strong></div>
+          <div>
+            <h3>Утренняя сводка и команды на ходу</h3>
+            <p>Каждое утро в выбранное время — push с цифрами вчерашнего дня. В течение дня — алерты на HOT-лиды без ответа. Команды /сводка, /леды, /pipe — данные за секунду в любом месте.</p>
+            <ul class="product-item-list">
+              <li>Утренний digest с фокусом дня</li>
+              <li>Алерты по триггерам (SLA, аномалии)</li>
+              <li>Управление CRM из чата</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="product-item">
+          <div class="product-item__num">04<strong>AI-ПОМОЩНИКИ</strong></div>
+          <div>
+            <h3>Автоматизация рутины через AI</h3>
+            <p>AI-помощники подсказывают команде следующие шаги, генерируют первичные ответы клиентам, разбирают аномалии в продажах, пишут шаблоны писем. Не «расскажем про AI» — встроим там, где он даёт результат.</p>
+            <ul class="product-item-list">
+              <li>Скоринг и квалификация лидов</li>
+              <li>Шаблонные ответы клиентам</li>
+              <li>Анализ аномалий и трендов</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="product-section" style="background:var(--bg-tinted);">
+    <div class="container">
+      <div class="product-section__head">
+        <span class="eyebrow">02 · Процесс</span>
+        <h2>Как проходят 3–4 недели</h2>
+        <p>Каждые 7–10 дней — промежуточная защита с вашим участием. Если идём не туда — корректируем. Это не формальность, это формат итераций.</p>
+      </div>
+
+      <div class="product-list">
+
+        <div class="product-item">
+          <div class="product-item__num">Н1<strong>НЕДЕЛЯ 1</strong></div>
+          <div>
+            <h3>Бриф и сборка фундамента</h3>
+            <p>Глубокий бриф 90 минут — карта процессов, метрики, точки боли. Параллельно собираем основу: CRM-структуру под ваши данные, первичные дашборды.</p>
+            <ul class="product-item-list">
+              <li>День 1–2 · Бриф и архитектура</li>
+              <li>День 3–5 · Сборка CRM + первый дашборд</li>
+              <li>День 7 · Первая защита</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="product-item">
+          <div class="product-item__num">Н2<strong>НЕДЕЛЯ 2</strong></div>
+          <div>
+            <h3>Telegram-бот и автоматизации</h3>
+            <p>Подключаем Telegram-бота. Настраиваем утреннюю сводку и алерты. Автоматизируем критичные маршруты — приём заявок, скоринг, маршрутизация.</p>
+            <ul class="product-item-list">
+              <li>Бот и утренняя сводка</li>
+              <li>Авто-маршрутизация лидов</li>
+              <li>День 14 · Вторая защита</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="product-item">
+          <div class="product-item__num">Н3<strong>НЕДЕЛЯ 3</strong></div>
+          <div>
+            <h3>AI-помощники и кастомизация</h3>
+            <p>Подключаем AI там, где он даёт измеримый эффект. Дополнительные дашборды под отделы. Финальная сборка единой системы.</p>
+            <ul class="product-item-list">
+              <li>AI-помощники в процессах</li>
+              <li>Дашборды отделов</li>
+              <li>День 21 · Третья защита</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="product-item">
+          <div class="product-item__num">Н4<strong>НЕДЕЛЯ 4</strong></div>
+          <div>
+            <h3>Передача и онбординг команды</h3>
+            <p>Записываем видео-инструкции для каждой роли. Назначаем владельца системы внутри вашей команды. Финальная защита и передача доступов.</p>
+            <ul class="product-item-list">
+              <li>Видео-инструкции и документация</li>
+              <li>Онбординг команды</li>
+              <li>День 28 · Финальная защита</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- AFTER · Growth Plan -->
+  <section class="product-section" id="growth">
+    <div class="container">
+      <div class="product-section__head">
+        <span class="eyebrow">03 · После спринта</span>
+        <h2>Не оставляем один на один с системой</h2>
+        <p>60–70% наших клиентов остаются на Growth Plan — поддержке от 50 000 ₽/мес. Не до момента сдачи, а до момента, когда система реально работает без нас.</p>
+      </div>
+
+      <div class="approach__grid">
+
+        <article class="approach__card">
+          <div class="approach__card-step">Base · 50 000 ₽/мес</div>
+          <h3>Поддержка системы</h3>
+          <div class="approach__card-meta">
+            <strong>еженедельный синк</strong>
+            <span>30 минут</span>
+          </div>
+          <p class="approach__card-desc">Мониторинг 3 ключевых метрик. Slack-консультации. Корректировки и доработки по запросу.</p>
+        </article>
+
+        <article class="approach__card">
+          <div class="approach__card-step">Standard · 75 000 ₽/мес</div>
+          <h3>Развитие системы</h3>
+          <div class="approach__card-meta">
+            <strong>+ 1 мини-спринт</strong>
+            <span>в квартал</span>
+          </div>
+          <p class="approach__card-desc">Всё из Base + расширение мониторинга до 5 метрик. Один мини-спринт в квартал. Приоритетная поддержка.</p>
+        </article>
+
+        <article class="approach__card is-flagship">
+          <div class="approach__flagship-tag">Pro</div>
+          <div class="approach__card-step">Pro · 110 000 ₽/мес</div>
+          <h3>R&D и продуктовые ревью</h3>
+          <div class="approach__card-meta">
+            <strong>+ 2 R&D-апдейта</strong>
+            <span>в квартал</span>
+          </div>
+          <p class="approach__card-desc">Всё из Standard. Участие в product-ревью. Тестируем новые AI-инструменты под вас в первую очередь.</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section>
+    <div class="final">
+      <div class="final__container">
+        <span class="eyebrow" style="color:var(--accent);">Дальше</span>
+        <h2>Готовы посмотреть систему вживую?</h2>
+        <p>30-минутный созвон. Покажем демо инфраструктуры на обезличенных примерах. Расскажете контекст — увидите, как это адаптируется под вас.</p>
+        <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary">Записаться на демо системы</a>
+        <p class="final__note">Обычно отвечаем в течение 2 часов в рабочее время</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__grid">
+      <div class="site-footer__brand-col">
+        <div class="site-footer__brand">EDL</div>
+        <p class="site-footer__about">Elephant Dreams Lab. Собираем фаундерам операционную систему бизнеса. Чтобы было прозрачно. Чтобы можно было управлять с одного экрана.</p>
+      </div>
+      <div class="site-footer__col">
+        <h4>Услуги</h4>
+        <ul>
+          <li><a href="sprint.html">AI Operations Sprint</a></li>
+          <li><a href="diagnostic.html">Диагностика</a></li>
+          <li><a href="sprint.html#growth">Growth Plan</a></li>
+        </ul>
+      </div>
+      <div class="site-footer__col">
+        <h4>Компания</h4>
+        <ul>
+          <li><a href="/#approach">Подход</a></li>
+          <li><a href="/#method">Наша система</a></li>
+          <li><a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener">Канал в Telegram</a></li>
+        </ul>
+      </div>
+      <div class="site-footer__col">
+        <h4>Контакты</h4>
+        <ul>
+          <li><a href="https://t.me/evzhiganova8888" target="_blank" rel="noopener">Telegram</a></li>
+          <li><a href="mailto:hello@elephantdreams.ru">hello@elephantdreams.ru</a></li>
+          <li><a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener">Calendly</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <span>© 2026, Elephant Dreams Lab</span>
+      <div class="site-footer__bottom-lang">
+        <a href="/">RU</a><span>·</span><a href="/en/">EN</a>
       </div>
     </div>
   </div>
+</footer>
 
-  <script src="main.js" defer></script>
 </body>
 </html>
