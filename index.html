@@ -382,36 +382,95 @@
               <p class="method-principle__hover">Как будильник в&nbsp;iPhone: можно поставить раз и&nbsp;забыть, можно менять каждый день. У&nbsp;каждого руководителя — своя сводка со&nbsp;своими метриками. Вы&nbsp;настраиваете, кто что видит. Это конструктор, который растёт вместе с&nbsp;компанией.</p>
 
               <!-- iPhone-будильник — иллюстрация поворачивающегося колеса времени -->
-              <div class="alarm-mock" aria-hidden="true">
-                <div class="alarm-mock__phone">
-                  <div class="alarm-mock__notch"></div>
-                  <div class="alarm-mock__top">
-                    <span class="alarm-mock__cancel">Отмена</span>
-                    <span class="alarm-mock__title">Сводка</span>
-                    <span class="alarm-mock__save">Сохранить</span>
-                  </div>
-                  <div class="alarm-mock__wheel">
-                    <div class="alarm-mock__wheel-row alarm-mock__wheel-row--dim">07</div>
-                    <div class="alarm-mock__wheel-row alarm-mock__wheel-row--dim">07&nbsp;:&nbsp;30</div>
-                    <div class="alarm-mock__wheel-row alarm-mock__wheel-row--active">08&nbsp;:&nbsp;30</div>
-                    <div class="alarm-mock__wheel-row alarm-mock__wheel-row--dim">09&nbsp;:&nbsp;00</div>
-                    <div class="alarm-mock__wheel-row alarm-mock__wheel-row--dim">09&nbsp;:&nbsp;30</div>
-                  </div>
-                  <div class="alarm-mock__bottom">
-                    <span class="alarm-mock__row">
-                      <span>Что присылать</span>
-                      <span class="alarm-mock__row-value">Лиды&nbsp;·&nbsp;HOT&nbsp;·&nbsp;Выручка</span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ol>
+             <!-- ===================================================================
+     ИНТЕРАКТИВНЫЙ БУДИЛЬНИК — заменяет статичный мокап в Принципах → 03
+     ===================================================================
+     Куда вставить: в секцию «Принципы → 03 · Утренний будильник вашего бизнеса»
+                    вместо текущего статичного блока с 07/07:30/08:30/09:00/09:30
+     
+     Что делает:
+     1. Пользователь выбирает время утренней сводки (6 кнопок)
+     2. После выбора — появляется анимированный timeline дня в системе
+     3. В конце — CTA «Получить такую же на свой бизнес»
+     
+     Полностью семантичен, доступен с клавиатуры, уважает prefers-reduced-motion.
+     Mobile-first: на узких экранах picker становится в 2 колонки.
+     =================================================================== -->
+
+<div class="edl-clock" id="edl-clock" role="region" aria-label="Демо: настройка времени утренней сводки">
+
+  <div class="edl-clock__frame">
+
+    <!-- Верхняя панель — стилизация под iPhone -->
+    <div class="edl-clock__topbar">
+      <button type="button" class="edl-clock__topbar-action" data-clock-cancel aria-label="Отмена">
+        Отмена
+      </button>
+      <span class="edl-clock__title" aria-hidden="true">Сводка</span>
+      <button type="button" class="edl-clock__topbar-action" data-clock-save aria-label="Сохранить выбранное время">
+        Сохранить
+      </button>
+    </div>
+
+    <!-- Picker: выбор времени -->
+    <div class="edl-clock__picker" role="radiogroup" aria-label="Выберите время утренней сводки">
+      <button type="button" class="edl-clock__time-btn" role="radio" aria-checked="false" aria-pressed="false" data-time="07:00">07:00</button>
+      <button type="button" class="edl-clock__time-btn" role="radio" aria-checked="false" aria-pressed="false" data-time="07:30">07:30</button>
+      <button type="button" class="edl-clock__time-btn" role="radio" aria-checked="true"  aria-pressed="true"  data-time="08:30" data-default>08:30</button>
+      <button type="button" class="edl-clock__time-btn" role="radio" aria-checked="false" aria-pressed="false" data-time="09:00">09:00</button>
+      <button type="button" class="edl-clock__time-btn" role="radio" aria-checked="false" aria-pressed="false" data-time="09:30">09:30</button>
+      <button type="button" class="edl-clock__time-btn" role="radio" aria-checked="false" aria-pressed="false" data-time="10:00">10:00</button>
+    </div>
+
+    <p class="edl-clock__caption">
+      <strong>↑ выберите время</strong> — посмотрите день в EDL OS
+    </p>
+
+    <!-- Timeline: появляется после выбора и нажатия Сохранить (или авто через 1.5с) -->
+    <div class="edl-clock__timeline" aria-live="polite">
+
+      <div class="edl-clock__event" data-event="1">
+        <div class="edl-clock__event-icon" aria-hidden="true">🌅</div>
+        <div class="edl-clock__event-time"><span data-clock-display>08:30</span> · утренняя сводка</div>
+        <div class="edl-clock__event-desc">
+          Лидов вчера: 4 · HOT в работе: 2 · Выручка месяца: 182 тыс
         </div>
       </div>
-    </section>
 
-    <div class="section-bridge section-bridge--canvas-to-tinted" aria-hidden="true"></div>
+      <div class="edl-clock__event edl-clock__event--alert" data-event="2">
+        <div class="edl-clock__event-icon" aria-hidden="true">🚨</div>
+        <div class="edl-clock__event-time">11:00 · алерт</div>
+        <div class="edl-clock__event-desc">
+          1 HOT-лид без ответа &gt; 2ч → передан Ивану
+        </div>
+      </div>
+
+      <div class="edl-clock__event" data-event="3">
+        <div class="edl-clock__event-icon" aria-hidden="true">📊</div>
+        <div class="edl-clock__event-time">18:00 · итоги дня</div>
+        <div class="edl-clock__event-desc">
+          +3 лида · 1 диагностика подписана · цель месяца 4/5
+        </div>
+      </div>
+
+      <!-- CTA — появляется последним -->
+      <div class="edl-clock__cta">
+        <p class="edl-clock__cta-text">
+          Так выглядит день в EDL OS.<br>
+          Соберём такой же под ваш бизнес.
+        </p>
+        <a class="edl-clock__cta-link" href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener">
+          Записаться на демо системы →
+        </a>
+        <button type="button" class="edl-clock__reset" data-clock-reset>
+          ← Выбрать другое время
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</div>
 
     <!-- ───── 05 · Funnel — 3 cards + horizontal support stripe ───── -->
     <section class="section section--tinted" id="approach" data-reveal>
