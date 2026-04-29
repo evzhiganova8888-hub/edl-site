@@ -1,0 +1,532 @@
+/* ===================================================================
+   EDL Site Update Patch v1 — 30 апреля 2026
+   ===================================================================
+   Подключается ПОСЛЕ основного styles.css.
+   Содержит:
+   1. Дополнительные токены (additive, ничего не перетирают)
+   2. FAQ-фикс (убирает нечитаемую тёмную подложку)
+   3. Интерактивный будильник + timeline дня
+   4. Mobile-defensive правила (точечно, без ломки)
+   5. A11y и motion preferences
+   =================================================================== */
+
+
+/* ========== 1. ДОПОЛНИТЕЛЬНЫЕ ТОКЕНЫ ========== */
+/* Используются только в новых компонентах. Не перетирают твои существующие переменные. */
+
+:root {
+  --edl-lime: #C8FF00;
+  --edl-lime-glow: rgba(200, 255, 0, 0.18);
+  --edl-navy: #1A1B2E;
+  --edl-navy-soft: #2A2B40;
+  --edl-bg: #FAF9F6;
+  --edl-fg: #15151D;
+  --edl-fg-2: #4A4A52;
+  --edl-fg-3: #888893;
+  --edl-border: rgba(21, 21, 29, 0.08);
+  --edl-border-strong: rgba(21, 21, 29, 0.16);
+  --edl-card: #FFFFFF;
+  --edl-tinted: #F2F0EA;
+  --edl-success: #16A34A;
+  --edl-warn: #F59E0B;
+  --edl-danger: #EF4444;
+
+  /* Easings */
+  --edl-ease: cubic-bezier(0.16, 1, 0.3, 1);          /* ease-out-quart */
+  --edl-ease-soft: cubic-bezier(0.4, 0, 0.2, 1);      /* material standard */
+  --edl-ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Радиусы */
+  --edl-r-sm: 8px;
+  --edl-r-md: 12px;
+  --edl-r-lg: 20px;
+  --edl-r-xl: 28px;
+}
+
+
+/* ========== 2. FAQ-ФИКС: УБИРАЕМ ТЁМНУЮ ПОДЛОЖКУ ========== */
+/* Проблема: внутри открытого FAQ есть тёмная карточка, на ней не виден текст. */
+/* Решение: помечаем эти блоки атрибутом data-fix="faq-card" и переопределяем их */
+/* как светлые карточки с lime-акцентами для цифр. */
+
+[data-fix="faq-card"] {
+  background: var(--edl-card) !important;
+  color: var(--edl-fg) !important;
+  border: 1px solid var(--edl-border);
+  border-radius: var(--edl-r-lg);
+  padding: clamp(20px, 4vw, 32px) !important;
+  box-shadow: 0 1px 0 rgba(21, 21, 29, 0.04), 0 4px 24px rgba(21, 21, 29, 0.04);
+}
+
+[data-fix="faq-card"] * {
+  color: inherit;
+}
+
+/* Цены и числа выделяются lime-подложкой (соответствует Brand Guidelines §2.2) */
+[data-fix="faq-card"] [data-fix="price"] {
+  background: var(--edl-lime);
+  color: var(--edl-fg);
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Пункты-перечисления внутри FAQ-карточки */
+[data-fix="faq-card"] ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+[data-fix="faq-card"] ul li {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--edl-border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+}
+
+[data-fix="faq-card"] ul li:last-child {
+  border-bottom: none;
+}
+
+[data-fix="faq-card"] ul li strong {
+  font-weight: 600;
+}
+
+[data-fix="faq-card"] em {
+  font-style: normal;
+  color: var(--edl-fg-2);
+  font-size: 0.9em;
+}
+
+
+/* ========== 3. ИНТЕРАКТИВНЫЙ БУДИЛЬНИК + TIMELINE ДНЯ ========== */
+/* Заменяет статичный будильник в секции «Принципы → 03». */
+/* User flow: выбор времени → анимация показа дня в системе → CTA. */
+
+.edl-clock {
+  --clock-width: min(360px, 100%);
+  width: var(--clock-width);
+  margin: 32px auto 0;
+  position: relative;
+  font-family: inherit;
+}
+
+/* --- Phone-frame (визуальная рамка) --- */
+.edl-clock__frame {
+  background: var(--edl-navy);
+  color: #F5F5F0;
+  border-radius: var(--edl-r-xl);
+  padding: 20px 18px 24px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 24px 60px -20px rgba(21, 21, 29, 0.45),
+    0 8px 24px -8px rgba(21, 21, 29, 0.25);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Top bar — стилизация под iPhone-окно */
+.edl-clock__topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: rgba(245, 245, 240, 0.6);
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
+}
+
+.edl-clock__topbar-action {
+  background: none;
+  border: none;
+  color: var(--edl-lime);
+  font: inherit;
+  cursor: pointer;
+  padding: 4px 8px;
+  margin: -4px -8px;
+  border-radius: 6px;
+  transition: background 200ms var(--edl-ease);
+}
+
+.edl-clock__topbar-action:hover {
+  background: rgba(200, 255, 0, 0.08);
+}
+
+.edl-clock__topbar-action:focus-visible {
+  outline: 2px solid var(--edl-lime);
+  outline-offset: 2px;
+}
+
+.edl-clock__title {
+  color: rgba(245, 245, 240, 0.85);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* --- Состояние 1: PICKER — выбор времени --- */
+.edl-clock__picker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 8px 0 16px;
+}
+
+.edl-clock__time-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(245, 245, 240, 0.75);
+  padding: 14px 8px;
+  border-radius: var(--edl-r-md);
+  font-size: clamp(18px, 2.4vw, 22px);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  transition:
+    background 240ms var(--edl-ease),
+    border-color 240ms var(--edl-ease),
+    color 240ms var(--edl-ease),
+    transform 240ms var(--edl-ease);
+  font-family: inherit;
+  /* Минимальная touch-цель 44px (Apple HIG) */
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edl-clock__time-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: #F5F5F0;
+}
+
+.edl-clock__time-btn:focus-visible {
+  outline: 2px solid var(--edl-lime);
+  outline-offset: 2px;
+}
+
+.edl-clock__time-btn[aria-pressed="true"] {
+  background: var(--edl-lime);
+  color: var(--edl-fg);
+  border-color: var(--edl-lime);
+  transform: scale(1.04);
+  box-shadow: 0 0 0 3px var(--edl-lime-glow);
+}
+
+/* Подпись под picker */
+.edl-clock__caption {
+  font-size: 12px;
+  color: rgba(245, 245, 240, 0.55);
+  text-align: center;
+  margin-top: 4px;
+  letter-spacing: -0.01em;
+}
+
+.edl-clock__caption strong {
+  color: var(--edl-lime);
+  font-weight: 600;
+}
+
+/* --- Состояние 2: TIMELINE дня --- */
+.edl-clock__timeline {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.edl-clock.is-running .edl-clock__picker,
+.edl-clock.is-running .edl-clock__caption {
+  display: none;
+}
+
+.edl-clock.is-running .edl-clock__timeline {
+  display: flex;
+}
+
+.edl-clock__event {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--edl-r-md);
+  padding: 12px 14px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 12px;
+  row-gap: 4px;
+  align-items: start;
+
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 600ms var(--edl-ease),
+    transform 600ms var(--edl-ease);
+}
+
+.edl-clock__event.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.edl-clock__event-icon {
+  font-size: 18px;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(200, 255, 0, 0.1);
+  border-radius: 8px;
+  grid-row: 1 / 3;
+}
+
+.edl-clock__event-time {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--edl-lime);
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.edl-clock__event-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #F5F5F0;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.edl-clock__event-desc {
+  grid-column: 2 / 3;
+  font-size: 12px;
+  color: rgba(245, 245, 240, 0.65);
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+}
+
+.edl-clock__event--alert .edl-clock__event-icon {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.edl-clock__event--alert .edl-clock__event-time {
+  color: #FCA5A5;
+}
+
+/* CTA-блок появляется после таймлайна */
+.edl-clock__cta {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 600ms var(--edl-ease) 200ms,
+    transform 600ms var(--edl-ease) 200ms;
+}
+
+.edl-clock__cta.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.edl-clock__cta-text {
+  font-size: 13px;
+  color: rgba(245, 245, 240, 0.75);
+  margin-bottom: 12px;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+}
+
+.edl-clock__cta-link {
+  display: inline-block;
+  background: var(--edl-lime);
+  color: var(--edl-fg);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 20px;
+  border-radius: var(--edl-r-md);
+  letter-spacing: -0.01em;
+  transition: transform 200ms var(--edl-ease), box-shadow 200ms var(--edl-ease);
+  /* Touch target ≥ 44px */
+  min-height: 44px;
+  line-height: 1.4;
+}
+
+.edl-clock__cta-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px -8px rgba(200, 255, 0, 0.5);
+}
+
+.edl-clock__cta-link:focus-visible {
+  outline: 2px solid var(--edl-lime);
+  outline-offset: 3px;
+}
+
+.edl-clock__reset {
+  display: block;
+  margin: 10px auto 0;
+  background: none;
+  border: none;
+  color: rgba(245, 245, 240, 0.45);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: color 200ms var(--edl-ease);
+}
+
+.edl-clock__reset:hover {
+  color: var(--edl-lime);
+}
+
+.edl-clock__reset:focus-visible {
+  outline: 2px solid var(--edl-lime);
+  outline-offset: 2px;
+}
+
+
+/* ========== 4. MOBILE-DEFENSIVE ПРАВИЛА ========== */
+/* Минимальная адаптивность для всего сайта. Точечно, без агрессивных оверрайдов. */
+
+/* 4.1 Запрет горизонтального скролла на body */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* 4.2 Все картинки и SVG — масштабируются по ширине контейнера */
+img, svg, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 4.3 Адаптивность таблиц (если есть в FAQ) */
+table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 4.4 Touch-friendly размеры на тач-устройствах */
+@media (hover: none) and (pointer: coarse) {
+  button,
+  a.btn,
+  [role="button"],
+  input[type="button"],
+  input[type="submit"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* 4.5 Мобильные правила (≤768px) */
+@media (max-width: 768px) {
+  /* Будильник — упрощаем picker до 2 колонок чтобы кнопки были крупнее */
+  .edl-clock__picker {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .edl-clock__time-btn {
+    min-height: 56px;
+    font-size: 22px;
+  }
+
+  /* Скрываем рисковые декоративные элементы на моб (помечаются [data-mobile-hide]) */
+  [data-mobile-hide="true"] {
+    display: none !important;
+  }
+
+  /* Упрощаем мокапы дашбордов — если они помечены, делаем компактнее */
+  [data-mobile-compact="true"] {
+    transform: none !important;
+    margin: 0 !important;
+  }
+}
+
+/* 4.6 Очень маленькие экраны (≤375px — iPhone SE) */
+@media (max-width: 375px) {
+  .edl-clock {
+    --clock-width: 100%;
+  }
+
+  .edl-clock__frame {
+    padding: 16px 14px 20px;
+    border-radius: 22px;
+  }
+
+  .edl-clock__time-btn {
+    font-size: 20px;
+    padding: 12px 6px;
+  }
+}
+
+
+/* ========== 5. A11Y И MOTION PREFERENCES ========== */
+
+/* Уважаем пользователей которые отключили анимации */
+@media (prefers-reduced-motion: reduce) {
+  .edl-clock__time-btn,
+  .edl-clock__event,
+  .edl-clock__cta,
+  .edl-clock__cta-link,
+  .edl-clock__reset {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .edl-clock__event,
+  .edl-clock__cta {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Усиливаем фокус-кольцо для всех интерактивных элементов будильника */
+.edl-clock :focus-visible {
+  outline-offset: 2px;
+}
+
+
+/* ========== 6. ОБЩИЕ ТИПОГРАФИЧЕСКИЕ УЛУЧШЕНИЯ ========== */
+/* Применяются ко всему сайту — улучшают читаемость без ломки. */
+
+/* text-wrap: balance для заголовков (где поддерживается — Chrome 114+, Safari 17.4+) */
+@supports (text-wrap: balance) {
+  h1, h2, h3, .hero__title, [class*="hero"] h1 {
+    text-wrap: balance;
+  }
+}
+
+/* text-wrap: pretty для абзацев — избегает «сирот» в конце строки */
+@supports (text-wrap: pretty) {
+  p, li {
+    text-wrap: pretty;
+  }
+}
+
+
+/* ========== 7. ДЕБАГ (выключено по умолчанию) ========== */
+/* Чтобы временно подсветить какой-то элемент — раскомментируй и добавь data-debug к нему */
+
+/*
+[data-debug] {
+  outline: 2px dashed magenta !important;
+  outline-offset: 2px;
+}
+*/
+
+/* ===================================================================
+   КОНЕЦ ПАТЧА
+   =================================================================== */
