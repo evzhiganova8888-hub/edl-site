@@ -44,97 +44,86 @@
     </div>
 
     <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary site-header__cta">Записаться на демо</a>
-
-    <button class="site-header__burger" aria-label="Меню" type="button"><span></span></button>
   </div>
 </header>
 
 <main id="main">
 
-  <!-- ============== HERO ============== -->
+  <!-- ============== HERO — без иллюстрации, с lime акцентом ============== -->
   <section class="hero">
     <div class="container">
-      <div class="hero__grid">
+      <div class="hero__inner">
+        <span class="eyebrow">01 · Интро</span>
+        <h1 class="hero__title">Один экран.<br>Весь&nbsp;<span class="hero__accent">бизнес</span>.</h1>
+        <p class="hero__lead">
+          <strong>Дорого привлекать клиентов. Команда буксует без вас.</strong>
+          За 3–4 недели соберём CRM, дашборды, Telegram-бот и AI-помощников — выйдете из операционки и увидите бизнес одним экраном.
+        </p>
 
-        <div class="hero__content">
-          <span class="eyebrow">01 · Интро</span>
-          <h1 class="hero__title">Один экран.<br>Весь бизнес.</h1>
-          <p class="hero__lead">
-            <strong>Дорого привлекать клиентов. Команда буксует без вас.</strong>
-            За 3–4 недели соберём CRM, дашборды, Telegram-бот и AI-помощников — выйдете из операционки и увидите бизнес одним экраном.
-          </p>
-
-          <div class="hero__cta-row">
-            <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary">Записаться на демо системы</a>
-            <span class="hero__cta-secondary">Ещё рано? <a href="quiz.html">Пройдите экспресс-тест за 5 минут →</a></span>
-          </div>
-
-          <ul class="hero__tags">
-            <li>утренний push · 8:30</li>
-            <li>один экран</li>
-            <li>пульс бизнеса</li>
-          </ul>
+        <div class="hero__cta-row">
+          <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary">Записаться на демо системы</a>
+          <span class="hero__cta-secondary">Ещё рано? <a href="quiz.html">Пройдите экспресс-тест за 5 минут →</a></span>
         </div>
 
-        <div class="hero__visual" aria-hidden="true">
-          <div class="hero__visual-card">
-            <div class="hero__visual-head">
-              <strong>EDL Operations</strong>
-              <span>сводка · 8:30</span>
-            </div>
-            <div class="hero__visual-row">
-              <span>Лидов вчера</span><span>4</span>
-            </div>
-            <div class="hero__visual-row">
-              <span>HOT в работе</span><span>2</span>
-            </div>
-            <div class="hero__visual-row">
-              <span>Выручка месяца</span><span>182 тыс</span>
-            </div>
-            <div class="proof__alert">Один HOT-лид без ответа &gt; 2 ч</div>
-          </div>
-        </div>
-
+        <ul class="hero__tags">
+          <li>утренний push · 8:30</li>
+          <li>один экран</li>
+          <li>пульс бизнеса</li>
+        </ul>
       </div>
     </div>
   </section>
 
-  <!-- ============== PROOF (НАША СИСТЕМА) ============== -->
+  <!-- ============== PROOF · 3D КАРУСЕЛЬ ============== -->
   <section class="proof">
     <div class="container">
-      <div class="proof__grid">
+      <div class="proof__head">
+        <span class="eyebrow">02 · Наша система</span>
+        <h2>Сначала собрали себе.<br>Теперь — клиентам.</h2>
+        <p>Команда EDL управляет работой через эту инфраструктуру. По ней же работают наши клиенты: лиды попадают в CRM автоматически, утром приходит сводка с тревогами и фокусами дня, AI-помощники подсказывают команде следующие шаги.</p>
+        <p>На демо мы покажем эту инфраструктуру вживую — реальные сценарии, на обезличенных примерах клиентов.</p>
+      </div>
 
-        <div class="proof__copy">
-          <span class="eyebrow">02 · Наша система</span>
-          <h2 class="proof__title">Сначала собрали себе.<br>Теперь — клиентам.</h2>
-          <div class="proof__body">
-            <p>Команда EDL управляет работой через эту инфраструктуру. По ней же работают наши клиенты: лиды попадают в CRM автоматически, утром приходит сводка с тревогами и фокусами дня, AI-помощники подсказывают команде следующие шаги.</p>
-            <p>На демо мы покажем эту инфраструктуру вживую — реальные сценарии, на обезличенных примерах клиентов.</p>
+      <!-- 3D-карусель из 3 карточек, вращается по часовой стрелке -->
+      <div class="carousel" role="region" aria-label="Скриншоты системы EDL — карусель">
+
+        <article class="carousel__card pos-front">
+          <div class="carousel__head">
+            <strong>EDL Operations</strong>
+            <span>сводка · 8:30</span>
           </div>
-        </div>
+          <div class="carousel__row"><span>Лидов вчера</span><span>4</span></div>
+          <div class="carousel__row"><span>HOT в работе</span><span>2</span></div>
+          <div class="carousel__row"><span>Выручка месяца</span><span>182 тыс</span></div>
+          <div class="carousel__alert">Один HOT-лид без ответа &gt; 2 ч</div>
+        </article>
 
-        <div class="proof__visuals" data-mobile-hide="true">
-          <div class="hero__visual-card">
-            <div class="hero__visual-head">
-              <strong>CRM_Leads · pipeline</strong>
-              <span>Sheets</span>
-            </div>
-            <div class="hero__visual-row"><span>Образоват. продукт · TG</span><span class="accent">94 HOT</span></div>
-            <div class="hero__visual-row"><span>Marketing agency · LinkedIn</span><span>71 WARM</span></div>
-            <div class="hero__visual-row"><span>SaaS 30+ чел · реф.</span><span class="accent">88 HOT</span></div>
-            <div class="hero__visual-row"><span>E-com retail · Quiz</span><span>52 COLD</span></div>
+        <article class="carousel__card pos-back-left">
+          <div class="carousel__head">
+            <strong>CRM_Leads · pipeline</strong>
+            <span>Sheets</span>
           </div>
+          <div class="carousel__row"><span>Образоват. продукт · TG</span><span class="accent">94 HOT</span></div>
+          <div class="carousel__row"><span>Marketing agency · LinkedIn</span><span>71 WARM</span></div>
+          <div class="carousel__row"><span>SaaS 30+ чел · реф.</span><span class="accent">88 HOT</span></div>
+          <div class="carousel__row"><span>E-com retail · Quiz</span><span>52 COLD</span></div>
+        </article>
 
-          <div class="hero__visual-card" style="background:var(--bg-tinted);">
-            <div class="hero__visual-head">
-              <strong>Dashboard · фокус дня</strong>
-              <span>авто</span>
-            </div>
-            <p style="font-size:14px;color:var(--fg-2);line-height:1.5;margin-top:6px;">«Закрыть 1 HOT-лид и запустить диагностику для Marketing agency.»</p>
-            <p style="margin-top:14px;display:inline-block;background:var(--accent);color:var(--fg);padding:4px 10px;border-radius:6px;font-size:13px;font-weight:600;">Цель месяца: 4 / 5 диагностик</p>
+        <article class="carousel__card pos-back-right">
+          <div class="carousel__head">
+            <strong>Dashboard · фокус дня</strong>
+            <span>авто</span>
           </div>
-        </div>
+          <p class="carousel__quote">«Закрыть 1 HOT-лид и запустить диагностику для Marketing agency.»</p>
+          <span class="carousel__goal">Цель месяца: 4 / 5 диагностик</span>
+        </article>
 
+      </div>
+
+      <div class="carousel__dots" role="tablist" aria-label="Переключение карточек">
+        <span class="carousel__dot is-active" data-carousel-dot></span>
+        <span class="carousel__dot" data-carousel-dot></span>
+        <span class="carousel__dot" data-carousel-dot></span>
       </div>
 
       <!-- Stats row -->
@@ -159,17 +148,19 @@
   </section>
 
   <!-- ============== ARCHITECTURE ============== -->
-  <section class="architecture">
-    <div class="architecture__container">
-      <span class="eyebrow">03 · Архитектура</span>
-      <h2 class="architecture__title">Anthropic, Tesla, Stripe — и теперь вы</h2>
-      <p class="architecture__lead">Современные tech-компании — Anthropic, Tesla, Stripe — строят бизнес как единую среду: один источник правды, всё видно с одного экрана, AI и автоматизация в каждом процессе.</p>
-      <p class="architecture__lead">Мы собрали эту архитектуру под малый и средний бизнес. По ней работаем сами и делаем такую же нашим клиентам — это не свежий эксперимент, а отлаженный продукт.</p>
-      <a href="#method" class="architecture__link">Как это работает →</a>
+  <section>
+    <div class="architecture">
+      <div class="architecture__container">
+        <span class="eyebrow">03 · Архитектура</span>
+        <h2 class="architecture__title">Anthropic, Tesla, Stripe — и теперь вы</h2>
+        <p class="architecture__lead">Современные tech-компании — Anthropic, Tesla, Stripe — строят бизнес как единую среду: один источник правды, всё видно с одного экрана, AI и автоматизация в каждом процессе.</p>
+        <p class="architecture__lead">Мы собрали эту архитектуру под малый и средний бизнес. По ней работаем сами и делаем такую же нашим клиентам — это не свежий эксперимент, а отлаженный продукт.</p>
+        <a href="#method" class="architecture__link">Как это работает →</a>
+      </div>
     </div>
   </section>
 
-  <!-- ============== METHOD (4 СЛОЯ) ============== -->
+  <!-- ============== METHOD ============== -->
   <section class="method" id="method">
     <div class="container">
       <div class="method__head">
@@ -252,7 +243,7 @@
     </div>
   </section>
 
-  <!-- ============== PRINCIPLES + ИНТЕРАКТИВНЫЙ БУДИЛЬНИК ============== -->
+  <!-- ============== PRINCIPLES + БУДИЛЬНИК ============== -->
   <section class="principles">
     <div class="container">
 
@@ -350,7 +341,7 @@
     </div>
   </section>
 
-  <!-- ============== APPROACH (ЦЕНЫ) ============== -->
+  <!-- ============== APPROACH ============== -->
   <section class="approach" id="approach">
     <div class="container">
       <div class="approach__head">
@@ -598,7 +589,7 @@
     </div>
   </section>
 
-  <!-- ============== FAQ — СВЕТЛЫЕ КАРТОЧКИ ============== -->
+  <!-- ============== FAQ ============== -->
   <section class="faq">
     <div class="container">
       <div class="faq__head">
@@ -669,7 +660,7 @@
     </div>
   </section>
 
-  <!-- ============== TELEGRAM ============== -->
+  <!-- ============== TELEGRAM — слоты под последние посты ============== -->
   <section class="telegram">
     <div class="container">
       <div class="telegram__head">
@@ -679,30 +670,31 @@
       </div>
 
       <div class="telegram__grid">
-        <a href="https://t.me/elephantdreamscommunity/9" target="_blank" rel="noopener" class="telegram__card">
+        <!-- ⚠️ ЗАМЕНИ НА АКТУАЛЬНЫЕ ПОСТЫ — обнови ID после "/##" в href и текст в .telegram__card-text -->
+        <a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener" class="telegram__card">
           <div class="telegram__card-meta">
             <strong>@elephantdreamscommunity</strong>
-            <span>#9</span>
+            <span>пост 1</span>
           </div>
-          <p class="telegram__card-text">Как мы строим инфраструктуру управления для фаундера: четыре слоя, один результат.</p>
+          <p class="telegram__card-text">Замените этот текст на содержание актуального поста из канала. Обычно подойдёт первое-второе предложение.</p>
           <span class="telegram__card-link">Читать в Telegram →</span>
         </a>
 
-        <a href="https://t.me/elephantdreamscommunity/34" target="_blank" rel="noopener" class="telegram__card">
+        <a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener" class="telegram__card">
           <div class="telegram__card-meta">
             <strong>@elephantdreamscommunity</strong>
-            <span>#34</span>
+            <span>пост 2</span>
           </div>
-          <p class="telegram__card-text">Что увидели в работе с клиентами: AI работает, когда встроен в процесс. Без процесса — игрушка.</p>
+          <p class="telegram__card-text">Замените этот текст на содержание актуального поста из канала.</p>
           <span class="telegram__card-link">Читать в Telegram →</span>
         </a>
 
-        <a href="https://t.me/elephantdreamscommunity/35" target="_blank" rel="noopener" class="telegram__card">
+        <a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener" class="telegram__card">
           <div class="telegram__card-meta">
             <strong>@elephantdreamscommunity</strong>
-            <span>#35</span>
+            <span>пост 3</span>
           </div>
-          <p class="telegram__card-text">Утренняя сводка фаундера в 8:30: что входит, как работает, почему это критичнее, чем кажется.</p>
+          <p class="telegram__card-text">Замените этот текст на содержание актуального поста из канала.</p>
           <span class="telegram__card-link">Читать в Telegram →</span>
         </a>
       </div>
@@ -713,7 +705,7 @@
     </div>
   </section>
 
-  <!-- ============== FINAL CTA ============== -->
+  <!-- ============== FINAL CTA — увеличен отступ note ============== -->
   <section>
     <div class="final">
       <div class="final__container">
