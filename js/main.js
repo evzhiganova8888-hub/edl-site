@@ -189,16 +189,19 @@
         let solutionHtml = '<ul style="padding-left: 20px; display:flex; flex-direction:column; gap:8px;">';
         
         if (checked.includes('reports')) {
-          solutionHtml += '<li><strong>Аналитика:</strong> Автоматизируем сбор метрик. Вы будете получать утреннюю сводку в Telegram за 1 секунду без участия команды.</li>';
+          solutionHtml += '<li><strong>Аналитика:</strong> Соберем единый пульт управления. Вы будете видеть прозрачную картину бизнеса каждое утро.</li>';
         }
         if (checked.includes('margin')) {
-          solutionHtml += '<li><strong>Финансы:</strong> Подключим дашборды к 1С/банку. Вы увидите реальную маржу в разрезе проектов и когорт.</li>';
+          solutionHtml += '<li><strong>Финансы:</strong> Свяжем 1С, банк и CRM. Вы увидите реальную чистую прибыль и поймете, где теряете маржу.</li>';
         }
         if (checked.includes('leads')) {
-          solutionHtml += '<li><strong>Продажи:</strong> Внедрим CRM с AI-скорингом. Бот сам квалифицирует лидов и пришлет пуш менеджерам по горячим.</li>';
+          solutionHtml += '<li><strong>Продажи:</strong> Оцифруем отдел продаж. Бот сам напомнит менеджерам дожать горячих клиентов и покажет зависшие сделки.</li>';
         }
         if (checked.includes('focus')) {
-          solutionHtml += '<li><strong>Управление:</strong> Настроим трекинг задач. AI начнет подсвечивать вам только зоны, выходящие из графика (красные статусы).</li>';
+          solutionHtml += '<li><strong>Управление:</strong> Выстроим регулярный менеджмент. Платформа поможет контролировать фокус команды, пока вы занимаетесь стратегией.</li>';
+        }
+        if (checked.includes('scale')) {
+          solutionHtml += '<li><strong>Масштабирование:</strong> Спроектируем архитектуру роста. Внедрим систему, которая позволит расти х2 без раздувания штата.</li>';
         }
         solutionHtml += '</ul>';
         
@@ -206,14 +209,14 @@
         
         // Update Meta
         if (checked.length === 1) {
-          if(timeEl) timeEl.textContent = '2 недели';
-          if(budgetEl) budgetEl.textContent = 'от 150 000 ₽';
-        } else if (checked.length === 2) {
-          if(timeEl) timeEl.textContent = '3 недели';
-          if(budgetEl) budgetEl.textContent = 'от 250 000 ₽';
+          if(timeEl) timeEl.textContent = '1 неделя (Диагностика)';
+          if(budgetEl) budgetEl.textContent = 'от 25 000 ₽';
+        } else if (checked.length <= 3) {
+          if(timeEl) timeEl.textContent = '2-3 недели (Диагностика + База)';
+          if(budgetEl) budgetEl.textContent = 'от 125 000 ₽';
         } else {
-          if(timeEl) timeEl.textContent = '4 недели (Спринт)';
-          if(budgetEl) budgetEl.textContent = 'от 350 000 ₽';
+          if(timeEl) timeEl.textContent = '4 недели (Спринт + Поддержка)';
+          if(budgetEl) budgetEl.textContent = 'от 225 000 ₽';
         }
       });
     });

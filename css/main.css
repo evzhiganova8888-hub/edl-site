@@ -154,7 +154,63 @@
   .hero__demo { justify-content: flex-end; }
 }
 
-/* ── Fast-Track Triage (JTBD) ── */
+/* ── Hero Mockup WOW Effect ── */
+.hero__phone-mockup {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  border-radius: 40px;
+  padding: 12px;
+  background: linear-gradient(145deg, #1f1f1f, #0a0a0a);
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25), inset 0 0 0 4px #2c2c2c, inset 0 0 0 10px #000;
+  z-index: 1;
+}
+.hero__phone-mockup .tg-window {
+  border-radius: 28px;
+  height: 100%;
+  background: rgba(245, 246, 250, 0.85);
+  backdrop-filter: blur(10px);
+  border: none;
+}
+.hero__phone-mockup .tg-window__header {
+  padding-top: 36px; /* Space for the notch */
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
+}
+.hero__phone-mockup::before {
+  content: '';
+  position: absolute;
+  top: 12px; left: 50%;
+  transform: translateX(-50%);
+  width: 100px; height: 25px;
+  background: #000;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  z-index: 10;
+}
+.hero__floating-widget {
+  position: absolute;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-gray-900);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  z-index: -1;
+  animation: float 6s ease-in-out infinite;
+}
+.hero__floating-widget--1 { top: 10%; right: -20px; animation-delay: 0s; }
+.hero__floating-widget--2 { bottom: 20%; left: -30px; animation-delay: -3s; }
+.widget-icon { font-weight: 800; color: var(--color-tangerine); margin-right: 4px; }
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+/* ── Fast-Track Triage ── */
 .fast-track__container {
   display: grid;
   grid-template-columns: 1fr;

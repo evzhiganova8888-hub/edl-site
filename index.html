@@ -82,8 +82,8 @@
       <div class="container hero__grid">
         <div class="hero__content">
           <h1 class="hero__title">Бортовой компьютер для бизнеса</h1>
-          <p class="hero__subtitle">EDL OS — Founder OS для SMB-фаундера. Управление в Telegram. AI знает ваши когорты,
-            юнит-экономику и команду.</p>
+          <p class="hero__subtitle">EDL OS — Операционная система для собственников бизнеса. Управление в Telegram. AI знает ваши когорты,
+            маржу и команду.</p>
           <div class="hero__description">EDL OS помогает быть стратегом, а не операционным менеджером. Мы закроем ваши основные боли за 4 недели:
             <ul style="margin-top:12px; display:flex; flex-direction:column; gap:8px; list-style:none; padding:0; text-align:left;">
               <li><span style="color:var(--color-tangerine); font-weight:bold;">✓</span> <strong>Хаос в процессах:</strong> команда не сходится без вашего ручного управления.</li>
@@ -105,38 +105,46 @@
           </div>
         </div>
         <div class="hero__demo">
-          <div class="tg-window" id="hero-tg">
-            <div class="tg-window__header">
-              <div class="tg-window__avatar">E</div>
-              <div>
-                <div style="font-weight:600;">EDL OS Bot</div>
-                <div class="tg-online-status">онлайн</div>
-              </div>
+          <div class="hero__phone-mockup">
+            <div class="hero__floating-widget hero__floating-widget--1">
+              <span class="widget-icon">1C</span> Sync ✓
             </div>
-            <div class="tg-window__body" id="hero-tg-body">
-              <div class="tg-msg" data-delay="0"><strong>EDL OS · Утро · 8:30</strong>
-                <div class="tg-msg__time">8:30</div>
+            <div class="hero__floating-widget hero__floating-widget--2">
+              <span class="widget-icon">amo</span> CRM Connected
+            </div>
+            <div class="tg-window" id="hero-tg">
+              <div class="tg-window__header">
+                <div class="tg-window__avatar">E</div>
+                <div>
+                  <div style="font-weight:600;">EDL OS Bot</div>
+                  <div class="tg-online-status">онлайн</div>
+                </div>
               </div>
-              <div class="tg-msg" data-delay="800">Выручка вчера: <strong>247k ₽</strong> · <span
-                  class="tg-msg__indicator tg-msg__indicator--ok"></span>+12% к норме месяца<div class="tg-msg__time">
-                  8:30</div>
-              </div>
-              <div class="tg-msg" data-delay="1600"><span
-                  class="tg-msg__indicator tg-msg__indicator--hot"></span>HOT-сделки в работе: <strong>3</strong>
-                <div class="tg-msg__time">8:30</div>
-              </div>
-              <div class="tg-msg" data-delay="2400"><span
-                  class="tg-msg__indicator tg-msg__indicator--warn"></span>Главный риск: Иванов на 800k без касания 28
-                часов. Открыть карточку?<div class="tg-msg__time">8:31</div>
-              </div>
-              <div class="tg-msg" data-delay="3200">Хочешь такую сводку для своего бизнеса?<div class="tg-msg__time">
-                  8:31</div>
-              </div>
-              <div class="tg-inline-btns" data-delay="3500">
-                <a href="#" class="tg-inline-btn tg-inline-btn--primary calendly-trigger"
-                  data-event="click_demo_tg_bot">Записаться на демо</a>
-                <a href="#triggers" class="tg-inline-btn tg-inline-btn--outline"
-                  data-event="click_details_tg_bot">Расскажи подробнее</a>
+              <div class="tg-window__body" id="hero-tg-body">
+                <div class="tg-msg" data-delay="0"><strong>EDL OS · Утро · 8:30</strong>
+                  <div class="tg-msg__time">8:30</div>
+                </div>
+                <div class="tg-msg" data-delay="800">Выручка вчера: <strong>247k ₽</strong> · <span
+                    class="tg-msg__indicator tg-msg__indicator--ok"></span>+12% к норме месяца<div class="tg-msg__time">
+                    8:30</div>
+                </div>
+                <div class="tg-msg" data-delay="1600"><span
+                    class="tg-msg__indicator tg-msg__indicator--hot"></span>HOT-сделки в работе: <strong>3</strong>
+                  <div class="tg-msg__time">8:30</div>
+                </div>
+                <div class="tg-msg" data-delay="2400"><span
+                    class="tg-msg__indicator tg-msg__indicator--warn"></span>Главный риск: Иванов на 800k без касания 28
+                  часов. Открыть карточку?<div class="tg-msg__time">8:31</div>
+                </div>
+                <div class="tg-msg" data-delay="3200">Хочешь такую сводку для своего бизнеса?<div class="tg-msg__time">
+                    8:31</div>
+                </div>
+                <div class="tg-inline-btns" data-delay="3500">
+                  <a href="#" class="tg-inline-btn tg-inline-btn--primary calendly-trigger"
+                    data-event="click_demo_tg_bot">Записаться на демо</a>
+                  <a href="#triggers" class="tg-inline-btn tg-inline-btn--outline"
+                    data-event="click_details_tg_bot">Расскажи подробнее</a>
+                </div>
               </div>
             </div>
           </div>
@@ -156,11 +164,13 @@
             <label class="jtbd-toggle"><input type="checkbox" value="reports" data-event="jtbd_toggle_reports"> <span
                 class="jtbd-toggle__text">Трачу >10ч в неделю на сбор отчетов</span></label>
             <label class="jtbd-toggle"><input type="checkbox" value="margin" data-event="jtbd_toggle_margin"> <span
-                class="jtbd-toggle__text">Сложно считать юнит-экономику и маржу</span></label>
+                class="jtbd-toggle__text">Сложно считать экономику и маржу</span></label>
             <label class="jtbd-toggle"><input type="checkbox" value="leads" data-event="jtbd_toggle_leads"> <span
                 class="jtbd-toggle__text">Теряем лидов из-за медленной реакции</span></label>
             <label class="jtbd-toggle"><input type="checkbox" value="focus" data-event="jtbd_toggle_focus"> <span
                 class="jtbd-toggle__text">Команда теряет фокус без моего участия</span></label>
+            <label class="jtbd-toggle"><input type="checkbox" value="scale" data-event="jtbd_toggle_scale"> <span
+                class="jtbd-toggle__text">Уперлись в потолок: масштабироваться без хаоса не получается</span></label>
           </div>
           <div class="fast-track__result">
             <h3 style="margin-bottom: 16px;">План решения</h3>
@@ -168,8 +178,7 @@
               style="min-height: 60px; font-weight: 500; margin-bottom: 16px; color: var(--color-tangerine);">Отметьте чекбоксы слева, чтобы увидеть, какую инфраструктуру мы соберем под ваши задачи.</div>
             <div class="ft-meta"
               style="font-size:0.875rem; color:var(--color-gray-700); display:flex; flex-direction:column; gap:8px;">
-              <div><strong>Кто делает:</strong> Команда EDL OS (под ключ)</div>
-              <div><strong>Сроки:</strong> <span id="ft-time">от 2 недель</span></div>
+              <div><strong>Формат:</strong> <span id="ft-time">Выбор за вами</span></div>
               <div><strong>Бюджет:</strong> <span id="ft-budget">рассчитывается...</span></div>
             </div>
             <a href="https://t.me/edl_os_bot" target="_blank" rel="noopener" class="btn btn--primary"
@@ -179,50 +188,49 @@
       </div>
     </section>
 
-    <!-- Section 2: 5 Triggers -->
+    <!-- Section 2: 6 Triggers -->
     <section class="section" id="triggers">
       <div class="container">
         <div class="section__header">
-          <h2 class="section__title">Если вам знакомо хотя бы 2 из 5</h2>
-          <p class="section__subtitle">В 2026 SMB-фаундеру стало тяжелее. Вот 5 болей которые мы решаем.</p>
+          <h2 class="section__title">Если вам знакомо хотя бы 2 из 6</h2>
+          <p class="section__subtitle">В 2026 руководителю стало тяжелее. Вот 6 болей, которые мы слышим каждый день от основателей бизнеса.</p>
         </div>
-        <div class="triggers__grid">
-
+        <div class="grid triggers-grid">
           <div class="card card--interactive trigger-card" data-scroll-to="killer-ai">
             <div class="trigger-card__icon">%</div>
-            <h3 class="trigger-card__title">Налоги растут — где оптимизировать?</h3>
-            <p class="trigger-card__ai"><strong>Решение:</strong> Бот выдает 3-4 легальных варианта оптимизации с
-              оценкой рисков.</p>
+            <h3 class="trigger-card__title">Прибыль только на бумаге</h3>
+            <p class="trigger-card__ai"><strong>Реальность:</strong> «По отчетам мы в плюсе, а на счетах кассовый разрыв. Постоянно ждем оплат, чтобы закрыть зарплаты.»</p>
           </div>
 
           <div class="card card--interactive trigger-card" data-scroll-to="killer-ai">
             <div class="trigger-card__icon">📈</div>
-            <h3 class="trigger-card__title">Реклама не окупается — какой канал лучший?</h3>
-            <p class="trigger-card__ai"><strong>Решение:</strong> Бот выдает цифры по всем каналам с анализом стоимости лида (CPL) и LTV
-              по запросу.</p>
+            <h3 class="trigger-card__title">Слив маркетинга</h3>
+            <p class="trigger-card__ai"><strong>Реальность:</strong> «Рекламный бюджет растет, а продажники жалуются, что "лиды мусорные". Кто виноват — непонятно.»</p>
           </div>
 
-          <div class="card card--interactive trigger-card" data-scroll-to="killer-sprint">
-            <div class="trigger-card__icon">✦</div>
-            <h3 class="trigger-card__title">AI — все говорят, никто не знает с чего начать</h3>
-            <p class="trigger-card__ai"><strong>Решение:</strong> Внедряем AI-помощников в ваши процессы за 4 недели
-              (Sprint).</p>
+          <div class="card card--interactive trigger-card" data-scroll-to="killer-tg">
+            <div class="trigger-card__icon">🤖</div>
+            <h3 class="trigger-card__title">Зоопарк сервисов</h3>
+            <p class="trigger-card__ai"><strong>Реальность:</strong> «Пытались внедрить Битрикс и CRM, но в итоге вся работа всё равно идет в хаосе Telegram-чатов.»</p>
           </div>
 
           <div class="card card--interactive trigger-card" data-scroll-to="killer-tg">
             <div class="trigger-card__icon">⚡</div>
-            <h3 class="trigger-card__title">Руководители есть. Но без видения — не работает</h3>
-            <p class="trigger-card__ai"><strong>Решение:</strong> AI распределяет фокусные задачи команде. Видение как процесс,
-              а не ручное усилие.</p>
+            <h3 class="trigger-card__title">Ручное управление</h3>
+            <p class="trigger-card__ai"><strong>Реальность:</strong> «Команда работает, только когда я их "пинаю". Уехал в отпуск на неделю — процессы встали.»</p>
           </div>
 
-          <div class="card card--interactive trigger-card" data-scroll-to="killer-tg">
-            <div class="trigger-card__icon">☀</div>
-            <h3 class="trigger-card__title">Выгорание — закрыть бизнес дешевле чем продолжать?</h3>
-            <p class="trigger-card__ai"><strong>Решение:</strong> 4-5 ч/день вместо 12-14. Команда автономна. Здоровье
-              восстанавливается.</p>
+          <div class="card card--interactive trigger-card" data-scroll-to="killer-sprint">
+            <div class="trigger-card__icon">☀️</div>
+            <h3 class="trigger-card__title">Стеклянный потолок</h3>
+            <p class="trigger-card__ai"><strong>Реальность:</strong> «Мы наняли больше людей, работаем больше часов, но чистая прибыль почему-то не растет.»</p>
           </div>
 
+          <div class="card card--interactive trigger-card" data-scroll-to="killer-sprint">
+            <div class="trigger-card__icon">🔥</div>
+            <h3 class="trigger-card__title">Я — узкое горлышко</h3>
+            <p class="trigger-card__ai"><strong>Реальность:</strong> «Я сам стал главным тормозом компании. Все решения завязаны на мне, я тону в микроменеджменте.»</p>
+          </div>
         </div>
       </div>
     </section>
@@ -256,9 +264,8 @@
     <section class="section" id="killers">
       <div class="container">
         <div class="section__header">
-          <h2 class="section__title">4 фичи которых нет ни у кого вместе</h2>
-          <p class="section__subtitle">Каждая фича существует в индустрии. Но никакая комбинация из 20
-            проанализированных конкурентов не закрывает все 4 одновременно.</p>
+          <h2 class="section__title">4 системных инструмента, которые редко работают вместе</h2>
+          <p class="section__subtitle">Каждый инструмент существует в индустрии отдельно. Но мы собрали их в единую операционную систему.</p>
         </div>
         <div class="killers__grid">
 
