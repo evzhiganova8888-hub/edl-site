@@ -164,6 +164,57 @@
     });
   });
 
+  /* ── Fast-Track JTBD Logic ── */
+  const jtbdCheckboxes = document.querySelectorAll('.jtbd-toggle input');
+  const ftSolution = document.getElementById('ft-solution');
+  
+  if (jtbdCheckboxes.length > 0 && ftSolution) {
+    const defaultText = 'Отметьте хотя бы один пункт слева, чтобы увидеть решение.';
+    
+    jtbdCheckboxes.forEach(cb => {
+      cb.addEventListener('change', () => {
+        const checked = Array.from(jtbdCheckboxes).filter(i => i.checked).map(i => i.value);
+        
+        if (checked.length === 0) {
+          ftSolution.textContent = defaultText;
+          ftSolution.style.color = 'var(--color-tangerine)';
+          return;
+        }
+        
+        ftSolution.style.color = 'var(--color-gray-900)';
+        let solutionText = '';
+        
+        if (checked.includes('reports') || checked.includes('margin')) {
+          solutionText += '1. Внедряем автоматический P&L и Cashflow на базе ваших 1С/банков. ';
+        }
+        if (checked.includes('leads') || checked.includes('focus')) {
+          solutionText += '2. Подключаем CRM с AI-скорингом и пушами в Telegram по горячим лидам. ';
+        }
+        if (checked.length >= 3) {
+          solutionText += '3. Настраиваем утреннюю AI-сводку (запас денег, риски, фокус) лично для вас.';
+        }
+        
+        if (solutionText === '') {
+            solutionText = 'Собираем инфраструктуру под ключ: CRM + Дашборды + Telegram-бот.';
+        }
+        
+        ftSolution.textContent = solutionText;
+      });
+    });
+  }
+
+  /* ── Floating TG Button Visibility ── */
+  const floatingTg = document.getElementById('floating-tg');
+  if (floatingTg) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 500) {
+        floatingTg.classList.add('is-visible');
+      } else {
+        floatingTg.classList.remove('is-visible');
+      }
+    }, { passive: true });
+  }
+
   /* ── Header scroll effect ── */
   let lastScroll = 0;
   window.addEventListener('scroll', () => {
