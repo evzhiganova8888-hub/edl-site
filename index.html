@@ -12,10 +12,26 @@
 <link rel="canonical" href="https://elephantdreams.ru/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/main.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "EDL OS",
+  "operatingSystem": "Web, Telegram",
+  "applicationCategory": "BusinessApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "150000",
+    "priceCurrency": "RUB"
+  },
+  "description": "Founder OS для малого и среднего бизнеса. Управление в Telegram, AI-дашборды, аналитика."
+}
+</script>
 </head>
 <body>
 <a href="#main" class="skip-link">Перейти к содержимому</a>
@@ -32,8 +48,8 @@
 <a href="#pricing">Цены</a>
 <a href="#faq">FAQ</a>
 </div>
-<a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary header__cta" style="height:40px;font-size:0.875rem;padding:0 20px;">Демо</a>
-<button class="header__burger" aria-label="Меню" id="burger"><span></span><span></span><span></span></button>
+<a href="#" class="btn btn--primary header__cta calendly-trigger" data-event="click_demo_header" style="height:40px;font-size:0.875rem;padding:0 20px;">Демо</a>
+<button class="header__burger" aria-label="Меню" aria-expanded="false" aria-controls="mobile-nav" id="burger"><span></span><span></span><span></span></button>
 </nav>
 </div>
 </header>
@@ -44,7 +60,7 @@
 <a href="#method" onclick="closeMobileNav()">Метод</a>
 <a href="#pricing" onclick="closeMobileNav()">Цены</a>
 <a href="#faq" onclick="closeMobileNav()">FAQ</a>
-<a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary">Записаться на демо</a>
+<a href="#" class="btn btn--primary calendly-trigger" data-event="click_demo_mobile_nav" onclick="closeMobileNav()">Записаться на демо</a>
 </nav>
 
 <main id="main">
@@ -58,13 +74,16 @@
 <p class="hero__description">В 2026 фаундеру тяжело: налоги выросли, лиды дорожают, AI надо внедрять, без вашего вижна команда не сходится. EDL OS — операционная система которая помогает быть вижнаром, а не операционным менеджером. За 4 недели соберём вашу инфраструктуру.</p>
 <p class="hero__proof">Команда с бэкграундом в Точка / Додо / karpov.courses / ВШЭ / ИТМО. Используем эту систему сами — на демо показываем её вживую.</p>
 <div class="hero__actions">
-<a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary" id="hero-cta">Записаться на демо</a>
-<a href="quiz.html" class="hero__secondary-link">Не готов к демо? Узнайте свой Founder OS Score за 5 минут →</a>
+<div style="display:flex;flex-direction:column;gap:8px;">
+<a href="#" class="btn btn--primary calendly-trigger" data-event="click_demo_hero" id="hero-cta">Записаться на демо</a>
+<span style="font-size:0.75rem;color:var(--color-gray-500);text-align:center;">30 минут, покажем на ваших данных. Без спама.</span>
+</div>
+<a href="quiz.html" class="hero__secondary-link" data-event="click_quiz_hero">Не готов к демо? Узнайте свой Founder OS Score за 5 минут →</a>
 </div>
 </div>
 <div class="hero__demo">
 <div class="tg-window" id="hero-tg">
-<div class="tg-window__header"><div class="tg-window__avatar">E</div><div><div style="font-weight:600;">EDL OS Bot</div><div style="font-size:0.75rem;opacity:0.7;">онлайн</div></div></div>
+<div class="tg-window__header"><div class="tg-window__avatar">E</div><div><div style="font-weight:600;">EDL OS Bot</div><div class="tg-online-status">онлайн</div></div></div>
 <div class="tg-window__body" id="hero-tg-body">
 <div class="tg-msg" data-delay="0"><strong>EDL OS · Утро · 8:30</strong><div class="tg-msg__time">8:30</div></div>
 <div class="tg-msg" data-delay="800">Выручка вчера: <strong>247k ₽</strong> · <span class="tg-msg__indicator tg-msg__indicator--ok"></span>+12% к норме месяца<div class="tg-msg__time">8:30</div></div>
@@ -72,8 +91,8 @@
 <div class="tg-msg" data-delay="2400"><span class="tg-msg__indicator tg-msg__indicator--warn"></span>Главный риск: Иванов на 800k без касания 28 часов. Открыть карточку?<div class="tg-msg__time">8:31</div></div>
 <div class="tg-msg" data-delay="3200">Хочешь такую сводку для своего бизнеса?<div class="tg-msg__time">8:31</div></div>
 <div class="tg-inline-btns" data-delay="3500">
-<a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="tg-inline-btn tg-inline-btn--primary">Записаться на демо</a>
-<a href="#triggers" class="tg-inline-btn tg-inline-btn--outline">Расскажи подробнее</a>
+<a href="#" class="tg-inline-btn tg-inline-btn--primary calendly-trigger" data-event="click_demo_tg_bot">Записаться на демо</a>
+<a href="#triggers" class="tg-inline-btn tg-inline-btn--outline" data-event="click_details_tg_bot">Расскажи подробнее</a>
 </div>
 </div>
 </div>
@@ -150,9 +169,9 @@
 <p class="killer-card__body">Не «уведомления в Telegram» — а полноценный интерфейс. Утренняя сводка, AI-вопросы, согласование платежей, назначение задач — всё через бот.</p>
 <p class="killer-card__diff">Notion работает через Slack. Битрикс — через свой интерфейс. Telegram — наша территория.</p>
 <div class="killer-card__interactive">
-<div class="tg-command"><span class="tg-command__input">/cash</span><button class="btn btn--primary" style="height:40px;font-size:0.8125rem;padding:0 16px;" id="cmd-cash">Запустить</button></div>
+<div class="tg-command"><span class="tg-command__input">/cash</span><button class="btn btn--primary" style="height:40px;font-size:0.8125rem;padding:0 16px;" id="cmd-cash" data-event="cmd_cash">Запустить</button></div>
 <div class="tg-response" id="resp-cash"><div class="tg-msg" style="opacity:1;transform:none;max-width:100%;">💰 Cash: <strong>1.4M ₽</strong> · Runway: <strong>4.2 мес</strong> · <span class="tg-msg__indicator tg-msg__indicator--warn"></span>Главный риск — выплата 800k 25 мая. → Открыть Финансист</div></div>
-<div class="tg-command" style="margin-top:12px;"><span class="tg-command__input">/leads</span><button class="btn btn--secondary" style="height:40px;font-size:0.8125rem;padding:0 16px;" id="cmd-leads">Запустить</button></div>
+<div class="tg-command" style="margin-top:12px;"><span class="tg-command__input">/leads</span><button class="btn btn--secondary" style="height:40px;font-size:0.8125rem;padding:0 16px;" id="cmd-leads" data-event="cmd_leads">Запустить</button></div>
 <div class="tg-response" id="resp-leads"><div class="tg-msg" style="opacity:1;transform:none;max-width:100%;">🔥 HOT: <strong>3</strong>. WARM: 7. COLD: 12. Top-3: Иванов (24ч), Петров (8ч), Сидоров (4ч)</div></div>
 </div>
 </div>
@@ -215,9 +234,9 @@
 <div class="container">
 <div class="section__header"><h2 class="section__title">AI знает контекст вашего бизнеса</h2><p class="section__subtitle">3 типа вопросов которые наш AI закрывает. Подключён к ВАШИМ данным: CRM, финансы, команда, маркетинг.</p></div>
 <div class="tabs" role="tablist">
-<button class="tab-btn is-active" role="tab" data-tab="ai-finance" aria-selected="true">Финансовые</button>
-<button class="tab-btn" role="tab" data-tab="ai-team" aria-selected="false">Командные</button>
-<button class="tab-btn" role="tab" data-tab="ai-strategy" aria-selected="false">Стратегические</button>
+<button class="tab-btn is-active" role="tab" data-tab="ai-finance" aria-selected="true" data-event="tab_ai_finance">Финансовые</button>
+<button class="tab-btn" role="tab" data-tab="ai-team" aria-selected="false" data-event="tab_ai_team">Командные</button>
+<button class="tab-btn" role="tab" data-tab="ai-strategy" aria-selected="false" data-event="tab_ai_strategy">Стратегические</button>
 </div>
 <div class="ai-examples__content">
 <div class="tab-panel is-active" id="ai-finance" role="tabpanel">
@@ -271,9 +290,9 @@
 <div class="container">
 <div class="section__header"><h2 class="section__title">У нас уже Х. Зачем EDL?</h2><p class="section__subtitle">Мы не заменяем — дополняем. EDL OS интегрируется поверх вашего стека.</p></div>
 <div class="tabs" role="tablist">
-<button class="tab-btn is-active" role="tab" data-tab="battle-bitrix" aria-selected="true">Битрикс24 / amoCRM</button>
-<button class="tab-btn" role="tab" data-tab="battle-notion" aria-selected="false">Notion + Notion AI</button>
-<button class="tab-btn" role="tab" data-tab="battle-chatgpt" aria-selected="false">ChatGPT / самостоятельно</button>
+<button class="tab-btn is-active" role="tab" data-tab="battle-bitrix" aria-selected="true" data-event="tab_battle_bitrix">Битрикс24 / amoCRM</button>
+<button class="tab-btn" role="tab" data-tab="battle-notion" aria-selected="false" data-event="tab_battle_notion">Notion + Notion AI</button>
+<button class="tab-btn" role="tab" data-tab="battle-chatgpt" aria-selected="false" data-event="tab_battle_chatgpt">ChatGPT / самостоятельно</button>
 </div>
 <div class="battle__content">
 <div class="tab-panel is-active" id="battle-bitrix" role="tabpanel">
@@ -318,7 +337,11 @@
 <p>12 000 учеников · 4 курса · 18 человек · ~80M ₽/год</p>
 <h5>Было</h5><ul><li>Фаундер тратил 12 ч/нед на сводки</li><li>Retention D30 = 64%</li><li>Приоритеты разваливались без фаундера</li></ul>
 <h5>Сделали</h5><ul><li>Sprint 4 недели</li><li>Геткурс + Битрикс + Тинькофф</li><li>AI cohort-analysis + TG-бот</li></ul>
-<h5>Стало</h5><ul><li>Время на операционку: <span class="case-card__result-num">3 ч/нед (-75%)</span></li><li>Retention D30: <span class="case-card__result-num">78% (+14 п.п.)</span></li><li>NPS: <span class="case-card__result-num">+12 пунктов</span></li></ul>
+<div class="case-card__results">
+<div class="case-card__badge"><span class="case-card__badge-val" style="color:var(--color-tangerine);font-weight:700;">-75%</span> времени на операционку</div>
+<div class="case-card__badge"><span class="case-card__badge-val" style="color:var(--color-tangerine);font-weight:700;">+14%</span> Retention D30</div>
+<div class="case-card__badge"><span class="case-card__badge-val" style="color:var(--color-tangerine);font-weight:700;">+12</span> пунктов NPS</div>
+</div>
 </div>
 <div class="card case-card">
 <span class="case-card__tag">B2B Education</span>
@@ -326,7 +349,10 @@
 <p>1 500 платящих · 8 человек · ~120M ₽/год</p>
 <h5>Было</h5><ul><li>Терял enterprise-контракты 100k+</li><li>Sales-цикл 30+ дней</li><li>Не понимал с чего начать AI</li></ul>
 <h5>Сделали</h5><ul><li>Sprint под B2B-сценарий</li><li>Sales CRM enterprise-pipeline</li><li>AI-классификация лидов</li></ul>
-<h5>Стало</h5><ul><li>Conversion: <span class="case-card__result-num">8% → 23% (+187%)</span></li><li>Отклик на лид: <span class="case-card__result-num">36ч → 2ч</span></li><li>Sales-цикл: <span class="case-card__result-num">32 → 21 день</span></li></ul>
+<div class="case-card__results">
+<div class="case-card__badge"><span class="case-card__badge-val" style="color:var(--color-tangerine);font-weight:700;">+187%</span> Конверсия в продажу</div>
+<div class="case-card__badge"><span class="case-card__badge-val" style="color:var(--color-tangerine);font-weight:700;">2ч</span> Отклик на лид (было 36ч)</div>
+</div>
 </div>
 <div class="card case-card">
 <span class="case-card__tag">Professional Services</span>
@@ -334,7 +360,10 @@
 <p>12 юристов · 18 человек · ~95M ₽/год</p>
 <h5>Было</h5><ul><li>Project-margin не считали</li><li>Renewals контрактов терялись</li><li>8 ч/нед на админ-вопросы</li></ul>
 <h5>Сделали</h5><ul><li>Sprint с Pack #2</li><li>Project-margin analytics</li><li>Renewal management</li></ul>
-<h5>Стало</h5><ul><li>Маржа: <span class="case-card__result-num">+18%</span></li><li>Renewals: <span class="case-card__result-num">+40%</span></li><li>Время на админ: <span class="case-card__result-num">8 → 2 ч/нед</span></li></ul>
+<div class="case-card__results">
+<div class="case-card__badge"><span class="case-card__badge-val" style="color:var(--color-tangerine);font-weight:700;">+18%</span> рост Project-margin</div>
+<div class="case-card__badge"><span class="case-card__badge-val" style="color:var(--color-tangerine);font-weight:700;">+40%</span> удержание клиентов</div>
+</div>
 </div>
 </div>
 </div>
@@ -371,10 +400,10 @@
 <div class="container">
 <div class="section__header"><h2 class="section__title">Цены и формат работы</h2><p class="section__subtitle">Прозрачные цены до демо. Без «уточняем по запросу».</p></div>
 <div class="pricing__grid">
-<div class="card price-card"><div class="price-card__name">Демо системы</div><div class="price-card__price">Бесплатно</div><div class="price-card__duration">30 минут</div><p class="price-card__desc">Показываем нашу инфраструктуру вживую, обсуждаем ваши боли.</p><a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary" style="width:100%;">Записаться на демо</a></div>
-<div class="card price-card"><div class="price-card__name">Diagnostic</div><div class="price-card__price">25 000 ₽</div><div class="price-card__duration">3-5 дней</div><p class="price-card__desc">Глубокое интервью, карта бизнеса, 5-7 быстрых побед, roadmap.</p><a href="diagnostic.html" class="btn btn--secondary" style="width:100%;">Узнать больше</a></div>
-<div class="card price-card"><div class="price-card__name">AI Operations Sprint</div><div class="price-card__price">от 150 000 ₽</div><div class="price-card__duration">3-4 недели</div><p class="price-card__desc">Полная сборка: CRM, дашборды, TG-бот, AI-помощники, обучение команды.</p><a href="sprint.html" class="btn btn--secondary" style="width:100%;">Узнать больше</a></div>
-<div class="card price-card"><div class="price-card__name">Growth Plan</div><div class="price-card__price">от 50 000 ₽/мес</div><div class="price-card__duration">минимум 3 месяца</div><p class="price-card__desc">Поддержка, развитие, новые AI-промпты, подключение vertical-фич.</p><a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--secondary" style="width:100%;">Обсудить на демо</a></div>
+<div class="card price-card"><div class="price-card__name">Демо системы</div><div class="price-card__price">Бесплатно</div><div class="price-card__duration">30 минут</div><p class="price-card__desc">Показываем нашу инфраструктуру вживую, обсуждаем ваши боли.</p><a href="#" class="btn btn--primary calendly-trigger" data-event="click_demo_pricing_1" style="width:100%;">Записаться на демо</a></div>
+<div class="card price-card"><div class="price-card__name">Diagnostic</div><div class="price-card__price">25 000 ₽</div><div class="price-card__duration">3-5 дней</div><p class="price-card__desc">Глубокое интервью, карта бизнеса, 5-7 быстрых побед, roadmap.</p><a href="diagnostic.html" class="btn btn--secondary" data-event="click_diagnostic_pricing" style="width:100%;">Узнать больше</a></div>
+<div class="card price-card"><div class="price-card__name">AI Operations Sprint</div><div class="price-card__price">от 150 000 ₽</div><div class="price-card__duration">3-4 недели</div><p class="price-card__desc">Полная сборка: CRM, дашборды, TG-бот, AI-помощники, обучение команды.</p><a href="sprint.html" class="btn btn--secondary" data-event="click_sprint_pricing" style="width:100%;">Узнать больше</a></div>
+<div class="card price-card"><div class="price-card__name">Growth Plan</div><div class="price-card__price">от 50 000 ₽/мес</div><div class="price-card__duration">минимум 3 месяца</div><p class="price-card__desc">Поддержка, развитие, новые AI-промпты, подключение vertical-фич.</p><a href="#" class="btn btn--secondary calendly-trigger" data-event="click_demo_pricing_4" style="width:100%;">Обсудить на демо</a></div>
 </div>
 <div style="background:var(--color-white);border-radius:16px;padding:32px;"><h3 style="margin-bottom:16px;">Это не для всех. Мы НЕ делаем:</h3>
 <ul class="not-do__list">
@@ -410,8 +439,8 @@
 <h2 class="final-cta__title">Готовы быть вижнаром, а не операционкой?</h2>
 <p class="final-cta__subtitle">30 минут демо · бесплатно · без обязательств</p>
 <div class="final-cta__actions">
-<a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary">Записаться на демо</a>
-<a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener" class="btn btn--dark">Не готов? Telegram-канал EDL — методология, кейсы, AI-промпты</a>
+<a href="#" class="btn btn--primary calendly-trigger" data-event="click_demo_footer">Записаться на демо</a>
+<a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener" class="btn btn--dark" data-event="click_tg_footer">Не готов? Telegram-канал EDL — методология, кейсы, AI-промпты</a>
 </div>
 </div>
 </section>
@@ -432,5 +461,33 @@
 </footer>
 
 <script src="js/main.js" defer></script>
+
+<!-- Calendly Modal Widget -->
+<div id="calendly-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
+<div style="background:#fff;width:100%;max-width:800px;height:80vh;border-radius:16px;position:relative;overflow:hidden;animation:fadeUp 0.3s ease-out;">
+<button onclick="closeCalendly()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;z-index:10;">✕</button>
+<!-- Calendly inline widget begin -->
+<div class="calendly-inline-widget" data-url="https://calendly.com/evzhiganova8888/30min?hide_event_type_details=1&hide_gdpr_banner=1" style="min-width:320px;height:100%;"></div>
+<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<!-- Calendly inline widget end -->
+</div>
+</div>
+<script>
+function openCalendly(e) {
+  if (e) e.preventDefault();
+  document.getElementById('calendly-modal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeCalendly() {
+  document.getElementById('calendly-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('.calendly-trigger').forEach(btn => {
+  btn.addEventListener('click', openCalendly);
+});
+document.getElementById('calendly-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeCalendly();
+});
+</script>
 </body>
 </html>

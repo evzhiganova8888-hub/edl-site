@@ -50,7 +50,7 @@
       </div>
       <div class="quiz-nav">
         <div></div>
-        <button type="button" class="btn btn--primary next-btn">Далее</button>
+        <button type="button" class="btn btn--primary next-btn" data-event="quiz_step_1_next">Далее</button>
       </div>
     </div>
 
@@ -64,8 +64,8 @@
         <label class="quiz-option"><input type="radio" name="q2" value="c"> <span>Команда продолжит работу по целям без потерь</span></label>
       </div>
       <div class="quiz-nav">
-        <button type="button" class="btn btn--secondary prev-btn">Назад</button>
-        <button type="button" class="btn btn--primary next-btn">Далее</button>
+        <button type="button" class="btn btn--secondary prev-btn" data-event="quiz_step_2_prev">Назад</button>
+        <button type="button" class="btn btn--primary next-btn" data-event="quiz_step_2_next">Далее</button>
       </div>
     </div>
 
@@ -79,8 +79,8 @@
         <label class="quiz-option"><input type="radio" name="q3" value="c"> <span>AI анализирует данные из CRM или финансов</span></label>
       </div>
       <div class="quiz-nav">
-        <button type="button" class="btn btn--secondary prev-btn">Назад</button>
-        <button type="button" class="btn btn--primary next-btn">Далее</button>
+        <button type="button" class="btn btn--secondary prev-btn" data-event="quiz_step_3_prev">Назад</button>
+        <button type="button" class="btn btn--primary next-btn" data-event="quiz_step_3_next">Далее</button>
       </div>
     </div>
 
@@ -94,8 +94,20 @@
         <label class="quiz-option"><input type="radio" name="q4" value="c"> <span>Меньше 5 часов, я занимаюсь стратегией</span></label>
       </div>
       <div class="quiz-nav">
-        <button type="button" class="btn btn--secondary prev-btn">Назад</button>
-        <button type="button" class="btn btn--primary finish-btn">Узнать результат</button>
+        <button type="button" class="btn btn--secondary prev-btn" data-event="quiz_step_4_prev">Назад</button>
+        <button type="button" class="btn btn--primary next-btn" data-event="quiz_step_4_next">Далее</button>
+      </div>
+    </div>
+
+    <!-- Step 5: Lead Capture -->
+    <div class="quiz-step" data-step="5" style="text-align:center;">
+      <div style="font-size:3rem;margin-bottom:16px;">📩</div>
+      <h2 class="quiz-title">Почти готово! Куда отправить результат?</h2>
+      <p style="color:var(--color-gray-700);margin-bottom:24px;">Мы подготовили детальный разбор вашего Founder OS Score и рекомендации по оптимизации.</p>
+      <input type="email" id="lead-email" class="input" placeholder="Ваш рабочий email" required style="max-width:320px;margin:0 auto 24px;display:block;">
+      <div class="quiz-nav" style="justify-content:center;gap:16px;">
+        <button type="button" class="btn btn--secondary prev-btn" data-event="quiz_lead_prev">Назад</button>
+        <button type="button" class="btn btn--primary finish-btn" data-event="quiz_lead_submit">Получить результат</button>
       </div>
     </div>
 
@@ -147,9 +159,9 @@
   });
 
   document.querySelector('.finish-btn').addEventListener('click', () => {
-    const stepEl = steps[currentStep];
-    if (!stepEl.querySelector('input:checked')) {
-      alert('Пожалуйста, выберите вариант ответа.');
+    const emailInput = document.getElementById('lead-email');
+    if (!emailInput.value || !emailInput.value.includes('@')) {
+      alert('Пожалуйста, введите корректный email.');
       return;
     }
     steps.forEach(s => s.classList.remove('is-active'));

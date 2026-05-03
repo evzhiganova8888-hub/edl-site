@@ -147,6 +147,9 @@
   color: var(--color-gray-500);
 }
 .hero__demo { display: flex; justify-content: center; }
+@media (max-width: 767px) {
+  .hero__demo { order: -1; margin-bottom: var(--space-4); }
+}
 @media (min-width: 768px) {
   .hero__demo { justify-content: flex-end; }
 }
@@ -617,7 +620,15 @@
 @media (min-width: 1024px) {
   .pricing__grid { grid-template-columns: repeat(4, 1fr); }
 }
-.price-card { padding: var(--space-6); text-align: center; }
+.price-card { 
+  padding: var(--space-6); 
+  text-align: center; 
+  transition: box-shadow var(--duration-normal) var(--ease-bounce), transform var(--duration-normal); 
+}
+.price-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(255, 107, 26, 0.12);
+}
 .price-card__name {
   font-size: 1rem;
   font-weight: 600;
