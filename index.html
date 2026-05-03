@@ -52,8 +52,8 @@
       <nav class="header__nav">
         <div class="header__nav-links">
           <a href="#triggers">Проблемы</a>
-          <a href="#killers">Фичи</a>
-          <a href="#method">Метод</a>
+          <a href="#killers">Система</a>
+          <a href="#method">Методология</a>
           <a href="#pricing">Цены</a>
           <a href="#faq">FAQ</a>
         </div>
@@ -67,8 +67,8 @@
 
   <nav class="mobile-nav" id="mobile-nav">
     <a href="#triggers" onclick="closeMobileNav()">Проблемы</a>
-    <a href="#killers" onclick="closeMobileNav()">Фичи</a>
-    <a href="#method" onclick="closeMobileNav()">Метод</a>
+    <a href="#killers" onclick="closeMobileNav()">Система</a>
+    <a href="#method" onclick="closeMobileNav()">Методология</a>
     <a href="#pricing" onclick="closeMobileNav()">Цены</a>
     <a href="#faq" onclick="closeMobileNav()">FAQ</a>
     <a href="#" class="btn btn--primary calendly-trigger" data-event="click_demo_mobile_nav"
@@ -201,43 +201,39 @@
           <h2 class="section__title">Если вам знакомо хотя бы 2 из 6</h2>
           <p class="section__subtitle">В 2026 руководителю стало тяжелее. Вот 6 болей, которые мы слышим каждый день от основателей бизнеса.</p>
         </div>
-        <div class="grid triggers-grid">
-          <div class="card card--interactive trigger-card" data-scroll-to="killer-ai">
-            <div class="trigger-card__icon">%</div>
-            <h3 class="trigger-card__title">Прибыль только на бумаге</h3>
-            <p class="trigger-card__ai"><strong>Реальность:</strong> «По отчетам мы в плюсе, а на счетах кассовый разрыв. Постоянно ждем оплат, чтобы закрыть зарплаты.»</p>
+        <div class="triggers-grid">
+          <div class="trigger-card">
+            <div class="trigger-card__icon">📉</div>
+            <div class="trigger-card__title">Прибыль только на бумаге</div>
+            <div class="trigger-card__content"><strong>Реальность:</strong> «По отчетам мы в плюсе, а на счетах кассовый разрыв. Постоянно ждем оплат, чтобы закрыть зарплаты.»</div>
           </div>
-
-          <div class="card card--interactive trigger-card" data-scroll-to="killer-ai">
-            <div class="trigger-card__icon">📈</div>
-            <h3 class="trigger-card__title">Слив маркетинга</h3>
-            <p class="trigger-card__ai"><strong>Реальность:</strong> «Рекламный бюджет растет, а продажники жалуются, что "лиды мусорные". Кто виноват — непонятно.»</p>
+          <div class="trigger-card">
+            <div class="trigger-card__icon">💸</div>
+            <div class="trigger-card__title">Слив маркетинга</div>
+            <div class="trigger-card__content"><strong>Реальность:</strong> «Рекламный бюджет растет, а продажники жалуются, что "лиды мусорные". Кто виноват — непонятно.»</div>
           </div>
-
-          <div class="card card--interactive trigger-card" data-scroll-to="killer-tg">
-            <div class="trigger-card__icon">🤖</div>
-            <h3 class="trigger-card__title">Зоопарк сервисов</h3>
-            <p class="trigger-card__ai"><strong>Реальность:</strong> «Пытались внедрить Битрикс и CRM, но в итоге вся работа всё равно идет в хаосе Telegram-чатов.»</p>
+          <div class="trigger-card">
+            <div class="trigger-card__icon">🧩</div>
+            <div class="trigger-card__title">Зоопарк сервисов</div>
+            <div class="trigger-card__content"><strong>Реальность:</strong> «Пытались внедрить Битрикс и CRM, но в итоге вся работа всё равно идет в хаосе Telegram-чатов.»</div>
           </div>
-
-          <div class="card card--interactive trigger-card" data-scroll-to="killer-tg">
+          <div class="trigger-card">
             <div class="trigger-card__icon">⚡</div>
-            <h3 class="trigger-card__title">Ручное управление</h3>
-            <p class="trigger-card__ai"><strong>Реальность:</strong> «Команда работает, только когда я их "пинаю". Уехал в отпуск на неделю — процессы встали.»</p>
+            <div class="trigger-card__title">Ручное управление</div>
+            <div class="trigger-card__content"><strong>Реальность:</strong> «Команда работает, только когда я их "пинаю". Уехал в отпуск на неделю — процессы встали.»</div>
           </div>
-
-          <div class="card card--interactive trigger-card" data-scroll-to="killer-sprint">
+          <div class="trigger-card">
             <div class="trigger-card__icon">☀️</div>
-            <h3 class="trigger-card__title">Стеклянный потолок</h3>
-            <p class="trigger-card__ai"><strong>Реальность:</strong> «Мы наняли больше людей, работаем больше часов, но чистая прибыль почему-то не растет.»</p>
+            <div class="trigger-card__title">Стеклянный потолок</div>
+            <div class="trigger-card__content"><strong>Реальность:</strong> «Мы наняли больше людей, работаем больше часов, но чистая прибыль почему-то не растет.»</div>
           </div>
-
-          <div class="card card--interactive trigger-card" data-scroll-to="killer-sprint">
+          <div class="trigger-card">
             <div class="trigger-card__icon">🔥</div>
-            <h3 class="trigger-card__title">Я — узкое горлышко</h3>
-            <p class="trigger-card__ai"><strong>Реальность:</strong> «Я сам стал главным тормозом компании. Все решения завязаны на мне, я тону в микроменеджменте.»</p>
+            <div class="trigger-card__title">Я — узкое горлышко</div>
+            <div class="trigger-card__content"><strong>Реальность:</strong> «Я сам стал главным тормозом компании. Все решения завязаны на мне, я тону в микроменеджменте.»</div>
           </div>
         </div>
+        <div class="trigger-hint">Нажмите на карточку, чтобы узнать больше ↓</div>
       </div>
     </section>
 
@@ -359,7 +355,7 @@
 
           <!-- Killer 4: Methodology -->
           <div class="card killer-card" id="killer-method">
-            <h3 class="killer-card__headline">7+ лет опыта Точка / Додо / karpov / ВШЭ / ИТМО</h3>
+            <h3 class="killer-card__headline">Собственная методология управления</h3>
             <p class="killer-card__body">4-слойная архитектура + ритм бизнеса + AI = единая система. Не «документ как у
               Notion» и не «методология как у Cameron Herold». Методология воплощённая в продукт.</p>
             <p class="killer-card__diff">Like Centre продаёт курс. Cameron Herold — книгу. Мы — методология которая уже
@@ -799,33 +795,31 @@
             <div class="price-card__name">Демо системы</div>
             <div class="price-card__price">Бесплатно</div>
             <div class="price-card__duration">30 минут</div>
-            <p class="price-card__desc">Показываем нашу инфраструктуру вживую, обсуждаем ваши боли.</p><a href="#"
-              class="btn btn--primary calendly-trigger" data-event="click_demo_pricing_1" style="width:100%;">Записаться
+            <p class="price-card__desc">Показываем нашу инфраструктуру вживую, обсуждаем ваши боли.</p><a href="https://t.me/edl_os_bot?start=demo" target="_blank"
+              class="btn btn--secondary" style="width:100%;">Записаться
               на демо</a>
           </div>
           <div class="card price-card">
-            <div class="price-card__name">Diagnostic</div>
+            <div class="price-card__name">Диагностика</div>
             <div class="price-card__price">25 000 ₽</div>
             <div class="price-card__duration">3-5 дней</div>
             <p class="price-card__desc">Глубокое интервью, карта бизнеса, 5-7 быстрых побед, roadmap.</p><a
-              href="diagnostic.html" class="btn btn--secondary" data-event="click_diagnostic_pricing"
-              style="width:100%;">Узнать больше</a>
+              href="diagnostic.html" class="btn btn--secondary"
+              style="width:100%;">Купить за 25 000 ₽</a>
           </div>
-          <div class="card price-card">
-            <div class="price-card__name">AI Operations Sprint</div>
-            <div class="price-card__price">от 150 000 ₽</div>
-            <div class="price-card__duration">3-4 недели</div>
+          <div class="card price-card price-card--highlight" style="border: 2px solid var(--color-tangerine); box-shadow: 0 15px 30px rgba(255, 107, 26, 0.15);">
+            <div class="price-card__name">Спринт Операционной Системы <span class="badge" style="font-size: 0.6rem; margin-left: 8px;">Основной продукт</span></div>
+            <div class="price-card__price" style="color: var(--color-tangerine);">от 225 000 ₽</div>
+            <div class="price-card__duration">4 недели</div>
             <p class="price-card__desc">Полная сборка: CRM, дашборды, TG-бот, AI-помощники, обучение команды.</p><a
-              href="sprint.html" class="btn btn--secondary" data-event="click_sprint_pricing" style="width:100%;">Узнать
-              больше</a>
+              href="https://t.me/edl_os_bot?start=kp" target="_blank" class="btn btn--primary" style="width:100%;">Скачать презентацию</a>
           </div>
           <div class="card price-card">
-            <div class="price-card__name">Growth Plan</div>
+            <div class="price-card__name">План Роста</div>
             <div class="price-card__price">от 50 000 ₽/мес</div>
             <div class="price-card__duration">минимум 3 месяца</div>
-            <p class="price-card__desc">Поддержка, развитие, новые AI-промпты, подключение vertical-фич.</p><a href="#"
-              class="btn btn--secondary calendly-trigger" data-event="click_demo_pricing_4" style="width:100%;">Обсудить
-              на демо</a>
+            <p class="price-card__desc">Поддержка, развитие, новые AI-промпты, подключение vertical-фич.</p><a href="https://t.me/edl_os_bot?start=growth" target="_blank"
+              class="btn btn--secondary" style="width:100%;">Обсудить поддержку</a>
           </div>
         </div>
         <div style="background:var(--color-white);border-radius:16px;padding:32px;">
@@ -858,7 +852,7 @@
           <div class="faq-item"><button class="faq-item__q" aria-expanded="false">Сколько это стоит на самом деле?<span
                 class="faq-item__icon">+</span></button>
             <div class="faq-item__a">
-              <p>Sprint от 150 000 ₽ (3-4 недели). Growth Plan от 50 000 ₽/мес (минимум 3 мес). Diagnostic 25 000 ₽.
+              <p>Спринт ОС от 225 000 ₽ (4 недели). План Роста от 50 000 ₽/мес (минимум 3 мес). Диагностика 25 000 ₽.
                 Демо бесплатно.</p>
             </div>
           </div>
@@ -896,10 +890,10 @@
                 data, your control.</p>
             </div>
           </div>
-          <div class="faq-item"><button class="faq-item__q" aria-expanded="false">Что после Sprint?<span
+          <div class="faq-item"><button class="faq-item__q" aria-expanded="false">Что после Спринта?<span
                 class="faq-item__icon">+</span></button>
             <div class="faq-item__a">
-              <p>30 дней бесплатной поддержки. Дальше — Growth Plan от 50k/мес или вы сами развиваете (полный доступ).
+              <p>30 дней бесплатной поддержки. Дальше — План Роста от 50k/мес или вы сами развиваете (полный доступ).
                 При переходе на SaaS (Q3 2026) — сохранение старой цены навсегда.</p>
             </div>
           </div>
@@ -946,9 +940,9 @@
         <div>
           <div class="footer__col-title">Услуги</div>
           <ul class="footer__links">
-            <li><a href="sprint.html">Sprint</a></li>
-            <li><a href="diagnostic.html">Diagnostic</a></li>
-            <li><a href="#pricing">Growth Plan</a></li>
+            <li><a href="sprint.html">Спринт ОС</a></li>
+            <li><a href="diagnostic.html">Диагностика</a></li>
+            <li><a href="#pricing">План Роста</a></li>
           </ul>
         </div>
         <div>

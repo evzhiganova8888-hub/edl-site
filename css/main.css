@@ -967,3 +967,74 @@
   text-decoration: none;
 }
 .footer__bottom a:hover { color: var(--color-white); }
+
+/* ── Triggers Grid (6 болей) ── */
+.triggers-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 24px;
+}
+@media (min-width: 768px) {
+  .triggers-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.trigger-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all var(--transition-speed);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+.trigger-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+  border-color: var(--color-tangerine);
+}
+.trigger-card__icon {
+  font-size: 2rem;
+  margin-bottom: 16px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-gray-100);
+  border-radius: 12px;
+}
+.trigger-card__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-gray-900);
+  margin-bottom: 12px;
+}
+.trigger-card__content {
+  font-size: 0.875rem;
+  color: var(--color-tangerine);
+  max-height: 0;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+.trigger-card:hover .trigger-card__content,
+.trigger-card.is-active .trigger-card__content {
+  max-height: 150px;
+  opacity: 1;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-gray-100);
+}
+.trigger-hint {
+  font-size: 0.875rem;
+  color: var(--color-gray-500);
+  text-align: center;
+  margin-top: 24px;
+  display: none;
+}
+@media (max-width: 767px) {
+  .trigger-hint { display: block; }
+}
