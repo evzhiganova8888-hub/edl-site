@@ -41,7 +41,7 @@
   <form id="quiz-form">
     <!-- Step 1 -->
     <div class="quiz-step is-active" data-step="1">
-      <div class="badge" style="margin-bottom:16px;">Вопрос 1 из 4</div>
+      <div class="badge" style="margin-bottom:16px;">Вопрос 1 из 6</div>
       <h2 class="quiz-title">Как вы сейчас узнаёте статус бизнеса утром?</h2>
       <div class="quiz-options">
         <label class="quiz-option"><input type="radio" name="q1" value="a"> <span>Жду отчёты от руководителей</span></label>
@@ -56,7 +56,7 @@
 
     <!-- Step 2 -->
     <div class="quiz-step" data-step="2">
-      <div class="badge" style="margin-bottom:16px;">Вопрос 2 из 4</div>
+      <div class="badge" style="margin-bottom:16px;">Вопрос 2 из 6</div>
       <h2 class="quiz-title">Если вы уедете в отпуск на 2 недели без телефона:</h2>
       <div class="quiz-options">
         <label class="quiz-option"><input type="radio" name="q2" value="a"> <span>Всё остановится или сломается</span></label>
@@ -71,7 +71,7 @@
 
     <!-- Step 3 -->
     <div class="quiz-step" data-step="3">
-      <div class="badge" style="margin-bottom:16px;">Вопрос 3 из 4</div>
+      <div class="badge" style="margin-bottom:16px;">Вопрос 3 из 6</div>
       <h2 class="quiz-title">Как вы используете AI в бизнесе?</h2>
       <div class="quiz-options">
         <label class="quiz-option"><input type="radio" name="q3" value="a"> <span>Никак, только игрался с ChatGPT</span></label>
@@ -86,7 +86,7 @@
 
     <!-- Step 4 -->
     <div class="quiz-step" data-step="4">
-      <div class="badge" style="margin-bottom:16px;">Вопрос 4 из 4</div>
+      <div class="badge" style="margin-bottom:16px;">Вопрос 4 из 6</div>
       <h2 class="quiz-title">Сколько часов в неделю вы тратите на "тушение пожаров"?</h2>
       <div class="quiz-options">
         <label class="quiz-option"><input type="radio" name="q4" value="a"> <span>Больше 20 часов</span></label>
@@ -99,13 +99,46 @@
       </div>
     </div>
 
-    <!-- Step 5: Lead Capture -->
-    <div class="quiz-step" data-step="5" style="text-align:center;">
+    <!-- Step 5: New Question -->
+    <div class="quiz-step" data-step="5">
+      <div class="badge" style="margin-bottom:16px;">Вопрос 5 из 6</div>
+      <h2 class="quiz-title">Каков масштаб вашей команды прямо сейчас?</h2>
+      <div class="quiz-options">
+        <label class="quiz-option"><input type="radio" name="q5" value="a"> <span>До 10 человек (ищем product-market fit)</span></label>
+        <label class="quiz-option"><input type="radio" name="q5" value="b"> <span>10-50 человек (активно масштабируемся)</span></label>
+        <label class="quiz-option"><input type="radio" name="q5" value="c"> <span>50+ человек (процессы буксуют, много бюрократии)</span></label>
+      </div>
+      <div class="quiz-nav">
+        <button type="button" class="btn btn--secondary prev-btn" data-event="quiz_step_5_prev">Назад</button>
+        <button type="button" class="btn btn--primary next-btn" data-event="quiz_step_5_next">Далее</button>
+      </div>
+    </div>
+
+    <!-- Step 6: New Question -->
+    <div class="quiz-step" data-step="6">
+      <div class="badge" style="margin-bottom:16px;">Вопрос 6 из 6</div>
+      <h2 class="quiz-title">Где сейчас живет управление вашим бизнесом?</h2>
+      <div class="quiz-options">
+        <label class="quiz-option"><input type="radio" name="q6" value="a"> <span>Excel / Таблицы и хаос в чатах Telegram</span></label>
+        <label class="quiz-option"><input type="radio" name="q6" value="b"> <span>Зоопарк сервисов: Trello, CRM, Notion (всё отдельно)</span></label>
+        <label class="quiz-option"><input type="radio" name="q6" value="c"> <span>Пытались внедрить ERP (Битрикс24/1C), но не взлетело</span></label>
+      </div>
+      <div class="quiz-nav">
+        <button type="button" class="btn btn--secondary prev-btn" data-event="quiz_step_6_prev">Назад</button>
+        <button type="button" class="btn btn--primary next-btn" data-event="quiz_step_6_next">Далее</button>
+      </div>
+    </div>
+
+    <!-- Step 7: Lead Capture -->
+    <div class="quiz-step" data-step="7" style="text-align:center;">
       <div style="font-size:3rem;margin-bottom:16px;">📩</div>
       <h2 class="quiz-title">Почти готово! Куда отправить результат?</h2>
       <p style="color:var(--color-gray-700);margin-bottom:24px;">Мы подготовили детальный разбор вашего Founder OS Score и рекомендации по оптимизации.</p>
-      <input type="email" id="lead-email" class="input" placeholder="Ваш рабочий email" required style="max-width:320px;margin:0 auto 24px;display:block;">
-      <div class="quiz-nav" style="justify-content:center;gap:16px;">
+      <input type="email" id="lead-email" class="input" placeholder="Ваш рабочий email" required style="max-width:320px;margin:0 auto 16px;display:block;">
+      <label style="display:flex; align-items:center; justify-content:center; gap:8px; font-size:0.875rem; color:var(--color-gray-500); margin-bottom:24px; cursor:pointer;">
+        <input type="checkbox" id="gdpr-consent" required> Я согласен(на) на обработку персональных данных
+      </label>
+      <div class="quiz-nav" style="justify-content:center;gap:16px; margin-top:0;">
         <button type="button" class="btn btn--secondary prev-btn" data-event="quiz_lead_prev">Назад</button>
         <button type="button" class="btn btn--primary finish-btn" data-event="quiz_lead_submit">Получить результат</button>
       </div>
@@ -113,11 +146,11 @@
 
     <!-- Result -->
     <div class="quiz-step" id="result-step" style="text-align:center;">
-      <div style="font-size:3rem;margin-bottom:16px;">📊</div>
-      <h2 class="quiz-title">Ваш Founder OS Score: <span style="color:var(--color-tangerine);">Низкий</span></h2>
-      <p style="color:var(--color-gray-700);margin-bottom:32px;">Ваш бизнес сильно зависит от вас. Вы тратите много времени на операционку и сбор данных руками. EDL OS может сэкономить вам 15-20 часов в неделю.</p>
-      <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary" style="width:100%;margin-bottom:16px;">Обсудить результаты на демо</a>
-      <a href="/" class="btn btn--secondary" style="width:100%;">Вернуться на главную</a>
+      <div style="font-size:3rem;margin-bottom:16px;">🎉</div>
+      <h2 class="quiz-title">Результат уже летит на вашу почту!</h2>
+      <p style="color:var(--color-gray-700);margin-bottom:32px;">Пока мы формируем ваш персональный отчет с разбором узких мест, посмотрите, как EDL OS выглядит изнутри.</p>
+      <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary" style="width:100%;margin-bottom:16px;">Посмотреть демо платформы</a>
+      <a href="/" class="btn btn--secondary" style="width:100%;">Вернуться на сайт</a>
     </div>
   </form>
 </div>
@@ -160,8 +193,13 @@
 
   document.querySelector('.finish-btn').addEventListener('click', () => {
     const emailInput = document.getElementById('lead-email');
+    const gdprInput = document.getElementById('gdpr-consent');
     if (!emailInput.value || !emailInput.value.includes('@')) {
       alert('Пожалуйста, введите корректный email.');
+      return;
+    }
+    if (!gdprInput.checked) {
+      alert('Пожалуйста, подтвердите согласие на обработку данных.');
       return;
     }
     steps.forEach(s => s.classList.remove('is-active'));

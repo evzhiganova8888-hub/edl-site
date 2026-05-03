@@ -169,36 +169,52 @@
   const ftSolution = document.getElementById('ft-solution');
   
   if (jtbdCheckboxes.length > 0 && ftSolution) {
-    const defaultText = 'Отметьте хотя бы один пункт слева, чтобы увидеть решение.';
+    const defaultText = 'Отметьте чекбоксы слева, чтобы увидеть, какую инфраструктуру мы соберем под ваши задачи.';
+    const timeEl = document.getElementById('ft-time');
+    const budgetEl = document.getElementById('ft-budget');
     
     jtbdCheckboxes.forEach(cb => {
       cb.addEventListener('change', () => {
         const checked = Array.from(jtbdCheckboxes).filter(i => i.checked).map(i => i.value);
         
         if (checked.length === 0) {
-          ftSolution.textContent = defaultText;
+          ftSolution.innerHTML = defaultText;
           ftSolution.style.color = 'var(--color-tangerine)';
+          if(timeEl) timeEl.textContent = 'от 2 недель';
+          if(budgetEl) budgetEl.textContent = 'рассчитывается...';
           return;
         }
         
         ftSolution.style.color = 'var(--color-gray-900)';
-        let solutionText = '';
+        let solutionHtml = '<ul style="padding-left: 20px; display:flex; flex-direction:column; gap:8px;">';
         
-        if (checked.includes('reports') || checked.includes('margin')) {
-          solutionText += '1. Внедряем автоматический P&L и Cashflow на базе ваших 1С/банков. ';
+        if (checked.includes('reports')) {
+          solutionHtml += '<li><strong>Аналитика:</strong> Автоматизируем сбор метрик. Вы будете получать утреннюю сводку в Telegram за 1 секунду без участия команды.</li>';
         }
-        if (checked.includes('leads') || checked.includes('focus')) {
-          solutionText += '2. Подключаем CRM с AI-скорингом и пушами в Telegram по горячим лидам. ';
+        if (checked.includes('margin')) {
+          solutionHtml += '<li><strong>Финансы:</strong> Подключим дашборды к 1С/банку. Вы увидите реальную маржу в разрезе проектов и когорт.</li>';
         }
-        if (checked.length >= 3) {
-          solutionText += '3. Настраиваем утреннюю AI-сводку (запас денег, риски, фокус) лично для вас.';
+        if (checked.includes('leads')) {
+          solutionHtml += '<li><strong>Продажи:</strong> Внедрим CRM с AI-скорингом. Бот сам квалифицирует лидов и пришлет пуш менеджерам по горячим.</li>';
         }
+        if (checked.includes('focus')) {
+          solutionHtml += '<li><strong>Управление:</strong> Настроим трекинг задач. AI начнет подсвечивать вам только зоны, выходящие из графика (красные статусы).</li>';
+        }
+        solutionHtml += '</ul>';
         
-        if (solutionText === '') {
-            solutionText = 'Собираем инфраструктуру под ключ: CRM + Дашборды + Telegram-бот.';
-        }
+        ftSolution.innerHTML = solutionHtml;
         
-        ftSolution.textContent = solutionText;
+        // Update Meta
+        if (checked.length === 1) {
+          if(timeEl) timeEl.textContent = '2 недели';
+          if(budgetEl) budgetEl.textContent = 'от 150 000 ₽';
+        } else if (checked.length === 2) {
+          if(timeEl) timeEl.textContent = '3 недели';
+          if(budgetEl) budgetEl.textContent = 'от 250 000 ₽';
+        } else {
+          if(timeEl) timeEl.textContent = '4 недели (Спринт)';
+          if(budgetEl) budgetEl.textContent = 'от 350 000 ₽';
+        }
       });
     });
   }

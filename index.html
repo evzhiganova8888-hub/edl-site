@@ -84,9 +84,13 @@
           <h1 class="hero__title">Бортовой компьютер для бизнеса</h1>
           <p class="hero__subtitle">EDL OS — Founder OS для SMB-фаундера. Управление в Telegram. AI знает ваши когорты,
             юнит-экономику и команду.</p>
-          <p class="hero__description">В 2026 руководителю тяжело: налоги выросли, лиды дорожают, AI надо внедрять, без
-            вашего видения команда не сходится. EDL OS — операционная система которая помогает быть стратегом, а не
-            операционным менеджером. За 4 недели соберём вашу инфраструктуру.</p>
+          <div class="hero__description">EDL OS помогает быть стратегом, а не операционным менеджером. Мы закроем ваши основные боли за 4 недели:
+            <ul style="margin-top:12px; display:flex; flex-direction:column; gap:8px; list-style:none; padding:0; text-align:left;">
+              <li><span style="color:var(--color-tangerine); font-weight:bold;">✓</span> <strong>Хаос в процессах:</strong> команда не сходится без вашего ручного управления.</li>
+              <li><span style="color:var(--color-tangerine); font-weight:bold;">✓</span> <strong>Слепые зоны:</strong> экономика и маржа считаются с опозданием.</li>
+              <li><span style="color:var(--color-tangerine); font-weight:bold;">✓</span> <strong>AI-тренд:</strong> нужно внедрять нейросети, но непонятно с чего начать.</li>
+            </ul>
+          </div>
           <p class="hero__proof">Команда с бэкграундом в Точка / Додо / karpov.courses / ВШЭ / ИТМО. Используем эту
             систему сами — на демо показываем её вживую.</p>
           <div class="hero__actions">
@@ -144,9 +148,8 @@
     <section class="section section--gray" id="fast-track">
       <div class="container">
         <div class="section__header" style="text-align:center; max-width:800px; margin:0 auto 40px;">
-          <h2 class="section__title">Нет времени читать? Узнайте за 30 секунд, подходит ли вам EDL OS</h2>
-          <p class="section__subtitle" style="margin: 0 auto;">Отметьте ваши текущие задачи (JTBD), чтобы получить
-            моментальный расчет решения.</p>
+          <h2 class="section__title">Узнайте за 30 секунд, как EDL OS решит ваши задачи</h2>
+          <p class="section__subtitle" style="margin: 0 auto;">Выберите то, что отнимает у вас время прямо сейчас, и получите готовый план решения.</p>
         </div>
         <div class="fast-track__container">
           <div class="fast-track__toggles">
@@ -162,16 +165,15 @@
           <div class="fast-track__result">
             <h3 style="margin-bottom: 16px;">План решения</h3>
             <div id="ft-solution"
-              style="min-height: 60px; font-weight: 500; margin-bottom: 16px; color: var(--color-tangerine);">Отметьте
-              хотя бы один пункт слева, чтобы увидеть решение.</div>
+              style="min-height: 60px; font-weight: 500; margin-bottom: 16px; color: var(--color-tangerine);">Отметьте чекбоксы слева, чтобы увидеть, какую инфраструктуру мы соберем под ваши задачи.</div>
             <div class="ft-meta"
               style="font-size:0.875rem; color:var(--color-gray-700); display:flex; flex-direction:column; gap:8px;">
               <div><strong>Кто делает:</strong> Команда EDL OS (под ключ)</div>
-              <div><strong>Сроки:</strong> 3-4 недели (Sprint)</div>
-              <div><strong>Бюджет:</strong> от 150 000 ₽</div>
+              <div><strong>Сроки:</strong> <span id="ft-time">от 2 недель</span></div>
+              <div><strong>Бюджет:</strong> <span id="ft-budget">рассчитывается...</span></div>
             </div>
             <a href="https://t.me/edl_os_bot" target="_blank" rel="noopener" class="btn btn--primary"
-              style="width:100%;margin-top:24px;" data-event="click_ft_tg">Спросить в Telegram</a>
+              style="width:100%;margin-top:24px;" data-event="click_ft_tg">Обсудить этот план в Telegram</a>
           </div>
         </div>
       </div>
