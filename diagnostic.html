@@ -1,280 +1,160 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Диагностика инфраструктуры — за 3–5 дней · EDL</title>
-  <meta name="description" content="Диагностика операционки EDL: за 3-5 дней проведём аудит и составим карту процессов, 5-7 первых шагов и план на 3 месяца. 25 000 ₽.">
-
-  <link rel="canonical" href="https://elephantdreams.ru/diagnostic.html">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-
-  <meta property="og:title" content="Диагностика инфраструктуры — EDL">
-  <meta property="og:description" content="За 3-5 дней проведём аудит вашей операционки. На выходе — карта процессов, план первых шагов. 25 000 ₽.">
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="ru_RU">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnostic — карта бизнеса за 3-5 дней · EDL</title>
+<meta name="description" content="Diagnostic — глубокое интервью, карта процессов, 5-7 быстрых побед и roadmap за 25 000 ₽. Перед Sprint или для понимания масштаба задач.">
+<link rel="canonical" href="https://elephantdreams.ru/diagnostic.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-
-<!-- HEADER -->
-<header class="site-header">
-  <div class="site-header__inner">
-    <a href="/" class="site-header__logo" aria-label="EDL — на главную">EDL</a>
-    <nav class="site-header__nav" aria-label="Главное меню">
-      <a href="/#approach">Подход</a>
-      <a href="sprint.html">Спринт</a>
-      <a href="diagnostic.html">Диагностика</a>
-      <a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener">Telegram</a>
-    </nav>
-    <div class="site-header__lang">
-      <a href="/" class="is-active">RU</a><span>/</span><a href="/en/">EN</a>
-    </div>
-    <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary site-header__cta">Записаться на демо</a>
-  </div>
+<a href="#main" class="skip-link">Перейти к содержимому</a>
+<header class="header" id="header">
+<div class="container header__inner">
+<a href="/" class="header__logo"><span class="header__logo-dot"></span> EDL OS</a>
+<nav class="header__nav">
+<div class="header__nav-links">
+<a href="/">Главная</a>
+<a href="sprint.html">Sprint</a>
+<a href="/#pricing">Цены</a>
+</div>
+<a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary header__cta" style="height:40px;font-size:0.875rem;padding:0 20px;">Демо</a>
+<button class="header__burger" aria-label="Меню" onclick="document.getElementById('mobile-nav').classList.toggle('is-open')"><span></span><span></span><span></span></button>
+</nav>
+</div>
 </header>
+<nav class="mobile-nav" id="mobile-nav">
+<a href="/">Главная</a>
+<a href="sprint.html">Sprint</a>
+<a href="/#pricing">Цены</a>
+<a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary">Записаться на демо</a>
+</nav>
 
 <main id="main">
 
-  <!-- HERO -->
-  <section class="product-hero">
-    <div class="container">
-      <div class="product-hero__inner">
-        <span class="product-hero__tag">Точка входа</span>
-        <h1 class="product-hero__title">Диагностика операционки —<br>за 3–5 дней</h1>
-        <p class="product-hero__lead">
-          Аудит вашей текущей операционки. На выходе — карта процессов, 5–7 первых шагов с эффектом за 1–2 недели и план на 3 месяца. Конкретный документ, по которому может работать любой подрядчик — не только мы.
-        </p>
+<!-- Hero -->
+<section class="hero section" style="min-height:auto;padding-top:120px;padding-bottom:64px;">
+<div class="container">
+<span class="badge" style="margin-bottom:24px;">Diagnostic</span>
+<h1 style="max-width:700px;">Diagnostic — карта бизнеса за 3-5 дней</h1>
+<p class="hero__subtitle" style="max-width:600px;margin-top:24px;">Если не уверены что Sprint нужен прямо сейчас. Или хотите сначала понять «что у нас вообще не так». Или нужен roadmap для руководителей.</p>
+<div class="hero__actions" style="margin-top:32px;">
+<a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary">Записаться на демо</a>
+</div>
+</div>
+</section>
 
-        <div class="product-hero__meta">
-          <div class="product-hero__meta-item">
-            <span class="product-hero__meta-label">Цена</span>
-            <span class="product-hero__meta-value">25 000 ₽</span>
-          </div>
-          <div class="product-hero__meta-item">
-            <span class="product-hero__meta-label">Сроки</span>
-            <span class="product-hero__meta-value">3–5 дней</span>
-          </div>
-          <div class="product-hero__meta-item">
-            <span class="product-hero__meta-label">Ваше время</span>
-            <span class="product-hero__meta-value">~2 часа</span>
-          </div>
-          <div class="product-hero__meta-item">
-            <span class="product-hero__meta-label">Что на выходе</span>
-            <span class="product-hero__meta-value">PDF + созвон</span>
-          </div>
-        </div>
+<!-- 3 Phases -->
+<section class="section">
+<div class="container">
+<div class="section__header"><h2 class="section__title">Что входит</h2></div>
+<div style="display:grid;grid-template-columns:1fr;gap:24px;">
 
-        <div class="hero__cta-row">
-          <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary">Записаться на демо</a>
-          <span class="hero__cta-secondary">Готовы сразу к спринту? <a href="sprint.html">AI Operations Sprint →</a></span>
-        </div>
-      </div>
-    </div>
-  </section>
+<div class="card" style="padding:32px;">
+<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+<div class="num-badge">01</div>
+<h3>Глубокое интервью · 1.5 часа</h3>
+</div>
+<ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> Структурированное интервью с фаундером</li>
+<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> Опционально: интервью с 2-3 ключевыми ролями</li>
+</ul>
+</div>
 
-  <!-- WHAT'S INSIDE -->
-  <section class="product-section">
-    <div class="container">
-      <div class="product-section__head">
-        <span class="eyebrow">01 · Что входит</span>
-        <h2>Что вы получаете</h2>
-        <p>Диагностика — это не «концепция в общих словах», а конкретный документ с приоритетами и сроками. По нему может работать любая команда — наша или ваша внутренняя.</p>
-      </div>
+<div class="card" style="padding:32px;">
+<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+<div class="num-badge">02</div>
+<h3>Анализ · 3-4 дня</h3>
+</div>
+<ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> Карта текущих процессов</li>
+<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> Анализ стэка инструментов</li>
+<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> 5-7 быстрых побед</li>
+<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> Что стоит делать через Sprint, что — нет</li>
+</ul>
+</div>
 
-      <div class="product-list">
+<div class="card" style="padding:32px;">
+<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+<div class="num-badge">03</div>
+<h3>Презентация · 1 час</h3>
+</div>
+<ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> Roadmap на 3 месяца с/без Sprint</li>
+<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> ROI-калькуляция</li>
+<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> Q&A с командой</li>
+</ul>
+</div>
 
-        <div class="product-item">
-          <div class="product-item__num">01<strong>КАРТА</strong></div>
-          <div>
-            <h3>Карта текущей операционки</h3>
-            <p>Где находятся ваши лиды, как двигаются по воронке, кто за что отвечает, где теряются сделки, какие данные собираются (а какие — нет).</p>
-            <ul class="product-item-list">
-              <li>Источники лидов и каналы</li>
-              <li>Воронка продаж со статусами</li>
-              <li>Зоны ответственности команды</li>
-              <li>Места потерь и узкие горлышки</li>
-            </ul>
-          </div>
-        </div>
+</div>
+</div>
+</section>
 
-        <div class="product-item">
-          <div class="product-item__num">02<strong>ПРИОРИТЕТЫ</strong></div>
-          <div>
-            <h3>5–7 первых шагов с эффектом за 1–2 недели</h3>
-            <p>Не «полная переработка системы», а 5–7 быстрых действий, которые дают измеримый результат сразу. Их можно выполнить силами вашей команды или с нашим участием — это вы решаете после диагностики.</p>
-            <ul class="product-item-list">
-              <li>Каждый шаг — с оценкой сложности и эффекта</li>
-              <li>Что сделать на этой неделе, что на следующей</li>
-              <li>Метрика, по которой увидим результат</li>
-            </ul>
-          </div>
-        </div>
+<!-- Result -->
+<section class="section section--gray">
+<div class="container">
+<h2 class="section__title" style="margin-bottom:24px;">Что в результате</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px;">
+<div class="card" style="padding:24px;text-align:center;">
+<div style="font-size:2rem;margin-bottom:8px;">📄</div>
+<h4>PDF 15-25 страниц</h4>
+<p style="color:var(--color-gray-700);font-size:var(--font-size-small);margin-top:8px;">Карта процессов + 5-7 быстрых побед + roadmap</p>
+</div>
+<div class="card" style="padding:24px;text-align:center;">
+<div style="font-size:2rem;margin-bottom:8px;">🎬</div>
+<h4>Видео-запись</h4>
+<p style="color:var(--color-gray-700);font-size:var(--font-size-small);margin-top:8px;">Запись презентации для вашей команды</p>
+</div>
+<div class="card" style="padding:24px;text-align:center;">
+<div style="font-size:2rem;margin-bottom:8px;">💬</div>
+<h4>7 дней поддержки</h4>
+<p style="color:var(--color-gray-700);font-size:var(--font-size-small);margin-top:8px;">Возможность задавать вопросы после</p>
+</div>
+</div>
+</div>
+</section>
 
-        <div class="product-item">
-          <div class="product-item__num">03<strong>ПЛАН</strong></div>
-          <div>
-            <h3>Дорожная карта на 3 месяца</h3>
-            <p>Что собирать дальше, в какой последовательности, какими силами. Раздел про роли, бюджеты, сроки. По этому плану можно начать без нас — или вернуться к нам через спринт.</p>
-            <ul class="product-item-list">
-              <li>Этапы по неделям</li>
-              <li>Ресурсная оценка (время, бюджет)</li>
-              <li>Контрольные точки и метрики</li>
-            </ul>
-          </div>
-        </div>
+<!-- Pricing -->
+<section class="section">
+<div class="container" style="text-align:center;">
+<h2 class="section__title" style="margin-bottom:16px;">Стоимость</h2>
+<div class="price-card__price" style="font-size:clamp(2rem,4vw,3rem);margin-bottom:8px;">25 000 ₽</div>
+<p style="color:var(--color-gray-500);margin-bottom:32px;">При переходе в Sprint в течение 30 дней — зачитываем в стоимость Sprint</p>
+<a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary">Записаться на демо</a>
+</div>
+</section>
 
-        <div class="product-item">
-          <div class="product-item__num">04<strong>СОЗВОН</strong></div>
-          <div>
-            <h3>60 минут разбора с фаундером</h3>
-            <p>После сдачи документа — отдельный созвон 60 минут. Проходим план, отвечаем на вопросы, фиксируем, какие шаги вы хотите взять сразу, а какие — позже.</p>
-            <ul class="product-item-list">
-              <li>Без презентаций — рабочий разбор</li>
-              <li>Запись остаётся у вас</li>
-              <li>Дальнейшие шаги — на ваше усмотрение</li>
-            </ul>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- PROCESS -->
-  <section class="product-section" style="background:var(--bg-tinted);">
-    <div class="container">
-      <div class="product-section__head">
-        <span class="eyebrow">02 · Процесс</span>
-        <h2>Как проходят 3–5 дней</h2>
-        <p>Минимальное вовлечение с вашей стороны — около 2 часов суммарно. Остальное мы делаем сами.</p>
-      </div>
-
-      <div class="product-list">
-
-        <div class="product-item">
-          <div class="product-item__num">Д1<strong>ДЕНЬ 1</strong></div>
-          <div>
-            <h3>Установочный созвон 60 минут</h3>
-            <p>Глубокое интервью с фаундером. Проходим по бизнесу: продукт, команда, текущая операционка, цифры, точки боли, желаемое будущее. Запись остаётся у вас.</p>
-          </div>
-        </div>
-
-        <div class="product-item">
-          <div class="product-item__num">Д2<strong>ДНИ 2–4</strong></div>
-          <div>
-            <h3>Анализ и сборка документа</h3>
-            <p>Команда EDL анализирует ваши данные: текущие таблицы, отчёты, скриншоты процессов. Параллельно идёт письменная переписка — задаём уточняющие вопросы.</p>
-          </div>
-        </div>
-
-        <div class="product-item">
-          <div class="product-item__num">Д5<strong>ДЕНЬ 5</strong></div>
-          <div>
-            <h3>Разбор документа на созвоне</h3>
-            <p>Передаём PDF + созвон 60 минут. Проходим карту процессов, разбираем 5–7 первых шагов, фиксируем план на 3 месяца. Дальнейшие действия — на ваше усмотрение.</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- FOR WHOM -->
-  <section class="product-section">
-    <div class="container">
-      <div class="product-section__head">
-        <span class="eyebrow">03 · Кому подходит</span>
-        <h2>Когда диагностика — лучший первый шаг</h2>
-      </div>
-
-      <div class="audience__grid">
-
-        <div class="audience__card">
-          <div class="audience__card-title">Когда не уверены, нужен ли спринт</div>
-          <p class="audience__card-desc">Подозреваете, что есть проблема, но не до конца ясно — где. Диагностика покажет, что реально требует переделки, а что работает.</p>
-        </div>
-
-        <div class="audience__card">
-          <div class="audience__card-title">Когда уже есть подрядчик</div>
-          <p class="audience__card-desc">Хотите взгляд со стороны на текущую систему — что работает, что нет, что усилить. Документ передаётся вам, не подрядчику.</p>
-        </div>
-
-        <div class="audience__card">
-          <div class="audience__card-title">Когда команда хочет решать сама</div>
-          <p class="audience__card-desc">Не нужен внешний интегратор — нужен внешний аудит и план. Дальше внедряет ваша команда сама, по диагностическому документу.</p>
-        </div>
-
-        <div class="audience__card">
-          <div class="audience__card-title">Когда бюджет ограничен на старте</div>
-          <p class="audience__card-desc">25 000 ₽ — порог, который позволяет проверить нас на маленьком проекте до того, как принимать решение про спринт за 150 000 ₽.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- FINAL CTA -->
-  <section>
-    <div class="final">
-      <div class="final__container">
-        <span class="eyebrow" style="color:var(--accent);">Дальше</span>
-        <h2>Записаться на диагностику</h2>
-        <p>Сначала — 30-минутный демо-созвон. Покажем нашу систему вживую, обсудим ваш контекст. Если диагностика подходит — запишем сразу после звонка.</p>
-        <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary">Записаться на демо</a>
-        <p class="final__note">Обычно отвечаем в течение 2 часов в рабочее время</p>
-      </div>
-    </div>
-  </section>
+<!-- Final CTA -->
+<section class="section section--dark final-cta">
+<div class="container">
+<h2 class="final-cta__title">Хотите начать с карты бизнеса?</h2>
+<p class="final-cta__subtitle">Diagnostic обсуждается на 30-минутном демо</p>
+<div class="final-cta__actions">
+<a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary">Записаться на демо</a>
+<a href="sprint.html" class="btn btn--dark">Сразу Sprint →</a>
+</div>
+</div>
+</section>
 
 </main>
 
-<!-- FOOTER -->
-<footer class="site-footer">
-  <div class="site-footer__inner">
-    <div class="site-footer__grid">
-      <div class="site-footer__brand-col">
-        <div class="site-footer__brand">EDL</div>
-        <p class="site-footer__about">Elephant Dreams Lab. Собираем фаундерам операционную систему бизнеса. Чтобы было прозрачно. Чтобы можно было управлять с одного экрана.</p>
-      </div>
-      <div class="site-footer__col">
-        <h4>Услуги</h4>
-        <ul>
-          <li><a href="sprint.html">AI Operations Sprint</a></li>
-          <li><a href="diagnostic.html">Диагностика</a></li>
-          <li><a href="sprint.html#growth">Growth Plan</a></li>
-        </ul>
-      </div>
-      <div class="site-footer__col">
-        <h4>Компания</h4>
-        <ul>
-          <li><a href="/#approach">Подход</a></li>
-          <li><a href="/#method">Наша система</a></li>
-          <li><a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener">Канал в Telegram</a></li>
-        </ul>
-      </div>
-      <div class="site-footer__col">
-        <h4>Контакты</h4>
-        <ul>
-          <li><a href="https://t.me/evzhiganova8888" target="_blank" rel="noopener">Telegram</a></li>
-          <li><a href="mailto:hello@elephantdreams.ru">hello@elephantdreams.ru</a></li>
-          <li><a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener">Calendly</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="site-footer__bottom">
-      <span>© 2026, Elephant Dreams Lab</span>
-      <div class="site-footer__bottom-lang">
-        <a href="/">RU</a><span>·</span><a href="/en/">EN</a>
-      </div>
-    </div>
-  </div>
+<footer class="footer">
+<div class="container">
+<div class="footer__grid">
+<div><div class="footer__brand-name">EDL OS</div><p class="footer__brand-desc">Founder OS for SMB</p></div>
+<div><div class="footer__col-title">Услуги</div><ul class="footer__links"><li><a href="sprint.html">Sprint</a></li><li><a href="diagnostic.html">Diagnostic</a></li><li><a href="/#pricing">Growth Plan</a></li></ul></div>
+<div><div class="footer__col-title">Компания</div><ul class="footer__links"><li><a href="/#team">Команда</a></li><li><a href="/#method">Метод</a></li></ul></div>
+<div><div class="footer__col-title">Контакты</div><ul class="footer__links"><li><a href="https://t.me/evzhiganova8888" target="_blank" rel="noopener">Telegram</a></li><li><a href="mailto:info@elephantdreams.ru">Email</a></li></ul></div>
+</div>
+<div class="footer__bottom"><span>© 2026 Elephant Dreams Lab</span><div><a href="legal/privacy.html">Privacy</a> · <a href="legal/terms.html">Terms</a></div></div>
+</div>
 </footer>
-
+<script src="js/main.js" defer></script>
 </body>
 </html>

@@ -1,773 +1,436 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>EDL — операционная система для бизнеса · Один экран. Весь бизнес.</title>
-  <meta name="description" content="За 3–4 недели соберём операционную систему для вашего бизнеса: CRM, дашборды, Telegram-бот, AI-помощников. Выйдете из операционки и увидите бизнес одним экраном.">
-
-  <link rel="canonical" href="https://elephantdreams.ru/">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-
-  <meta property="og:title" content="EDL — операционная система для бизнеса">
-  <meta property="og:description" content="Один экран. Весь бизнес. Соберём CRM, дашборды, Telegram-бот и AI-помощников за 3–4 недели.">
-  <meta property="og:image" content="https://elephantdreams.ru/og-image.png">
-  <meta property="og:url" content="https://elephantdreams.ru/">
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="ru_RU">
-  <meta name="twitter:card" content="summary_large_image">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDL OS — Founder OS для SMB-фаундера</title>
+<meta name="description" content="EDL OS — операционная система для фаундера малого и среднего бизнеса. Управление в Telegram. AI знает ваши когорты, юнит-экономику и команду.">
+<meta property="og:title" content="EDL OS — Founder OS для SMB-фаундера">
+<meta property="og:description" content="Бортовой компьютер для бизнеса. За 4 недели соберём CRM, дашборды, Telegram-бот и AI на ВАШИ данные.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://elephantdreams.ru/">
+<link rel="canonical" href="https://elephantdreams.ru/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/main.css">
 </head>
 <body>
+<a href="#main" class="skip-link">Перейти к содержимому</a>
 
-<!-- ============== HEADER ============== -->
-<header class="site-header">
-  <div class="site-header__inner">
-    <a href="/" class="site-header__logo" aria-label="EDL — на главную">EDL</a>
-
-    <nav class="site-header__nav" aria-label="Главное меню">
-      <a href="#approach">Подход</a>
-      <a href="sprint.html">Спринт</a>
-      <a href="diagnostic.html">Диагностика</a>
-      <a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener">Telegram</a>
-    </nav>
-
-    <div class="site-header__lang" aria-label="Язык">
-      <a href="/" class="is-active">RU</a>
-      <span>/</span>
-      <a href="/en/">EN</a>
-    </div>
-
-    <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary site-header__cta">Записаться на демо</a>
-  </div>
+<!-- Header -->
+<header class="header" id="header">
+<div class="container header__inner">
+<a href="/" class="header__logo"><span class="header__logo-dot"></span> EDL OS</a>
+<nav class="header__nav">
+<div class="header__nav-links">
+<a href="#triggers">Проблемы</a>
+<a href="#killers">Фичи</a>
+<a href="#method">Метод</a>
+<a href="#pricing">Цены</a>
+<a href="#faq">FAQ</a>
+</div>
+<a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary header__cta" style="height:40px;font-size:0.875rem;padding:0 20px;">Демо</a>
+<button class="header__burger" aria-label="Меню" id="burger"><span></span><span></span><span></span></button>
+</nav>
+</div>
 </header>
+
+<nav class="mobile-nav" id="mobile-nav">
+<a href="#triggers" onclick="closeMobileNav()">Проблемы</a>
+<a href="#killers" onclick="closeMobileNav()">Фичи</a>
+<a href="#method" onclick="closeMobileNav()">Метод</a>
+<a href="#pricing" onclick="closeMobileNav()">Цены</a>
+<a href="#faq" onclick="closeMobileNav()">FAQ</a>
+<a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary">Записаться на демо</a>
+</nav>
 
 <main id="main">
 
-  <!-- ============== HERO — без иллюстрации, с lime акцентом ============== -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero__inner">
-        <span class="eyebrow">01 · Интро</span>
-        <h1 class="hero__title">Один экран.<br>Весь&nbsp;<span class="hero__accent">бизнес</span>.</h1>
-        <p class="hero__lead">
-          <strong>Дорого привлекать клиентов. Команда буксует без вас.</strong>
-          За 3–4 недели соберём CRM, дашборды, Telegram-бот и AI-помощников — выйдете из операционки и увидите бизнес одним экраном.
-        </p>
-
-        <div class="hero__cta-row">
-          <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary">Записаться на демо системы</a>
-          <span class="hero__cta-secondary">Ещё рано? <a href="quiz.html">Пройдите экспресс-тест за 5 минут →</a></span>
-        </div>
-
-        <ul class="hero__tags">
-          <li>утренний push · 8:30</li>
-          <li>один экран</li>
-          <li>пульс бизнеса</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============== PROOF · 3D КАРУСЕЛЬ ============== -->
-  <section class="proof">
-    <div class="container">
-      <div class="proof__head">
-        <span class="eyebrow">02 · Наша система</span>
-        <h2>Сначала собрали себе.<br>Теперь — клиентам.</h2>
-        <p>Команда EDL управляет работой через эту инфраструктуру. По ней же работают наши клиенты: лиды попадают в CRM автоматически, утром приходит сводка с тревогами и фокусами дня, AI-помощники подсказывают команде следующие шаги.</p>
-        <p>На демо мы покажем эту инфраструктуру вживую — реальные сценарии, на обезличенных примерах клиентов.</p>
-      </div>
-
-      <!-- 3D-карусель из 3 карточек, вращается по часовой стрелке -->
-      <div class="carousel" role="region" aria-label="Скриншоты системы EDL — карусель">
-
-        <article class="carousel__card pos-front">
-          <div class="carousel__head">
-            <strong>EDL Operations</strong>
-            <span>сводка · 8:30</span>
-          </div>
-          <div class="carousel__row"><span>Лидов вчера</span><span>4</span></div>
-          <div class="carousel__row"><span>HOT в работе</span><span>2</span></div>
-          <div class="carousel__row"><span>Выручка месяца</span><span>182 тыс</span></div>
-          <div class="carousel__alert">Один HOT-лид без ответа &gt; 2 ч</div>
-        </article>
-
-        <article class="carousel__card pos-back-left">
-          <div class="carousel__head">
-            <strong>CRM_Leads · pipeline</strong>
-            <span>Sheets</span>
-          </div>
-          <div class="carousel__row"><span>Образоват. продукт · TG</span><span class="accent">94 HOT</span></div>
-          <div class="carousel__row"><span>Marketing agency · LinkedIn</span><span>71 WARM</span></div>
-          <div class="carousel__row"><span>SaaS 30+ чел · реф.</span><span class="accent">88 HOT</span></div>
-          <div class="carousel__row"><span>E-com retail · Quiz</span><span>52 COLD</span></div>
-        </article>
-
-        <article class="carousel__card pos-back-right">
-          <div class="carousel__head">
-            <strong>Dashboard · фокус дня</strong>
-            <span>авто</span>
-          </div>
-          <p class="carousel__quote">«Закрыть 1 HOT-лид и запустить диагностику для Marketing agency.»</p>
-          <span class="carousel__goal">Цель месяца: 4 / 5 диагностик</span>
-        </article>
-
-      </div>
-
-      <div class="carousel__dots" role="tablist" aria-label="Переключение карточек">
-        <span class="carousel__dot is-active" data-carousel-dot></span>
-        <span class="carousel__dot" data-carousel-dot></span>
-        <span class="carousel__dot" data-carousel-dot></span>
-      </div>
-
-      <!-- Stats row -->
-      <div class="proof__stats">
-        <div>
-          <div class="proof__stat-num">8:30</div>
-          <p class="proof__stat-title">время сводки, которое выбирают 80% наших фаундеров</p>
-          <span class="proof__stat-cap">Настраивается под ваш режим</span>
-        </div>
-        <div>
-          <div class="proof__stat-num">40<span>%</span></div>
-          <p class="proof__stat-title">операционных задач уходит из ручного режима в первый месяц после спринта</p>
-          <span class="proof__stat-cap">Средняя цифра по проектам EDL</span>
-        </div>
-        <div>
-          <div class="proof__stat-num">3–4</div>
-          <p class="proof__stat-title">недели — объективный минимум сборки рабочей инфраструктуры</p>
-          <span class="proof__stat-cap">Быстрее даёт поверхностный результат</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============== ARCHITECTURE ============== -->
-  <section>
-    <div class="architecture">
-      <div class="architecture__container">
-        <span class="eyebrow">03 · Архитектура</span>
-        <h2 class="architecture__title">Anthropic, Tesla, Stripe — и теперь вы</h2>
-        <p class="architecture__lead">Современные tech-компании — Anthropic, Tesla, Stripe — строят бизнес как единую среду: один источник правды, всё видно с одного экрана, AI и автоматизация в каждом процессе.</p>
-        <p class="architecture__lead">Мы собрали эту архитектуру под малый и средний бизнес. По ней работаем сами и делаем такую же нашим клиентам — это не свежий эксперимент, а отлаженный продукт.</p>
-        <a href="#method" class="architecture__link">Как это работает →</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============== METHOD ============== -->
-  <section class="method" id="method">
-    <div class="container">
-      <div class="method__head">
-        <span class="eyebrow">04 · Метод</span>
-        <h2>Четыре слоя.<br>Один результат.</h2>
-        <p>Мы не пишем код с нуля. У нас есть проверенная архитектура, которую кастомизируем под ваши процессы, продукт и команду.</p>
-        <p>За 3–4 недели вы получаете рабочую инфраструктуру с полным доступом. Без привязки к нашей команде.</p>
-      </div>
-
-      <div class="method__layers">
-
-        <div class="method__layer">
-          <div class="method__layer-num">01<strong>ВХОДЫ</strong></div>
-          <div>
-            <h3>Лиды и сигналы со всех каналов</h3>
-            <p class="method__layer-list">Лендинг · Quiz · Calendly · LinkedIn · TG-канал · рекомендации</p>
-            <p class="method__layer-cap">Всё, что приходит — попадает в одно место. Никаких потерянных лидов.</p>
-          </div>
-        </div>
-
-        <div class="method__layer">
-          <div class="method__layer-num">02<strong>ОБРАБОТЧИК</strong></div>
-          <div>
-            <h3>Приём, скоринг, маршрутизация</h3>
-            <p class="method__layer-list">HOT/WARM/COLD · валидация · авто-приоритизация · ответственный по правилам</p>
-            <p class="method__layer-cap">Каждый сигнал получает приоритет автоматически. Фаундер не разбирает руками.</p>
-          </div>
-        </div>
-
-        <div class="method__layer">
-          <div class="method__layer-num">03<strong>CRM</strong></div>
-          <div>
-            <h3>Структурированное хранилище</h3>
-            <p class="method__layer-list">Сделки · pipeline · статусы · lead score · next action</p>
-            <p class="method__layer-cap">Один источник правды для всей команды. История каждого клиента — на одной странице.</p>
-          </div>
-        </div>
-
-        <div class="method__layer">
-          <div class="method__layer-num">04<strong>ИНТЕРФЕЙС</strong></div>
-          <div>
-            <h3>То, что вы открываете каждое утро</h3>
-            <p class="method__layer-list">Утренняя сводка · push на HOT-лиды · мобильный дашборд · фокус дня</p>
-            <p class="method__layer-cap">Бизнес — в одном экране каждое утро. Не нужно открывать чаты, дашборды, отчёты.</p>
-          </div>
-        </div>
-
-        <div class="method__layer is-final">
-          <div class="method__layer-num">05<strong>ВЫ</strong></div>
-          <div>
-            <h3>Вижн и стратегия</h3>
-            <p class="method__layer-list">Решения · приоритеты · направление · видение продукта</p>
-            <p class="method__layer-cap">AI и команда EDL — на остальном. Вы остаётесь у руля. Просто без рутины в руках.</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============== NEWSLETTER ============== -->
-  <section>
-    <div class="newsletter">
-      <div class="newsletter__container">
-        <div class="newsletter__grid">
-          <div>
-            <p class="newsletter__eyebrow">Сводка EDL · раз в 2 недели</p>
-            <h2 class="newsletter__title">Раз в две недели — как это устроено внутри</h2>
-            <p class="newsletter__lead">Разбор кейсов, методология, AI-эксперименты, наблюдения с рынка. От Екатерины Жигановой.</p>
-          </div>
-          <div>
-            <form class="newsletter__form" action="#" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Записал ✓';">
-              <input type="email" placeholder="ваша@почта.ru" required aria-label="Email для подписки">
-              <button type="submit" class="btn btn--primary">Подписаться</button>
-            </form>
-            <p class="newsletter__note">Отписаться можно в любой момент. Письма от Екатерины Жигановой.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============== PRINCIPLES + БУДИЛЬНИК ============== -->
-  <section class="principles">
-    <div class="container">
-
-      <div class="principles__head">
-        <span class="eyebrow">Принципы</span>
-        <h2>AI работает.<br>Решения за вами.</h2>
-        <p>Эти три принципа — про то, как четыре слоя работают для вас. Не для AI, не для команды EDL. Для фаундера.</p>
-      </div>
-
-      <div class="principles__list">
-
-        <article class="principle">
-          <div class="principle__num">01<strong>ПРИНЦИП</strong></div>
-          <div>
-            <h3>Любую автоматику можно остановить или поправить.</h3>
-            <p class="principle__lead">Каждое правило открыто. Вы видите и редактируете.</p>
-            <p class="principle__detail">Это не закрытый софт, где что-то «работает само». Каждый сценарий — как настроенный сценарий в умном доме. Можно посмотреть, что именно происходит, и поменять под себя.</p>
-          </div>
-        </article>
-
-        <article class="principle">
-          <div class="principle__num">02<strong>ПРИНЦИП</strong></div>
-          <div>
-            <h3>Приборная панель спереди.<br>Пульт управления — за ней.</h3>
-            <p class="principle__lead">Команда видит чистые цифры и фокусы. Вы настраиваете, как они приходят.</p>
-            <p class="principle__detail">Как у автомобиля: спидометр и газ — для водителя, а двигатель и настройки — под капотом, для тех, кто знает. Так же и тут: фронт — для команды, бэк — для вас и нашей команды EDL.</p>
-          </div>
-        </article>
-
-        <article class="principle principle--clock">
-          <div class="principle__num">03<strong>ПРИНЦИП</strong></div>
-          <div>
-            <h3>Утренний будильник вашего бизнеса.</h3>
-            <p class="principle__lead">Сводка приходит каждое утро. Время и состав — настраиваете один раз или меняете каждый вечер.</p>
-            <p class="principle__detail">Как будильник в iPhone: можно поставить раз и забыть, можно менять каждый день. У каждого руководителя — своя сводка со своими метриками. Вы настраиваете, кто что видит. Это конструктор, который растёт вместе с компанией.</p>
-            <p class="principle__detail" style="margin-top:14px;color:var(--fg-3);font-size:13px;">↓ Попробуйте прямо сейчас — выберите своё время и нажмите «Сохранить»</p>
-          </div>
-
-          <!-- ИНТЕРАКТИВНЫЙ БУДИЛЬНИК -->
-          <div class="principle__clock-side">
-            <div class="clock" id="edl-clock" role="region" aria-label="Демо: настройка времени утренней сводки">
-              <div class="clock__phone">
-
-                <div class="clock__topbar">
-                  <button type="button" class="clock__topbar-btn clock__topbar-btn--cancel" data-clock-cancel>Отмена</button>
-                  <span class="clock__topbar-title">Сводка</span>
-                  <button type="button" class="clock__topbar-btn" data-clock-save>Сохранить</button>
-                </div>
-
-                <div class="clock__picker">
-                  <div class="clock__picker-line" aria-hidden="true"></div>
-                  <div class="clock__picker-mask" aria-hidden="true"></div>
-                  <div class="clock__picker-scroll">
-                    <div class="clock__cell" data-time="06:30">06:30</div>
-                    <div class="clock__cell" data-time="07:00">07:00</div>
-                    <div class="clock__cell" data-time="07:30">07:30</div>
-                    <div class="clock__cell" data-time="08:00">08:00</div>
-                    <div class="clock__cell is-active" data-time="08:30" data-default>08:30</div>
-                    <div class="clock__cell" data-time="09:00">09:00</div>
-                    <div class="clock__cell" data-time="09:30">09:30</div>
-                    <div class="clock__cell" data-time="10:00">10:00</div>
-                    <div class="clock__cell" data-time="10:30">10:30</div>
-                  </div>
-                </div>
-
-                <p class="clock__caption">Крутите ↕ или нажмите на время</p>
-
-                <div class="clock__success">
-                  <div class="clock__toast">
-                    <div class="clock__toast-icon" aria-hidden="true">✓</div>
-                    <div class="clock__toast-text">
-                      <strong>Сводка установлена на <span data-clock-display>08:30</span></strong>
-                      <span>Будет приходить каждое утро в Telegram</span>
-                    </div>
-                  </div>
-
-                  <div class="clock__cta-block">
-                    <p class="clock__cta-text">
-                      <strong>Это только 1% возможностей EDL OS.</strong><br>
-                      Соберём всю операционку под ваш бизнес за 3–4 недели.
-                    </p>
-                    <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="clock__cta-btn">
-                      Записаться на демо системы →
-                    </a>
-                    <button type="button" class="clock__reset" data-clock-reset>← Выбрать другое время</button>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </article>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============== APPROACH ============== -->
-  <section class="approach" id="approach">
-    <div class="container">
-      <div class="approach__head">
-        <span class="eyebrow">05 · Подход</span>
-        <h2>Прозрачно по каждому шагу. Цены зафиксированы до старта.</h2>
-      </div>
-
-      <div class="approach__grid">
-
-        <article class="approach__card">
-          <div class="approach__card-step">01 · Точка входа</div>
-          <h3>Демо системы</h3>
-          <div class="approach__card-meta">
-            <strong>бесплатно</strong>
-            <span>30 минут</span>
-          </div>
-          <p class="approach__card-desc">Покажем демо нашей инфраструктуры. Расскажете контекст бизнеса, обсудим, как это адаптируется под вас.</p>
-          <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="approach__card-link">Записаться →</a>
-        </article>
-
-        <article class="approach__card">
-          <div class="approach__card-step">02 · Разогрев</div>
-          <h3>Диагностика</h3>
-          <div class="approach__card-meta">
-            <strong>25 000 ₽</strong>
-            <span>3–5 дней</span>
-          </div>
-          <p class="approach__card-desc">Аудит вашей операционки. На выходе — карта процессов, 5–7 первых шагов и план на 3 месяца.</p>
-          <a href="diagnostic.html" class="approach__card-link">Подробнее →</a>
-        </article>
-
-        <article class="approach__card is-flagship">
-          <div class="approach__flagship-tag">Флагман</div>
-          <div class="approach__card-step">03 · Спринт</div>
-          <h3>AI Operations Sprint</h3>
-          <p class="approach__card-cap">собираем для вас EDL OS · версия 1.0</p>
-          <div class="approach__card-meta">
-            <strong>от 150 000 ₽</strong>
-            <span>3–4 недели</span>
-          </div>
-          <p class="approach__card-desc">Собираем работающую инфраструктуру: CRM, дашборды, Telegram-бот, AI-помощников. Полный доступ и видео-инструкции для команды.</p>
-          <a href="sprint.html" class="approach__card-link">Подробнее →</a>
-        </article>
-
-        <article class="approach__card">
-          <div class="approach__card-step">04 · После спринта</div>
-          <h3>Поддержка</h3>
-          <div class="approach__card-meta">
-            <strong>от 50 000 ₽/мес</strong>
-            <span>от 3 месяцев</span>
-          </div>
-          <p class="approach__card-desc">Опционально, после спринта. Развитие системы, новые AI-помощники, мониторинг ключевых метрик. Формат и тариф обсуждаем на финальной защите спринта.</p>
-        </article>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============== AUDIENCE ============== -->
-  <section class="audience">
-    <div class="container">
-      <div class="audience__head">
-        <span class="eyebrow">06 · Кому подходит</span>
-        <h2>Это работает, если...</h2>
-        <p>Откройте карточку — увидите реальный кейс.</p>
-      </div>
-
-      <div class="audience__grid">
-
-        <div class="audience__card">
-          <div class="audience__card-title">Бизнес 5+ лет на рынке</div>
-          <p class="audience__card-desc">Вы выжили, доказали продукт, есть постоянные клиенты.</p>
-          <div class="audience__card-example">
-            <strong>Например:</strong>
-            Образовательный продукт с 8 000 учеников и командой 12 человек. Курс работает, выручка стабильная, но фаундер закрывает каждый день в операционке: проверяет CRM, отвечает на заявки, считает выручку вручную.
-          </div>
-        </div>
-
-        <div class="audience__card">
-          <div class="audience__card-title">Выручка 30–100 млн ₽ в год</div>
-          <p class="audience__card-desc">Команда 5+ человек. Уже не «сам всё делаю», но ещё не «у меня операционный директор».</p>
-          <div class="audience__card-example">
-            <strong>Например:</strong>
-            Маркетинговое агентство с 12 сотрудниками и выручкой 60 млн ₽. В этой зоне команда без системы выгорает: 60% задач теряются между руководителем и исполнителями.
-          </div>
-        </div>
-
-        <div class="audience__card">
-          <div class="audience__card-title">Устали от хаоса</div>
-          <p class="audience__card-desc">Не успеваете следить за всем. Команда «разваливается без вас». Аналитика разрознена.</p>
-          <div class="audience__card-example">
-            <strong>Например:</strong>
-            Лиды — в LinkedIn, оплаты — в банке, заявки — в трёх формах, отчёты — ручной экспорт раз в неделю. Никто не знает, кто отвечает за конкретного клиента.
-          </div>
-        </div>
-
-        <div class="audience__card">
-          <div class="audience__card-title">Хотите идти в ногу с AI</div>
-          <p class="audience__card-desc">Тонете в информационном шуме. Хотите интеграцию, а не лекции.</p>
-          <div class="audience__card-example">
-            <strong>Например:</strong>
-            Фаундер прочитал 30 статей про AI, протестировал ChatGPT, n8n и Make. Понял, что инструментов много, никто не скажет, какие подходят — и куда их встраивать.
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============== TEAM ============== -->
-  <section class="team">
-    <div class="container">
-      <div class="team__head">
-        <span class="eyebrow">07 · Команда</span>
-        <h2>Команда EDL</h2>
-        <p>За EDL стоит команда, в которой каждое направление ведёт отдельный руководитель. Это не «фрилансер с подрядчиками», а структурированное агентство с ролями.</p>
-      </div>
-
-      <div class="team__grid">
-
-        <div class="team__card">
-          <div class="team__card-num">01 · Founder</div>
-          <h3>Екатерина Жиганова</h3>
-          <p class="team__card-bio">Основательница. Ведёт стратегию проекта, продуктовую логику и архитектуру решений. Подключается там, где важно увидеть бизнес целиком и собрать систему вокруг коммерческого результата.</p>
-          <ul class="team__card-tags">
-            <li>7+ лет в digital</li>
-            <li>Strategy & Product</li>
-          </ul>
-        </div>
-
-        <div class="team__card">
-          <div class="team__card-num">02 · CMO</div>
-          <h3>Антон Чиков</h3>
-          <p class="team__card-bio">Партнёр и CMO. Отвечает за маркетинговую стратегию, позиционирование и рост. Переводит экспертность и продукт в понятное предложение для рынка.</p>
-          <ul class="team__card-tags">
-            <li>10+ лет в маркетинге</li>
-            <li>Россия и СНГ</li>
-          </ul>
-        </div>
-
-        <div class="team__card">
-          <div class="team__card-num">03 · Growth & Sales</div>
-          <h3>Иван Худяков</h3>
-          <p class="team__card-bio">Head of Growth & Sales. Управляет логикой перехода от спроса к сделке, повторными продажами и ростом LTV. Строит коммерческую систему проекта.</p>
-          <ul class="team__card-tags">
-            <li>9+ лет в B2C/B2B</li>
-            <li>Партнёрские модели</li>
-          </ul>
-        </div>
-
-        <div class="team__card">
-          <div class="team__card-num">04 · AI Lead</div>
-          <h3>Данил Усик</h3>
-          <p class="team__card-bio">AI Solutions Business Lead. Внедряет AI там, где он ускоряет процессы, снижает ручную нагрузку и усиливает коммерческую эффективность.</p>
-          <ul class="team__card-tags">
-            <li>AI для продаж</li>
-            <li>Бизнес-автоматизация</li>
-          </ul>
-        </div>
-
-        <div class="team__card">
-          <div class="team__card-num">05 · SMM & Content</div>
-          <h3>Дарья Шалаева</h3>
-          <p class="team__card-bio">Head of SMM & Content. Ведёт контентную и social-модель команды и клиентских проектов. Выстраивает коммуникацию как часть системы роста.</p>
-          <ul class="team__card-tags">
-            <li>5+ лет в digital</li>
-            <li>Brand voice</li>
-          </ul>
-        </div>
-
-        <div class="team__card">
-          <div class="team__card-num">06 · CFO</div>
-          <h3>Вероника Касаткина</h3>
-          <p class="team__card-bio">International Finance & Jurisdiction Lead. Ведёт международную финансовую связность и юрисдикционную структуру в международном контуре команды.</p>
-          <ul class="team__card-tags">
-            <li>5+ лет в финансах</li>
-            <li>International</li>
-          </ul>
-        </div>
-
-      </div>
-
-      <div class="team__additional">
-        <h3>И команда специалистов</h3>
-        <p>JTBD-исследователи, project- и product-менеджеры, интеграторы, аналитики — которые подключаются на проектах под конкретные задачи. Без штатной нагрузки, без долгого найма.</p>
-      </div>
-
-      <div class="team__clients">
-        <p class="team__clients-title">Клиенты и партнёры</p>
-        <ul class="team__clients-list">
-          <li>Додо Пицца</li>
-          <li>karpov.courses</li>
-          <li>ДОМ.ру</li>
-          <li>Точка банк</li>
-          <li>НИУ ВШЭ</li>
-          <li>ЦИИ СПбГУ</li>
-          <li>Яндекс.Практикум</li>
-          <li>эксперты Т-Банка</li>
-          <li>эксперты Островка</li>
-          <li>и более 20 компаний малого и среднего бизнеса</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============== BOUNDARIES ============== -->
-  <section class="boundaries">
-    <div class="container">
-      <div class="boundaries__head">
-        <span class="eyebrow">08 · Границы</span>
-        <h2>Чего мы не делаем</h2>
-        <p>Мы не пытаемся быть универсальным агентством. Это позволяет нам быть очень хорошими в одном.</p>
-      </div>
-
-      <div class="boundaries__list">
-        <div class="boundaries__item">
-          <span class="boundaries__item-mark">—</span>
-          <div>
-            <h3>Не делаем брендинг и графический дизайн</h3>
-            <p>Это про эстетику. Мы про инфраструктуру.</p>
-          </div>
-        </div>
-        <div class="boundaries__item">
-          <span class="boundaries__item-mark">—</span>
-          <div>
-            <h3>Не запускаем рекламу и трафик</h3>
-            <p>Это другая профессия. Сильную команду по перформансу мы порекомендуем.</p>
-          </div>
-        </div>
-        <div class="boundaries__item">
-          <span class="boundaries__item-mark">—</span>
-          <div>
-            <h3>Не разрабатываем мобильные приложения и backend</h3>
-            <p>Мы работаем на готовых платформах: Google Sheets, Apps Script, Telegram, OpenAI/Anthropic API.</p>
-          </div>
-        </div>
-        <div class="boundaries__item">
-          <span class="boundaries__item-mark">—</span>
-          <div>
-            <h3>Не берёмся без диагностики или серьёзного брифа</h3>
-            <p>Серьёзная работа требует серьёзного входа. Без понимания вашего бизнеса мы не запускаем проект — слишком велик риск собрать «не то».</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============== FAQ ============== -->
-  <section class="faq">
-    <div class="container">
-      <div class="faq__head">
-        <span class="eyebrow">09 · Вопросы</span>
-        <h2>Вопросы, которые нам задают</h2>
-      </div>
-
-      <div class="faq__list">
-
-        <details class="faq__item">
-          <summary class="faq__summary">Сколько на самом деле стоит проект?</summary>
-          <div class="faq__content">
-            <p>Прозрачно по каждому продукту:</p>
-            <div class="faq__pricing">
-              <ul>
-                <li><strong>Демо системы</strong> — <span class="faq__pricing-price">бесплатно</span> · <em>30 минут</em></li>
-                <li><strong>Диагностика</strong> — <span class="faq__pricing-price">25 000 ₽</span> · <em>3–5 дней</em></li>
-                <li><strong>AI Operations Sprint</strong> <em>(флагман)</em> — <span class="faq__pricing-price">от 150 000 ₽</span> · <em>3–4 недели</em></li>
-                <li><strong>Поддержка</strong> <em>(опционально)</em> — <span class="faq__pricing-price">от 50 000 ₽/мес</span> · <em>от 3 месяцев</em></li>
-              </ul>
-              <p>Типовой спринт — <span class="faq__pricing-price">180 000 ₽</span>. До <span class="faq__pricing-price">220 000 ₽</span> при дополнительных требованиях. Всё фиксируется в договоре до старта. Скрытых стоимостей нет.</p>
-            </div>
-          </div>
-        </details>
-
-        <details class="faq__item">
-          <summary class="faq__summary">Что если результат не устроит?</summary>
-          <div class="faq__content">
-            <p>Каждые 7–10 дней мы устраиваем промежуточную защиту с вашим участием. Если на любой из защит видите, что движемся не туда — корректируем направление вместе. Это не формальность для галочки: формат итераций даёт пересобрать архитектуру до того, как закрепили её в системе.</p>
-            <p>Конкретный рост выручки гарантировать не можем — это зависит от того, как ваша команда внедрит систему в работу. Но мы остаёмся рядом минимум 3 месяца в формате поддержки. Не до момента сдачи, а до момента, когда система реально работает без нас.</p>
-          </div>
-        </details>
-
-        <details class="faq__item">
-          <summary class="faq__summary">Почему не сделать то же через ChatGPT?</summary>
-          <div class="faq__content">
-            <p>ChatGPT — инструмент. EDL — методология плюс инструменты. ChatGPT не знает, какие дашборды должны быть в вашем бизнесе, как Telegram-бот должен реагировать на лид, какие AI-помощники нужны вашей команде, где у вас узкие места.</p>
-            <p>Архитектуру и решения принимает команда EDL. AI используется для ускорения рутины — генерации шаблонов, разбора сценариев, написания инструкций. Не для того, чтобы заменить мышление о вашем бизнесе.</p>
-          </div>
-        </details>
-
-        <details class="faq__item">
-          <summary class="faq__summary">Серьёзный продукт за 3–4 недели — это реально?</summary>
-          <div class="faq__content">
-            <p>Реально. Мы не строим систему с нуля — мы собираем дом из готовых модулей, у которых проверена сейсмика. Под ваш фундамент: вашу команду, ваши процессы, ваш продукт.</p>
-            <p>Если бы делали с нуля — это 3–4 месяца. С нашей базой — 3–4 недели. Это не «быстро», это объективный минимум: быстрее — поверхностно, медленнее — фундамент уже стоит, ждать незачем.</p>
-          </div>
-        </details>
-
-        <details class="faq__item">
-          <summary class="faq__summary">А если у нас уже есть подрядчик или штатный продакт?</summary>
-          <div class="faq__content">
-            <p>Здесь два пути.</p>
-            <p><strong>Первый:</strong> независимый аудит за 25 000 ₽. Взгляд со стороны часто полезен — покажем, что у вашего подрядчика работает, что нет, что можно усилить. Не отбираем работу, отдаём документ и расходимся. Дальше решаете вы.</p>
-            <p><strong>Второй:</strong> если решите перестраивать систему — у нас отработанный регламент передачи. Видео-инструкции для каждой роли, документация по архитектуре, один человек в команде клиента становится владельцем системы. Можем работать первый месяц параллельно с действующим подрядчиком — без конфликтов, без перекладывания ответственности.</p>
-          </div>
-        </details>
-
-        <details class="faq__item">
-          <summary class="faq__summary">Сколько времени уходит у клиента на работу с нами?</summary>
-          <div class="faq__content">
-            <p>Реалистично — 4–6 часов в неделю фаундера в течение спринта: два созвона по часу, быстрые ответы в чате, одна финальная защита.</p>
-            <p>Команды клиента — больше: проходят онбординг в систему, получают видео-инструкции, один человек назначается владельцем системы внутри компании. После спринта — минимальная нагрузка: система работает автономно, мы остаёмся рядом для апдейтов.</p>
-          </div>
-        </details>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============== TELEGRAM — слоты под последние посты ============== -->
-  <section class="telegram">
-    <div class="container">
-      <div class="telegram__head">
-        <span class="eyebrow">10 · Канал</span>
-        <h2>Канал в Telegram</h2>
-        <p>Продуктовые наблюдения, кейсы, AI-эксперименты. Без воды.</p>
-      </div>
-
-      <div class="telegram__grid">
-        <!-- ⚠️ ЗАМЕНИ НА АКТУАЛЬНЫЕ ПОСТЫ — обнови ID после "/##" в href и текст в .telegram__card-text -->
-        <a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener" class="telegram__card">
-          <div class="telegram__card-meta">
-            <strong>@elephantdreamscommunity</strong>
-            <span>пост 1</span>
-          </div>
-          <p class="telegram__card-text">Замените этот текст на содержание актуального поста из канала. Обычно подойдёт первое-второе предложение.</p>
-          <span class="telegram__card-link">Читать в Telegram →</span>
-        </a>
-
-        <a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener" class="telegram__card">
-          <div class="telegram__card-meta">
-            <strong>@elephantdreamscommunity</strong>
-            <span>пост 2</span>
-          </div>
-          <p class="telegram__card-text">Замените этот текст на содержание актуального поста из канала.</p>
-          <span class="telegram__card-link">Читать в Telegram →</span>
-        </a>
-
-        <a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener" class="telegram__card">
-          <div class="telegram__card-meta">
-            <strong>@elephantdreamscommunity</strong>
-            <span>пост 3</span>
-          </div>
-          <p class="telegram__card-text">Замените этот текст на содержание актуального поста из канала.</p>
-          <span class="telegram__card-link">Читать в Telegram →</span>
-        </a>
-      </div>
-
-      <div class="telegram__more">
-        <a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener" class="btn btn--ghost">Подписаться на канал →</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============== FINAL CTA — увеличен отступ note ============== -->
-  <section>
-    <div class="final">
-      <div class="final__container">
-        <span class="eyebrow" style="color:var(--accent);">11 · Дальше</span>
-        <h2>Покажем, как это работает у вас</h2>
-        <p>Покажем демо нашей инфраструктуры на обезличенных примерах. Расскажете контекст бизнеса — увидите, как система адаптируется под ваши процессы. Дальше — ваше решение.</p>
-        <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary">Записаться на демо системы</a>
-        <p class="final__note">Обычно отвечаем в течение 2 часов в рабочее время</p>
-      </div>
-    </div>
-  </section>
+<!-- Section 1: Hero -->
+<section class="hero section" id="hero">
+<div class="container hero__grid">
+<div class="hero__content">
+<h1 class="hero__title">Бортовой компьютер для бизнеса</h1>
+<p class="hero__subtitle">EDL OS — Founder OS для SMB-фаундера. Управление в Telegram. AI знает ваши когорты, юнит-экономику и команду.</p>
+<p class="hero__description">В 2026 фаундеру тяжело: налоги выросли, лиды дорожают, AI надо внедрять, без вашего вижна команда не сходится. EDL OS — операционная система которая помогает быть вижнаром, а не операционным менеджером. За 4 недели соберём вашу инфраструктуру.</p>
+<p class="hero__proof">Команда с бэкграундом в Точка / Додо / karpov.courses / ВШЭ / ИТМО. Используем эту систему сами — на демо показываем её вживую.</p>
+<div class="hero__actions">
+<a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary" id="hero-cta">Записаться на демо</a>
+<a href="quiz.html" class="hero__secondary-link">Не готов к демо? Узнайте свой Founder OS Score за 5 минут →</a>
+</div>
+</div>
+<div class="hero__demo">
+<div class="tg-window" id="hero-tg">
+<div class="tg-window__header"><div class="tg-window__avatar">E</div><div><div style="font-weight:600;">EDL OS Bot</div><div style="font-size:0.75rem;opacity:0.7;">онлайн</div></div></div>
+<div class="tg-window__body" id="hero-tg-body">
+<div class="tg-msg" data-delay="0"><strong>EDL OS · Утро · 8:30</strong><div class="tg-msg__time">8:30</div></div>
+<div class="tg-msg" data-delay="800">Выручка вчера: <strong>247k ₽</strong> · <span class="tg-msg__indicator tg-msg__indicator--ok"></span>+12% к норме месяца<div class="tg-msg__time">8:30</div></div>
+<div class="tg-msg" data-delay="1600"><span class="tg-msg__indicator tg-msg__indicator--hot"></span>HOT-сделки в работе: <strong>3</strong><div class="tg-msg__time">8:30</div></div>
+<div class="tg-msg" data-delay="2400"><span class="tg-msg__indicator tg-msg__indicator--warn"></span>Главный риск: Иванов на 800k без касания 28 часов. Открыть карточку?<div class="tg-msg__time">8:31</div></div>
+<div class="tg-msg" data-delay="3200">Хочешь такую сводку для своего бизнеса?<div class="tg-msg__time">8:31</div></div>
+<div class="tg-inline-btns" data-delay="3500">
+<a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="tg-inline-btn tg-inline-btn--primary">Записаться на демо</a>
+<a href="#triggers" class="tg-inline-btn tg-inline-btn--outline">Расскажи подробнее</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Section 2: 5 Triggers -->
+<section class="section" id="triggers">
+<div class="container">
+<div class="section__header"><h2 class="section__title">Если вам знакомо хотя бы 2 из 5</h2><p class="section__subtitle">В 2026 SMB-фаундеру стало тяжелее. Вот 5 болей которые мы решаем.</p></div>
+<div class="triggers__grid">
+
+<div class="card card--interactive trigger-card" data-scroll-to="killer-ai">
+<div class="trigger-card__icon">%</div>
+<h3 class="trigger-card__title">Налоги растут — где оптимизировать?</h3>
+<p class="trigger-card__desc">УСН → ОСН переход для 60M+. НДС изменения. ФОТ +15%. Оптимизация налогов = головная боль фаундера.</p>
+<p class="trigger-card__ai">Спросите бота: «Где у меня вырастут налоги в Q3?» — получите 3-4 легальных варианта оптимизации с risk-assessment</p>
+</div>
+
+<div class="card card--interactive trigger-card" data-scroll-to="killer-ai">
+<div class="trigger-card__icon">📈</div>
+<h3 class="trigger-card__title">Реклама не окупается — какой канал лучший?</h3>
+<p class="trigger-card__desc">Yandex Direct CPM +30-50% YoY. Старые каналы выгорают. Новые — непонятны. Маркетолог тестит — нет результата.</p>
+<p class="trigger-card__ai">Спросите бота: «Какой канал у нас лучший по CPL и LTV?» — получите цифры по 5 каналам с разбором</p>
+</div>
+
+<div class="card card--interactive trigger-card" data-scroll-to="killer-sprint">
+<div class="trigger-card__icon">✦</div>
+<h3 class="trigger-card__title">AI — все говорят, никто не знает с чего начать</h3>
+<p class="trigger-card__desc">Подписался на ChatGPT Pro — не помогло. Подрядчик за $5000 — рискованно. Найм AI-инженера — 250-400k/мес.</p>
+<p class="trigger-card__ai">За 4-недельный Sprint внедряем AI-классификацию лидов, утренние сводки, AI-помощники с понятным ROI 2-3 месяца</p>
+</div>
+
+<div class="card card--interactive trigger-card" data-scroll-to="killer-tg">
+<div class="trigger-card__icon">⚡</div>
+<h3 class="trigger-card__title">Руководители есть. Но без вижна — не работает</h3>
+<p class="trigger-card__desc">6+ key roles. Все умные. Но если фаундер на 2 недели в отпуске — приоритеты разваливаются.</p>
+<p class="trigger-card__ai">AI задаёт вам 5 вопросов раз в неделю. Распределяет focus areas руководителям. Вижн как процесс, не как ручное усилие</p>
+</div>
+
+<div class="card card--interactive trigger-card" data-scroll-to="killer-tg">
+<div class="trigger-card__icon">☀</div>
+<h3 class="trigger-card__title">Выгорание — закрыть бизнес дешевле чем продолжать?</h3>
+<p class="trigger-card__desc">12-14 ч/день. 5-6 ч сна. Семья страдает. Хобби нет. Тренинги по тайм-менеджменту не помогают.</p>
+<p class="trigger-card__ai">Фаундер тратит 4-5 ч/день вместо 12-14. Команда работает в выходные без него. Здоровье восстанавливается</p>
+</div>
+
+</div>
+</div>
+</section>
+
+<!-- Section 3: Live System Proof -->
+<section class="section section--dark live-proof" id="proof">
+<div class="container">
+<div class="section__header"><h2 class="section__title">Сначала собрали себе. Теперь — клиентам.</h2><p class="section__subtitle">Команда EDL управляет работой через эту инфраструктуру. На демо покажем её вживую — реальные сценарии, обезличенные данные.</p></div>
+<div class="live-proof__grid">
+<div class="stat-block"><div class="stat-block__number" data-target="8:30" data-type="time">0</div><div class="stat-block__label">время сводки которое выбирают 80% наших фаундеров</div></div>
+<div class="stat-block"><div class="stat-block__number" data-target="40" data-suffix="%">0</div><div class="stat-block__label">операционных задач уходит из ручного режима в первый месяц</div></div>
+<div class="stat-block"><div class="stat-block__number" data-target="4" data-suffix=" нед">0</div><div class="stat-block__label">объективный минимум сборки рабочей инфраструктуры</div></div>
+</div>
+</div>
+</section>
+
+<!-- Section 4: 4 Killer Features -->
+<section class="section" id="killers">
+<div class="container">
+<div class="section__header"><h2 class="section__title">4 фичи которых нет ни у кого вместе</h2><p class="section__subtitle">Каждая фича существует в индустрии. Но никакая комбинация из 20 проанализированных конкурентов не закрывает все 4 одновременно.</p></div>
+<div class="killers__grid">
+
+<!-- Killer 1: TG Bot -->
+<div class="card killer-card" id="killer-tg">
+<h3 class="killer-card__headline">Управление в Telegram, не в дашборде</h3>
+<p class="killer-card__body">Не «уведомления в Telegram» — а полноценный интерфейс. Утренняя сводка, AI-вопросы, согласование платежей, назначение задач — всё через бот.</p>
+<p class="killer-card__diff">Notion работает через Slack. Битрикс — через свой интерфейс. Telegram — наша территория.</p>
+<div class="killer-card__interactive">
+<div class="tg-command"><span class="tg-command__input">/cash</span><button class="btn btn--primary" style="height:40px;font-size:0.8125rem;padding:0 16px;" id="cmd-cash">Запустить</button></div>
+<div class="tg-response" id="resp-cash"><div class="tg-msg" style="opacity:1;transform:none;max-width:100%;">💰 Cash: <strong>1.4M ₽</strong> · Runway: <strong>4.2 мес</strong> · <span class="tg-msg__indicator tg-msg__indicator--warn"></span>Главный риск — выплата 800k 25 мая. → Открыть Финансист</div></div>
+<div class="tg-command" style="margin-top:12px;"><span class="tg-command__input">/leads</span><button class="btn btn--secondary" style="height:40px;font-size:0.8125rem;padding:0 16px;" id="cmd-leads">Запустить</button></div>
+<div class="tg-response" id="resp-leads"><div class="tg-msg" style="opacity:1;transform:none;max-width:100%;">🔥 HOT: <strong>3</strong>. WARM: 7. COLD: 12. Top-3: Иванов (24ч), Петров (8ч), Сидоров (4ч)</div></div>
+</div>
+</div>
+
+<!-- Killer 2: AI -->
+<div class="card killer-card" id="killer-ai">
+<h3 class="killer-card__headline">AI знает ВАШ бизнес</h3>
+<p class="killer-card__body">Спросите «прогноз runway?» — AI ответит цифрами с разбором. Не общий случай как ChatGPT, не выдумки как Notion AI.</p>
+<p class="killer-card__diff">ChatGPT не знает ваш бизнес. Notion AI не подключён к 1С/amoCRM/Тинькоффу. Мы знаем.</p>
+<div class="killer-card__interactive">
+<div class="ai-suggestions">
+<button class="ai-suggestion-btn" data-answer="runway">Прогноз runway?</button>
+<button class="ai-suggestion-btn" data-answer="margin">Где маржа просела?</button>
+<button class="ai-suggestion-btn" data-answer="hire">Нанимать второго sales?</button>
+</div>
+<div class="ai-response" id="ai-resp-runway">По данным Тинькофф Бизнес + 1С: На <strong>4.2 мес</strong> при текущем burn 580k/мес. Главный риск — выплата подрядчику 800k 25 мая. Если не закроется большой контракт до 20 мая, runway падает до <strong>3.1 мес</strong>. → Открыть Финансист</div>
+<div class="ai-response" id="ai-resp-margin">Месяц к месяцу: маржа <strong>-12%</strong>. Причины: 1) Реклама в Yandex Direct +18% при том же CAC, 2) Зарплата нового продакта +6%, 3) Refund-rate +4%. Рекомендация: пересобрать креативы YD, ускорить onboarding продакта.</div>
+<div class="ai-response" id="ai-resp-hire">По текущему conversion (12%) и CAC (28k): окупится за <strong>2.5 мес</strong> если выйдет на план Ивана за 60 дней. Риск — в Pipeline 8 лидов на одного. Рекомендация: дождитесь 14+ лидов, потом найм.</div>
+</div>
+</div>
+
+<!-- Killer 3: Sprint -->
+<div class="card killer-card" id="killer-sprint">
+<h3 class="killer-card__headline">4 недели → инфраструктура навсегда</h3>
+<p class="killer-card__body">Не консалтинг с уходом. Sprint — это premium onboarding в нашу платформу. После 4 недель: рабочая система + команда обучена + полный доступ + 30 дней поддержки.</p>
+<p class="killer-card__diff">HubSpot onboarding — обучение. Битрикс — вы сами. Мы — собираем под вашу vertical-специфику.</p>
+<div class="sprint-timeline">
+<div class="sprint-step"><div class="sprint-step__check">✓</div><div class="sprint-step__text"><strong>Неделя 1:</strong> Discovery + Architecture</div></div>
+<div class="sprint-step"><div class="sprint-step__check">✓</div><div class="sprint-step__text"><strong>Неделя 2:</strong> Core Build (CRM + Dashboards)</div></div>
+<div class="sprint-step"><div class="sprint-step__check">✓</div><div class="sprint-step__text"><strong>Неделя 3:</strong> AI + Telegram-bot</div></div>
+<div class="sprint-step"><div class="sprint-step__check">✓</div><div class="sprint-step__text"><strong>Неделя 4:</strong> Onboarding команды + Документация</div></div>
+</div>
+<p style="font-size:0.8125rem;color:var(--color-gray-500);margin-top:16px;">Промежуточные защиты каждые 7-10 дней. Если что-то не туда — корректируем вместе.</p>
+</div>
+
+<!-- Killer 4: Methodology -->
+<div class="card killer-card" id="killer-method">
+<h3 class="killer-card__headline">7+ лет опыта Точка / Додо / karpov / ВШЭ / ИТМО</h3>
+<p class="killer-card__body">4-слойная архитектура + ритм бизнеса + AI = единая система. Не «документ как у Notion» и не «методология как у Cameron Herold». Методология воплощённая в продукт.</p>
+<p class="killer-card__diff">Like Centre продаёт курс. Cameron Herold — книгу. Мы — методология которая уже работает в продукте.</p>
+<div class="layers-stack">
+<div class="layer-item"><div class="num-badge">01</div><div class="layer-item__text"><h4>Входы</h4><p class="layer-item__sub">Лиды и сигналы со всех каналов</p></div></div>
+<div class="layer-arrow">↓</div>
+<div class="layer-item"><div class="num-badge">02</div><div class="layer-item__text"><h4>Обработчик</h4><p class="layer-item__sub">HOT/WARM/COLD · скоринг · маршрутизация</p></div></div>
+<div class="layer-arrow">↓</div>
+<div class="layer-item"><div class="num-badge">03</div><div class="layer-item__text"><h4>CRM</h4><p class="layer-item__sub">Сделки · pipeline · статусы · next action</p></div></div>
+<div class="layer-arrow">↓</div>
+<div class="layer-item"><div class="num-badge">04</div><div class="layer-item__text"><h4>Интерфейс</h4><p class="layer-item__sub">Утренняя сводка · push · мобильный дашборд</p></div></div>
+<div class="layer-arrow">↓</div>
+<div class="layer-item layer-item--highlight"><div class="num-badge">05</div><div class="layer-item__text"><h4>Вы (фаундер)</h4><p class="layer-item__sub">Решения · приоритеты · видение продукта</p></div></div>
+</div>
+</div>
+
+</div>
+</div>
+</section>
+
+<!-- Section 5: AI Examples -->
+<section class="section section--gray" id="ai-examples">
+<div class="container">
+<div class="section__header"><h2 class="section__title">AI знает контекст вашего бизнеса</h2><p class="section__subtitle">3 типа вопросов которые наш AI закрывает. Подключён к ВАШИМ данным: CRM, финансы, команда, маркетинг.</p></div>
+<div class="tabs" role="tablist">
+<button class="tab-btn is-active" role="tab" data-tab="ai-finance" aria-selected="true">Финансовые</button>
+<button class="tab-btn" role="tab" data-tab="ai-team" aria-selected="false">Командные</button>
+<button class="tab-btn" role="tab" data-tab="ai-strategy" aria-selected="false">Стратегические</button>
+</div>
+<div class="ai-examples__content">
+<div class="tab-panel is-active" id="ai-finance" role="tabpanel">
+<div class="qa-block"><p class="qa-block__q">«Прогноз runway?»</p><p class="qa-block__a">На 4.2 мес при текущем burn 580k/мес. Главный риск — выплата подрядчику 800k 25 мая. Если не закроется контракт до 20 мая, runway 3.1 мес.</p></div>
+<div class="qa-block"><p class="qa-block__q">«Где у меня деньги утекают?»</p><p class="qa-block__a">3 контракта без авансов = -180k кэша до конца месяца. Реклама в LinkedIn ×2 от плана при том же CAC. Зарплата +12% — новый дизайнер.</p></div>
+<div class="qa-block"><p class="qa-block__q">«Стоит ли поднять цену Sprint?»</p><p class="qa-block__a">5 закрытых сделок за 60 дней. 0 отказов на этапе цены. Pipeline: 4 лида с бюджетом ≥250k. Рекомендация: поднять до 220k для новых клиентов с июня.</p></div>
+</div>
+<div class="tab-panel" id="ai-team" role="tabpanel">
+<div class="qa-block"><p class="qa-block__q">«Кто из руководителей перегружен?»</p><p class="qa-block__a">Антон (CMO) — 38 задач без сроков, нагрузка ×1.4 от плана. Иван (Sales) — 12 непрочитанных лидов >24ч. Никита (Junior) — нагрузка 60% (есть резерв).</p></div>
+<div class="qa-block"><p class="qa-block__q">«Антон жалуется на нагрузку — справедливо?»</p><p class="qa-block__a">11 активных задач, средний срок 4.2 дня (норма 3). 3 проекта параллельно, один внутренний. Рекомендация: отложить внутренний контент, нанять 0.5 копирайтера.</p></div>
+<div class="qa-block"><p class="qa-block__q">«Когда касались партнёра ИТМО?»</p><p class="qa-block__a">28 апреля, разговор с Иваном. Был запрос на партнёрский курс. Никто не вернулся. → Назначить follow-up?</p></div>
+</div>
+<div class="tab-panel" id="ai-strategy" role="tabpanel">
+<div class="qa-block"><p class="qa-block__q">«Какая retention 30 дней по последнему потоку?»</p><p class="qa-block__a">78% retention D30, 62% D60. Худший урок — Урок 4 (drop 18%). Гипотеза: задание слишком сложное.</p></div>
+<div class="qa-block"><p class="qa-block__q">«Какой канал лидов лучший в апреле?»</p><p class="qa-block__a">Telegram-партнёрки CPL 3500, conversion 14%. Рекомендации Ивана CPL 0, conversion 38%. LinkedIn outbound CPL 0, conversion 8%.</p></div>
+<div class="qa-block"><p class="qa-block__q">«Где у нас CAC растёт?»</p><p class="qa-block__a">За 30 дней: CAC через сайт +18% (с 24k до 28k). Причина — conversion на демо упал с 14% до 11%. Гипотеза: качество лидов упало.</p></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Section 6: Methodology -->
+<section class="section" id="method">
+<div class="container">
+<div class="section__header"><h2 class="section__title">Метод</h2><p class="section__subtitle">Не пишем код с нуля. У нас есть проверенная архитектура, которую кастомизируем под ваши процессы, продукт и команду.</p></div>
+<div class="method-layers">
+<div class="layers-stack">
+<div class="layer-item"><div class="num-badge">01</div><div class="layer-item__text"><h4>Входы</h4><p class="layer-item__sub">Лиды и сигналы со всех каналов</p><p style="font-size:0.8125rem;color:var(--color-gray-500);font-style:italic;margin-top:4px;">Всё, что приходит — попадает в одно место. Никаких потерянных лидов.</p></div></div>
+<div class="layer-arrow">↓</div>
+<div class="layer-item"><div class="num-badge">02</div><div class="layer-item__text"><h4>Обработчик</h4><p class="layer-item__sub">HOT/WARM/COLD · валидация · авто-приоритизация</p><p style="font-size:0.8125rem;color:var(--color-gray-500);font-style:italic;margin-top:4px;">Каждый сигнал получает приоритет автоматически.</p></div></div>
+<div class="layer-arrow">↓</div>
+<div class="layer-item"><div class="num-badge">03</div><div class="layer-item__text"><h4>CRM</h4><p class="layer-item__sub">Сделки · pipeline · статусы · lead score · next action</p><p style="font-size:0.8125rem;color:var(--color-gray-500);font-style:italic;margin-top:4px;">Один источник правды для всей команды.</p></div></div>
+<div class="layer-arrow">↓</div>
+<div class="layer-item"><div class="num-badge">04</div><div class="layer-item__text"><h4>Интерфейс</h4><p class="layer-item__sub">Утренняя сводка · push на HOT · мобильный дашборд · фокус дня</p><p style="font-size:0.8125rem;color:var(--color-gray-500);font-style:italic;margin-top:4px;">Бизнес — в одном экране каждое утро.</p></div></div>
+<div class="layer-arrow">↓</div>
+<div class="layer-item layer-item--highlight"><div class="num-badge">05</div><div class="layer-item__text"><h4>Вы (фаундер)</h4><p class="layer-item__sub">Решения · приоритеты · направление · видение продукта</p><p style="font-size:0.8125rem;color:var(--color-gray-500);font-style:italic;margin-top:4px;">AI и команда EDL — на остальном. Вы остаётесь у руля.</p></div></div>
+</div>
+</div>
+<h3 style="margin-bottom:24px;">Ритм бизнеса</h3>
+<div class="rhythm-grid">
+<div class="card rhythm-card"><div class="rhythm-card__icon">⚡</div><h4 class="rhythm-card__title">День</h4><ul class="rhythm-card__list"><li>8:30 сводка</li><li>Фокус дня</li><li>Push HOT-лидов</li></ul></div>
+<div class="card rhythm-card"><div class="rhythm-card__icon">📅</div><h4 class="rhythm-card__title">Неделя</h4><ul class="rhythm-card__list"><li>Пн план команды</li><li>Ср мини-ретро</li><li>Пт сводка</li></ul></div>
+<div class="card rhythm-card"><div class="rhythm-card__icon">📊</div><h4 class="rhythm-card__title">Месяц</h4><ul class="rhythm-card__list"><li>Пересмотр ICP</li><li>Закрытие финансов с AI</li><li>Анализ воронки</li></ul></div>
+<div class="card rhythm-card"><div class="rhythm-card__icon">🎯</div><h4 class="rhythm-card__title">Квартал</h4><ul class="rhythm-card__list"><li>Стратегический обзор</li><li>Конкурентный анализ</li><li>Roadmap пересмотр</li></ul></div>
+</div>
+</div>
+</section>
+
+<!-- Section 7: Battle -->
+<section class="section section--gray" id="battle">
+<div class="container">
+<div class="section__header"><h2 class="section__title">У нас уже Х. Зачем EDL?</h2><p class="section__subtitle">Мы не заменяем — дополняем. EDL OS интегрируется поверх вашего стека.</p></div>
+<div class="tabs" role="tablist">
+<button class="tab-btn is-active" role="tab" data-tab="battle-bitrix" aria-selected="true">Битрикс24 / amoCRM</button>
+<button class="tab-btn" role="tab" data-tab="battle-notion" aria-selected="false">Notion + Notion AI</button>
+<button class="tab-btn" role="tab" data-tab="battle-chatgpt" aria-selected="false">ChatGPT / самостоятельно</button>
+</div>
+<div class="battle__content">
+<div class="tab-panel is-active" id="battle-bitrix" role="tabpanel">
+<h3 class="battle-panel__headline">Битрикс — для отдела. EDL — для фаундера.</h3>
+<ul class="battle-panel__points">
+<li>Битрикс знает что делать менеджеру. EDL знает что делать вам.</li>
+<li>Битрикс — операционная CRM. EDL — пульт ВЫШЕ CRM.</li>
+<li>EDL интегрируется с Битриксом через API за 2 дня. Все данные остаются у вас.</li>
+</ul>
+<p class="battle-panel__confidence">Через API мы читаем из Битрикса лиды и сделки. Битрикс остаётся для отдела продаж, EDL — для вас.</p>
+</div>
+<div class="tab-panel" id="battle-notion" role="tabpanel">
+<h3 class="battle-panel__headline">Notion — документ. EDL — пульт.</h3>
+<ul class="battle-panel__points">
+<li>Notion ждёт что вы напишете. EDL приходит в TG в 8:30 с 3 цифрами.</li>
+<li>Notion AI Agents 2026 умеют много, но НЕ подключены к 1С/amoCRM/Битрикс/Тинькоффу.</li>
+<li>Notion остаётся source of truth. EDL добавляет автоматизацию + AI + Telegram.</li>
+</ul>
+<p class="battle-panel__confidence">Notion 3.3 + Custom Agents — мощный инструмент. Но в РФ-стэке Notion структурно не работает. EDL подключён ко всему.</p>
+</div>
+<div class="tab-panel" id="battle-chatgpt" role="tabpanel">
+<h3 class="battle-panel__headline">ChatGPT — инструмент. EDL — методология плюс инструменты.</h3>
+<ul class="battle-panel__points">
+<li>ChatGPT не знает контекст вашего бизнеса. Каждый раз вкидываете данные руками.</li>
+<li>Архитектуру нельзя спросить у GPT. EDL — это команда + методология + инструменты.</li>
+<li>ChatGPT собирает текст. EDL собирает работающий бизнес.</li>
+</ul>
+<p class="battle-panel__confidence">Excel + ChatGPT работают первые 2 недели. Потом обновлять некому. EDL обновляется автоматически.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Section 8: Cases -->
+<section class="section" id="cases">
+<div class="container">
+<div class="section__header"><h2 class="section__title">Как это работает у других</h2><p class="section__subtitle">3 ролевых кейса — реалистичные истории для иллюстрации. Реальные кейсы появятся после первого бета-клиента в мае 2026.</p></div>
+<div class="cases__grid">
+<div class="card case-card">
+<span class="case-card__tag">B2C Education</span>
+<h3 class="case-card__title">Школа цифровых профессий</h3>
+<p>12 000 учеников · 4 курса · 18 человек · ~80M ₽/год</p>
+<h5>Было</h5><ul><li>Фаундер тратил 12 ч/нед на сводки</li><li>Retention D30 = 64%</li><li>Приоритеты разваливались без фаундера</li></ul>
+<h5>Сделали</h5><ul><li>Sprint 4 недели</li><li>Геткурс + Битрикс + Тинькофф</li><li>AI cohort-analysis + TG-бот</li></ul>
+<h5>Стало</h5><ul><li>Время на операционку: <span class="case-card__result-num">3 ч/нед (-75%)</span></li><li>Retention D30: <span class="case-card__result-num">78% (+14 п.п.)</span></li><li>NPS: <span class="case-card__result-num">+12 пунктов</span></li></ul>
+</div>
+<div class="card case-card">
+<span class="case-card__tag">B2B Education</span>
+<h3 class="case-card__title">Корпоративная school AI Engineer</h3>
+<p>1 500 платящих · 8 человек · ~120M ₽/год</p>
+<h5>Было</h5><ul><li>Терял enterprise-контракты 100k+</li><li>Sales-цикл 30+ дней</li><li>Не понимал с чего начать AI</li></ul>
+<h5>Сделали</h5><ul><li>Sprint под B2B-сценарий</li><li>Sales CRM enterprise-pipeline</li><li>AI-классификация лидов</li></ul>
+<h5>Стало</h5><ul><li>Conversion: <span class="case-card__result-num">8% → 23% (+187%)</span></li><li>Отклик на лид: <span class="case-card__result-num">36ч → 2ч</span></li><li>Sales-цикл: <span class="case-card__result-num">32 → 21 день</span></li></ul>
+</div>
+<div class="card case-card">
+<span class="case-card__tag">Professional Services</span>
+<h3 class="case-card__title">Юридическая консалтинговая</h3>
+<p>12 юристов · 18 человек · ~95M ₽/год</p>
+<h5>Было</h5><ul><li>Project-margin не считали</li><li>Renewals контрактов терялись</li><li>8 ч/нед на админ-вопросы</li></ul>
+<h5>Сделали</h5><ul><li>Sprint с Pack #2</li><li>Project-margin analytics</li><li>Renewal management</li></ul>
+<h5>Стало</h5><ul><li>Маржа: <span class="case-card__result-num">+18%</span></li><li>Renewals: <span class="case-card__result-num">+40%</span></li><li>Время на админ: <span class="case-card__result-num">8 → 2 ч/нед</span></li></ul>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Section 9: Team -->
+<section class="section" id="team">
+<div class="container">
+<div class="section__header"><h2 class="section__title">Команда</h2><p class="section__subtitle">6 ключевых ролей. У каждого — реальный опыт. Бэкграунд: Точка / Додо / karpov / ВШЭ / ИТМО / ДОМ.ру.</p></div>
+<div class="team__grid">
+<div class="team-card"><div class="team-card__photo">ЕЖ</div><div><div class="team-card__name">Екатерина Жиганова</div><div class="team-card__role">Founder, Strategy</div><p class="team-card__bg">7+ лет: Точка банк, Додо Пицца, ДОМ.ру. Преподаватель ВШЭ + ИТМО. Партнёрство karpov.courses.</p></div></div>
+<div class="team-card"><div class="team-card__photo">АЧ</div><div><div class="team-card__name">Антон Чиков</div><div class="team-card__role">CMO</div><p class="team-card__bg">10+ лет digital-маркетинг, РФ + СНГ. SaaS, B2B, performance.</p></div></div>
+<div class="team-card"><div class="team-card__photo">ИХ</div><div><div class="team-card__name">Иван Худяков</div><div class="team-card__role">Head of Growth & Sales</div><p class="team-card__bg">9+ лет B2C/B2B-продажи. Enterprise-сделки, длинные циклы.</p></div></div>
+<div class="team-card"><div class="team-card__photo">ДУ</div><div><div class="team-card__name">Данил Усик</div><div class="team-card__role">AI Solutions Business Lead</div><p class="team-card__bg">AI-архитектор, ML-engineer. Prompt engineering, LLM, RAG-pipelines.</p></div></div>
+<div class="team-card"><div class="team-card__photo">ДШ</div><div><div class="team-card__name">Дарья Шалаева</div><div class="team-card__role">Head of SMM & Content</div><p class="team-card__bg">5+ лет SMM и контент-маркетинг. B2B-контент, edtech partnerships.</p></div></div>
+<div class="team-card"><div class="team-card__photo">ВК</div><div><div class="team-card__name">Вероника Касаткина</div><div class="team-card__role">International Finance & Jurisdiction</div><p class="team-card__bg">Финансовый менеджер. Налоги РФ + Кипр + Дубай, легальная оптимизация.</p></div></div>
+</div>
+<h3 style="margin-bottom:16px;">Кто доверяет</h3>
+<div class="clients-list">
+<span class="clients-list__item">Додо Пицца</span><span class="clients-list__sep"></span>
+<span class="clients-list__item">karpov.courses</span><span class="clients-list__sep"></span>
+<span class="clients-list__item">ДОМ.ру</span><span class="clients-list__sep"></span>
+<span class="clients-list__item">Точка банк</span><span class="clients-list__sep"></span>
+<span class="clients-list__item">НИУ ВШЭ</span><span class="clients-list__sep"></span>
+<span class="clients-list__item">ЦИИ СПбГУ</span><span class="clients-list__sep"></span>
+<span class="clients-list__item">Яндекс.Практикум</span><span class="clients-list__sep"></span>
+<span class="clients-list__item">+ 20 SMB-компаний</span>
+</div>
+</div>
+</section>
+
+<!-- Section 10: Pricing -->
+<section class="section section--gray" id="pricing">
+<div class="container">
+<div class="section__header"><h2 class="section__title">Цены и формат работы</h2><p class="section__subtitle">Прозрачные цены до демо. Без «уточняем по запросу».</p></div>
+<div class="pricing__grid">
+<div class="card price-card"><div class="price-card__name">Демо системы</div><div class="price-card__price">Бесплатно</div><div class="price-card__duration">30 минут</div><p class="price-card__desc">Показываем нашу инфраструктуру вживую, обсуждаем ваши боли.</p><a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary" style="width:100%;">Записаться на демо</a></div>
+<div class="card price-card"><div class="price-card__name">Diagnostic</div><div class="price-card__price">25 000 ₽</div><div class="price-card__duration">3-5 дней</div><p class="price-card__desc">Глубокое интервью, карта бизнеса, 5-7 быстрых побед, roadmap.</p><a href="diagnostic.html" class="btn btn--secondary" style="width:100%;">Узнать больше</a></div>
+<div class="card price-card"><div class="price-card__name">AI Operations Sprint</div><div class="price-card__price">от 150 000 ₽</div><div class="price-card__duration">3-4 недели</div><p class="price-card__desc">Полная сборка: CRM, дашборды, TG-бот, AI-помощники, обучение команды.</p><a href="sprint.html" class="btn btn--secondary" style="width:100%;">Узнать больше</a></div>
+<div class="card price-card"><div class="price-card__name">Growth Plan</div><div class="price-card__price">от 50 000 ₽/мес</div><div class="price-card__duration">минимум 3 месяца</div><p class="price-card__desc">Поддержка, развитие, новые AI-промпты, подключение vertical-фич.</p><a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--secondary" style="width:100%;">Обсудить на демо</a></div>
+</div>
+<div style="background:var(--color-white);border-radius:16px;padding:32px;"><h3 style="margin-bottom:16px;">Это не для всех. Мы НЕ делаем:</h3>
+<ul class="not-do__list">
+<li>Не пишем код с нуля. Используем готовую архитектуру + кастомизируем</li>
+<li>Не работаем с микро-бизнесом до 5 человек. Минимальная окупаемость — от 5+</li>
+<li>Не гарантируем рост выручки в %. Гарантируем сроки и артефакты</li>
+<li>Не делаем мобильные приложения и комплексные back-end системы</li>
+<li>Не работаем с теми, кому «нужно ещё вчера». Минимум 3 недели — объективно</li>
+</ul></div>
+</div>
+</section>
+
+<!-- Section 11: FAQ -->
+<section class="section" id="faq">
+<div class="container">
+<div class="section__header"><h2 class="section__title">Часто спрашивают</h2></div>
+<div class="faq-list">
+<div class="faq-item is-open"><button class="faq-item__q" aria-expanded="true">Чем вы отличаетесь от Битрикс24 / amoCRM / Notion?<span class="faq-item__icon">+</span></button><div class="faq-item__a"><p>Битрикс — для отдела продаж. Notion — для документов. EDL OS — пульт фаундера ВЫШЕ вашего стека. Мы интегрируемся с Битриксом и Notion через API, не заменяем.</p></div></div>
+<div class="faq-item"><button class="faq-item__q" aria-expanded="false">Сколько это стоит на самом деле?<span class="faq-item__icon">+</span></button><div class="faq-item__a"><p>Sprint от 150 000 ₽ (3-4 недели). Growth Plan от 50 000 ₽/мес (минимум 3 мес). Diagnostic 25 000 ₽. Демо бесплатно.</p></div></div>
+<div class="faq-item"><button class="faq-item__q" aria-expanded="false">Какие гарантии?<span class="faq-item__icon">+</span></button><div class="faq-item__a"><p>Гарантируем сроки, артефакты, защиты каждые 7-10 дней. 30 дней пост-Sprint поддержки бесплатно.</p></div></div>
+<div class="faq-item"><button class="faq-item__q" aria-expanded="false">Как быстро получим первые результаты?<span class="faq-item__icon">+</span></button><div class="faq-item__a"><p>Первая утренняя сводка — на 7-10 день. Полная инфраструктура — после 3-4 недель. Видимые изменения — через 4-6 недель после Sprint.</p></div></div>
+<div class="faq-item"><button class="faq-item__q" aria-expanded="false">Какие у вас интеграции?<span class="faq-item__icon">+</span></button><div class="faq-item__a"><p>amoCRM, Битрикс24, Геткурс, Платформа, Антитренинги, Тинькофф, Сбер, Альфа, Точка, 1С, Telegram, Calendly, Apps Script. Custom — обсудим на демо.</p></div></div>
+<div class="faq-item"><button class="faq-item__q" aria-expanded="false">У нас уже есть продакт / аналитик. Не лишние ли вы?<span class="faq-item__icon">+</span></button><div class="faq-item__a"><p>Не лишние. Мы не заменяем команду — даём ей пульт. Аналитик получает дашборды, продакт — AI-помощников. Команда становится продуктивнее.</p></div></div>
+<div class="faq-item"><button class="faq-item__q" aria-expanded="false">Безопасно ли передавать вам данные?<span class="faq-item__icon">+</span></button><div class="faq-item__a"><p>Все данные на ВАШЕЙ инфраструктуре. Мы получаем доступ только на время Sprint. NDA стандартно. Your data, your control.</p></div></div>
+<div class="faq-item"><button class="faq-item__q" aria-expanded="false">Что после Sprint?<span class="faq-item__icon">+</span></button><div class="faq-item__a"><p>30 дней бесплатной поддержки. Дальше — Growth Plan от 50k/мес или вы сами развиваете (полный доступ). При переходе на SaaS (Q3 2026) — grandfather pricing навсегда.</p></div></div>
+</div>
+</div>
+</section>
+
+<!-- Final CTA -->
+<section class="section section--dark final-cta">
+<div class="container">
+<h2 class="final-cta__title">Готовы быть вижнаром, а не операционкой?</h2>
+<p class="final-cta__subtitle">30 минут демо · бесплатно · без обязательств</p>
+<div class="final-cta__actions">
+<a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary">Записаться на демо</a>
+<a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener" class="btn btn--dark">Не готов? Telegram-канал EDL — методология, кейсы, AI-промпты</a>
+</div>
+</div>
+</section>
 
 </main>
 
-<!-- ============== FOOTER ============== -->
-<footer class="site-footer">
-  <div class="site-footer__inner">
-    <div class="site-footer__grid">
-      <div class="site-footer__brand-col">
-        <div class="site-footer__brand">EDL</div>
-        <p class="site-footer__about">Elephant Dreams Lab. Собираем фаундерам операционную систему бизнеса. Чтобы было прозрачно. Чтобы можно было управлять с одного экрана.</p>
-      </div>
-
-      <div class="site-footer__col">
-        <h4>Услуги</h4>
-        <ul>
-          <li><a href="sprint.html">AI Operations Sprint</a></li>
-          <li><a href="diagnostic.html">Диагностика</a></li>
-          <li><a href="sprint.html#growth">Growth Plan</a></li>
-        </ul>
-      </div>
-
-      <div class="site-footer__col">
-        <h4>Компания</h4>
-        <ul>
-          <li><a href="#approach">Подход</a></li>
-          <li><a href="#method">Наша система</a></li>
-          <li><a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener">Канал в Telegram</a></li>
-        </ul>
-      </div>
-
-      <div class="site-footer__col">
-        <h4>Контакты</h4>
-        <ul>
-          <li><a href="https://t.me/evzhiganova8888" target="_blank" rel="noopener">Telegram</a></li>
-          <li><a href="mailto:hello@elephantdreams.ru">hello@elephantdreams.ru</a></li>
-          <li><a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener">Calendly</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="site-footer__bottom">
-      <span>© 2026, Elephant Dreams Lab</span>
-      <div class="site-footer__bottom-lang">
-        <a href="/">RU</a>
-        <span>·</span>
-        <a href="/en/">EN</a>
-      </div>
-    </div>
-  </div>
+<!-- Footer -->
+<footer class="footer">
+<div class="container">
+<div class="footer__grid">
+<div><div class="footer__brand-name">EDL OS</div><p class="footer__brand-desc">Founder OS for SMB</p></div>
+<div><div class="footer__col-title">Услуги</div><ul class="footer__links"><li><a href="sprint.html">Sprint</a></li><li><a href="diagnostic.html">Diagnostic</a></li><li><a href="#pricing">Growth Plan</a></li></ul></div>
+<div><div class="footer__col-title">Компания</div><ul class="footer__links"><li><a href="#team">Команда</a></li><li><a href="#method">Метод</a></li><li><a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener">Telegram-канал</a></li></ul></div>
+<div><div class="footer__col-title">Контакты</div><ul class="footer__links"><li><a href="https://t.me/evzhiganova8888" target="_blank" rel="noopener">Telegram</a></li><li><a href="mailto:info@elephantdreams.ru">Email</a></li><li><a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener">Calendly</a></li></ul></div>
+</div>
+<div class="footer__bottom"><span>© 2026 Elephant Dreams Lab</span><div><a href="legal/privacy.html">Privacy</a> · <a href="legal/terms.html">Terms</a></div></div>
+</div>
 </footer>
 
-<script src="clock.js" defer></script>
+<script src="js/main.js" defer></script>
 </body>
 </html>
