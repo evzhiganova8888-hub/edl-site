@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Бизнес-чекап за 9 000 ₽ · EDL OS</title>
+  <meta name="description" content="Карта вашего бизнеса за 48 часов. 30 минут звонка + ИИ-разбор по 4 слоям + персональное видео от Кати. Возврат в 14 дней.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/main-v2.css">
+  <script>
+    (function(){
+      const ENDPOINT = window.EDL_ANALYTICS_ENDPOINT || null;
+      const buffer = JSON.parse(localStorage.getItem('edl_events') || '[]');
+      function track(event, payload) {
+        const data = {
+          event: event,
+          timestamp: new Date().toISOString(),
+          page: document.body.dataset.page || 'audit',
+          segment: document.body.dataset.segmentActive || 'services',
+          referrer: document.referrer,
+          ...payload
+        };
+        buffer.push(data);
+        if (ENDPOINT) flush(); else localStorage.setItem('edl_events', JSON.stringify(buffer));
+      }
+      function flush() {
+        if (!ENDPOINT || !buffer.length) return;
+        fetch(ENDPOINT, {method:'POST', body:JSON.stringify(buffer), keepalive:true}).catch(console.error);
+        buffer.length = 0;
+        localStorage.removeItem('edl_events');
+      }
+      window.EDLTrack = track;
+      window.addEventListener('beforeunload', flush);
+      window.addEventListener('DOMContentLoaded', () => track('page_view', {}));
+    })();
+  </script>
+</head>
+<body data-page="audit">
+
+  <!-- Header -->
+  <header class="header" id="header" style="background:var(--color-white); border-bottom:1px solid var(--color-gray-200);">
+    <div class="container header__inner" style="display:flex; justify-content:space-between; align-items:center;">
+      <a href="/" class="header__logo" style="font-weight:700; color:var(--color-gray-900); text-decoration:none;">EDL OS</a>
+      <a href="/" style="font-size:0.875rem; color:var(--color-gray-500); text-decoration:none;">← На главную</a>
+    </div>
+  </header>
+
+  <!-- Sticky Mobile CTA -->
+  <div class="sticky-cta" id="sticky-cta">
+    <button class="btn btn--primary open-checkout" data-cta-type="audit_checkout" data-cta-location="sticky">Купить за 9 000 ₽</button>
+  </div>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="audit-hero section">
+      <div class="container" style="max-width:800px; margin:0 auto; text-align:center;">
+        <div class="hero__badge">Возврат денег в течение 14 дней</div>
+        <h1 class="audit-hero__title" style="font-size:clamp(2.5rem, 5vw, 4rem); line-height:1.1;">Бизнес-чекап за 9 000 ₽.</h1>
+        <h2 class="audit-hero__subtitle">Карта вашего бизнеса за 48 часов.</h2>
+        <p class="audit-hero__desc">30 минут звонка + ИИ-разбор по 4 слоям + персональное видео от Кати.<br>3 quick-wins на эту неделю и 90-дневный roadmap.</p>
+        
+        <!-- Video Placeholder -->
+        <div style="margin-bottom:48px;">
+          <div class="video-placeholder" id="audit-video-container">
+            <div class="video-placeholder__icon">🎥</div>
+            <div class="video-placeholder__text">Снимаем 23 мая, обновим на этой странице</div>
+          </div>
+        </div>
+        
+        <button class="btn btn--primary open-checkout" style="font-size:1.125rem; padding:16px 32px;" data-cta-type="audit_checkout" data-cta-location="hero">Купить за 9 000 ₽</button>
+      </div>
+    </section>
+
+    <!-- Bundle -->
+    <section class="section">
+      <div class="container" style="max-width:800px; margin:0 auto;">
+        <h2 class="section__title" style="margin-bottom:32px;">Что вы получите через 48 часов</h2>
+        <div class="bundle-grid">
+          <div style="display:flex; gap:16px; align-items:flex-start;">
+            <div style="color:var(--color-tangerine); font-size:1.5rem;">📞</div>
+            <div>
+              <h4 style="font-weight:600; margin-bottom:8px;">Звонок 30 минут</h4>
+              <p style="color:var(--color-gray-500); font-size:0.875rem;">С Иваном или Катей. Собираем фактуру и боли.</p>
+            </div>
+          </div>
+          <div style="display:flex; gap:16px; align-items:flex-start;">
+            <div style="color:var(--color-tangerine); font-size:1.5rem;">📄</div>
+            <div>
+              <h4 style="font-weight:600; margin-bottom:8px;">PDF-отчёт на 5-7 страниц</h4>
+              <p style="color:var(--color-gray-500); font-size:0.875rem;">Founder OS Audit. ИИ-разбор вашей экономики.</p>
+            </div>
+          </div>
+          <div style="display:flex; gap:16px; align-items:flex-start;">
+            <div style="color:var(--color-tangerine); font-size:1.5rem;">🌐</div>
+            <div>
+              <h4 style="font-weight:600; margin-bottom:8px;">HTML-интерактив</h4>
+              <p style="color:var(--color-gray-500); font-size:0.875rem;">Личная страница, живёт навсегда. Через 90 дней — re-audit.</p>
+            </div>
+          </div>
+          <div style="display:flex; gap:16px; align-items:flex-start;">
+            <div style="color:var(--color-tangerine); font-size:1.5rem;">🎬</div>
+            <div>
+              <h4 style="font-weight:600; margin-bottom:8px;">Видео от Кати</h4>
+              <p style="color:var(--color-gray-500); font-size:0.875rem;">1-минутное персональное видео с главным выводом.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 Layers -->
+    <section class="section section--gray">
+      <div class="container" style="max-width:800px; margin:0 auto;">
+        <h2 class="section__title" style="margin-bottom:32px;">Как проходит разбор — 4 слоя</h2>
+        <div class="layers-grid">
+          <div class="layer-card">
+            <h3 class="layer-card__name">Vision</h3>
+            <p class="layer-card__desc">Стратегия на 3 года. 3 ключевые ставки на 2026. Что НЕ будете делать.</p>
+          </div>
+          <div class="layer-card">
+            <h3 class="layer-card__name">Sales</h3>
+            <p class="layer-card__desc">Где живёт pipeline. Конверсии. Кто закрывает.</p>
+          </div>
+          <div class="layer-card">
+            <h3 class="layer-card__name">Delivery</h3>
+            <p class="layer-card__desc">Нагрузка команды. Маржа по проектам. Узкое горлышко.</p>
+          </div>
+          <div class="layer-card">
+            <h3 class="layer-card__name">Finance</h3>
+            <p class="layer-card__desc">Runway. Маржа. Что изменилось с НДС 2026.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Guarantee -->
+    <section class="section">
+      <div class="container" style="max-width:800px; margin:0 auto;">
+        <div class="guarantee-block">
+          <h3 class="guarantee-block__title">Гарантия возврата 14 дней</h3>
+          <p class="guarantee-block__text">Если за 14 дней после получения bundle вы не получили 3 конкретных действия для своего бизнеса — мы вернём 9 000 ₽ без вопросов. Просто напишите в Telegram.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section">
+      <div class="container" style="max-width:800px; margin:0 auto;">
+        <h2 class="section__title">Частые вопросы</h2>
+        <div class="faq-list">
+          <details class="faq-item" data-faq-id="1">
+            <summary class="faq-summary">Чем Audit отличается от Diagnostic за 25 000 ₽?</summary>
+            <div class="faq-content"><p>Audit — это взгляд снаружи (30 минут разговора). Diagnostic — это погружение внутрь, команда заходит в ваши данные на 3-5 дней.</p></div>
+          </details>
+          <details class="faq-item" data-faq-id="2">
+            <summary class="faq-summary">Когда я увижу bundle?</summary>
+            <div class="faq-content"><p>В течение 48 часов после звонка-интервью.</p></div>
+          </details>
+          <details class="faq-item" data-faq-id="3">
+            <summary class="faq-summary">Что если я не founder, а CFO/COO?</summary>
+            <div class="faq-content"><p>Методология подходит для C-level, если вы принимаете стратегические решения. Мы адаптируем фокус отчёта.</p></div>
+          </details>
+          <details class="faq-item" data-faq-id="4">
+            <summary class="faq-summary">Что если у меня несколько юр.лиц в разных юрисдикциях?</summary>
+            <div class="faq-content"><p>Анализируем бизнес как консолидированную сущность, вне зависимости от юридической структуры.</p></div>
+          </details>
+          <details class="faq-item" data-faq-id="5">
+            <summary class="faq-summary">Куда деваются мои данные после Audit?</summary>
+            <div class="faq-content"><p>Мы не запрашиваем доступы к вашим системам на этапе Audit (всё со слов на звонке). Любая фактура удаляется по первому требованию. NDA.</p></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="section section--dark">
+      <div class="container" style="text-align:center;">
+        <h2 class="section__title" style="color:#fff; margin-bottom:48px;">Готовы увидеть карту своего бизнеса?</h2>
+        <button class="btn btn--primary open-checkout" data-cta-type="audit_checkout" data-cta-location="final" style="font-size:1.125rem; padding:16px 32px;">Купить Бизнес-чекап за 9 000 ₽ · возврат в 14 дней</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Checkout Modal -->
+  <div class="checkout-modal" id="checkout-modal">
+    <div class="checkout-modal__content">
+      <button class="checkout-modal__close" id="close-modal">×</button>
+      <h3 class="checkout-modal__title">Подтверждение заказа · Бизнес-чекап за 9 000 ₽</h3>
+      <p class="checkout-modal__text">Чтобы оформить чекап, нажмите кнопку ниже — откроется Telegram. Напишите Ивану «Хочу Audit», он отправит вам инвойс и забронирует звонок в течение часа.</p>
+      <a href="https://t.me/lvanKhudyakov?text=%D0%A5%D0%BE%D1%87%D1%83%20Audit" target="_blank" class="btn btn--primary" id="telegram-checkout" data-cta-type="telegram_pay" style="width:100%; margin-bottom:16px;">Открыть Telegram → @lvanKhudyakov</a>
+      <div style="font-weight:600; color:var(--color-tangerine); margin-bottom:8px;">Возврат в 14 дней без вопросов.</div>
+      <div class="checkout-modal__details">
+        • Оплата по СБП или картой РФ — Иван пришлёт ссылку на оплату<br>
+        • Чек закрывает наша ИП-бухгалтерия — получите чек на почту<br>
+        • Все звонки, отчёты, видео — после подтверждения оплаты
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer" style="background:#fff; border-top:1px solid #e4e4e7; padding:24px 0; text-align:center;">
+    <div class="container" style="color:#9ca3af; font-size:0.875rem;">
+      © 2026 EDL OS · Elephant Dreams Lab · Все права защищены
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Sticky CTA
+      const stickyCta = document.getElementById('sticky-cta');
+      if (stickyCta) {
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+          if (scrollTimeout) cancelAnimationFrame(scrollTimeout);
+          scrollTimeout = requestAnimationFrame(() => {
+            if (window.scrollY > 300) {
+              stickyCta.classList.add('is-visible');
+            } else {
+              stickyCta.classList.remove('is-visible');
+            }
+          });
+        });
+      }
+
+      // Modal
+      const modal = document.getElementById('checkout-modal');
+      const openBtns = document.querySelectorAll('.open-checkout');
+      const closeBtn = document.getElementById('close-modal');
+      const tgCheckout = document.getElementById('telegram-checkout');
+
+      openBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          modal.classList.add('is-open');
+          window.EDLTrack && window.EDLTrack('audit_checkout_opened', {});
+        });
+      });
+
+      closeBtn.addEventListener('click', () => {
+        modal.classList.remove('is-open');
+      });
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('is-open');
+      });
+
+      tgCheckout.addEventListener('click', () => {
+        window.EDLTrack && window.EDLTrack('audit_telegram_clicked', {});
+      });
+
+      // FAQ Tracking
+      document.querySelectorAll('details.faq-item').forEach(faq => {
+        faq.addEventListener('toggle', () => {
+          if (faq.open) {
+            window.EDLTrack && window.EDLTrack('faq_opened', {faq_id: faq.getAttribute('data-faq-id')});
+          }
+        });
+      });
+      
+      // Track page views
+      window.EDLTrack && window.EDLTrack('audit_page_viewed', {});
+    });
+  </script>
+</body>
+</html>

@@ -1,1007 +1,563 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EDL OS — Founder OS для SMB-фаундера</title>
-  <meta name="description"
-    content="EDL OS — операционная система для фаундера малого и среднего бизнеса. Управление в Telegram. AI знает ваши когорты, юнит-экономику и команду.">
-  <meta property="og:title" content="EDL OS — Founder OS для SMB-фаундера">
-  <meta property="og:description"
-    content="Бортовой компьютер для бизнеса. За 4 недели соберём CRM, дашборды, Telegram-бот и AI на ВАШИ данные.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://elephantdreams.ru/">
-  <link rel="canonical" href="https://elephantdreams.ru/">
+  <title>EDL OS — Бортовой компьютер для бизнеса</title>
+  <meta name="description" content="EDL OS — Founder OS нового поколения. Все цифры, риски и решения вашего бизнеса — в одном месте. Утром в Telegram.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload"
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-    as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript>
-    <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  </noscript>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/main.css">
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "EDL OS",
-  "operatingSystem": "Web, Telegram",
-  "applicationCategory": "BusinessApplication",
-  "offers": {
-    "@type": "Offer",
-    "price": "150000",
-    "priceCurrency": "RUB"
-  },
-  "description": "Founder OS для малого и среднего бизнеса. Управление в Telegram, AI-дашборды, аналитика."
-}
-</script>
+  <link rel="stylesheet" href="css/main-v2.css">
+  <!-- Analytics tracking script (Inline buffer as per TZ) -->
+  <script>
+    (function(){
+      const ENDPOINT = window.EDL_ANALYTICS_ENDPOINT || null;
+      const buffer = JSON.parse(localStorage.getItem('edl_events') || '[]');
+      function track(event, payload) {
+        const data = {
+          event: event,
+          timestamp: new Date().toISOString(),
+          page: document.body.dataset.page || 'home',
+          segment: document.body.dataset.segmentActive || 'services',
+          referrer: document.referrer,
+          ...payload
+        };
+        buffer.push(data);
+        if (ENDPOINT) flush(); else localStorage.setItem('edl_events', JSON.stringify(buffer));
+      }
+      function flush() {
+        if (!ENDPOINT || !buffer.length) return;
+        fetch(ENDPOINT, {method:'POST', body:JSON.stringify(buffer), keepalive:true}).catch(console.error);
+        buffer.length = 0;
+        localStorage.removeItem('edl_events');
+      }
+      window.EDLTrack = track;
+      window.addEventListener('beforeunload', flush);
+      window.addEventListener('DOMContentLoaded', () => track('page_view', {}));
+    })();
+  </script>
 </head>
-
-<body>
-  <a href="#main" class="skip-link">Перейти к содержимому</a>
+<body data-page="home" data-segment-active="services">
 
   <!-- Header -->
   <header class="header" id="header">
-    <div class="container header__inner">
-      <a href="/" class="header__logo"><span class="header__logo-dot"></span> EDL OS</a>
-      <nav class="header__nav">
-        <div class="header__nav-links">
-          <a href="#triggers">Проблемы</a>
-          <a href="#killers">Система</a>
-          <a href="#method">Методология</a>
-          <a href="#pricing">Цены</a>
-          <a href="#faq">FAQ</a>
-        </div>
-        <a href="#" class="btn btn--primary header__cta calendly-trigger" data-event="click_demo_header"
-          style="height:40px;font-size:0.875rem;padding:0 20px;">Демо</a>
-        <button class="header__burger" aria-label="Меню" aria-expanded="false" aria-controls="mobile-nav"
-          id="burger"><span></span><span></span><span></span></button>
+    <div class="container header__inner" style="display:flex; justify-content:space-between; align-items:center;">
+      <a href="/" class="header__logo" style="font-weight:700; color:var(--color-gray-900); text-decoration:none;">EDL OS</a>
+      <nav class="header__nav" style="display:none;">
+        <a href="#method">Метод</a>
+        <a href="#cases">Кейсы</a>
+        <a href="#pricing">Цены</a>
+        <a href="#faq">FAQ</a>
+        <a href="#team">Команда</a>
       </nav>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <a href="https://t.me/edl_os" target="_blank" class="btn btn--outline" style="padding:8px 12px; border-radius:100px; display:flex; gap:6px; font-size:14px; text-decoration:none;">
+          <span>✈️</span> Канал
+        </a>
+        <button class="header__burger" aria-label="Меню" id="burger" style="background:none; border:none; font-size:24px; cursor:pointer;">☰</button>
+      </div>
     </div>
   </header>
 
-  <nav class="mobile-nav" id="mobile-nav">
-    <a href="#triggers" onclick="closeMobileNav()">Проблемы</a>
-    <a href="#killers" onclick="closeMobileNav()">Система</a>
-    <a href="#method" onclick="closeMobileNav()">Методология</a>
-    <a href="#pricing" onclick="closeMobileNav()">Цены</a>
-    <a href="#faq" onclick="closeMobileNav()">FAQ</a>
-    <a href="#" class="btn btn--primary calendly-trigger" data-event="click_demo_mobile_nav"
-      onclick="closeMobileNav()">Записаться на демо</a>
-  </nav>
+  <!-- Mobile sticky CTA -->
+  <div class="sticky-cta" id="sticky-cta">
+    <a href="audit.html" class="btn btn--primary" data-cta-type="audit" data-cta-location="sticky">Бизнес-чекап 9 000 ₽</a>
+  </div>
 
   <main id="main">
-
-    <!-- Section 1: Hero -->
-    <section class="hero section" id="hero">
+    <!-- Hero -->
+    <section class="hero section" id="hero" style="padding-top:100px;">
       <div class="container hero__grid">
         <div class="hero__content">
-          <h1 class="hero__title">Бортовой компьютер для бизнеса</h1>
-          <p class="hero__subtitle">EDL OS — Операционная система для собственников бизнеса. Управление в Telegram. AI знает ваши когорты,
-            маржу и команду.</p>
-          <div class="hero__description">EDL OS помогает быть стратегом, а не операционным менеджером. Мы закроем ваши основные боли за 4 недели:
-            <ul style="margin-top:12px; display:flex; flex-direction:column; gap:8px; list-style:none; padding:0; text-align:left;">
-              <li><span style="color:var(--color-tangerine); font-weight:bold;">✓</span> <strong>Хаос в процессах:</strong> команда не сходится без вашего ручного управления.</li>
-              <li><span style="color:var(--color-tangerine); font-weight:bold;">✓</span> <strong>Слепые зоны:</strong> экономика и маржа считаются с опозданием.</li>
-              <li><span style="color:var(--color-tangerine); font-weight:bold;">✓</span> <strong>AI-тренд:</strong> нужно внедрять нейросети, но непонятно с чего начать.</li>
-            </ul>
+          <h1 class="hero__title" style="font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 24px;">Бортовой компьютер для бизнеса.<br><span style="color:var(--color-tangerine)">EDL OS — Founder OS нового поколения.</span></h1>
+          <p class="hero__subtitle" style="font-size: 1.25rem; color: var(--color-gray-700); margin-bottom: 32px; line-height: 1.5;">Все цифры, риски и решения вашего бизнеса — в одном месте. Утром в Telegram. Без дашбордов, без новых паролей, без IT-отдела.</p>
+          <ul class="hero__bullets">
+            <li><strong>Знайте</strong> реальную экономику — прибыль, остаток денег, прогноз — каждое утро в Telegram.</li>
+            <li><strong>Считайте</strong> то, что раньше было на ощупь — ИИ анализирует ваши данные, не чужие.</li>
+            <li><strong>Решайте</strong> быстрее — система подсвечивает риски и отклонения до того, как они станут дорогими.</li>
+          </ul>
+          <div class="hero__badge">Работает в Telegram. Собирается за 4 недели. Все данные остаются у вас.</div>
+          <div style="display:flex; gap:16px; margin-top:24px; flex-wrap:wrap; align-items:center;">
+            <a href="audit.html" class="btn btn--primary" data-cta-type="audit" data-cta-location="hero">Купить Бизнес-чекап за 9 000 ₽ · возврат в 14 дней</a>
+            <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" class="btn btn--outline" data-cta-type="demo" data-cta-location="hero">Бесплатное демо · 30 минут</a>
           </div>
-          <p class="hero__proof">Команда с бэкграундом в Точка / Додо / karpov.courses / ВШЭ / ИТМО. Используем эту
-            систему сами — на демо показываем её вживую.</p>
-          <div class="hero__actions">
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <a href="#" class="btn btn--primary calendly-trigger" data-event="click_demo_hero"
-                id="hero-cta">Записаться на демо</a>
-              <span style="font-size:0.75rem;color:var(--color-gray-500);text-align:center;">30 минут, покажем на ваших
-                данных. Без спама.</span>
-            </div>
-            <a href="quiz.html" class="hero__secondary-link" data-event="click_quiz_hero">Не готов к демо? Узнайте свой
-              Founder OS Score за 5 минут →</a>
-          </div>
+          <div class="hero__cta-note">48 часов от оплаты до bundle. PDF + HTML + 1-минутное видео от Кати лично.</div>
         </div>
+
+        <!-- Right Side: ICP Switcher & TG Widget -->
         <div class="hero__demo">
-          <div class="hero__phone-mockup">
-            <div class="hero__floating-widget hero__floating-widget--1">
-              <span class="widget-icon">1C</span> Синхронизировано ✓
+          <div style="background:var(--color-gray-50); padding:24px; border-radius:16px; border:1px solid var(--color-gray-200);">
+            <div class="icp-switcher">
+              <span class="icp-switcher__label">Покажите для:</span>
+              <button class="icp-btn is-active" data-segment-switch="services">Услуги</button>
+              <button class="icp-btn" data-segment-switch="manufacturing">Производство</button>
+              <button class="icp-btn" data-segment-switch="marketplace">Маркетплейс-сервис</button>
             </div>
-            <div class="hero__floating-widget hero__floating-widget--2">
-              <span class="widget-icon" style="color:#00bceb;">Битрикс24</span> Упорядочено ✓
-            </div>
-            <div class="hero__floating-widget hero__floating-widget--3">
-              <span class="widget-icon" style="color:#0F9D58;">Google Sheets</span> Заменено ✓
-            </div>
-            <div class="hero__floating-widget hero__floating-widget--4">
-              <span class="widget-icon" style="color:#0f2e53;">amoCRM</span> Подключено ✓
-            </div>
-            <div class="tg-window" id="hero-tg">
-              <div class="tg-window__header">
-                <div class="tg-window__avatar">E</div>
-                <div>
-                  <div style="font-weight:600;">EDL OS Bot</div>
-                  <div class="tg-online-status">онлайн</div>
-                </div>
+            <div class="tg-window" style="background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.05); overflow:hidden;">
+              <div class="tg-window__header" style="background:#f4f4f5; padding:12px; border-bottom:1px solid #e4e4e7; display:flex; align-items:center; gap:12px;">
+                <div style="width:36px; height:36px; background:var(--color-tangerine); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">E</div>
+                <div><div style="font-weight:600; font-size:14px;">EDL OS Bot</div><div style="font-size:12px; color:#10b981;">онлайн</div></div>
               </div>
-              <div class="tg-window__body" id="hero-tg-body">
-                <div class="tg-msg" data-delay="0"><strong>EDL OS · Утро · 8:30</strong>
-                  <div class="tg-msg__time">8:30</div>
+              <div class="tg-window__body" style="padding:16px;">
+                <div data-segment="services">
+                  <p style="font-size:14px; margin:0 0 8px;">Маржа по проектам апреля: <strong>-2.1 п.п.</strong> к плану. Убыточные: 3 из 24. Главный — клиент Z.</p>
+                  <p style="font-size:14px; margin:0 0 8px;">🔥 HOT-сделки: Петров (1.2М) без касания 28ч — открыть?</p>
+                  <p style="font-size:14px; color:#6b7280; margin:0;">Сегодня: 2 защиты, 1 КП на согласовании.</p>
                 </div>
-                <div class="tg-msg" data-delay="800">Выручка вчера: <strong>247k ₽</strong> · <span
-                    class="tg-msg__indicator tg-msg__indicator--ok"></span>+12% к норме месяца<div class="tg-msg__time">
-                    8:30</div>
+                <div data-segment="manufacturing">
+                  <p style="font-size:14px; margin:0 0 8px;">Контракт ООО «Стройбаза» 1.2М — отгрузка завтра, аванс не пришёл (6 дней).</p>
+                  <p style="font-size:14px; margin:0 0 8px;">Прибыль по контрактам: <strong>3 из 17</strong> ниже порога после НДС.</p>
+                  <p style="font-size:14px; color:#6b7280; margin:0;">Рекомендация: пересмотр цен на 3 контрактах.</p>
                 </div>
-                <div class="tg-msg" data-delay="1600"><span
-                    class="tg-msg__indicator tg-msg__indicator--hot"></span>HOT-сделки в работе: <strong>3</strong>
-                  <div class="tg-msg__time">8:30</div>
+                <div data-segment="marketplace">
+                  <p style="font-size:14px; margin:0 0 8px;">Новых заявок сегодня: <strong>47</strong> (+25% к норме пятницы).</p>
+                  <p style="font-size:14px; margin:0 0 8px;">🔥 HOT: 4 продавца >5М/мес — ответить сегодня.</p>
+                  <p style="font-size:14px; color:#6b7280; margin:0;">Бот отфильтровал 89 мусорных. Команда: Алина перегружена ×1.4. Прибыльность клиентов Q1: топ-3 дают 40% выручки.</p>
                 </div>
-                <div class="tg-msg" data-delay="2400"><span
-                    class="tg-msg__indicator tg-msg__indicator--warn"></span>Главный риск: Иванов на 800k без касания 28
-                  часов. Открыть карточку?<div class="tg-msg__time">8:31</div>
-                </div>
-                <div class="tg-msg" data-delay="3200">Хочешь такую сводку для своего бизнеса?<div class="tg-msg__time">
-                    8:31</div>
-                </div>
-                <div class="tg-inline-btns" data-delay="3500">
-                  <a href="#" class="tg-inline-btn tg-inline-btn--primary calendly-trigger"
-                    data-event="click_demo_tg_bot">Записаться на демо</a>
-                  <a href="#triggers" class="tg-inline-btn tg-inline-btn--outline"
-                    data-event="click_details_tg_bot">Расскажи подробнее</a>
-                </div>
+                <a href="audit.html" class="micro-cta" data-cta-type="audit" data-cta-location="tg_widget">Хочу такую сводку → Купить Audit 9 000 ₽</a>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-
-    <!-- Fast-Track Triage (JTBD) -->
-    <section class="section section--gray" id="fast-track">
-      <div class="container">
-        <div class="section__header" style="text-align:center; max-width:800px; margin:0 auto 40px;">
-          <h2 class="section__title">Узнайте за 30 секунд, как EDL OS решит ваши задачи</h2>
-          <p class="section__subtitle" style="margin: 0 auto;">Выберите то, что отнимает у вас время прямо сейчас, и получите готовый план решения.</p>
-        </div>
-        <div class="fast-track__container">
-          <div class="fast-track__toggles">
-            <label class="jtbd-toggle"><input type="checkbox" value="reports" data-event="jtbd_toggle_reports"> <span
-                class="jtbd-toggle__text">Трачу >10ч в неделю на сбор отчетов</span></label>
-            <label class="jtbd-toggle"><input type="checkbox" value="margin" data-event="jtbd_toggle_margin"> <span
-                class="jtbd-toggle__text">Сложно считать экономику и маржу</span></label>
-            <label class="jtbd-toggle"><input type="checkbox" value="leads" data-event="jtbd_toggle_leads"> <span
-                class="jtbd-toggle__text">Теряем лидов из-за медленной реакции</span></label>
-            <label class="jtbd-toggle"><input type="checkbox" value="focus" data-event="jtbd_toggle_focus"> <span
-                class="jtbd-toggle__text">Команда теряет фокус без моего участия</span></label>
-            <label class="jtbd-toggle"><input type="checkbox" value="scale" data-event="jtbd_toggle_scale"> <span
-                class="jtbd-toggle__text">Уперлись в потолок: масштабироваться без хаоса не получается</span></label>
-          </div>
-          <div class="fast-track__result">
-            <h3 style="margin-bottom: 16px;">План решения</h3>
-            <div id="ft-solution"
-              style="min-height: 60px; font-weight: 500; margin-bottom: 16px; color: var(--color-tangerine);">Отметьте чекбоксы слева, чтобы увидеть, какую инфраструктуру мы соберем под ваши задачи.</div>
-            <div class="ft-meta"
-              style="font-size:0.875rem; color:var(--color-gray-700); display:flex; flex-direction:column; gap:8px;">
-              <div><strong>Формат:</strong> <span id="ft-time">Выбор за вами</span></div>
-              <div><strong>Бюджет:</strong> <span id="ft-budget">рассчитывается...</span></div>
-            </div>
-            <a href="https://t.me/edl_os_bot" target="_blank" rel="noopener" class="btn btn--primary"
-              style="width:100%;margin-top:24px;" data-event="click_ft_tg">Обсудить этот план в Telegram</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 2: 6 Triggers -->
-    <section class="section" id="triggers">
+    <!-- What EDL Shows (4 cards) -->
+    <section class="section section--gray" id="triggers">
       <div class="container">
         <div class="section__header">
-          <h2 class="section__title">Если вам знакомо хотя бы 2 из 6</h2>
-          <p class="section__subtitle">В 2026 руководителю стало тяжелее. Вот 6 болей, которые мы слышим каждый день от основателей бизнеса.</p>
+          <h2 class="section__title">Что вы будете видеть утром в Telegram</h2>
+          <p class="section__subtitle">Не нужно заходить в 10 систем. EDL собирает всё в одну выжимку.</p>
         </div>
-        <div class="triggers-grid">
-          <div class="trigger-card">
-            <div class="trigger-card__icon">📉</div>
-            <div class="trigger-card__title">Прибыль только на бумаге</div>
-            <div class="trigger-card__content"><strong>Реальность:</strong> «По отчетам мы в плюсе, а на счетах кассовый разрыв. Постоянно ждем оплат, чтобы закрыть зарплаты.»</div>
+        <div class="edl-cards__grid">
+          <div class="edl-card" data-card-id="1">
+            <div class="edl-card__icon">📊</div>
+            <h3 class="edl-card__title">НДС и новые налоги</h3>
+            <p class="edl-card__context">С 2026 — НДС 22%, антидробление, новые отчёты. Цены поднял — клиенты ушли. Не поднял — съело прибыль.</p>
+            <p class="edl-card__shows"><strong>EDL показывает</strong> реальную прибыль по каждому контракту после НДС. Видно, где маржа просела и какие 3 контракта пересмотреть первыми.</p>
           </div>
-          <div class="trigger-card">
-            <div class="trigger-card__icon">💸</div>
-            <div class="trigger-card__title">Слив маркетинга</div>
-            <div class="trigger-card__content"><strong>Реальность:</strong> «Рекламный бюджет растет, а продажники жалуются, что "лиды мусорные". Кто виноват — непонятно.»</div>
+          <div class="edl-card" data-card-id="2">
+            <div class="edl-card__icon">🧩</div>
+            <h3 class="edl-card__title">10 систем без связи</h3>
+            <p class="edl-card__context">CRM отдельно, таблицы отдельно, 1С отдельно. Цельной картины нет нигде.</p>
+            <p class="edl-card__shows"><strong>EDL собирает</strong> данные из ваших систем в одну сводку. Вместо 10 вкладок — 1 сообщение в Telegram утром.</p>
           </div>
-          <div class="trigger-card">
-            <div class="trigger-card__icon">🧩</div>
-            <div class="trigger-card__title">Зоопарк сервисов</div>
-            <div class="trigger-card__content"><strong>Реальность:</strong> «Пытались внедрить Битрикс и CRM, но в итоге вся работа всё равно идет в хаосе Telegram-чатов.»</div>
+          <div class="edl-card" data-card-id="3">
+            <div class="edl-card__icon">📉</div>
+            <h3 class="edl-card__title">Прибыль на бумаге</h3>
+            <p class="edl-card__context">В отчёте плюс, на счёте — кассовый разрыв. Понять, где просела прибыль — на ощущениях.</p>
+            <p class="edl-card__shows"><strong>EDL прогнозирует</strong> прогноз остатка денег на 30/60/90 дней. Кассовый разрыв виден за 3 недели до того, как случится.</p>
           </div>
-          <div class="trigger-card">
-            <div class="trigger-card__icon">⚡</div>
-            <div class="trigger-card__title">Ручное управление</div>
-            <div class="trigger-card__content"><strong>Реальность:</strong> «Команда работает, только когда я их "пинаю". Уехал в отпуск на неделю — процессы встали.»</div>
-          </div>
-          <div class="trigger-card">
-            <div class="trigger-card__icon">☀️</div>
-            <div class="trigger-card__title">Стеклянный потолок</div>
-            <div class="trigger-card__content"><strong>Реальность:</strong> «Мы наняли больше людей, работаем больше часов, но чистая прибыль почему-то не растет.»</div>
-          </div>
-          <div class="trigger-card">
-            <div class="trigger-card__icon">🔥</div>
-            <div class="trigger-card__title">Я — узкое горлышко</div>
-            <div class="trigger-card__content"><strong>Реальность:</strong> «Я сам стал главным тормозом компании. Все решения завязаны на мне, я тону в микроменеджменте.»</div>
-          </div>
-        </div>
-        <div class="trigger-hint">Нажмите на карточку, чтобы узнать больше ↓</div>
-      </div>
-    </section>
-
-    <!-- Section 3: Live System Proof -->
-    <section class="section section--dark live-proof" id="proof">
-      <div class="container">
-        <div class="section__header">
-          <h2 class="section__title">Сначала собрали себе. Теперь — клиентам.</h2>
-          <p class="section__subtitle">Команда EDL управляет работой через эту инфраструктуру. На демо покажем её вживую
-            — реальные сценарии, обезличенные данные.</p>
-        </div>
-        <div class="live-proof__grid">
-          <div class="stat-block">
-            <div class="stat-block__number" data-target="8:30" data-type="time">0</div>
-            <div class="stat-block__label">время сводки которое выбирают 80% наших фаундеров</div>
-          </div>
-          <div class="stat-block">
-            <div class="stat-block__number" data-target="40" data-suffix="%">0</div>
-            <div class="stat-block__label">операционных задач уходит из ручного режима в первый месяц</div>
-          </div>
-          <div class="stat-block">
-            <div class="stat-block__number" data-target="4" data-suffix=" нед">0</div>
-            <div class="stat-block__label">объективный минимум сборки рабочей инфраструктуры</div>
+          <div class="edl-card" data-card-id="4" data-segment="all">
+            <div data-segment="services manufacturing">
+              <div class="edl-card__icon">⚡</div>
+              <h3 class="edl-card__title">ИИ-гонка</h3>
+              <p class="edl-card__context">Все говорят «внедряй ИИ». Но ChatGPT не подключён к вашим данным и не знает ваш бизнес.</p>
+              <p class="edl-card__shows"><strong>EDL покажет:</strong> ИИ, подключённый к ВАШИМ данным. Спрашиваете на русском языке — получаете ответ про свой бизнес, не «вообще».</p>
+            </div>
+            <div data-segment="marketplace">
+              <div class="edl-card__icon">🔥</div>
+              <h3 class="edl-card__title">Команда не тянет масштабирование</h3>
+              <p class="edl-card__context">Джуны уходят за полгода. Нанять сильного дорого. Операционка живёт на 6 джунах с текучкой 30-50%.</p>
+              <p class="edl-card__shows"><strong>EDL показывает</strong> нагрузку по сотрудникам. Автоматизирует рутину, освобождает 2-3 часа в день на каждого.</p>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Section 4: 4 Killer Features -->
-    <section class="section" id="killers">
+    <!-- Battle Block -->
+    <section class="section" id="battle">
       <div class="container">
-        <div class="section__header">
-          <h2 class="section__title">4 системных инструмента, которые редко работают вместе</h2>
-          <p class="section__subtitle">Каждый инструмент существует в индустрии отдельно. Но мы собрали их в единую операционную систему.</p>
+        <div class="section__header" style="max-width: 800px; margin: 0 auto 48px; text-align: center;">
+          <h2 class="section__title">У вас уже 10 инструментов.<br>EDL OS — точка сборки</h2>
+          <p class="section__subtitle" style="max-width: 100%;">Мы не заменяем ваши системы — собираем из них пульт управления для владельца. Если вашего стека нет в списке — интегрируемся через API за 2-5 дней.</p>
         </div>
-        <div class="killers__grid">
-
-          <!-- Killer 1: TG Bot -->
-          <div class="card killer-card" id="killer-tg">
-            <h3 class="killer-card__headline">Управление в Telegram, не в дашборде</h3>
-            <p class="killer-card__body">Не «уведомления в Telegram» — а полноценный интерфейс. Утренняя сводка,
-              AI-вопросы, согласование платежей, назначение задач — всё через бот.</p>
-            <p class="killer-card__diff">Notion работает через Slack. Битрикс — через свой интерфейс. Telegram — наша
-              территория.</p>
-            <div class="killer-card__interactive">
-              <div class="tg-command"><span class="tg-command__input">/cash</span><button class="btn btn--primary"
-                  style="height:40px;font-size:0.8125rem;padding:0 16px;" id="cmd-cash"
-                  data-event="cmd_cash">Запустить</button></div>
-              <div class="tg-response" id="resp-cash">
-                <div class="tg-msg" style="opacity:1;transform:none;max-width:100%;">💰 Cash: <strong>1.4M ₽</strong> ·
-                  Runway: <strong>4.2 мес</strong> · <span
-                    class="tg-msg__indicator tg-msg__indicator--warn"></span>Главный риск — выплата 800k 25 мая. →
-                  Открыть Финансист</div>
-              </div>
-              <div class="tg-command" style="margin-top:12px;"><span class="tg-command__input">/leads</span><button
-                  class="btn btn--secondary" style="height:40px;font-size:0.8125rem;padding:0 16px;" id="cmd-leads"
-                  data-event="cmd_leads">Запустить</button></div>
-              <div class="tg-response" id="resp-leads">
-                <div class="tg-msg" style="opacity:1;transform:none;max-width:100%;">🔥 HOT: <strong>3</strong>. WARM:
-                  7. COLD: 12. Top-3: Иванов (24ч), Петров (8ч), Сидоров (4ч)</div>
+        <div class="battle-tabs">
+          <div class="tabs" style="display:flex; gap:16px; margin-bottom:32px; justify-content:center; flex-wrap:wrap;">
+            <button class="btn btn--outline active" data-battle-tab="1c" style="border-radius:100px;">1С / Бухгалтерия</button>
+            <button class="btn btn--outline" data-battle-tab="crm" style="border-radius:100px;">Битрикс-24 / amoCRM</button>
+            <button class="btn btn--outline" data-battle-tab="notion" style="border-radius:100px;">Яндекс.Вики / Notion</button>
+            <button class="btn btn--outline" data-battle-tab="chatgpt" style="border-radius:100px;">ChatGPT / YandexGPT</button>
+          </div>
+          <div class="tab-panels">
+            <div class="tab-panel active" id="tab-1c" data-battle-tab-content="1c">
+              <button class="battle-accordion-trigger">1С / Бухгалтерия</button>
+              <div class="battle-accordion-content">
+                <div style="background:var(--color-gray-50); padding:32px; border-radius:16px; text-align:center;">
+                  <h3 style="font-size:1.5rem; margin-bottom:16px;">Бухгалтер знает учёт. EDL показывает экономику бизнеса.</h3>
+                  <p style="color:var(--color-gray-700); max-width:600px; margin:0 auto; line-height:1.6;">Все данные остаются у вас. EDL не имеет доступа к налоговой отчётности и не передаёт ничего третьим сторонам. Показывает прибыль, остаток и прогноз в реальном времени.</p>
+                </div>
               </div>
             </div>
-          </div>
-
-          <!-- Killer 2: AI -->
-          <div class="card killer-card" id="killer-ai">
-            <h3 class="killer-card__headline">AI знает ВАШ бизнес</h3>
-            <p class="killer-card__body">Спросите «прогноз runway?» — AI ответит цифрами с разбором. Не общий случай как
-              ChatGPT, не выдумки как Notion AI.</p>
-            <p class="killer-card__diff">ChatGPT не знает ваш бизнес. Notion AI не подключён к 1С/amoCRM/Тинькоффу. Мы
-              знаем.</p>
-            <div class="killer-card__interactive">
-              <div class="ai-suggestions">
-                <button class="ai-suggestion-btn" data-answer="runway">Запас денег (runway)?</button>
-                <button class="ai-suggestion-btn" data-answer="margin">Где маржа просела?</button>
-                <button class="ai-suggestion-btn" data-answer="hire">Нанимать второго sales?</button>
-              </div>
-              <div class="ai-response" id="ai-resp-runway">По данным Тинькофф Бизнес + 1С: На <strong>4.2 мес</strong>
-                при текущих расходах 580k/мес. Главный риск — выплата подрядчику 800k 25 мая. Если не закроется большой
-                контракт до 20 мая, запас денег падает до <strong>3.1 мес</strong>. → Открыть Финансист</div>
-              <div class="ai-response" id="ai-resp-margin">Месяц к месяцу: маржа <strong>-12%</strong>. Причины: 1)
-                Реклама в Yandex Direct +18% при том же CAC, 2) Зарплата нового продакта +6%, 3) Доля возвратов +4%.
-                Рекомендация: пересобрать креативы YD, ускорить адаптацию продакта.</div>
-              <div class="ai-response" id="ai-resp-hire">По текущей конверсии (12%) и стоимости привлечения (28k): окупится за
-                <strong>2.5 мес</strong> если выйдет на план Ивана за 60 дней. Риск — в Pipeline 8 лидов на одного.
-                Рекомендация: дождитесь 14+ лидов, потом найм.
+            <div class="tab-panel" id="tab-crm" data-battle-tab-content="crm">
+              <button class="battle-accordion-trigger">Битрикс-24 / amoCRM</button>
+              <div class="battle-accordion-content">
+                <div style="background:var(--color-gray-50); padding:32px; border-radius:16px; text-align:center;">
+                  <h3 style="font-size:1.5rem; margin-bottom:16px;">CRM для менеджера. EDL — для владельца.</h3>
+                  <p style="color:var(--color-gray-700); max-width:600px; margin:0 auto; line-height:1.6;">Не заменяет CRM. Вытаскивает ключевые цифры: конверсия, pipeline, забытые сделки. Интеграция за 2 дня.</p>
+                </div>
               </div>
             </div>
-          </div>
-
-          <!-- Killer 3: Sprint -->
-          <div class="card killer-card" id="killer-sprint">
-            <h3 class="killer-card__headline">4 недели → инфраструктура навсегда</h3>
-            <p class="killer-card__body">Не консалтинг с уходом. Sprint — это глубокое внедрение нашей платформы. После
-              4 недель: рабочая система + команда обучена + полный доступ + 30 дней поддержки.</p>
-            <p class="killer-card__diff">HubSpot onboarding — обучение. Битрикс — вы сами. Мы — собираем под
-              специфику вашей ниши.</p>
-            <div class="sprint-timeline">
-              <div class="sprint-step">
-                <div class="sprint-step__check">✓</div>
-                <div class="sprint-step__text"><strong>Неделя 1:</strong> Аудит и Архитектура</div>
-              </div>
-              <div class="sprint-step">
-                <div class="sprint-step__check">✓</div>
-                <div class="sprint-step__text"><strong>Неделя 2:</strong> Базовая сборка (CRM + Dashboards)</div>
-              </div>
-              <div class="sprint-step">
-                <div class="sprint-step__check">✓</div>
-                <div class="sprint-step__text"><strong>Неделя 3:</strong> AI + Telegram-bot</div>
-              </div>
-              <div class="sprint-step">
-                <div class="sprint-step__check">✓</div>
-                <div class="sprint-step__text"><strong>Неделя 4:</strong> Обучение команды + Документация</div>
+            <div class="tab-panel" id="tab-notion" data-battle-tab-content="notion">
+              <button class="battle-accordion-trigger">Яндекс.Вики / Notion</button>
+              <div class="battle-accordion-content">
+                <div style="background:var(--color-gray-50); padding:32px; border-radius:16px; text-align:center;">
+                  <h3 style="font-size:1.5rem; margin-bottom:16px;">Документы для команды. EDL — для управления.</h3>
+                  <p style="color:var(--color-gray-700); max-width:600px; margin:0 auto; line-height:1.6;">Не заменяет базы знаний. Собирает из них метрики и добавляет сводки в Telegram автоматически.</p>
+                </div>
               </div>
             </div>
-            <p style="font-size:0.8125rem;color:var(--color-gray-500);margin-top:16px;">Промежуточные защиты каждые 7-10
-              дней. Если что-то не туда — корректируем вместе.</p>
-          </div>
-
-          <!-- Killer 4: Methodology -->
-          <div class="card killer-card" id="killer-method">
-            <h3 class="killer-card__headline">Собственная методология управления</h3>
-            <p class="killer-card__body">4-слойная архитектура + ритм бизнеса + AI = единая система. Не «документ как у
-              Notion» и не «методология как у Cameron Herold». Методология воплощённая в продукт.</p>
-            <p class="killer-card__diff">Like Centre продаёт курс. Cameron Herold — книгу. Мы — методология которая уже
-              работает в продукте.</p>
-            <div class="layers-stack">
-              <div class="layer-item">
-                <div class="num-badge">01</div>
-                <div class="layer-item__text">
-                  <h4>Входы</h4>
-                  <p class="layer-item__sub">Лиды и сигналы со всех каналов</p>
-                </div>
-              </div>
-              <div class="layer-arrow">↓</div>
-              <div class="layer-item">
-                <div class="num-badge">02</div>
-                <div class="layer-item__text">
-                  <h4>Обработчик</h4>
-                  <p class="layer-item__sub">HOT/WARM/COLD · скоринг · маршрутизация</p>
-                </div>
-              </div>
-              <div class="layer-arrow">↓</div>
-              <div class="layer-item">
-                <div class="num-badge">03</div>
-                <div class="layer-item__text">
-                  <h4>CRM</h4>
-                  <p class="layer-item__sub">Сделки · pipeline · статусы · следующий шаг</p>
-                </div>
-              </div>
-              <div class="layer-arrow">↓</div>
-              <div class="layer-item">
-                <div class="num-badge">04</div>
-                <div class="layer-item__text">
-                  <h4>Интерфейс</h4>
-                  <p class="layer-item__sub">Утренняя сводка · уведомления · мобильный дашборд</p>
-                </div>
-              </div>
-              <div class="layer-arrow">↓</div>
-              <div class="layer-item layer-item--highlight">
-                <div class="num-badge">05</div>
-                <div class="layer-item__text">
-                  <h4>Вы (фаундер)</h4>
-                  <p class="layer-item__sub">Решения · приоритеты · видение продукта</p>
+            <div class="tab-panel" id="tab-chatgpt" data-battle-tab-content="chatgpt">
+              <button class="battle-accordion-trigger">ChatGPT / YandexGPT</button>
+              <div class="battle-accordion-content">
+                <div style="background:var(--color-gray-50); padding:32px; border-radius:16px; text-align:center;">
+                  <h3 style="font-size:1.5rem; margin-bottom:16px;">ChatGPT отвечает «вообще». EDL — «про ваш бизнес».</h3>
+                  <p style="color:var(--color-gray-700); max-width:600px; margin:0 auto; line-height:1.6;">Подключает ИИ к вашим данным. Не нужно писать промпты и копировать цифры — система уже знает контекст.</p>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
 
-    <!-- Section 5: AI Examples -->
-    <section class="section section--gray" id="ai-examples">
+    <!-- Case -->
+    <section class="section section--gray" id="cases">
       <div class="container">
         <div class="section__header">
-          <h2 class="section__title">AI знает контекст вашего бизнеса</h2>
-          <p class="section__subtitle">3 типа вопросов которые наш AI закрывает. Подключён к ВАШИМ данным: CRM, финансы,
-            команда, маркетинг.</p>
+          <h2 class="section__title">Как используют каждый день</h2>
         </div>
-        <div class="tabs" role="tablist">
-          <button class="tab-btn is-active" role="tab" data-tab="ai-finance" aria-selected="true"
-            data-event="tab_ai_finance">Финансовые</button>
-          <button class="tab-btn" role="tab" data-tab="ai-team" aria-selected="false"
-            data-event="tab_ai_team">Командные</button>
-          <button class="tab-btn" role="tab" data-tab="ai-strategy" aria-selected="false"
-            data-event="tab_ai_strategy">Стратегические</button>
-        </div>
-        <div class="ai-examples__content">
-          <div class="tab-panel is-active" id="ai-finance" role="tabpanel">
-            <div class="qa-block">
-              <p class="qa-block__q">«Запас денег (runway)?»</p>
-              <p class="qa-block__a">На 4.2 мес при текущих расходах 580k/мес. Главный риск — выплата подрядчику 800k 25
-                мая. Если не закроется контракт до 20 мая, запас денег 3.1 мес.</p>
-            </div>
-            <div class="qa-block">
-              <p class="qa-block__q">«Где у меня деньги утекают?»</p>
-              <p class="qa-block__a">3 контракта без авансов = -180k кэша до конца месяца. Реклама в LinkedIn ×2 от
-                плана при той же стоимости привлечения. Зарплата +12% — новый дизайнер.</p>
-            </div>
-            <div class="qa-block">
-              <p class="qa-block__q">«Стоит ли поднять цену Sprint?»</p>
-              <p class="qa-block__a">5 закрытых сделок за 60 дней. 0 отказов на этапе цены. Pipeline: 4 лида с бюджетом
-                ≥250k. Рекомендация: поднять до 220k для новых клиентов с июня.</p>
-            </div>
+        <div style="background:var(--color-white); border-radius:16px; border:1px solid var(--color-gray-200); padding:40px; display:flex; gap:40px; flex-wrap:wrap; align-items:center;">
+          <div style="flex:1; min-width:300px;">
+            <div style="display:inline-block; padding:8px 12px; background:rgba(255,107,26,0.1); color:var(--color-tangerine); font-weight:600; font-size:14px; border-radius:8px; margin-bottom:16px;">Кейс: Юридическая консалтинговая компания</div>
+            <p style="font-size:14px; color:var(--color-gray-500); margin-bottom:24px;">14 человек · ~80М ₽/год</p>
+            <h3 style="font-size:1.25rem; margin-bottom:12px;">Как используют EDL:</h3>
+            <ul style="list-style:none; padding:0; margin:0 0 32px; display:flex; flex-direction:column; gap:8px; color:var(--color-gray-700);">
+              <li>✓ Утренняя сводка показывает маржу по проектам и забытые КП.</li>
+              <li>✓ ИИ-помощник прогнозирует, какие сделки закроются в этом квартале.</li>
+              <li>✓ Менеджер видит нагрузку по юристам.</li>
+            </ul>
+            <h3 style="font-size:1.25rem; margin-bottom:12px;">Что изменилось:</h3>
+            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px; color:var(--color-gray-700);">
+              <li>✓ Перестали терять длинные сделки.</li>
+              <li>✓ Увидели 3 убыточных проекта, которые раньше выглядели прибыльными.</li>
+            </ul>
+            <a href="cases.html" style="display:inline-block; margin-top:32px; color:var(--color-tangerine); font-weight:600; text-decoration:none;">Все кейсы →</a>
           </div>
-          <div class="tab-panel" id="ai-team" role="tabpanel">
-            <div class="qa-block">
-              <p class="qa-block__q">«Кто из руководителей перегружен?»</p>
-              <p class="qa-block__a">Антон (CMO) — 38 задач без сроков, нагрузка ×1.4 от плана. Иван (Sales) — 12
-                непрочитанных лидов >24ч. Никита (Junior) — нагрузка 60% (есть резерв).</p>
-            </div>
-            <div class="qa-block">
-              <p class="qa-block__q">«Антон жалуется на нагрузку — справедливо?»</p>
-              <p class="qa-block__a">11 активных задач, средний срок 4.2 дня (норма 3). 3 проекта параллельно, один
-                внутренний. Рекомендация: отложить внутренний контент, нанять 0.5 копирайтера.</p>
-            </div>
-            <div class="qa-block">
-              <p class="qa-block__q">«Когда касались партнёра ИТМО?»</p>
-              <p class="qa-block__a">28 апреля, разговор с Иваном. Был запрос на партнёрский курс. Никто не вернулся. →
-                Назначить повторное касание?</p>
-            </div>
-          </div>
-          <div class="tab-panel" id="ai-strategy" role="tabpanel">
-            <div class="qa-block">
-              <p class="qa-block__q">«Какое удержание (retention) 30 дней по последнему потоку?»</p>
-              <p class="qa-block__a">Удержание D30: 78%, D60: 62%. Худший урок — Урок 4 (отсев 18%). Гипотеза: задание
-                слишком сложное.</p>
-            </div>
-            <div class="qa-block">
-              <p class="qa-block__q">«Какой канал лидов лучший в апреле?»</p>
-              <p class="qa-block__a">Telegram-партнёрки: цена лида 3500, конверсия 14%. Сарафан: цена лида 0, конверсия
-                38%. Исходящие в LinkedIn: цена лида 0, конверсия 8%.</p>
-            </div>
-            <div class="qa-block">
-              <p class="qa-block__q">«Где у нас стоимость привлечения растёт?»</p>
-              <p class="qa-block__a">За 30 дней: стоимость привлечения (CAC) через сайт +18% (с 24k до 28k). Причина — конверсия на демо упала с
-                14% до 11%. Гипотеза: качество лидов упало.</p>
+          <div style="flex:1; min-width:300px; text-align:center;">
+            <div style="background:#f4f4f5; padding:24px; border-radius:12px; border:1px solid #e4e4e7; font-size:14px; text-align:left; color:#1f2937; max-width:400px; margin:0 auto;">
+              <p style="margin-bottom:8px;">Маржа по проектам апреля: <strong>-2.1 п.п.</strong> к плану. Убыточные: 3 из 24.</p>
+              <p style="margin-bottom:8px;">🔥 HOT-сделки: Петров (1.2М) без касания 28ч.</p>
+              <p style="margin:bottom:0; color:#6b7280;">ИИ-прогноз: план продаж Q2 будет выполнен на 92% без новых касаний.</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Section 6: Methodology -->
-    <section class="section" id="method">
+    <!-- Live Proof -->
+    <section class="section" id="proof">
       <div class="container">
-        <div class="section__header">
-          <h2 class="section__title">Метод</h2>
-          <p class="section__subtitle">Не пишем код с нуля. У нас есть проверенная архитектура, которую кастомизируем
-            под ваши процессы, продукт и команду.</p>
-        </div>
-        <div class="method-layers">
-          <div class="layers-stack">
-            <div class="layer-item">
-              <div class="num-badge">01</div>
-              <div class="layer-item__text">
-                <h4>Входы</h4>
-                <p class="layer-item__sub">Лиды и сигналы со всех каналов</p>
-                <p style="font-size:0.8125rem;color:var(--color-gray-500);font-style:italic;margin-top:4px;">Всё, что
-                  приходит — попадает в одно место. Никаких потерянных лидов.</p>
-              </div>
-            </div>
-            <div class="layer-arrow">↓</div>
-            <div class="layer-item">
-              <div class="num-badge">02</div>
-              <div class="layer-item__text">
-                <h4>Обработчик</h4>
-                <p class="layer-item__sub">HOT/WARM/COLD · валидация · авто-приоритизация</p>
-                <p style="font-size:0.8125rem;color:var(--color-gray-500);font-style:italic;margin-top:4px;">Каждый
-                  сигнал получает приоритет автоматически.</p>
-              </div>
-            </div>
-            <div class="layer-arrow">↓</div>
-            <div class="layer-item">
-              <div class="num-badge">03</div>
-              <div class="layer-item__text">
-                <h4>CRM</h4>
-                <p class="layer-item__sub">Сделки · pipeline · статусы · оценка лида · следующий шаг</p>
-                <p style="font-size:0.8125rem;color:var(--color-gray-500);font-style:italic;margin-top:4px;">Один
-                  источник правды для всей команды.</p>
-              </div>
-            </div>
-            <div class="layer-arrow">↓</div>
-            <div class="layer-item">
-              <div class="num-badge">04</div>
-              <div class="layer-item__text">
-                <h4>Интерфейс</h4>
-                <p class="layer-item__sub">Утренняя сводка · уведомления по горячим лидам · мобильный дашборд · фокус дня</p>
-                <p style="font-size:0.8125rem;color:var(--color-gray-500);font-style:italic;margin-top:4px;">Бизнес — в
-                  одном экране каждое утро.</p>
-              </div>
-            </div>
-            <div class="layer-arrow">↓</div>
-            <div class="layer-item layer-item--highlight">
-              <div class="num-badge">05</div>
-              <div class="layer-item__text">
-                <h4>Вы (фаундер)</h4>
-                <p class="layer-item__sub">Решения · приоритеты · направление · видение продукта</p>
-                <p style="font-size:0.8125rem;color:var(--color-gray-500);font-style:italic;margin-top:4px;">AI и
-                  команда EDL — на остальном. Вы остаётесь у руля.</p>
-              </div>
-            </div>
+        <div class="live-proof-v2">
+          <div class="live-proof-v2__grid">
+            <div><div class="live-proof-v2__num">18+</div><div class="live-proof-v2__label">компаний прошли discovery с нашей командой</div></div>
+            <div><div class="live-proof-v2__num">2 года</div><div class="live-proof-v2__label">развиваем продукт и методологию</div></div>
+            <div><div class="live-proof-v2__num">1 бета</div><div class="live-proof-v2__label">маркетплейс-сервис, стартует май 2026</div></div>
+            <div><div class="live-proof-v2__num">50+ лет</div><div class="live-proof-v2__label">суммарный опыт команды: Точка · Додо · karpov.courses</div></div>
           </div>
-        </div>
-        <h3 style="margin-bottom:24px;">Ритм бизнеса</h3>
-        <div class="rhythm-grid">
-          <div class="card rhythm-card">
-            <div class="rhythm-card__icon">⚡</div>
-            <h4 class="rhythm-card__title">День</h4>
-            <ul class="rhythm-card__list">
-              <li>8:30 сводка</li>
-              <li>Фокус дня</li>
-              <li>Push HOT-лидов</li>
-            </ul>
-          </div>
-          <div class="card rhythm-card">
-            <div class="rhythm-card__icon">📅</div>
-            <h4 class="rhythm-card__title">Неделя</h4>
-            <ul class="rhythm-card__list">
-              <li>Пн план команды</li>
-              <li>Ср мини-ретро</li>
-              <li>Пт сводка</li>
-            </ul>
-          </div>
-          <div class="card rhythm-card">
-            <div class="rhythm-card__icon">📊</div>
-            <h4 class="rhythm-card__title">Месяц</h4>
-            <ul class="rhythm-card__list">
-              <li>Пересмотр портрета клиента</li>
-              <li>Закрытие финансов с AI</li>
-              <li>Анализ воронки</li>
-            </ul>
-          </div>
-          <div class="card rhythm-card">
-            <div class="rhythm-card__icon">🎯</div>
-            <h4 class="rhythm-card__title">Квартал</h4>
-            <ul class="rhythm-card__list">
-              <li>Стратегический обзор</li>
-              <li>Конкурентный анализ</li>
-              <li>Пересмотр плана развития</li>
-            </ul>
+          <div class="live-proof-v2__cta">
+            <p>Следующие пилоты — услуги и производство, июнь-июль 2026.</p>
+            <a href="https://t.me/edl_os_bot" target="_blank" class="btn btn--outline" data-cta-type="waitlist" style="background:#fff;">Запись на лист ожидания →</a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Section 7: Battle -->
-    <section class="section section--gray" id="battle">
-      <div class="container">
-        <div class="section__header">
-          <h2 class="section__title">У нас уже Х. Зачем EDL?</h2>
-          <p class="section__subtitle">Мы не заменяем — дополняем. EDL OS интегрируется поверх вашего стека.</p>
-        </div>
-        <div class="tabs" role="tablist">
-          <button class="tab-btn is-active" role="tab" data-tab="battle-bitrix" aria-selected="true"
-            data-event="tab_battle_bitrix">Битрикс24 / amoCRM</button>
-          <button class="tab-btn" role="tab" data-tab="battle-notion" aria-selected="false"
-            data-event="tab_battle_notion">Notion + Notion AI</button>
-          <button class="tab-btn" role="tab" data-tab="battle-chatgpt" aria-selected="false"
-            data-event="tab_battle_chatgpt">ChatGPT / самостоятельно</button>
-        </div>
-        <div class="battle__content">
-          <div class="tab-panel is-active" id="battle-bitrix" role="tabpanel">
-            <h3 class="battle-panel__headline">Битрикс — для отдела. EDL — для фаундера.</h3>
-            <ul class="battle-panel__points">
-              <li>Битрикс знает что делать менеджеру. EDL знает что делать вам.</li>
-              <li>Битрикс — операционная CRM. EDL — пульт ВЫШЕ CRM.</li>
-              <li>EDL интегрируется с Битриксом через API за 2 дня.</li>
-            </ul>
-          </div>
-          <div class="tab-panel" id="battle-notion" role="tabpanel">
-            <h3 class="battle-panel__headline">Notion — документ. EDL — пульт.</h3>
-            <ul class="battle-panel__points">
-              <li>Notion ждёт что вы напишете. EDL приходит в TG в 8:30 с 3 цифрами.</li>
-              <li>Notion AI Agents НЕ подключены к 1С/amoCRM/Тинькоффу.</li>
-              <li>Notion остаётся source of truth. EDL добавляет автоматизацию.</li>
-            </ul>
-          </div>
-          <div class="tab-panel" id="battle-chatgpt" role="tabpanel">
-            <h3 class="battle-panel__headline">ChatGPT — инструмент. EDL — система.</h3>
-            <ul class="battle-panel__points">
-              <li>ChatGPT не знает контекст бизнеса. Нужно писать промпты.</li>
-              <li>Архитектуру нельзя спросить у GPT. EDL — это готовая архитектура.</li>
-              <li>ChatGPT собирает текст. EDL собирает работающий процесс.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 8: Cases -->
-    <section class="section" id="cases">
-      <div class="container">
-        <div class="section__header">
-          <h2 class="section__title">Как это работает у других</h2>
-          <p class="section__subtitle">3 ролевых кейса — реалистичные истории для иллюстрации. Реальные кейсы появятся
-            после первого бета-клиента в мае 2026.</p>
-        </div>
-        <div class="cases__grid">
-          <div class="card case-card">
-            <span class="case-card__tag">B2C Education</span>
-            <h3 class="case-card__title">Школа цифровых профессий</h3>
-            <p>12 000 учеников · 4 курса · 18 человек · ~80M ₽/год</p>
-            <h5>Было</h5>
-            <ul>
-              <li>Фаундер тратил 12 ч/нед на сводки</li>
-              <li>Удержание D30 = 64%</li>
-              <li>Приоритеты разваливались без фаундера</li>
-            </ul>
-            <h5>Сделали</h5>
-            <ul>
-              <li>Sprint 4 недели</li>
-              <li>Геткурс + Битрикс + Тинькофф</li>
-              <li>AI когортный анализ + TG-бот</li>
-            </ul>
-            <div class="case-card__results">
-              <div class="case-card__badge"><span class="case-card__badge-val"
-                  style="color:var(--color-tangerine);font-weight:700;">-75%</span> времени на операционку</div>
-              <div class="case-card__badge"><span class="case-card__badge-val"
-                  style="color:var(--color-tangerine);font-weight:700;">+14%</span> Удержание D30</div>
-              <div class="case-card__badge"><span class="case-card__badge-val"
-                  style="color:var(--color-tangerine);font-weight:700;">+12</span> пунктов NPS</div>
-            </div>
-          </div>
-          <div class="card case-card">
-            <span class="case-card__tag">B2B Education</span>
-            <h3 class="case-card__title">Корпоративная school AI Engineer</h3>
-            <p>1 500 платящих · 8 человек · ~120M ₽/год</p>
-            <h5>Было</h5>
-            <ul>
-              <li>Терял enterprise-контракты 100k+</li>
-              <li>Цикл сделки 30+ дней</li>
-              <li>Не понимал с чего начать AI</li>
-            </ul>
-            <h5>Сделали</h5>
-            <ul>
-              <li>Sprint под B2B-сценарий</li>
-              <li>Sales CRM воронка B2B-продаж</li>
-              <li>AI-классификация лидов</li>
-            </ul>
-            <div class="case-card__results">
-              <div class="case-card__badge"><span class="case-card__badge-val"
-                  style="color:var(--color-tangerine);font-weight:700;">+187%</span> Конверсия в продажу</div>
-              <div class="case-card__badge"><span class="case-card__badge-val"
-                  style="color:var(--color-tangerine);font-weight:700;">2ч</span> Отклик на лид (было 36ч)</div>
-            </div>
-          </div>
-          <div class="card case-card">
-            <span class="case-card__tag">Professional Services</span>
-            <h3 class="case-card__title">Юридическая консалтинговая</h3>
-            <p>12 юристов · 18 человек · ~95M ₽/год</p>
-            <h5>Было</h5>
-            <ul>
-              <li>Маржинальность проектов не считали</li>
-              <li>Продления контрактов терялись</li>
-              <li>8 ч/нед на админ-вопросы</li>
-            </ul>
-            <h5>Сделали</h5>
-            <ul>
-              <li>Sprint с Pack #2</li>
-              <li>Аналитика прибыльности проектов</li>
-              <li>Управление продлениями</li>
-            </ul>
-            <div class="case-card__results">
-              <div class="case-card__badge"><span class="case-card__badge-val"
-                  style="color:var(--color-tangerine);font-weight:700;">+18%</span> рост маржинальности проектов</div>
-              <div class="case-card__badge"><span class="case-card__badge-val"
-                  style="color:var(--color-tangerine);font-weight:700;">+40%</span> удержание клиентов</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 9: Team -->
+    <!-- Team -->
     <section class="section" id="team">
       <div class="container">
         <div class="section__header">
           <h2 class="section__title">Команда</h2>
-          <p class="section__subtitle">6 ключевых ролей. У каждого — реальный опыт. Бэкграунд: Точка / Додо / karpov /
-            ВШЭ / ИТМО / ДОМ.ру.</p>
+          <p class="section__subtitle">Мы сами строили операционку в B2B и финтехе. Теперь делаем продукт, которого нам не хватало.</p>
         </div>
-        <div class="team__grid">
-          <div class="team-card">
-            <div class="team-card__photo">ЕЖ</div>
+        <div class="team-v2__grid">
+          <div class="team-v2-card">
+            <div class="team-v2-card__photo">Е</div>
             <div>
-              <div class="team-card__name">Екатерина Жиганова</div>
-              <div class="team-card__role">Founder, Strategy</div>
-              <p class="team-card__bg">7+ лет: Точка банк, Додо Пицца, ДОМ.ру. Преподаватель ВШЭ + ИТМО. Партнёрство
-                karpov.courses.</p>
+              <div class="team-v2-card__name">Екатерина Жиганова</div>
+              <div class="team-v2-card__role">Founder, Product Lead</div>
+              <div class="team-v2-card__bg">7+ лет в продакт-менеджменте. Запускала продукты в Точке и karpov.courses.</div>
             </div>
           </div>
-          <div class="team-card">
-            <div class="team-card__photo">АЧ</div>
+          <div class="team-v2-card">
+            <div class="team-v2-card__photo">И</div>
             <div>
-              <div class="team-card__name">Антон Чиков</div>
-              <div class="team-card__role">CMO</div>
-              <p class="team-card__bg">10+ лет digital-маркетинг, РФ + СНГ. SaaS, B2B, performance.</p>
+              <div class="team-v2-card__name">Иван Худяков</div>
+              <div class="team-v2-card__role">Head of Sales</div>
+              <div class="team-v2-card__bg">9+ лет в B2B-продажах. Закрывал сделки в финтехе и SaaS.</div>
             </div>
           </div>
-          <div class="team-card">
-            <div class="team-card__photo">ИХ</div>
+          <div class="team-v2-card">
+            <div class="team-v2-card__photo">А</div>
             <div>
-              <div class="team-card__name">Иван Худяков</div>
-              <div class="team-card__role">Head of Growth & Sales</div>
-              <p class="team-card__bg">9+ лет B2C/B2B-продажи. Enterprise-сделки, длинные циклы.</p>
+              <div class="team-v2-card__name">Антон Чиков</div>
+              <div class="team-v2-card__role">CMO</div>
+              <div class="team-v2-card__bg">10+ лет в маркетинге. Запускал контент-стратегии для tech-брендов.</div>
             </div>
           </div>
-          <div class="team-card">
-            <div class="team-card__photo">ДУ</div>
+          <div class="team-v2-card">
+            <div class="team-v2-card__photo">Д</div>
             <div>
-              <div class="team-card__name">Данил Усик</div>
-              <div class="team-card__role">AI Solutions Business Lead</div>
-              <p class="team-card__bg">AI-архитектор, ML-engineer. Prompt engineering, LLM, RAG-pipelines.</p>
+              <div class="team-v2-card__name">Данил Усик</div>
+              <div class="team-v2-card__role">AI Lead</div>
+              <div class="team-v2-card__bg">Эксперт по AI-автоматизации, prompt-engineering, RAG-инфраструктуре.</div>
             </div>
           </div>
-          <div class="team-card">
-            <div class="team-card__photo">ДШ</div>
+          <div class="team-v2-card">
+            <div class="team-v2-card__photo">Д</div>
             <div>
-              <div class="team-card__name">Дарья Шалаева</div>
-              <div class="team-card__role">Head of SMM & Content</div>
-              <p class="team-card__bg">5+ лет SMM и контент-маркетинг. B2B-контент, edtech partnerships.</p>
+              <div class="team-v2-card__name">Дарья Шалаева</div>
+              <div class="team-v2-card__role">SMM</div>
+              <div class="team-v2-card__bg">5+ лет в digital-контенте. Telegram, LinkedIn, визуальный сторителлинг.</div>
             </div>
           </div>
-          <div class="team-card">
-            <div class="team-card__photo">ВК</div>
+          <div class="team-v2-card">
+            <div class="team-v2-card__photo">В</div>
             <div>
-              <div class="team-card__name">Вероника Касаткина</div>
-              <div class="team-card__role">International Finance & Jurisdiction</div>
-              <p class="team-card__bg">Финансовый менеджер. Налоги РФ + Кипр + Дубай, легальная оптимизация.</p>
+              <div class="team-v2-card__name">Вероника Касаткина</div>
+              <div class="team-v2-card__role">CFO</div>
+              <div class="team-v2-card__bg">Финансовое моделирование, cash-flow, налоговое планирование.</div>
             </div>
           </div>
         </div>
-        <h3 style="margin-bottom:16px;">Кто доверяет</h3>
-        <div class="clients-list">
-          <span class="clients-list__item">Додо Пицца</span><span class="clients-list__sep"></span>
-          <span class="clients-list__item">karpov.courses</span><span class="clients-list__sep"></span>
-          <span class="clients-list__item">ДОМ.ру</span><span class="clients-list__sep"></span>
-          <span class="clients-list__item">Точка банк</span><span class="clients-list__sep"></span>
-          <span class="clients-list__item">НИУ ВШЭ</span><span class="clients-list__sep"></span>
-          <span class="clients-list__item">ЦИИ СПбГУ</span><span class="clients-list__sep"></span>
-          <span class="clients-list__item">Яндекс.Практикум</span><span class="clients-list__sep"></span>
-          <span class="clients-list__item">+ 20 SMB-компаний</span>
+        <div style="text-align:center; margin-top:48px;">
+          <a href="about.html" style="color:var(--color-tangerine); font-weight:600; text-decoration:none;">Подробнее о команде →</a>
         </div>
       </div>
     </section>
-
-    <!-- Section 10: Pricing -->
+    <!-- Pricing (2 levels) -->
     <section class="section section--gray" id="pricing">
       <div class="container">
         <div class="section__header">
-          <h2 class="section__title">Цены и формат работы</h2>
-          <p class="section__subtitle">Прозрачные цены до демо. Без «уточняем по запросу».</p>
+          <h2 class="section__title">С чего начать?</h2>
         </div>
-        <div class="pricing__grid">
-          <div class="card price-card">
-            <div class="price-card__name">Демо системы</div>
-            <div class="price-card__price">Бесплатно</div>
-            <div class="price-card__duration">30 минут</div>
-            <p class="price-card__desc">Показываем нашу инфраструктуру вживую, обсуждаем ваши боли.</p><a href="https://t.me/edl_os_bot?start=demo" target="_blank"
-              class="btn btn--secondary" style="width:100%;">Записаться
-              на демо</a>
+        <div class="pricing-v2__grid">
+          <div class="pricing-v2-card">
+            <h3 class="pricing-v2-card__name">Бесплатное демо</h3>
+            <div class="pricing-v2-card__price">0 ₽</div>
+            <div class="pricing-v2-card__duration">30 минут</div>
+            <p class="pricing-v2-card__desc">Знакомство с системой. Покажем, как EDL OS работает, ответим на вопросы и обсудим вашу специфику.</p>
+            <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" class="btn btn--outline" data-cta-type="demo" data-cta-location="pricing" style="width:100%;">Записаться на демо</a>
           </div>
-          <div class="card price-card">
-            <div class="price-card__name">Диагностика</div>
-            <div class="price-card__price">25 000 ₽</div>
-            <div class="price-card__duration">3-5 дней</div>
-            <p class="price-card__desc">Глубокое интервью, карта бизнеса, 5-7 быстрых побед, roadmap.</p><a
-              href="diagnostic.html" class="btn btn--secondary"
-              style="width:100%;">Купить за 25 000 ₽</a>
-          </div>
-          <div class="card price-card price-card--highlight" style="border: 2px solid var(--color-tangerine); box-shadow: 0 15px 30px rgba(255, 107, 26, 0.15);">
-            <div class="price-card__name">Спринт Операционной Системы <span class="badge" style="font-size: 0.6rem; margin-left: 8px;">Основной продукт</span></div>
-            <div class="price-card__price" style="color: var(--color-tangerine);">от 225 000 ₽</div>
-            <div class="price-card__duration">4 недели</div>
-            <p class="price-card__desc">Полная сборка: CRM, дашборды, TG-бот, AI-помощники, обучение команды.</p><a
-              href="https://t.me/edl_os_bot?start=kp" target="_blank" class="btn btn--primary" style="width:100%;">Скачать презентацию</a>
-          </div>
-          <div class="card price-card">
-            <div class="price-card__name">План Роста</div>
-            <div class="price-card__price">от 50 000 ₽/мес</div>
-            <div class="price-card__duration">минимум 3 месяца</div>
-            <p class="price-card__desc">Поддержка, развитие, новые AI-промпты, подключение vertical-фич.</p><a href="https://t.me/edl_os_bot?start=growth" target="_blank"
-              class="btn btn--secondary" style="width:100%;">Обсудить поддержку</a>
+          <div class="pricing-v2-card pricing-v2-card--primary">
+            <h3 class="pricing-v2-card__name">Бизнес-чекап</h3>
+            <div class="pricing-v2-card__price">9 000 ₽</div>
+            <div class="pricing-v2-card__duration">48 часов</div>
+            <p class="pricing-v2-card__desc">30 мин звонок + 48ч AI-обработка. PDF + HTML + персональное видео Кати. Возврат в 14 дней.</p>
+            <a href="audit.html" class="btn btn--primary" data-cta-type="audit" data-cta-location="pricing" style="width:100%;">Купить чекап</a>
           </div>
         </div>
-        <div style="background:var(--color-white);border-radius:16px;padding:32px;">
-          <h3 style="margin-bottom:16px;">Это не для всех. Мы НЕ делаем:</h3>
-          <ul class="not-do__list">
-            <li>Не пишем код с нуля. Используем готовую архитектуру + кастомизируем</li>
-            <li>Не работаем с микро-бизнесом до 5 человек. Минимальная окупаемость — от 5+</li>
-            <li>Не гарантируем рост выручки в %. Гарантируем сроки и артефакты</li>
-            <li>Не делаем мобильные приложения и комплексные back-end системы</li>
-            <li>Не работаем с теми, кому «нужно ещё вчера». Минимум 3 недели — объективно</li>
-          </ul>
+        <div class="pricing-v2__link">
+          <a href="pricing.html" style="color:var(--color-gray-500); font-size:0.875rem; text-decoration:none;">Посмотреть полный pricing →</a>
         </div>
       </div>
     </section>
 
-    <!-- Section 11: FAQ -->
+    <!-- FAQ -->
     <section class="section" id="faq">
       <div class="container">
         <div class="section__header">
-          <h2 class="section__title">Часто спрашивают</h2>
+          <h2 class="section__title">Частые вопросы</h2>
         </div>
-        <div class="faq-list">
-          <div class="faq-item is-open"><button class="faq-item__q" aria-expanded="true">Чем вы отличаетесь от Битрикс24
-              / amoCRM / Notion?<span class="faq-item__icon">+</span></button>
-            <div class="faq-item__a">
-              <p>Битрикс — для отдела продаж. Notion — для документов. EDL OS — пульт фаундера ВЫШЕ вашего стека. Мы
-                интегрируемся с Битриксом и Notion через API, не заменяем.</p>
+        <div class="faq-list" style="max-width:800px; margin:0 auto;">
+          <details class="faq-item" data-faq-id="1">
+            <summary class="faq-summary">Чем Бизнес-чекап отличается от бесплатного демо?</summary>
+            <div class="faq-content">
+              <p>Демо — это знакомство с системой. 30 минут, мы покажем, как EDL OS работает, ответим на вопросы. Бесплатно.</p>
+              <p>Бизнес-чекап — это аудит ВАШЕГО бизнеса. 30 минут звонка, 48 часов AI-обработки, и вы получаете персональный разбор: PDF на 5-7 страниц, HTML-страницу (живёт навсегда), 1-минутное видео от Кати лично, 3 конкретных действия на следующую неделю и 90-дневный roadmap.</p>
             </div>
-          </div>
-          <div class="faq-item"><button class="faq-item__q" aria-expanded="false">Сколько это стоит на самом деле?<span
-                class="faq-item__icon">+</span></button>
-            <div class="faq-item__a">
-              <p>Спринт ОС от 225 000 ₽ (4 недели). План Роста от 50 000 ₽/мес (минимум 3 мес). Диагностика 25 000 ₽.
-                Демо бесплатно.</p>
+          </details>
+          <details class="faq-item" data-faq-id="2">
+            <summary class="faq-summary">Что вы понимаете про антидробление и НДС 2026?</summary>
+            <div class="faq-content">
+              <p>Антидробление — когда ФНС считает несколько юр.лиц одним бизнесом для целей налогообложения. Маркеры: синхронность оборотов по связанным юр.лицам, дробление вокруг лимита УСН, общие сотрудники и инфраструктура (ст. 54.1 НК РФ).</p>
+              <p>EDL OS показывает экономику «как есть»: прибыль по каждому юр.лицу и консолидированно. Система подсвечивает, если оборот по двум юр.лицам растёт синхронно или приближается к лимиту.</p>
+              <p>Что EDL OS НЕ делает: не даёт советов по уклонению, не передаёт данные третьим сторонам, не имеет доступа к налоговой отчётности.</p>
             </div>
-          </div>
-          <div class="faq-item"><button class="faq-item__q" aria-expanded="false">Какие гарантии?<span
-                class="faq-item__icon">+</span></button>
-            <div class="faq-item__a">
-              <p>Гарантируем сроки, артефакты, защиты каждые 7-10 дней. 30 дней пост-Sprint поддержки бесплатно.</p>
+          </details>
+          <details class="faq-item" data-faq-id="3">
+            <summary class="faq-summary">Это безопасно? EDL и налоговая?</summary>
+            <div class="faq-content">
+              <p>Все данные на вашей инфраструктуре. EDL не имеет доступа к налоговой отчётности и не передаёт данные третьим сторонам. NDA подписываем стандартно. Если вы захотите остановить работу — все данные, интеграции и код остаются у вас, система продолжает работать автономно.</p>
             </div>
-          </div>
-          <div class="faq-item"><button class="faq-item__q" aria-expanded="false">Как быстро получим первые
-              результаты?<span class="faq-item__icon">+</span></button>
-            <div class="faq-item__a">
-              <p>Первая утренняя сводка — на 7-10 день. Полная инфраструктура — после 3-4 недель. Видимые изменения —
-                через 4-6 недель после Sprint.</p>
+          </details>
+          <details class="faq-item" data-faq-id="4">
+            <summary class="faq-summary">Вы работаете с моей нишей?</summary>
+            <div class="faq-content">
+              <p>Да. Система горизонтальная — подстраивается под вашу специфику. Сейчас в бете — маркетплейс-сервисы. Услуги и производство — пилоты июнь-июль 2026.</p>
+              <p>Если вашего стека нет в списке (1С, Битрикс, amoCRM, Google Sheets, TG-боты) — интегрируемся через API за 2-5 дней.</p>
             </div>
-          </div>
-          <div class="faq-item"><button class="faq-item__q" aria-expanded="false">Какие у вас интеграции?<span
-                class="faq-item__icon">+</span></button>
-            <div class="faq-item__a">
-              <p>amoCRM, Битрикс24, Геткурс, Платформа, Антитренинги, Тинькофф, Сбер, Альфа, Точка, 1С, Telegram,
-                Calendly, Apps Script. Custom — обсудим на демо.</p>
+          </details>
+          <details class="faq-item" data-faq-id="5">
+            <summary class="faq-summary">Какие гарантии?</summary>
+            <div class="faq-content">
+              <p>Бизнес-чекап: если за 14 дней не получите 3 конкретных действия — вернём деньги без вопросов.</p>
+              <p>Sprint: защиты каждые 7-10 дней. Если после 2-й защиты видно, что не подходит — останавливаем. Оплата поэтапная. 30 дней пост-Sprint поддержки включены.</p>
             </div>
-          </div>
-          <div class="faq-item"><button class="faq-item__q" aria-expanded="false">У нас уже есть продакт / аналитик. Не
-              лишние ли вы?<span class="faq-item__icon">+</span></button>
-            <div class="faq-item__a">
-              <p>Не лишние. Мы не заменяем команду — даём ей пульт. Аналитик получает дашборды, продакт — AI-помощников.
-                Команда становится продуктивнее.</p>
-            </div>
-          </div>
-          <div class="faq-item"><button class="faq-item__q" aria-expanded="false">Безопасно ли передавать вам
-              данные?<span class="faq-item__icon">+</span></button>
-            <div class="faq-item__a">
-              <p>Все данные на ВАШЕЙ инфраструктуре. Мы получаем доступ только на время Sprint. NDA стандартно. Your
-                data, your control.</p>
-            </div>
-          </div>
-          <div class="faq-item"><button class="faq-item__q" aria-expanded="false">Что после Спринта?<span
-                class="faq-item__icon">+</span></button>
-            <div class="faq-item__a">
-              <p>30 дней бесплатной поддержки. Дальше — План Роста от 50k/мес или вы сами развиваете (полный доступ).
-                При переходе на SaaS (Q3 2026) — сохранение старой цены навсегда.</p>
-            </div>
-          </div>
+          </details>
+        </div>
+        <div style="text-align:center; margin-top:48px;">
+          <a href="faq.html" style="color:var(--color-tangerine); font-weight:600; text-decoration:none;">Все вопросы →</a>
         </div>
       </div>
     </section>
 
     <!-- Final CTA -->
     <section class="section section--dark final-cta">
-      <div class="container">
-        <h2 class="final-cta__title">Управляйте бизнесом, а не тушите пожары.</h2>
-        <p class="final-cta__subtitle">30 минут демо · бесплатно · без обязательств</p>
-        <div class="final-cta__actions">
-          <a href="#" class="btn btn--primary calendly-trigger" data-event="click_demo_footer">Записаться на демо</a>
-          <a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener" class="btn btn--dark"
-            data-event="click_tg_footer">Не готов? Telegram-канал EDL — методология, кейсы, AI-промпты</a>
+      <div class="container" style="text-align:center;">
+        <h2 class="section__title" style="color:#fff; margin-bottom:16px;">Готовы посмотреть свою экономику без догадок?</h2>
+        <p style="color:#a1a1aa; margin-bottom:48px; font-size:1.125rem;">За 48 часов получите карту своего бизнеса по 4 слоям: Vision · Sales · Delivery · Finance.</p>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:16px;">
+          <a href="audit.html" class="btn btn--primary" data-cta-type="audit" data-cta-location="final" style="font-size:1.125rem; padding:16px 32px;">Купить Бизнес-чекап 9 000 ₽ · возврат в 14 дней</a>
+          <p style="color:#71717a; font-size:0.875rem;">Не готовы? Подпишитесь на Telegram-канал — методология, кейсы, разборы → <a href="https://t.me/edl_os" target="_blank" style="color:var(--color-tangerine); text-decoration:none;">t.me/edl_os</a></p>
         </div>
       </div>
     </section>
-
   </main>
 
-  <!-- Floating TG Button -->
-  <a href="https://t.me/edl_os_bot" target="_blank" rel="noopener" class="floating-tg" id="floating-tg"
-    data-event="click_floating_tg">
-    <span class="floating-tg__icon">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM16.64 8.8C16.49 10.43 15.86 14.15 15.53 15.86C15.39 16.58 15.13 16.83 14.88 16.85C14.33 16.9 13.91 16.48 13.38 16.14C12.55 15.6 12.08 15.26 11.28 14.73C10.35 14.12 10.95 13.78 11.49 13.22C11.63 13.07 14.07 10.84 14.12 10.63C14.13 10.6 14.13 10.49 14.07 10.43C14.01 10.37 13.92 10.39 13.85 10.41C13.76 10.43 12.28 11.41 9.42 13.34C9 13.63 8.62 13.77 8.28 13.76C7.9 13.75 7.18 13.55 6.64 13.37C5.94 13.14 5.39 13.01 5.44 12.62C5.47 12.42 5.75 12.21 6.3 11.98C9.69 10.51 11.95 9.56 13.08 9.09C14.16 8.64 14.38 8.56 14.53 8.56C14.56 8.56 14.64 8.57 14.69 8.62C14.73 8.66 14.75 8.71 14.74 8.78C14.74 8.78 14.64 8.8 14.64 8.8H16.64Z"
-          fill="currentColor" />
-      </svg>
-    </span>
-    <span class="floating-tg__text">Спросить в Telegram</span>
-  </a>
-
   <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer__grid">
-        <div>
-          <div class="footer__brand-name">EDL OS</div>
-          <p class="footer__brand-desc">Founder OS for SMB</p>
-        </div>
-        <div>
-          <div class="footer__col-title">Услуги</div>
-          <ul class="footer__links">
-            <li><a href="sprint.html">Спринт ОС</a></li>
-            <li><a href="diagnostic.html">Диагностика</a></li>
-            <li><a href="#pricing">План Роста</a></li>
-          </ul>
-        </div>
-        <div>
-          <div class="footer__col-title">Компания</div>
-          <ul class="footer__links">
-            <li><a href="#team">Команда</a></li>
-            <li><a href="#method">Метод</a></li>
-            <li><a href="https://t.me/elephantdreamscommunity" target="_blank" rel="noopener">Telegram-канал</a></li>
-          </ul>
-        </div>
-        <div>
-          <div class="footer__col-title">Контакты</div>
-          <ul class="footer__links">
-            <li><a href="https://t.me/evzhiganova8888" target="_blank" rel="noopener">Telegram</a></li>
-            <li><a href="mailto:info@elephantdreams.ru">Email</a></li>
-            <li><a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener">Calendly</a></li>
-          </ul>
-        </div>
+  <footer class="footer" style="background:#fff; border-top:1px solid #e4e4e7; padding:48px 0;">
+    <div class="container" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:32px;">
+      <div>
+        <h4 style="font-weight:600; margin-bottom:16px;">Контакты</h4>
+        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
+          <li><a href="https://t.me/edl_os" target="_blank" style="color:#4b5563; text-decoration:none;">Telegram: t.me/edl_os</a></li>
+          <li><a href="https://t.me/edl_os_bot" target="_blank" style="color:#4b5563; text-decoration:none;">TG-бот: t.me/edl_os_bot</a></li>
+          <li><a href="mailto:evzhiganova8888@gmail.com" style="color:#4b5563; text-decoration:none;">evzhiganova8888@gmail.com</a></li>
+          <li><a href="#" style="color:#4b5563; text-decoration:none;">LinkedIn Кати</a></li>
+        </ul>
       </div>
-      <div class="footer__bottom"><span>© 2026 Elephant Dreams Lab</span>
-        <div><a href="legal/privacy.html">Privacy</a> · <a href="legal/terms.html">Terms</a></div>
+      <div>
+        <h4 style="font-weight:600; margin-bottom:16px;">Услуги</h4>
+        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
+          <li><a href="https://calendly.com/evzhiganova8888/30min" target="_blank" style="color:#4b5563; text-decoration:none;">Бесплатное демо</a></li>
+          <li><a href="audit.html" style="color:#4b5563; text-decoration:none;">Бизнес-чекап (Audit)</a></li>
+          <li><a href="diagnostic.html" style="color:#4b5563; text-decoration:none;">Diagnostic</a></li>
+          <li><a href="sprint.html" style="color:#4b5563; text-decoration:none;">Sprint</a></li>
+          <li><a href="pricing.html" style="color:#4b5563; text-decoration:none;">Growth Plan</a></li>
+        </ul>
       </div>
+      <div>
+        <h4 style="font-weight:600; margin-bottom:16px;">Компания</h4>
+        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
+          <li><a href="#method" style="color:#4b5563; text-decoration:none;">Метод</a></li>
+          <li><a href="cases.html" style="color:#4b5563; text-decoration:none;">Кейсы</a></li>
+          <li><a href="faq.html" style="color:#4b5563; text-decoration:none;">FAQ</a></li>
+          <li><a href="about.html" style="color:#4b5563; text-decoration:none;">Команда</a></li>
+          <li><a href="pricing.html" style="color:#4b5563; text-decoration:none;">Pricing</a></li>
+          <li><a href="quiz.html" style="color:#4b5563; text-decoration:none;">Quiz</a></li>
+          <li><a href="#" style="color:#4b5563; text-decoration:none;">Политика данных</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container" style="margin-top:48px; padding-top:24px; border-top:1px solid #e4e4e7; text-align:center; color:#9ca3af; font-size:0.875rem;">
+      © 2026 EDL OS · Elephant Dreams Lab · Все права защищены
     </div>
   </footer>
 
-  <script src="js/main.js" defer></script>
-
-  <!-- Calendly Modal Widget -->
-  <div id="calendly-modal"
-    style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
-    <div
-      style="background:#fff;width:100%;max-width:800px;height:80vh;border-radius:16px;position:relative;overflow:hidden;animation:fadeUp 0.3s ease-out;">
-      <button onclick="closeCalendly()"
-        style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;z-index:10;">✕</button>
-      <!-- Calendly inline widget begin -->
-      <div class="calendly-inline-widget"
-        data-url="https://calendly.com/evzhiganova8888/30min?hide_event_type_details=1&hide_gdpr_banner=1"
-        style="min-width:320px;height:100%;"></div>
-      <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-      <!-- Calendly inline widget end -->
-    </div>
-  </div>
+  <!-- Scripts -->
   <script>
-    function openCalendly(e) {
-      if (e) e.preventDefault();
-      document.getElementById('calendly-modal').style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    }
-    function closeCalendly() {
-      document.getElementById('calendly-modal').style.display = 'none';
-      document.body.style.overflow = '';
-    }
-    document.querySelectorAll('.calendly-trigger').forEach(btn => {
-      btn.addEventListener('click', openCalendly);
-    });
-    document.getElementById('calendly-modal').addEventListener('click', function (e) {
-      if (e.target === this) closeCalendly();
+    document.addEventListener('DOMContentLoaded', () => {
+      // Burger menu
+      const burger = document.getElementById('burger');
+      const nav = document.querySelector('.header__nav');
+      if (burger) {
+        burger.addEventListener('click', () => {
+          nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+        });
+      }
+
+      // ICP Switcher
+      const switchers = document.querySelectorAll('.icp-btn');
+      const body = document.body;
+      switchers.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const segment = btn.getAttribute('data-segment-switch');
+          if (!segment) return;
+          body.setAttribute('data-segment-active', segment);
+          window.EDLTrack && window.EDLTrack('segment_switched', {from: body.getAttribute('data-segment-active'), to: segment});
+          switchers.forEach(b => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+        });
+      });
+
+      // Battle Tabs Desktop
+      const tabs = document.querySelectorAll('.tabs button');
+      const panels = document.querySelectorAll('.tab-panel');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const target = tab.getAttribute('data-battle-tab');
+          tabs.forEach(t => t.classList.remove('active'));
+          panels.forEach(p => p.classList.remove('active'));
+          tab.classList.add('active');
+          const panel = document.querySelector(`.tab-panel[data-battle-tab-content="${target}"]`);
+          if (panel) panel.classList.add('active');
+          window.EDLTrack && window.EDLTrack('battle_tab_clicked', {tab: target});
+        });
+      });
+
+      // Battle Accordion Mobile
+      const accordions = document.querySelectorAll('.battle-accordion-trigger');
+      accordions.forEach(acc => {
+        acc.addEventListener('click', () => {
+          const panel = acc.parentElement;
+          panel.classList.toggle('is-open');
+          if (panel.classList.contains('is-open')) {
+            window.EDLTrack && window.EDLTrack('battle_tab_clicked', {tab: panel.getAttribute('data-battle-tab-content')});
+          }
+        });
+      });
+
+      // FAQ
+      const faqs = document.querySelectorAll('details.faq-item');
+      faqs.forEach(faq => {
+        faq.addEventListener('toggle', () => {
+          if (faq.open) {
+            window.EDLTrack && window.EDLTrack('faq_opened', {faq_id: faq.getAttribute('data-faq-id')});
+          }
+        });
+      });
+
+      // CTA Tracking
+      document.querySelectorAll('[data-cta-type]').forEach(cta => {
+        cta.addEventListener('click', (e) => {
+          window.EDLTrack && window.EDLTrack('cta_clicked', {
+            cta_type: cta.getAttribute('data-cta-type'),
+            cta_location: cta.getAttribute('data-cta-location')
+          });
+        });
+      });
+
+      // Sticky CTA Visibility
+      const stickyCta = document.getElementById('sticky-cta');
+      if (stickyCta) {
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+          if (scrollTimeout) cancelAnimationFrame(scrollTimeout);
+          scrollTimeout = requestAnimationFrame(() => {
+            if (window.scrollY > 400) {
+              stickyCta.classList.add('is-visible');
+            } else {
+              stickyCta.classList.remove('is-visible');
+            }
+          });
+        });
+      }
     });
   </script>
 </body>
-
 </html>

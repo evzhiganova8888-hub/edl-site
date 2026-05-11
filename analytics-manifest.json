@@ -1,0 +1,73 @@
+{
+  "version": "1.0",
+  "date": "2026-05-11",
+  "endpoint_required": true,
+  "endpoint_placeholder": "window.EDL_ANALYTICS_ENDPOINT",
+  "events": [
+    {
+      "name": "page_view",
+      "triggers": ["DOMContentLoaded on every page"],
+      "payload": {"page": "string", "segment": "string", "referrer": "string", "utm": "object"},
+      "pages": ["all"]
+    },
+    {
+      "name": "segment_switched",
+      "triggers": ["Click on ICP switcher button in Hero"],
+      "payload": {"from": "string", "to": "string"},
+      "pages": ["home"]
+    },
+    {
+      "name": "battle_tab_clicked",
+      "triggers": ["Click on a tab in the Battle block"],
+      "payload": {"tab": "string"},
+      "pages": ["home"]
+    },
+    {
+      "name": "faq_opened",
+      "triggers": ["Opening any FAQ details item"],
+      "payload": {"faq_id": "string"},
+      "pages": ["home", "faq", "audit"]
+    },
+    {
+      "name": "cta_clicked",
+      "triggers": ["Clicking any button or link with data-cta-type attribute"],
+      "payload": {"cta_type": "string", "cta_location": "string"},
+      "pages": ["all"]
+    },
+    {
+      "name": "audit_page_viewed",
+      "triggers": ["DOMContentLoaded on /audit"],
+      "payload": {},
+      "pages": ["audit"]
+    },
+    {
+      "name": "audit_checkout_opened",
+      "triggers": ["Clicking 'Buy' button on /audit opening the modal"],
+      "payload": {},
+      "pages": ["audit"]
+    },
+    {
+      "name": "audit_telegram_clicked",
+      "triggers": ["Clicking the final Telegram deep-link in the checkout modal"],
+      "payload": {},
+      "pages": ["audit"]
+    }
+  ],
+  "data_attributes": [
+    {"attribute": "data-cta-type", "values": ["audit", "demo", "audit_checkout", "waitlist", "telegram_pay"], "locations": ["Buttons and links"]},
+    {"attribute": "data-cta-location", "values": ["hero", "tg_widget", "pricing", "final", "sticky"], "locations": ["Buttons and links"]},
+    {"attribute": "data-segment-active", "values": ["services", "manufacturing", "marketplace"], "locations": ["body tag on home page"]},
+    {"attribute": "data-segment-switch", "values": ["services", "manufacturing", "marketplace"], "locations": ["ICP switcher buttons"]},
+    {"attribute": "data-battle-tab", "values": ["1c", "crm", "notion", "chatgpt"], "locations": ["Battle block tabs"]},
+    {"attribute": "data-faq-id", "values": ["1..12"], "locations": ["details elements in FAQ lists"]}
+  ],
+  "buffer_strategy": "localStorage + fetch keepalive",
+  "endpoint_payload_format": "POST application/json, body: array of events",
+  "expected_volume": "~200 visitors/week × ~15 events/visit = ~3000 events/week",
+  "recommendations_for_klode": [
+    "Apps Script endpoint: doPost(e) → parse JSON → append rows to Marketing Dashboard",
+    "Каждое событие — отдельная строка в листе 'Events Raw'",
+    "Агрегации (Visitors/week и т.д.) — формулами в листе 'Aggregated' с QUERY()/COUNTIF()",
+    "Дублирующая запись в Founder OS by EDL для критичных метрик (Audit purchases, Demo bookings)"
+  ]
+}

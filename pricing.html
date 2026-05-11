@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Полный pricing EDL OS</title>
+  <meta name="description" content="Стоимость и продукты EDL OS: Бесплатное демо, Бизнес-чекап, Диагностика, Спринт и План Роста.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/main-v2.css">
+  <script>
+    (function(){
+      const ENDPOINT = window.EDL_ANALYTICS_ENDPOINT || null;
+      const buffer = JSON.parse(localStorage.getItem('edl_events') || '[]');
+      function track(event, payload) {
+        const data = {
+          event: event,
+          timestamp: new Date().toISOString(),
+          page: 'pricing',
+          segment: document.body.dataset.segmentActive || 'services',
+          referrer: document.referrer,
+          ...payload
+        };
+        buffer.push(data);
+        if (ENDPOINT) flush(); else localStorage.setItem('edl_events', JSON.stringify(buffer));
+      }
+      function flush() {
+        if (!ENDPOINT || !buffer.length) return;
+        fetch(ENDPOINT, {method:'POST', body:JSON.stringify(buffer), keepalive:true}).catch(console.error);
+        buffer.length = 0;
+        localStorage.removeItem('edl_events');
+      }
+      window.EDLTrack = track;
+      window.addEventListener('beforeunload', flush);
+      window.addEventListener('DOMContentLoaded', () => track('page_view', {}));
+    })();
+  </script>
+</head>
+<body data-page="pricing">
+
+  <header class="header" id="header" style="background:var(--color-white); border-bottom:1px solid var(--color-gray-200);">
+    <div class="container header__inner" style="display:flex; justify-content:space-between; align-items:center;">
+      <a href="/" class="header__logo" style="font-weight:700; color:var(--color-gray-900); text-decoration:none;">EDL OS</a>
+      <a href="/" style="font-size:0.875rem; color:var(--color-gray-500); text-decoration:none;">← На главную</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section" style="padding-top:120px;">
+      <div class="container">
+        <h1 class="section__title" style="text-align:center; margin-bottom:64px;">Полный pricing EDL OS</h1>
+        
+        <div class="ladder">
+          <!-- Step 1 -->
+          <div class="ladder__step" data-step="1">
+            <div style="flex:1;">
+              <h2 class="ladder__name">Бесплатное демо</h2>
+              <div class="ladder__price">0 ₽ · 30 минут</div>
+              <p class="ladder__desc">Знакомство с системой. Мы покажем, как EDL OS работает на примерах, ответим на вопросы и обсудим вашу специфику.</p>
+              <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" class="btn btn--outline" style="margin-top:16px;" data-cta-type="demo" data-cta-location="pricing">Записаться на демо</a>
+            </div>
+          </div>
+          
+          <!-- Step 2 -->
+          <div class="ladder__step ladder__step--highlight" data-step="2">
+            <div style="flex:1;">
+              <h2 class="ladder__name">Бизнес-чекап (Audit)</h2>
+              <div class="ladder__price">9 000 ₽ · 48 часов</div>
+              <p class="ladder__desc">30 минут звонка, 48 часов AI-обработки, и вы получаете персональный разбор: PDF на 5-7 страниц, HTML-страницу (живёт навсегда), 1-минутное видео от Кати лично, 3 конкретных действия на следующую неделю и 90-дневный roadmap. Возврат в 14 дней.</p>
+              <a href="audit.html" class="btn btn--primary" style="margin-top:16px;" data-cta-type="audit" data-cta-location="pricing">Подробнее про Чекап</a>
+            </div>
+          </div>
+          
+          <!-- Step 3 -->
+          <div class="ladder__step" data-step="3">
+            <div style="flex:1;">
+              <h2 class="ladder__name">EDL Operations Diagnostic</h2>
+              <div class="ladder__price">25 000 ₽ · 3-5 дней</div>
+              <p class="ladder__desc">Погружение внутрь вашего бизнеса. Команда заходит в ваши данные на 3-5 дней. Проводим интервью с командой, смотрим структуру баз данных, оцениваем качество ведения CRM. На выходе — детальная спецификация для Спринта.</p>
+              <a href="diagnostic.html" class="btn btn--outline" style="margin-top:16px;" data-cta-type="diagnostic" data-cta-location="pricing">Подробнее про Diagnostic</a>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="ladder__step" data-step="4">
+            <div style="flex:1;">
+              <h2 class="ladder__name">AI Operations Sprint (флагман)</h2>
+              <div class="ladder__price">от 135 000 ₽ · 4 недели</div>
+              <p class="ladder__desc">За 4 недели собираем работающую систему. Синхронизируем базы, настраиваем Telegram-бота, подключаем ИИ-помощника к вашим данным. Защиты каждые 7-10 дней. Оплата поэтапная. 30 дней пост-Sprint поддержки включены.</p>
+              <a href="sprint.html" class="btn btn--outline" style="margin-top:16px;" data-cta-type="sprint" data-cta-location="pricing">Подробнее про Спринт</a>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="ladder__step" data-step="5" style="border-left-color:transparent;">
+            <div style="flex:1;">
+              <h2 class="ladder__name">Growth Plan (рекуррент)</h2>
+              <div class="ladder__price">от 50 000 ₽/мес · от 3 мес</div>
+              <p class="ladder__desc">Развиваем и масштабируем внедрённую систему. Новые интеграции, обучение команды, улучшение ИИ-агентов. Выделенный аналитик и продуктолог для вашего бизнеса.</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="max-width:700px; margin:48px auto 0; padding:24px; background:var(--color-gray-50); border-radius:12px; text-align:center;">
+          <p style="font-size:0.875rem; color:var(--color-gray-700); margin:0;"><strong>Не обязательно идти по порядку.</strong> После Бизнес-чекапа станет ясно, какой шаг нужен именно вам. Можно перейти к Плану Роста сразу после Чекапа, если Sprint пока рано — обсудим на демо.</p>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" style="background:#fff; border-top:1px solid #e4e4e7; padding:24px 0; text-align:center;">
+    <div class="container" style="color:#9ca3af; font-size:0.875rem;">
+      © 2026 EDL OS · Elephant Dreams Lab · Все права защищены
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ · Частые вопросы о EDL OS</title>
+  <meta name="description" content="Ответы на частые вопросы про EDL OS. Безопасность, гарантии, цены, форматы работы и интеграции.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/main-v2.css">
+  <script>
+    (function(){
+      const ENDPOINT = window.EDL_ANALYTICS_ENDPOINT || null;
+      const buffer = JSON.parse(localStorage.getItem('edl_events') || '[]');
+      function track(event, payload) {
+        const data = {
+          event: event,
+          timestamp: new Date().toISOString(),
+          page: 'faq',
+          segment: document.body.dataset.segmentActive || 'services',
+          referrer: document.referrer,
+          ...payload
+        };
+        buffer.push(data);
+        if (ENDPOINT) flush(); else localStorage.setItem('edl_events', JSON.stringify(buffer));
+      }
+      function flush() {
+        if (!ENDPOINT || !buffer.length) return;
+        fetch(ENDPOINT, {method:'POST', body:JSON.stringify(buffer), keepalive:true}).catch(console.error);
+        buffer.length = 0;
+        localStorage.removeItem('edl_events');
+      }
+      window.EDLTrack = track;
+      window.addEventListener('beforeunload', flush);
+      window.addEventListener('DOMContentLoaded', () => track('page_view', {}));
+    })();
+  </script>
+</head>
+<body data-page="faq">
+
+  <header class="header" id="header" style="background:var(--color-white); border-bottom:1px solid var(--color-gray-200);">
+    <div class="container header__inner" style="display:flex; justify-content:space-between; align-items:center;">
+      <a href="/" class="header__logo" style="font-weight:700; color:var(--color-gray-900); text-decoration:none;">EDL OS</a>
+      <a href="/" style="font-size:0.875rem; color:var(--color-gray-500); text-decoration:none;">← На главную</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section" style="padding-top:120px;">
+      <div class="container">
+        <h1 class="section__title" style="text-align:center; margin-bottom:64px;">Частые вопросы</h1>
+        
+        <div class="faq-list" style="max-width:800px; margin:0 auto;">
+          <!-- Questions from index -->
+          <details class="faq-item" data-faq-id="1">
+            <summary class="faq-summary">Чем Бизнес-чекап отличается от бесплатного демо?</summary>
+            <div class="faq-content">
+              <p>Демо — это знакомство с системой. 30 минут, мы покажем, как EDL OS работает, ответим на вопросы. Бесплатно.</p>
+              <p>Бизнес-чекап — это аудит ВАШЕГО бизнеса. 30 минут звонка, 48 часов AI-обработки, и вы получаете персональный разбор: PDF на 5-7 страниц, HTML-страницу (живёт навсегда), 1-минутное видео от Кати лично, 3 конкретных действия на следующую неделю и 90-дневный roadmap.</p>
+            </div>
+          </details>
+          <details class="faq-item" data-faq-id="2">
+            <summary class="faq-summary">Что вы понимаете про антидробление и НДС 2026?</summary>
+            <div class="faq-content">
+              <p>Антидробление — когда ФНС считает несколько юр.лиц одним бизнесом для целей налогообложения. Маркеры: синхронность оборотов по связанным юр.лицам, дробление вокруг лимита УСН, общие сотрудники и инфраструктура (ст. 54.1 НК РФ).</p>
+              <p>EDL OS показывает экономику «как есть»: прибыль по каждому юр.лицу и консолидированно. Система подсвечивает, если оборот по двум юр.лицам растёт синхронно или приближается к лимиту.</p>
+              <p>Что EDL OS НЕ делает: не даёт советов по уклонению, не передаёт данные третьим сторонам, не имеет доступа к налоговой отчётности.</p>
+            </div>
+          </details>
+          <details class="faq-item" data-faq-id="3">
+            <summary class="faq-summary">Это безопасно? EDL и налоговая?</summary>
+            <div class="faq-content">
+              <p>Все данные на вашей инфраструктуре. EDL не имеет доступа к налоговой отчётности и не передаёт данные третьим сторонам. NDA подписываем стандартно. Если вы захотите остановить работу — все данные, интеграции и код остаются у вас, система продолжает работать автономно.</p>
+            </div>
+          </details>
+          <details class="faq-item" data-faq-id="4">
+            <summary class="faq-summary">Вы работаете с моей нишей?</summary>
+            <div class="faq-content">
+              <p>Да. Система горизонтальная — подстраивается под вашу специфику. Сейчас в бете — маркетплейс-сервисы. Услуги и производство — пилоты июнь-июль 2026.</p>
+              <p>Если вашего стека нет в списке (1С, Битрикс, amoCRM, Google Sheets, TG-боты) — интегрируемся через API за 2-5 дней.</p>
+            </div>
+          </details>
+          <details class="faq-item" data-faq-id="5">
+            <summary class="faq-summary">Какие гарантии?</summary>
+            <div class="faq-content">
+              <p>Бизнес-чекап: если за 14 дней не получите 3 конкретных действия — вернём деньги без вопросов.</p>
+              <p>Sprint: защиты каждые 7-10 дней. Если после 2-й защиты видно, что не подходит — останавливаем. Оплата поэтапная. 30 дней пост-Sprint поддержки включены.</p>
+            </div>
+          </details>
+          <!-- Additional Questions for /faq page -->
+          <details class="faq-item" data-faq-id="6">
+            <summary class="faq-summary">Идёт ли 9к в зачёт Diagnostic?</summary>
+            <div class="faq-content">
+              <p>Нет, разные продукты. Чекап — взгляд снаружи. Диагностика — погружение внутрь.</p>
+            </div>
+          </details>
+          <details class="faq-item" data-faq-id="7">
+            <summary class="faq-summary">Что если ваша компания закроется?</summary>
+            <div class="faq-content">
+              <p>Все данные, интеграции и код у вас. После Sprint — полный доступ к настройкам. Ваша система продолжит работать автономно.</p>
+            </div>
+          </details>
+          <details class="faq-item" data-faq-id="8">
+            <summary class="faq-summary">Можно ли остановить Sprint на середине?</summary>
+            <div class="faq-content">
+              <p>Да, защиты каждые 7-10 дней. Если после 2-й защиты видно, что не подходит — останавливаем. Оплата поэтапная.</p>
+            </div>
+          </details>
+          <details class="faq-item" data-faq-id="9">
+            <summary class="faq-summary">У нас всё в Google Sheets и TG-ботах. Подключитесь?</summary>
+            <div class="faq-content">
+              <p>Да, это наш стандартный стек. Google Sheets, TG-боты, 1С, CRM — интегрируемся через API за 2-5 дней.</p>
+            </div>
+          </details>
+          <details class="faq-item" data-faq-id="10">
+            <summary class="faq-summary">Сколько это стоит на самом деле?</summary>
+            <div class="faq-content">
+              <p>Бизнес-чекап 9 000 ₽. Диагностика 25 000 ₽. Спринт от 135 000 ₽. План Роста от 50 000 ₽/мес. Демо бесплатно.</p>
+            </div>
+          </details>
+          <details class="faq-item" data-faq-id="11">
+            <summary class="faq-summary">Кто работает над моим Audit?</summary>
+            <div class="faq-content">
+              <p>Иван или Катя на звонке, AI генерирует отчёт, Катя делает ревью и записывает видео-разбор.</p>
+            </div>
+          </details>
+          <details class="faq-item" data-faq-id="12">
+            <summary class="faq-summary">Какие документы я подписываю перед Sprint?</summary>
+            <div class="faq-content">
+              <p>Договор, NDA, спецификация задач.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" style="background:#fff; border-top:1px solid #e4e4e7; padding:24px 0; text-align:center;">
+    <div class="container" style="color:#9ca3af; font-size:0.875rem;">
+      © 2026 EDL OS · Elephant Dreams Lab · Все права защищены
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('details.faq-item').forEach(faq => {
+        faq.addEventListener('toggle', () => {
+          if (faq.open) {
+            window.EDLTrack && window.EDLTrack('faq_opened', {faq_id: faq.getAttribute('data-faq-id')});
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

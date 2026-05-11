@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Кейсы EDL OS</title>
+  <meta name="description" content="Кейсы внедрения EDL OS: Услуги, Маркетплейсы, Производство.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/main-v2.css">
+  <script>
+    (function(){
+      const ENDPOINT = window.EDL_ANALYTICS_ENDPOINT || null;
+      const buffer = JSON.parse(localStorage.getItem('edl_events') || '[]');
+      function track(event, payload) {
+        const data = {
+          event: event,
+          timestamp: new Date().toISOString(),
+          page: 'cases',
+          segment: document.body.dataset.segmentActive || 'services',
+          referrer: document.referrer,
+          ...payload
+        };
+        buffer.push(data);
+        if (ENDPOINT) flush(); else localStorage.setItem('edl_events', JSON.stringify(buffer));
+      }
+      function flush() {
+        if (!ENDPOINT || !buffer.length) return;
+        fetch(ENDPOINT, {method:'POST', body:JSON.stringify(buffer), keepalive:true}).catch(console.error);
+        buffer.length = 0;
+        localStorage.removeItem('edl_events');
+      }
+      window.EDLTrack = track;
+      window.addEventListener('beforeunload', flush);
+      window.addEventListener('DOMContentLoaded', () => track('page_view', {}));
+    })();
+  </script>
+</head>
+<body data-page="cases">
+
+  <header class="header" id="header" style="background:var(--color-white); border-bottom:1px solid var(--color-gray-200);">
+    <div class="container header__inner" style="display:flex; justify-content:space-between; align-items:center;">
+      <a href="/" class="header__logo" style="font-weight:700; color:var(--color-gray-900); text-decoration:none;">EDL OS</a>
+      <a href="/" style="font-size:0.875rem; color:var(--color-gray-500); text-decoration:none;">← На главную</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section" style="padding-top:120px;">
+      <div class="container" style="max-width:800px; margin:0 auto;">
+        <h1 class="section__title" style="text-align:center; margin-bottom:64px;">Кейсы использования EDL OS</h1>
+
+        <div style="display:grid; grid-template-columns:1fr; gap:32px;">
+          
+          <!-- Case 1 -->
+          <div style="background:var(--color-white); border-radius:16px; border:1px solid var(--color-gray-200); padding:40px;">
+            <div style="display:inline-block; padding:8px 12px; background:rgba(255,107,26,0.1); color:var(--color-tangerine); font-weight:600; font-size:14px; border-radius:8px; margin-bottom:16px;">Pro Services</div>
+            <h2 style="font-size:1.5rem; margin-bottom:8px;">Юридическая консалтинговая компания</h2>
+            <p style="font-size:14px; color:var(--color-gray-500); margin-bottom:24px;">14 человек · ~80М ₽/год</p>
+            <h3 style="font-size:1.125rem; margin-bottom:12px;">Как используют EDL:</h3>
+            <ul style="list-style:none; padding:0; margin:0 0 24px; display:flex; flex-direction:column; gap:8px; color:var(--color-gray-700);">
+              <li>✓ Утренняя сводка показывает маржу по проектам и забытые КП.</li>
+              <li>✓ ИИ-помощник прогнозирует, какие сделки закроются в этом квартале.</li>
+              <li>✓ Менеджер видит нагрузку по юристам.</li>
+            </ul>
+            <h3 style="font-size:1.125rem; margin-bottom:12px;">Что изменилось:</h3>
+            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px; color:var(--color-gray-700);">
+              <li>✓ Перестали терять длинные сделки.</li>
+              <li>✓ Увидели 3 убыточных проекта, которые раньше выглядели прибыльными.</li>
+            </ul>
+          </div>
+
+          <!-- Stub 1 -->
+          <div style="background:var(--color-gray-50); border-radius:16px; border:1px dashed var(--color-gray-300); padding:40px; text-align:center; color:var(--color-gray-500);">
+            <div style="font-size:2rem; margin-bottom:16px;">📦</div>
+            <h2 style="font-size:1.25rem; font-weight:600; margin-bottom:8px;">Маркетплейс-сервис</h2>
+            <p>Кейс обновляется (результаты бета-запуска появятся в июне 2026)</p>
+          </div>
+
+          <!-- Stub 2 -->
+          <div style="background:var(--color-gray-50); border-radius:16px; border:1px dashed var(--color-gray-300); padding:40px; text-align:center; color:var(--color-gray-500);">
+            <div style="font-size:2rem; margin-bottom:16px;">⚙️</div>
+            <h2 style="font-size:1.25rem; font-weight:600; margin-bottom:8px;">Производство и торговля</h2>
+            <p>Кейс обновляется (результаты пилота появятся в июле 2026)</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" style="background:#fff; border-top:1px solid #e4e4e7; padding:24px 0; text-align:center;">
+    <div class="container" style="color:#9ca3af; font-size:0.875rem;">
+      © 2026 EDL OS · Elephant Dreams Lab · Все права защищены
+    </div>
+  </footer>
+
+</body>
+</html>
