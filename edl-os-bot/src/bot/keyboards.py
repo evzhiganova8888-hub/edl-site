@@ -69,10 +69,12 @@ def segments_keyboard() -> InlineKeyboardMarkup:
 
 
 def audit_pay_keyboard(invoice_url: str | None = None) -> InlineKeyboardMarkup:
-    """Кнопка оплаты Чекапа. На MVP Этапа 1 без реальной ссылки — заглушка."""
+    """Кнопка оплаты Чекапа. URL появляется после согласия + оферты + email."""
     buttons = []
     if invoice_url:
         buttons.append([InlineKeyboardButton("💳 Оплатить 9 000 ₽", url=invoice_url)])
+    else:
+        buttons.append([InlineKeyboardButton("🛒 Купить Чекап за 9 000 ₽", callback_data="audit:start_purchase")])
     buttons.append(
         [InlineKeyboardButton("📄 Сначала посмотреть пример", callback_data="menu:audit_sample")]
     )
@@ -80,6 +82,31 @@ def audit_pay_keyboard(invoice_url: str | None = None) -> InlineKeyboardMarkup:
         [InlineKeyboardButton(f"💬 Спросить Ивана", url=f"https://t.me/{settings.sales_username}")]
     )
     return InlineKeyboardMarkup(buttons)
+
+
+def offer_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("📜 Открыть полный текст оферты", url=settings.offer_url)],
+            [InlineKeyboardButton("✅ Я принимаю оферту", callback_data="offer:accept")],
+            [InlineKeyboardButton("❌ Не сейчас", callback_data="offer:decline")],
+        ]
+    )
+
+
+def refund_keyboard(application_id: str) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("↩️ Запросить возврат", callback_data=f"refund:request:{application_id}")],
+            [InlineKeyboardButton("← В меню", callback_data="menu:main")],
+        ]
+    )
+
+
+def cancel_collection_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        [[InlineKeyboardButton("Отменить", callback_data="audit:cancel_collection")]]
+    )
 
 
 def back_to_menu() -> InlineKeyboardMarkup:

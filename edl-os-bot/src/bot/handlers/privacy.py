@@ -24,6 +24,17 @@ def _privacy_keyboard() -> InlineKeyboardMarkup:
     )
 
 
+async def handle_privacy_action(update, context):
+    """Callback `privacy:export` / `privacy:delete`."""
+    query = update.callback_query
+    await query.answer()
+    action = (query.data or "").split(":", 1)[1] if ":" in (query.data or "") else ""
+    if action == "export":
+        await export_my_data_command(update, context)
+    elif action == "delete":
+        await delete_my_data_command(update, context)
+
+
 def _user_payload(user) -> dict:
     return {
         "telegram_id": user.telegram_id,

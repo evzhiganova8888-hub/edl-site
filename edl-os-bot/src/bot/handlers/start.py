@@ -7,7 +7,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from src.bot import keyboards, texts
-from src.bot.handlers import audit, consent as consent_handler, faq, privacy
+from src.bot.handlers import audit, consent as consent_handler, faq, lead_capture, privacy
 from src.core.segment import detect_from_deep_link
 from src.db.repos import get_or_create_user, log_event
 from src.db.session import async_session_factory
@@ -79,16 +79,8 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     if scenario == "audit_sample":
         await audit.audit_sample_command(update, context)
         return
-    if scenario == "demo":
-        await _stub_scenario(update, name="demo", description=texts.DEMO_INTRO)
-        return
-    if scenario == "diagnostic":
-        await _stub_scenario(update, name="diagnostic", description=texts.DIAGNOSTIC_INTRO)
-        return
-    if scenario == "sprint_waitlist":
-        await _stub_scenario(
-            update, name="sprint_waitlist", description=texts.SPRINT_WAITLIST_INTRO
-        )
+    if scenario in ("demo", "diagnostic", "sprint_waitlist", "hero_summary"):
+        await lead_capture.start_flow(update, context, flow_type=scenario)
         return
     if scenario == "quiz":
         await _stub_scenario(
@@ -97,16 +89,6 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
             description=(
                 "Quiz Founder OS Score (12 вопросов) — будет в Спринте 3. "
                 "А пока — главное меню."
-            ),
-        )
-        return
-    if scenario == "hero_summary":
-        await _stub_scenario(
-            update,
-            name="hero_summary",
-            description=(
-                "Вы видели интерактивную сводку на сайте. Хочется такую же для "
-                "вашего бизнеса? Это происходит в Чекапе или Спринте."
             ),
         )
         return
@@ -180,19 +162,14 @@ async def handle_menu_button(update: Update, context: ContextTypes.DEFAULT_TYPE)
     if action == "privacy":
         await privacy.privacy_command(update, context)
         return
-    if action == "demo":
-        await _stub_scenario(update, name="demo", description=texts.DEMO_INTRO)
+    if action in ("demo", "diagnostic", "sprint_waitlist", "hero_summary"):
+        await lead_capture.start_flow(update, context, flow_type=action)
         return
     if action == "quiz":
         await _stub_scenario(
             update,
             name="quiz",
             description="Quiz Founder OS Score — в Спринте 3. Сейчас доступно главное меню.",
-        )
-        return
-    if action == "sprint_waitlist":
-        await _stub_scenario(
-            update, name="sprint_waitlist", description=texts.SPRINT_WAITLIST_INTRO
         )
         return
 
