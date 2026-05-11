@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from telegram.ext import Application, CallbackQueryHandler, CommandHandler, MessageHandler, filters
 
-from src.bot.handlers import audit, consent, dialog, faq, privacy, refund, start
+from src.bot.handlers import admin, audit, consent, dialog, faq, privacy, quiz, refund, start
 
 
 def register(app: Application) -> None:
@@ -18,6 +18,8 @@ def register(app: Application) -> None:
     app.add_handler(CommandHandler("audit", audit.audit_command))
     app.add_handler(CommandHandler("audit_sample", audit.audit_sample_command))
     app.add_handler(CommandHandler("refund", refund.refund_command))
+    app.add_handler(CommandHandler("quiz", quiz.quiz_command))
+    app.add_handler(CommandHandler("admin", admin.admin_command))
     app.add_handler(CommandHandler("reset", start.reset_command))
 
     # Callback queries (inline buttons)
@@ -29,6 +31,10 @@ def register(app: Application) -> None:
     app.add_handler(CallbackQueryHandler(audit.handle_offer, pattern=r"^offer:"))
     app.add_handler(CallbackQueryHandler(refund.handle_refund_callback, pattern=r"^refund:request:"))
     app.add_handler(CallbackQueryHandler(privacy.handle_privacy_action, pattern=r"^privacy:"))
+    app.add_handler(CallbackQueryHandler(quiz.handle_answer, pattern=r"^quiz:ans:"))
+    app.add_handler(CallbackQueryHandler(quiz.handle_cancel, pattern=r"^quiz:cancel$"))
+    app.add_handler(CallbackQueryHandler(faq.handle_show, pattern=r"^faq:show:"))
+    app.add_handler(CallbackQueryHandler(admin.handle_admin_callback, pattern=r"^admin:"))
 
-    # Free-form text — FSM-маршрутизатор (audit / refund / lead_capture / dialog)
+    # Free-form text — FSM-маршрутизатор (audit / refund / lead / faq / dialog)
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, dialog.handle_text))

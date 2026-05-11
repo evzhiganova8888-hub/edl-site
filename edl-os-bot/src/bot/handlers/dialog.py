@@ -14,9 +14,10 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from src.bot import texts
-from src.bot.handlers import audit, lead_capture, refund
+from src.bot.handlers import audit, faq, lead_capture, refund
 from src.core import llm
 from src.core.config import settings
+from src.core.flags import FLAG_VITACONSULT_PUBLIC, get_flag
 from src.core.pd_sanitize import contains_pd
 from src.core.segment import detect_from_text, detect_sub_profile
 from src.core.stickers import StickerContext, pick_emoji, should_send_sticker
@@ -41,6 +42,8 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     if await refund.handle_text_step(update, context):
         return
     if await lead_capture.handle_text_step(update, context):
+        return
+    if await faq.handle_text_step(update, context):
         return
 
     # 2. Свободный диалог
@@ -71,6 +74,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             text=user_text,
             vat_topic_mentioned=any(t in user_text.lower() for t in ("ндс", "vat", "дроблен")),
         )
+        vitaconsult = await get_flag(session, FLAG_VITACONSULT_PUBLIC, default=False)
         await session.commit()
         segment = user.segment or "other"
         stage = user.stage or "cold"
@@ -88,7 +92,11 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         try:
             history = context.user_data.get(_HISTORY_KEY, [])
             answer, tokens = await llm.reply(
-                user_text=user_text, segment=segment, stage=stage, history=history
+                user_text=user_text,
+                segment=segment,
+                stage=stage,
+                history=history,
+                vitaconsult_public=vitaconsult,
             )
             history = (history + [
                 {"role": "user", "content": user_text},

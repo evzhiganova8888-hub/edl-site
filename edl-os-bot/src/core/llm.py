@@ -35,11 +35,14 @@ async def reply(
     segment: str,
     stage: str = "cold",
     history: list[dict[str, str]] | None = None,
+    vitaconsult_public: bool | None = None,
 ) -> tuple[str, int]:
     """Returns (response_text, total_tokens). Caches static system prompt."""
     client = get_client()
     safe_text = sanitize(user_text)
-    system_blocks = build_system_prompt(segment=segment, stage=stage)
+    system_blocks = build_system_prompt(
+        segment=segment, stage=stage, vitaconsult_public=vitaconsult_public
+    )
 
     messages: list[dict[str, str]] = list(history or [])
     messages.append({"role": "user", "content": safe_text})

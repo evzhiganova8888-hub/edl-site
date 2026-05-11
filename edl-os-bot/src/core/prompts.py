@@ -52,15 +52,23 @@ def _knowledge_base() -> str:
     return "\n\n".join(parts)
 
 
-def _runtime_flags() -> str:
-    return f"VITACONSULT_PUBLIC = {str(settings.vitaconsult_public).lower()}"
+def _runtime_flags(*, vitaconsult_public: bool) -> str:
+    return f"VITACONSULT_PUBLIC = {str(vitaconsult_public).lower()}"
 
 
-def build_system_prompt(*, segment: str, stage: str) -> list[dict]:
+def build_system_prompt(
+    *,
+    segment: str,
+    stage: str,
+    vitaconsult_public: bool | None = None,
+) -> list[dict]:
     """Возвращает массив system-блоков для Anthropic API.
 
     Все статические блоки помечаем `cache_control: ephemeral` — Anthropic
     кэширует их и берёт $0.08/1M вместо $1/1M.
+
+    `vitaconsult_public` передаётся динамически (из core.flags). Если None —
+    fallback на env-значение.
     """
     base = _read(_PROMPTS_DIR / "base.md")
     output_format = _read(_PROMPTS_DIR / "output_format.md")
@@ -79,6 +87,8 @@ def build_system_prompt(*, segment: str, stage: str) -> list[dict]:
         )
     )
 
+    flag_value = bool(settings.vitaconsult_public) if vitaconsult_public is None else vitaconsult_public
+
     return [
         {
             "type": "text",
@@ -87,6 +97,6 @@ def build_system_prompt(*, segment: str, stage: str) -> list[dict]:
         },
         {
             "type": "text",
-            "text": _runtime_flags(),
+            "text": _runtime_flags(vitaconsult_public=flag_value),
         },
     ]

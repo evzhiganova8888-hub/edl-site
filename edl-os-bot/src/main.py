@@ -28,6 +28,7 @@ from sqlalchemy import select
 from telegram import Update
 from telegram.ext import Application, ApplicationBuilder
 
+from src.admin.routes import router as admin_router
 from src.bot import texts
 from src.bot.handlers import register
 from src.core.config import settings
@@ -95,7 +96,8 @@ async def _run_polling(app: Application) -> None:
         logger.exception("polling failed")
 
 
-api = FastAPI(title="EDL OS Bot", version="0.2.0", lifespan=lifespan)
+api = FastAPI(title="EDL OS Bot", version="0.3.0", lifespan=lifespan)
+api.include_router(admin_router)
 
 
 @api.get("/health")

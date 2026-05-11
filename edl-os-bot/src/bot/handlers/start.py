@@ -7,7 +7,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from src.bot import keyboards, texts
-from src.bot.handlers import audit, consent as consent_handler, faq, lead_capture, privacy
+from src.bot.handlers import audit, consent as consent_handler, faq, lead_capture, privacy, quiz
 from src.core.segment import detect_from_deep_link
 from src.db.repos import get_or_create_user, log_event
 from src.db.session import async_session_factory
@@ -83,14 +83,7 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         await lead_capture.start_flow(update, context, flow_type=scenario)
         return
     if scenario == "quiz":
-        await _stub_scenario(
-            update,
-            name="quiz",
-            description=(
-                "Quiz Founder OS Score (12 вопросов) — будет в Спринте 3. "
-                "А пока — главное меню."
-            ),
-        )
+        await quiz.quiz_command(update, context)
         return
 
     # Неизвестный payload → главное меню
@@ -166,11 +159,7 @@ async def handle_menu_button(update: Update, context: ContextTypes.DEFAULT_TYPE)
         await lead_capture.start_flow(update, context, flow_type=action)
         return
     if action == "quiz":
-        await _stub_scenario(
-            update,
-            name="quiz",
-            description="Quiz Founder OS Score — в Спринте 3. Сейчас доступно главное меню.",
-        )
+        await quiz.quiz_command(update, context)
         return
 
     logger.warning("Unknown menu action: %s", action)

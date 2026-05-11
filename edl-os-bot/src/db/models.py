@@ -182,3 +182,16 @@ class PDAccessLog(Base):
     action: Mapped[str] = mapped_column(Text)  # read|update|export|delete
     fields: Mapped[list[str] | None] = mapped_column(ARRAY(String))
     at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class FeatureFlag(Base):
+    """Runtime toggle (§10 ТЗ v3 — VITACONSULT_PUBLIC и т.д.)."""
+
+    __tablename__ = "feature_flags"
+
+    key: Mapped[str] = mapped_column(Text, primary_key=True)
+    enabled: Mapped[bool] = mapped_column(Boolean, default=False)
+    updated_by: Mapped[str | None] = mapped_column(Text)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
