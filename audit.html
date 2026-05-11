@@ -57,9 +57,20 @@
 
   <!-- Header -->
   <header class="header" id="header" style="background:var(--color-white); border-bottom:1px solid var(--color-gray-200);">
-    <div class="container header__inner" style="display:flex; justify-content:space-between; align-items:center;">
-      <a href="/" class="header__logo" style="font-weight:700; color:var(--color-gray-900); text-decoration:none; display:inline-flex; align-items:center; gap:10px;"><img src="/assets/logo-192.png" alt="" width="28" height="28" style="border-radius:50%;" aria-hidden="true"><span>EDL&nbsp;OS</span></a>
-      <a href="/" style="font-size:0.875rem; color:var(--color-gray-500); text-decoration:none;">← На главную</a>
+    <div class="container header__inner site-header">
+      <a href="/" class="header__logo site-logo" aria-label="EDL OS — на главную"><img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true"><span>EDL&nbsp;OS</span></a>
+      <nav class="site-nav" id="site-nav" aria-label="Главное меню">
+        <a href="/index.html#cases">Кейсы</a>
+        <a href="/pricing.html">Цены</a>
+        <a href="/about.html">Команда</a>
+        <a href="/faq.html">FAQ</a>
+      </nav>
+      <div class="site-header__cta">
+        <a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--outline site-header__channel" aria-label="Telegram-канал EDL OS">
+          <span aria-hidden="true">✈️</span> Канал
+        </a>
+        <button class="header__burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav" id="burger">☰</button>
+      </div>
     </div>
   </header>
 
@@ -105,21 +116,21 @@
             <div style="color:var(--color-tangerine); font-size:1.5rem;">📄</div>
             <div>
               <h4 style="font-weight:600; margin-bottom:8px;">PDF-отчёт на 5-7 страниц</h4>
-              <p style="color:var(--color-gray-500); font-size:0.875rem;">Founder OS Audit. ИИ-разбор вашей экономики.</p>
+              <p style="color:var(--color-gray-500); font-size:0.875rem;">Разбор по методологии EDL OS. Сетка ИИ-агентов анализирует данные, основательница интерпретирует и записывает выводы.</p>
             </div>
           </div>
           <div style="display:flex; gap:16px; align-items:flex-start;">
             <div style="color:var(--color-tangerine); font-size:1.5rem;">🌐</div>
             <div>
               <h4 style="font-weight:600; margin-bottom:8px;">Майнд-карта оцифровки бизнеса</h4>
-              <p style="color:var(--color-gray-500); font-size:0.875rem;">Схема процессов вашей команды в Miro. Через 90 дней рекомендуем перепройти чекап (платно).</p>
+              <p style="color:var(--color-gray-500); font-size:0.875rem;">Схема процессов вашей команды в FigJam. Через 90 дней рекомендуем перепройти чекап (платно).</p>
             </div>
           </div>
           <div style="display:flex; gap:16px; align-items:flex-start;">
             <div style="color:var(--color-tangerine); font-size:1.5rem;">🎬</div>
             <div>
               <h4 style="font-weight:600; margin-bottom:8px;">Видео-разбор результата</h4>
-              <p style="color:var(--color-gray-500); font-size:0.875rem;">Персональный видео-разбор с главным выводом.</p>
+              <p style="color:var(--color-gray-500); font-size:0.875rem;">Персональный видео-разбор от основательницы EDL OS Екатерины Жигановой.</p>
             </div>
           </div>
         </div>
@@ -310,6 +321,23 @@
       // Track page views
       window.EDLTrack && window.EDLTrack('audit_page_viewed', {});
     });
+  </script>
+
+  <script>
+    (function(){
+      const b = document.getElementById('burger');
+      const n = document.getElementById('site-nav');
+      if (b && n) {
+        b.addEventListener('click', () => {
+          const open = n.classList.toggle('is-open');
+          b.setAttribute('aria-expanded', String(open));
+        });
+        n.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+          n.classList.remove('is-open');
+          b.setAttribute('aria-expanded','false');
+        }));
+      }
+    })();
   </script>
 </body>
 </html>

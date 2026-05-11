@@ -56,9 +56,20 @@
   <a href="#main" class="skip-link">Перейти к содержанию</a>
 
   <header class="header" id="header" style="background:var(--color-white); border-bottom:1px solid var(--color-gray-200);">
-    <div class="container header__inner" style="display:flex; justify-content:space-between; align-items:center;">
-      <a href="/" class="header__logo" style="font-weight:700; color:var(--color-gray-900); text-decoration:none; display:inline-flex; align-items:center; gap:10px;"><img src="/assets/logo-192.png" alt="" width="28" height="28" style="border-radius:50%;" aria-hidden="true"><span>EDL&nbsp;OS</span></a>
-      <a href="/" style="font-size:0.875rem; color:var(--color-gray-500); text-decoration:none;">← На главную</a>
+    <div class="container header__inner site-header">
+      <a href="/" class="header__logo site-logo" aria-label="EDL OS — на главную"><img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true"><span>EDL&nbsp;OS</span></a>
+      <nav class="site-nav" id="site-nav" aria-label="Главное меню">
+        <a href="/index.html#cases">Кейсы</a>
+        <a href="/pricing.html">Цены</a>
+        <a href="/about.html">Команда</a>
+        <a href="/faq.html">FAQ</a>
+      </nav>
+      <div class="site-header__cta">
+        <a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--outline site-header__channel" aria-label="Telegram-канал EDL OS">
+          <span aria-hidden="true">✈️</span> Канал
+        </a>
+        <button class="header__burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav" id="burger">☰</button>
+      </div>
     </div>
   </header>
 
@@ -141,14 +152,14 @@
           <div style="background:var(--color-gray-50); border-radius:16px; border:1px dashed var(--color-gray-300); padding:40px; text-align:center; color:var(--color-gray-500);">
             <div style="font-size:2rem; margin-bottom:16px;">🏢</div>
             <h2 style="font-size:1.25rem; font-weight:600; margin-bottom:8px;">VitaConsult</h2>
-            <p>Анонс результатов Спринта после 1 месяца работы — 18 июня 2026</p>
+            <p>Анонс результатов Спринта после первого месяца работы — июнь–июль 2026</p>
           </div>
 
           <!-- Stub 2 -->
           <div style="background:var(--color-gray-50); border-radius:16px; border:1px dashed var(--color-gray-300); padding:40px; text-align:center; color:var(--color-gray-500);">
             <div style="font-size:2rem; margin-bottom:16px;">🎓</div>
             <h2 style="font-size:1.25rem; font-weight:600; margin-bottom:8px;">karpov.courses</h2>
-            <p>Анонс результатов Спринта после 1 месяца работы — 18 июня 2026</p>
+            <p>Анонс результатов Спринта после первого месяца работы — июнь–июль 2026</p>
           </div>
 
         </div>
@@ -195,5 +206,22 @@
     </div>
   </footer>
 
+
+  <script>
+    (function(){
+      const b = document.getElementById('burger');
+      const n = document.getElementById('site-nav');
+      if (b && n) {
+        b.addEventListener('click', () => {
+          const open = n.classList.toggle('is-open');
+          b.setAttribute('aria-expanded', String(open));
+        });
+        n.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+          n.classList.remove('is-open');
+          b.setAttribute('aria-expanded','false');
+        }));
+      }
+    })();
+  </script>
 </body>
 </html>

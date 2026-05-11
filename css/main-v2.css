@@ -1,5 +1,95 @@
 /* EDL OS v2 — Additional Styles for TZ v1.0 final */
 
+/* Honor HTML5 [hidden] over our utility display rules.
+   Otherwise .tg-window__idle { display:flex } overrides [hidden]. */
+[hidden] { display: none !important; }
+
+/* ── Site Header v2 (desktop nav + mobile burger) ── */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+}
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: var(--color-gray-900);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.site-logo img { border-radius: 50%; display: block; }
+.site-logo span { font-size: 1rem; letter-spacing: 0.01em; }
+.site-nav {
+  display: none;
+  gap: 28px;
+  align-items: center;
+}
+.site-nav a {
+  color: var(--color-gray-700);
+  text-decoration: none;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: color var(--duration-fast);
+  padding: 6px 0;
+}
+.site-nav a:hover { color: var(--color-tangerine); }
+.site-header__cta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-shrink: 0;
+}
+.site-header__channel {
+  padding: 8px 14px;
+  border-radius: 100px;
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+.header__burger {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px 8px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-gray-900);
+  line-height: 1;
+}
+@media (min-width: 900px) {
+  .site-nav { display: flex; }
+  .header__burger { display: none; }
+}
+/* Mobile: collapsed nav drawer when burger is open */
+.site-nav.is-open {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 64px; left: 0; right: 0;
+  background: #fff;
+  border-bottom: 1px solid var(--color-gray-200);
+  padding: 16px 24px;
+  gap: 16px;
+  z-index: 250;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+@media (max-width: 480px) {
+  .site-header__channel span:not([aria-hidden]) { display: none; }
+}
+
+/* ── Hero badge: allow wrap on mobile ── */
+.hero__badge {
+  flex-wrap: wrap;
+  line-height: 1.45;
+}
+
 /* ── ICP Segment Switcher ── */
 .icp-switcher {
   display: flex;

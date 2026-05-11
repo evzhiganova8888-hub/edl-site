@@ -53,25 +53,24 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
   <meta name="theme-color" content="#0A0A0A">
 </head>
-<body data-page="home" data-segment-active="services">
+<body data-page="home">
   <a href="#main" class="skip-link">Перейти к содержанию</a>
 
   <!-- Header -->
   <header class="header" id="header">
-    <div class="container header__inner" style="display:flex; justify-content:space-between; align-items:center;">
-      <a href="/" class="header__logo" style="font-weight:700; color:var(--color-gray-900); text-decoration:none; display:inline-flex; align-items:center; gap:10px;"><img src="/assets/logo-192.png" alt="" width="28" height="28" style="border-radius:50%;" aria-hidden="true"><span>EDL&nbsp;OS</span></a>
-      <nav class="header__nav" style="display:none;">
-        <a href="#method">Метод</a>
-        <a href="#cases">Кейсы</a>
-        <a href="#pricing">Цены</a>
-        <a href="#faq">FAQ</a>
-        <a href="#team">Команда</a>
+    <div class="container header__inner site-header">
+      <a href="/" class="header__logo site-logo" aria-label="EDL OS — на главную"><img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true"><span>EDL&nbsp;OS</span></a>
+      <nav class="site-nav" id="site-nav" aria-label="Главное меню">
+        <a href="index.html#cases">Кейсы</a>
+        <a href="pricing.html">Цены</a>
+        <a href="about.html">Команда</a>
+        <a href="faq.html">FAQ</a>
       </nav>
-      <div style="display:flex; gap:12px; align-items:center;">
-        <a href="https://t.me/edl_os" target="_blank" class="btn btn--outline" style="padding:8px 12px; border-radius:100px; display:flex; gap:6px; font-size:14px; text-decoration:none;">
-          <span>✈️</span> Канал
+      <div class="site-header__cta">
+        <a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--outline site-header__channel" aria-label="Telegram-канал EDL OS">
+          <span aria-hidden="true">✈️</span> Канал
         </a>
-        <button class="header__burger" aria-label="Меню" id="burger" style="background:none; border:none; font-size:24px; cursor:pointer;">☰</button>
+        <button class="header__burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav" id="burger">☰</button>
       </div>
     </div>
   </header>
@@ -90,17 +89,17 @@
           <p class="hero__subtitle" style="font-size: 1.25rem; color: var(--color-gray-700); margin-bottom: 32px; line-height: 1.5;">Все цифры, риски и решения вашего бизнеса — в одном месте. Каждое утро в Telegram. Без дашбордов, без новых паролей, без IT-отдела.</p>
           <div class="hero__badge">Работает в Telegram · Собирается за 4 недели · Все данные остаются у вас</div>
           <div style="display:flex; gap:16px; margin-top:24px; flex-wrap:wrap; align-items:center;">
-            <a href="https://t.me/edl_os_bot?start=demo" target="_blank" class="btn btn--primary" data-cta-type="demo" data-cta-location="hero">Бесплатное демо в Telegram · 30 минут</a>
-            <a href="audit.html" class="btn btn--outline" data-cta-type="audit" data-cta-location="hero">Бизнес-чекап 9 000 ₽ · возврат за 14 дней</a>
+            <a href="https://t.me/edl_os_bot?start=demo" target="_blank" rel="noopener" class="btn btn--primary" data-cta-type="demo" data-cta-location="hero">Бесплатное демо · 30 минут</a>
+            <a href="audit.html" class="btn btn--outline" data-cta-type="audit" data-cta-location="hero">Бизнес-чекап 9 000 ₽</a>
           </div>
-          <div class="hero__cta-note">За 48 часов после чекапа: отчёт по 4 направлениям бизнеса, майнд-карта оцифровки в Miro и персональный видео-разбор.</div>
+          <div class="hero__cta-note">За 48 часов после чекапа: отчёт по 4 направлениям бизнеса, майнд-карта в FigJam, персональный видео-разбор от основательницы EDL OS. Возврат 14 дней, если не сможете внедрить.</div>
         </div>
 
         <!-- Right Side: ICP Switcher & TG Widget (2-step interactive) -->
         <div class="hero__demo">
           <div style="background:var(--color-gray-50); padding:24px; border-radius:16px; border:1px solid var(--color-gray-200);">
             <div class="icp-switcher">
-              <span class="icp-switcher__label">1. Покажите для:</span>
+              <span class="icp-switcher__label">Покажите для моей ниши:</span>
               <button class="icp-btn" data-segment-switch="services" aria-pressed="false">Услуги</button>
               <button class="icp-btn" data-segment-switch="manufacturing" aria-pressed="false">Производство</button>
               <button class="icp-btn" data-segment-switch="marketplace" aria-pressed="false">Маркетплейс-сервис</button>
@@ -464,7 +463,7 @@
             <summary class="faq-summary">Чем Бизнес-чекап отличается от бесплатного демо?</summary>
             <div class="faq-content">
               <p>Демо — это знакомство с системой. 30 минут, мы покажем, как EDL OS работает, ответим на вопросы. Бесплатно.</p>
-              <p>Бизнес-чекап — это аудит ВАШЕГО бизнеса. 30 минут звонка, 48 часов AI-обработки, и вы получаете персональный разбор: PDF на 5-7 страниц, майнд-карту оцифровки вашего бизнеса (в Miro), персональный видео-разбор вашего результата, 3 конкретных действия на следующую неделю и 90-дневный план.</p>
+              <p>Бизнес-чекап — это аудит ВАШЕГО бизнеса. 30 минут звонка, 48 часов AI-обработки, и вы получаете персональный разбор: PDF на 5-7 страниц, майнд-карту оцифровки вашего бизнеса в FigJam, персональный видео-разбор вашего результата, 3 конкретных действия на следующую неделю и 90-дневный план.</p>
             </div>
           </details>
           <details class="faq-item" data-faq-id="2">
@@ -566,13 +565,17 @@
 
       // Burger menu
       const burger = document.getElementById('burger');
-      const nav = document.querySelector('.header__nav');
-      if (burger) {
+      const nav = document.getElementById('site-nav') || document.querySelector('.site-nav');
+      if (burger && nav) {
         burger.addEventListener('click', () => {
-          const expanded = nav.style.display === 'flex';
-          nav.style.display = expanded ? 'none' : 'flex';
-          burger.setAttribute('aria-expanded', String(!expanded));
+          const open = nav.classList.toggle('is-open');
+          burger.setAttribute('aria-expanded', String(open));
         });
+        // close on link click (mobile)
+        nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+          nav.classList.remove('is-open');
+          burger.setAttribute('aria-expanded', 'false');
+        }));
       }
 
       // ── HERO v2: 2-step interactive demo ──

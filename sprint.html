@@ -27,20 +27,23 @@
 </head>
 <body>
 <a href="#main" class="skip-link">Перейти к содержимому</a>
-<header class="header" id="header">
-<div class="container header__inner">
-<a href="/" class="header__logo"><img src="/assets/logo-192.png" alt="" width="28" height="28" style="border-radius:50%; vertical-align:middle; margin-right:8px;" aria-hidden="true">EDL&nbsp;OS</a>
-<nav class="header__nav">
-<div class="header__nav-links">
-<a href="sprint.html">Спринт ОС</a>
-<a href="diagnostic.html">Диагностика</a>
-<a href="/#pricing">План Роста</a>
-</div>
-<a href="https://calendly.com/evzhiganova8888/30min" target="_blank" rel="noopener" class="btn btn--primary header__cta" style="height:40px;font-size:0.875rem;padding:0 20px;">Демо</a>
-<button class="header__burger" aria-label="Меню" onclick="document.getElementById('mobile-nav').classList.toggle('is-open')"><span></span><span></span><span></span></button>
-</nav>
-</div>
-</header>
+<header class="header" id="header" style="background:var(--color-white); border-bottom:1px solid var(--color-gray-200);">
+    <div class="container header__inner site-header">
+      <a href="/" class="header__logo site-logo" aria-label="EDL OS — на главную"><img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true"><span>EDL&nbsp;OS</span></a>
+      <nav class="site-nav" id="site-nav" aria-label="Главное меню">
+        <a href="/index.html#cases">Кейсы</a>
+        <a href="/pricing.html">Цены</a>
+        <a href="/about.html">Команда</a>
+        <a href="/faq.html">FAQ</a>
+      </nav>
+      <div class="site-header__cta">
+        <a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--outline site-header__channel" aria-label="Telegram-канал EDL OS">
+          <span aria-hidden="true">✈️</span> Канал
+        </a>
+        <button class="header__burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav" id="burger">☰</button>
+      </div>
+    </div>
+  </header>
 <nav class="mobile-nav" id="mobile-nav">
 <a href="/">Главная</a>
 <a href="sprint.html">Спринт ОС</a>
@@ -175,7 +178,10 @@
 <p class="price-card__desc" style="font-size:0.875rem;color:var(--color-gray-700);">Полная сборка + 3 месяца плотной поддержки и кастомные вертикали.</p>
 </div>
 </div>
-<p style="margin-top:24px;color:var(--color-gray-500);font-size:var(--font-size-small);">Оплата: 50% старт работ, 50% после финальной передачи системы.</p>
+<div style="max-width:640px;margin:32px auto 0;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;">
+<a href="https://t.me/lvanKhudyakov" target="_blank" rel="noopener" class="btn btn--primary" data-cta-type="sprint_waitlist" data-cta-location="pricing" style="font-size:1.0625rem;padding:14px 28px;">Записаться в лист ожидания →</a>
+<p style="color:var(--color-gray-500);font-size:0.875rem;line-height:1.5;margin:0;">Оплата: 50&nbsp;% — старт работ, 50&nbsp;% — после финальной передачи системы.</p>
+</div>
 </div>
 </section>
 
@@ -232,5 +238,22 @@
     </div>
   </footer>
 <script src="js/main.js" defer></script>
+
+  <script>
+    (function(){
+      const b = document.getElementById('burger');
+      const n = document.getElementById('site-nav');
+      if (b && n) {
+        b.addEventListener('click', () => {
+          const open = n.classList.toggle('is-open');
+          b.setAttribute('aria-expanded', String(open));
+        });
+        n.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+          n.classList.remove('is-open');
+          b.setAttribute('aria-expanded','false');
+        }));
+      }
+    })();
+  </script>
 </body>
 </html>

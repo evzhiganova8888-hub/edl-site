@@ -56,9 +56,20 @@
   <a href="#main" class="skip-link">Перейти к содержанию</a>
 
   <header class="header" id="header" style="background:var(--color-white); border-bottom:1px solid var(--color-gray-200);">
-    <div class="container header__inner" style="display:flex; justify-content:space-between; align-items:center;">
-      <a href="/" class="header__logo" style="font-weight:700; color:var(--color-gray-900); text-decoration:none; display:inline-flex; align-items:center; gap:10px;"><img src="/assets/logo-192.png" alt="" width="28" height="28" style="border-radius:50%;" aria-hidden="true"><span>EDL&nbsp;OS</span></a>
-      <a href="/" style="font-size:0.875rem; color:var(--color-gray-500); text-decoration:none;">← На главную</a>
+    <div class="container header__inner site-header">
+      <a href="/" class="header__logo site-logo" aria-label="EDL OS — на главную"><img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true"><span>EDL&nbsp;OS</span></a>
+      <nav class="site-nav" id="site-nav" aria-label="Главное меню">
+        <a href="/index.html#cases">Кейсы</a>
+        <a href="/pricing.html">Цены</a>
+        <a href="/about.html">Команда</a>
+        <a href="/faq.html">FAQ</a>
+      </nav>
+      <div class="site-header__cta">
+        <a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--outline site-header__channel" aria-label="Telegram-канал EDL OS">
+          <span aria-hidden="true">✈️</span> Канал
+        </a>
+        <button class="header__burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav" id="burger">☰</button>
+      </div>
     </div>
   </header>
 
@@ -73,7 +84,7 @@
             <summary class="faq-summary">Чем Бизнес-чекап отличается от бесплатного демо?</summary>
             <div class="faq-content">
               <p>Демо — это знакомство с системой. 30 минут, мы покажем, как EDL OS работает, ответим на вопросы. Бесплатно.</p>
-              <p>Бизнес-чекап — это аудит ВАШЕГО бизнеса. 30 минут звонка, 48 часов AI-обработки, и вы получаете персональный разбор: PDF на 5-7 страниц, майнд-карту оцифровки вашего бизнеса (в Miro), персональный видео-разбор вашего результата, 3 конкретных действия на следующую неделю и план действий на 90 дней.</p>
+              <p>Бизнес-чекап — это аудит ВАШЕГО бизнеса. 30 минут звонка, 48 часов AI-обработки, и вы получаете персональный разбор: PDF на 5-7 страниц, майнд-карту оцифровки вашего бизнеса в FigJam, персональный видео-разбор вашего результата, 3 конкретных действия на следующую неделю и план действий на 90 дней.</p>
             </div>
           </details>
           <details class="faq-item" data-faq-id="2">
@@ -138,7 +149,7 @@
           <details class="faq-item" data-faq-id="11">
             <summary class="faq-summary">Кто работает над моим Бизнес-чекапом?</summary>
             <div class="faq-content">
-              <p>Иван или Катя на звонке, AI генерирует отчёт, Катя делает ревью и записывает видео-разбор.</p>
+              <p>Иван или Катя проводит 30-минутный звонок-интервью. Затем сетка ИИ-агентов EDL OS обрабатывает данные по нашей методологии EDL OS. Екатерина Жиганова — основательница и автор методологии EDL OS — лично контролирует старт анализа, интерпретирует результат и записывает персональный видео-разбор для собственника.</p>
             </div>
           </details>
           <details class="faq-item" data-faq-id="12">
@@ -201,6 +212,23 @@
         });
       });
     });
+  </script>
+
+  <script>
+    (function(){
+      const b = document.getElementById('burger');
+      const n = document.getElementById('site-nav');
+      if (b && n) {
+        b.addEventListener('click', () => {
+          const open = n.classList.toggle('is-open');
+          b.setAttribute('aria-expanded', String(open));
+        });
+        n.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+          n.classList.remove('is-open');
+          b.setAttribute('aria-expanded','false');
+        }));
+      }
+    })();
   </script>
 </body>
 </html>
