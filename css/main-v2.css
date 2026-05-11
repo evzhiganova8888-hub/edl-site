@@ -641,3 +641,49 @@ body[data-segment-active="marketplace"] .icp-btn[data-segment-switch="marketplac
   color: var(--color-gray-700);
   line-height: 1.6;
 }
+
+/* ── Mobile: Hero CTA buttons ── */
+@media (max-width: 640px) {
+  .hero__content > div[style] a.btn {
+    width: 100%;
+    text-align: center;
+    font-size: 0.875rem;
+    padding: 12px 16px;
+  }
+  div[style*="display:flex"][style*="flex-wrap:wrap"] a.btn {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+}
+
+/* ── ICP Switcher mobile gap ── */
+.icp-switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+.icp-switcher__label {
+  font-size: 0.8125rem;
+  color: var(--color-gray-500);
+  flex: 0 0 100%;
+  margin-bottom: 2px;
+}
+
+/* ── Battle tabs / Integrations grid fix ── */
+.battle-tabs .tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+@media (max-width: 640px) {
+  .battle-tabs .tabs { gap: 8px; }
+  .battle-tabs .tabs .btn { font-size: 0.8125rem; padding: 8px 14px; }
+}
+
+/* ── Sprint pricing section top spacing ── */
+.sprint-pricing-section {
+  padding-top: 64px;
+}
