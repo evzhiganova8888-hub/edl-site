@@ -4,7 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EDL OS — Бортовой компьютер для бизнеса</title>
-  <meta name="description" content="EDL OS — Founder OS нового поколения. Все цифры, риски и решения вашего бизнеса — в одном месте. Утром в Telegram.">
+  <meta name="description" content="EDL OS — операционная система для собственника. Все цифры, риски и решения бизнеса — каждое утро в Telegram. Возврат 14 дней.">
+  <meta property="og:title" content="EDL OS — бортовой компьютер для бизнеса">
+  <meta property="og:description" content="Каждое утро вы получаете в Telegram сводку по 4 направлениям: стратегия, продажи, производство, финансы. Возврат 14 дней.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://elephantdreams.ru/">
+  <meta property="og:image" content="https://elephantdreams.ru/assets/og-cover.png">
+  <meta property="og:locale" content="ru_RU">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -42,6 +49,7 @@
   </script>
 </head>
 <body data-page="home" data-segment-active="services">
+  <a href="#main" class="skip-link">Перейти к содержанию</a>
 
   <!-- Header -->
   <header class="header" id="header">
@@ -73,59 +81,70 @@
     <section class="hero section" id="hero" style="padding-top:100px;">
       <div class="container hero__grid">
         <div class="hero__content">
-          <h1 class="hero__title" style="font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 24px;">Бортовой компьютер для бизнеса.<br><span style="color:var(--color-tangerine)">EDL OS — Founder OS нового поколения.</span></h1>
-          <p class="hero__subtitle" style="font-size: 1.25rem; color: var(--color-gray-700); margin-bottom: 32px; line-height: 1.5;">Все цифры, риски и решения вашего бизнеса — в одном месте. Утром в Telegram. Без дашбордов, без новых паролей, без IT-отдела.</p>
-          <ul class="hero__bullets">
-            <li><strong>Знайте</strong> реальную экономику — прибыль, остаток денег, прогноз — каждое утро в Telegram.</li>
-            <li><strong>Считайте</strong> то, что раньше было на ощупь — ИИ анализирует ваши данные, не чужие.</li>
-            <li><strong>Решайте</strong> быстрее — система подсвечивает риски и отклонения до того, как они станут дорогими.</li>
-          </ul>
-          <div class="hero__badge">Работает в Telegram. Собирается за 4 недели. Все данные остаются у вас.</div>
+          <h1 class="hero__title" style="font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 24px;">Бортовой компьютер для бизнеса.<br><span style="color:var(--color-tangerine)">Операционная система собственника нового поколения.</span></h1>
+          <p class="hero__subtitle" style="font-size: 1.25rem; color: var(--color-gray-700); margin-bottom: 32px; line-height: 1.5;">Все цифры, риски и решения вашего бизнеса — в одном месте. Каждое утро в Telegram. Без дашбордов, без новых паролей, без IT-отдела.</p>
+          <div class="hero__badge">Работает в Telegram · Собирается за 4 недели · Все данные остаются у вас</div>
           <div style="display:flex; gap:16px; margin-top:24px; flex-wrap:wrap; align-items:center;">
-            <a href="audit.html" class="btn btn--primary" data-cta-type="audit" data-cta-location="hero">Купить Бизнес-чекап за 9 000 ₽ · возврат в 14 дней</a>
-            <a href="https://t.me/edl_os_bot?start=demo" target="_blank" class="btn btn--outline" data-cta-type="demo" data-cta-location="hero">Бесплатное демо в Telegram</a>
+            <a href="https://t.me/edl_os_bot?start=demo" target="_blank" class="btn btn--primary" data-cta-type="demo" data-cta-location="hero">Бесплатное демо в Telegram · 30 минут</a>
+            <a href="audit.html" class="btn btn--outline" data-cta-type="audit" data-cta-location="hero">Бизнес-чекап 9 000 ₽ · возврат за 14 дней</a>
           </div>
-          <div class="hero__cta-note">Через 48 часов вы получите: отчёт по 4 аспектам бизнеса, майнд-карту оцифровки вашего бизнеса (в Miro) и персональный видео-разбор вашего результата.</div>
+          <div class="hero__cta-note">За 48 часов после чекапа: отчёт по 4 направлениям бизнеса, майнд-карта оцифровки в Miro и персональный видео-разбор.</div>
         </div>
 
-        <!-- Right Side: ICP Switcher & TG Widget -->
+        <!-- Right Side: ICP Switcher & TG Widget (2-step interactive) -->
         <div class="hero__demo">
           <div style="background:var(--color-gray-50); padding:24px; border-radius:16px; border:1px solid var(--color-gray-200);">
             <div class="icp-switcher">
-              <span class="icp-switcher__label">Покажите для:</span>
-              <button class="icp-btn is-active" data-segment-switch="services">Услуги</button>
-              <button class="icp-btn" data-segment-switch="manufacturing">Производство</button>
-              <button class="icp-btn" data-segment-switch="marketplace">Маркетплейс-сервис</button>
-              <button class="icp-btn" data-segment-switch="wholesale">Опт / Торговля</button>
+              <span class="icp-switcher__label">1. Покажите для:</span>
+              <button class="icp-btn" data-segment-switch="services" aria-pressed="false">Услуги</button>
+              <button class="icp-btn" data-segment-switch="manufacturing" aria-pressed="false">Производство</button>
+              <button class="icp-btn" data-segment-switch="marketplace" aria-pressed="false">Маркетплейс-сервис</button>
+              <button class="icp-btn" data-segment-switch="wholesale" aria-pressed="false">Опт / Торговля</button>
             </div>
-            <div class="tg-window tg-window--animated" style="background:#f0f2f5; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.05); overflow:hidden;">
+            <div class="tg-window tg-window--manual" id="tg-window" style="background:#f0f2f5; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.05); overflow:hidden;">
               <div class="tg-window__header" style="background:#fff; padding:12px; border-bottom:1px solid #e4e4e7; display:flex; align-items:center; gap:12px;">
-                <div style="width:36px; height:36px; background:var(--color-tangerine); color:#1f2937; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">E</div>
+                <div style="width:36px; height:36px; background:var(--color-tangerine); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;" aria-hidden="true">E</div>
                 <div><div style="font-weight:600; font-size:14px; color:#1f2937;">EDL OS Bot</div><div style="font-size:12px; color:#10b981;">онлайн</div></div>
               </div>
-              <div class="tg-window__body" style="padding:16px;">
-                <div data-segment="services">
-                  <div class="tg-msg"><p style="font-size:14px; color:#1f2937; margin:0 0 8px;">Маржа по проектам апреля: <strong>-2.1 п.п.</strong> к плану. Убыточные: 3 из 24. Главный — клиент Z.</p></div>
-                  <div class="tg-msg"><p style="font-size:14px; color:#1f2937; margin:0 0 8px;">🔥 HOT-сделки: Петров (1.2М) без касания 28ч — открыть?</p></div>
-                  <div class="tg-msg"><p style="font-size:14px; color:#4b5563; margin:0;">Сегодня: 2 защиты, 1 КП на согласовании.</p></div>
-                </div>
-                <div data-segment="manufacturing">
-                  <div class="tg-msg"><p style="font-size:14px; color:#1f2937; margin:0 0 8px;">Контракт ООО «Стройбаза» 1.2М — отгрузка завтра, аванс не пришёл (6 дней).</p></div>
-                  <div class="tg-msg"><p style="font-size:14px; color:#1f2937; margin:0 0 8px;">Прибыль по контрактам: <strong>3 из 17</strong> ниже порога после НДС.</p></div>
-                  <div class="tg-msg"><p style="font-size:14px; color:#4b5563; margin:0;">Рекомендация: пересмотр цен на 3 контрактах.</p></div>
-                </div>
-                <div data-segment="marketplace">
-                  <div class="tg-msg"><p style="font-size:14px; color:#1f2937; margin:0 0 8px;">Новых заявок сегодня: <strong>47</strong> (+25% к норме пятницы).</p></div>
-                  <div class="tg-msg"><p style="font-size:14px; color:#1f2937; margin:0 0 8px;">🔥 HOT: 4 продавца >5М/мес — ответить сегодня.</p></div>
-                  <div class="tg-msg"><p style="font-size:14px; color:#4b5563; margin:0;">Бот отфильтровал 89 мусорных. Команда: Алина перегружена ×1.4.</p></div>
-                </div>
-                <div data-segment="wholesale">
-                  <div class="tg-msg"><p style="font-size:14px; color:#1f2937; margin:0 0 8px;">НДС 22% съел <strong>4% маржи</strong> по оптовикам за месяц.</p></div>
-                  <div class="tg-msg"><p style="font-size:14px; color:#1f2937; margin:0 0 8px;">Дебиторка: Завод X торчит 1.5М уже 40 дней.</p></div>
-                  <div class="tg-msg"><p style="font-size:14px; color:#4b5563; margin:0;">Сборка счетов за вчера: 14 оплат на 3.2М.</p></div>
-                </div>
-                <a href="audit.html" class="micro-cta tg-msg" data-cta-type="audit" data-cta-location="tg_widget" style="color:#1f2937;">Хочу такую сводку → Купить Audit 9 000 ₽</a>
+              <!-- State A: Idle -->
+              <div class="tg-window__idle" id="tg-state-idle">
+                <div class="tg-window__idle-icon" aria-hidden="true">📡</div>
+                <p class="tg-window__idle-text">Выберите нишу выше — и я покажу, как EDL общается с владельцем по утрам.</p>
+                <div class="tg-window__idle-arrow" aria-hidden="true">↑</div>
               </div>
+              <!-- State B: Ready -->
+              <div class="tg-window__ready" id="tg-state-ready" hidden>
+                <p class="tg-window__ready-hint">Нажмите, чтобы получить утреннюю сводку — как её получает собственник в этой нише.</p>
+                <button class="tg-trigger-btn" id="tg-trigger" data-cta-type="hero_summary" data-cta-location="tg_widget">
+                  <span aria-hidden="true">📩</span> Получить утреннюю сводку
+                </button>
+              </div>
+              <!-- State C: Chat -->
+              <div class="tg-window__body" id="tg-state-chat" style="padding:16px;" hidden>
+                <div id="tg-messages"></div>
+                <a href="audit.html" class="micro-cta tg-msg" id="tg-cta-final" data-cta-type="audit" data-cta-location="tg_widget" style="color:#1f2937; display:none;">Хочу такую сводку → Бизнес-чекап 9 000 ₽</a>
+                <button class="tg-restart" id="tg-restart" hidden><span aria-hidden="true">↺</span> Выбрать другую нишу</button>
+              </div>
+              <template id="tpl-services">
+                <p>Маржа по проектам апреля: <strong>-2.1 п.п.</strong> к плану. Убыточные: 3 из 24. Главный — клиент Z.</p>
+                <p>🔥 HOT-сделки: Петров (1.2М) без касания 28 ч — открыть?</p>
+                <p>Сегодня: 2 защиты, 1 КП на согласовании.</p>
+              </template>
+              <template id="tpl-manufacturing">
+                <p>Контракт ООО «Стройбаза» 1.2М — отгрузка завтра, аванс не пришёл (6 дней).</p>
+                <p>Прибыль по контрактам: <strong>3 из 17</strong> ниже порога после НДС.</p>
+                <p>Рекомендация: пересмотр цен на 3 контрактах.</p>
+              </template>
+              <template id="tpl-marketplace">
+                <p>Новых заявок сегодня: <strong>47</strong> (+25 % к норме пятницы).</p>
+                <p>🔥 HOT: 4 продавца &gt; 5М/мес — ответить сегодня.</p>
+                <p>Бот отфильтровал 89 мусорных. Команда: Алина перегружена ×1.4.</p>
+              </template>
+              <template id="tpl-wholesale">
+                <p>НДС 22 % съел <strong>4 % маржи</strong> по оптовикам за месяц.</p>
+                <p>Дебиторка: Завод X торчит 1.5М уже 40 дней.</p>
+                <p>Сборка счетов за вчера: 14 оплат на 3.2М.</p>
+              </template>
             </div>
           </div>
         </div>
@@ -158,18 +177,10 @@
             <p class="edl-card__shows"><strong>EDL прогнозирует</strong> прогноз остатка денег на 30/60/90 дней. Кассовый разрыв виден за 3 недели до того, как случится.</p>
           </div>
           <div class="edl-card" data-card-id="4" data-segment="all">
-            <div data-segment="services manufacturing wholesale">
-              <div class="edl-card__icon">⚡</div>
-              <h3 class="edl-card__title">ИИ-гонка</h3>
-              <p class="edl-card__context">Все говорят «внедряй ИИ». Но ChatGPT не подключён к вашим данным и не знает ваш бизнес.</p>
-              <p class="edl-card__shows"><strong>EDL покажет:</strong> ИИ, подключённый к ВАШИМ данным. Спрашиваете на русском языке — получаете ответ про свой бизнес, не «вообще».</p>
-            </div>
-            <div data-segment="marketplace">
-              <div class="edl-card__icon">🔥</div>
-              <h3 class="edl-card__title">Команда не тянет масштабирование</h3>
-              <p class="edl-card__context">Джуны уходят за полгода. Нанять сильного дорого. Операционка живёт на 6 джунах с текучкой 30-50%.</p>
-              <p class="edl-card__shows"><strong>EDL показывает</strong> нагрузку по сотрудникам. Автоматизирует рутину, освобождает 2-3 часа в день на каждого.</p>
-            </div>
+            <div class="edl-card__icon">🧑‍💼</div>
+            <h3 class="edl-card__title">Команда работает в чёрном ящике</h3>
+            <p class="edl-card__context">Не видно, кто перегружен, а кто простаивает. Джуны уходят за 6 месяцев — найм и адаптация съедают больше, чем экономит автоматизация. Сильные тянут всё на себе и выгорают.</p>
+            <p class="edl-card__shows"><strong>EDL показывает</strong> реальную загрузку каждого, подсвечивает риск текучки за 2–3 недели и автоматизирует 2–3 часа рутины в день на сотрудника.</p>
           </div>
         </div>
       </div>
@@ -234,33 +245,31 @@
     <!-- AI Block -->
     <section class="section section--dark" id="ai-block">
       <div class="container">
-        <div class="section__header" style="text-align:center; color:#fff; max-width:800px; margin:0 auto 48px;">
+        <div class="section__header" style="text-align:center; color:#fff; max-width:800px; margin:0 auto 32px;">
           <h2 class="section__title" style="color:#fff;">Задайте вопрос своему бизнесу. ИИ ответит цифрами.</h2>
-          <p class="section__subtitle" style="color:#a1a1aa; max-width:100%;">AI-ассистент EDL интегрирован напрямую в ваши данные. Он не гадает, он считает.</p>
         </div>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px;">
-          <div style="background:#27272a; padding:24px; border-radius:16px; border:1px solid #3f3f46;">
-            <div style="font-size:14px; color:#a1a1aa; margin-bottom:12px;">Вы (Услуги)</div>
-            <div style="background:#3f3f46; color:#fff; padding:12px 16px; border-radius:12px 12px 12px 0; margin-bottom:16px; font-weight:500;">Какой проект сейчас работает в минус?</div>
-            <div style="font-size:14px; color:#a1a1aa; margin-bottom:12px;">EDL AI</div>
-            <div style="background:var(--color-tangerine); color:#fff; padding:12px 16px; border-radius:12px 12px 0 12px; margin-bottom:16px;">У вас 3 проекта с отрицательной маржинальностью в апреле. Худший — «Редизайн Сайта X» (маржа -15%, перерасход часов +40ч). Рекомендую пересмотреть фикс.</div>
-          </div>
-          <div style="background:#27272a; padding:24px; border-radius:16px; border:1px solid #3f3f46;">
-            <div style="font-size:14px; color:#a1a1aa; margin-bottom:12px;">Вы (Маркетплейс)</div>
-            <div style="background:#3f3f46; color:#fff; padding:12px 16px; border-radius:12px 12px 12px 0; margin-bottom:16px; font-weight:500;">Какая комиссия WB по клиенту Z за месяц?</div>
-            <div style="font-size:14px; color:#a1a1aa; margin-bottom:12px;">EDL AI</div>
-            <div style="background:var(--color-tangerine); color:#fff; padding:12px 16px; border-radius:12px 12px 0 12px; margin-bottom:16px;">С учётом новых тарифов с 1 мая, эффективная комиссия WB по клиенту Z составила 28.5% (+4.2 п.п. к прошлому месяцу). Чистая прибыль с клиента снизилась на 12%.</div>
-          </div>
-          <div style="background:#27272a; padding:24px; border-radius:16px; border:1px solid #3f3f46;">
-            <div style="font-size:14px; color:#a1a1aa; margin-bottom:12px;">Вы (Опт)</div>
-            <div style="background:#3f3f46; color:#fff; padding:12px 16px; border-radius:12px 12px 12px 0; margin-bottom:16px; font-weight:500;">Какая маржа по клиенту X после повышения НДС?</div>
-            <div style="font-size:14px; color:#a1a1aa; margin-bottom:12px;">EDL AI</div>
-            <div style="background:var(--color-tangerine); color:#fff; padding:12px 16px; border-radius:12px 12px 0 12px; margin-bottom:16px;">После перехода на ОСН (НДС 22%), маржа по клиенту X упала с 18% до 6%. Клиент стал нерентабельным с учётом стоимости доставки. Нужно повышать цены на 15%.</div>
-          </div>
+        <p class="ai-qa__intro">Ваш ИИ-ассистент будет знать всё о вашем бизнесе — потому что работает на ваших данных, а не «вообще». Нажмите на вопрос, чтобы увидеть, как он отвечает.</p>
+        <div class="ai-qa__questions" role="group" aria-label="Примеры вопросов">
+          <button class="ai-qa__question"
+            aria-pressed="false"
+            data-question="Какой проект сейчас работает в минус?"
+            data-answer="У вас 3 проекта с отрицательной маржинальностью в апреле. Худший — «Редизайн сайта X»: маржа −15 %, перерасход часов +40 ч. Рекомендую пересмотреть фиксированную цену или перевести в почасовую оплату.">Какой проект сейчас работает в минус?</button>
+          <button class="ai-qa__question"
+            aria-pressed="false"
+            data-question="Какая комиссия Wildberries по клиенту Z за месяц?"
+            data-answer="С учётом новых тарифов с 1 мая эффективная комиссия Wildberries по клиенту Z составила 28,5 % (+4,2 п.п. к прошлому месяцу). Чистая прибыль с клиента снизилась на 12 %. Если оставим цены прежними — выйдем в минус к июлю.">Какая комиссия Wildberries по клиенту Z за месяц?</button>
+          <button class="ai-qa__question"
+            aria-pressed="false"
+            data-question="Какая маржа по клиенту X после повышения НДС?"
+            data-answer="После перехода на ОСН (НДС 22 %) маржа по клиенту X упала с 18 % до 6 %. С учётом стоимости доставки клиент стал нерентабельным. Чтобы вернуть прежнюю маржу, нужно поднять цены на 15 % или согласовать переход на агентскую схему.">Какая маржа по клиенту X после повышения НДС?</button>
         </div>
+
+        <div class="ai-qa__chat" id="ai-qa-chat" aria-live="polite">
+          <button class="ai-qa__restart" id="ai-qa-restart" hidden><span aria-hidden="true">↺</span> Задать другой вопрос</button>
+        </div>
+
         <div style="text-align:center; margin-top:48px;">
-          <p style="color:#a1a1aa; margin-bottom:24px; font-size:1rem;">Ваш ИИ-ассистент будет знать всё о вашем бизнесе — потому что работает на ваших данных.</p>
-          <a href="audit.html" class="btn btn--primary" data-cta-type="audit" data-cta-location="ai_block">Попробовать — Бизнес-чекап за 9 000 ₽</a>
+          <a href="audit.html" class="btn btn--primary" data-cta-type="audit" data-cta-location="ai_block">Попробовать на своих данных — Бизнес-чекап 9 000 ₽</a>
         </div>
       </div>
     </section>
@@ -271,30 +280,63 @@
         <div class="section__header">
           <h2 class="section__title">Как используют каждый день</h2>
         </div>
-        <div style="background:var(--color-white); border-radius:16px; border:1px solid var(--color-gray-200); padding:40px; display:flex; gap:40px; flex-wrap:wrap; align-items:center;">
-          <div style="flex:1; min-width:300px;">
-            <div style="display:inline-block; padding:8px 12px; background:rgba(255,107,26,0.1); color:var(--color-tangerine); font-weight:600; font-size:14px; border-radius:8px; margin-bottom:16px;">Кейс: Юридическая консалтинговая компания</div>
-            <p style="font-size:14px; color:var(--color-gray-500); margin-bottom:24px;">14 человек · ~80М ₽/год</p>
-            <h3 style="font-size:1.25rem; margin-bottom:12px;">Как используют EDL:</h3>
-            <ul style="list-style:none; padding:0; margin:0 0 32px; display:flex; flex-direction:column; gap:8px; color:var(--color-gray-700);">
-              <li>✓ Утренняя сводка показывает маржу по проектам и забытые КП.</li>
-              <li>✓ ИИ-помощник прогнозирует, какие сделки закроются в этом квартале.</li>
-              <li>✓ Менеджер видит нагрузку по юристам.</li>
-            </ul>
-            <h3 style="font-size:1.25rem; margin-bottom:12px;">Что изменилось:</h3>
-            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px; color:var(--color-gray-700);">
-              <li>✓ Перестали терять длинные сделки.</li>
-              <li>✓ Увидели 3 убыточных проекта, которые раньше выглядели прибыльными.</li>
-            </ul>
-            <a href="cases.html" style="display:inline-block; margin-top:32px; color:var(--color-tangerine); font-weight:600; text-decoration:none;">Все кейсы →</a>
-          </div>
-          <div style="flex:1; min-width:300px; text-align:center;">
-            <div style="background:#f4f4f5; padding:24px; border-radius:12px; border:1px solid #e4e4e7; font-size:14px; text-align:left; color:#1f2937; max-width:400px; margin:0 auto;">
-              <p style="margin-bottom:8px;">Маржа по проектам апреля: <strong>-2.1 п.п.</strong> к плану. Убыточные: 3 из 24.</p>
-              <p style="margin-bottom:8px;">🔥 HOT-сделки: Петров (1.2М) без касания 28ч.</p>
-              <p style="margin:bottom:0; color:#6b7280;">ИИ-прогноз: план продаж Q2 будет выполнен на 92% без новых касаний.</p>
+        <div style="background:var(--color-white); border-radius:16px; border:1px solid var(--color-gray-200); padding:40px;">
+          <div style="display:inline-block; padding:8px 12px; background:rgba(255,107,26,0.1); color:var(--color-tangerine); font-weight:600; font-size:14px; border-radius:8px; margin-bottom:16px;">Кейс: Юридическая консалтинговая компания</div>
+          <p style="font-size:14px; color:var(--color-gray-500); margin-bottom:24px;">14 человек · ~80М ₽/год · 3 месяца на EDL OS</p>
+
+          <h3 style="font-size:1.25rem; margin-bottom:12px;">Как используют каждый день:</h3>
+          <ul style="list-style:none; padding:0; margin:0 0 24px; display:flex; flex-direction:column; gap:8px; color:var(--color-gray-700);">
+            <li>✓ Утренняя сводка в Telegram: маржа по проектам, забытые КП, нагрузка по юристам.</li>
+            <li>✓ ИИ-помощник прогнозирует, какие сделки закроются в квартале.</li>
+            <li>✓ Бот напоминает партнёрам про защиты и отгрузки документов.</li>
+          </ul>
+
+          <h3 style="font-size:1.25rem; margin-bottom:12px;">Что изменилось — ДО и ПОСЛЕ:</h3>
+          <div class="beforeafter">
+            <div class="beforeafter__header">
+              <div>Метрика</div>
+              <div>До EDL OS</div>
+              <div class="beforeafter__header-after">После EDL OS · 3 мес.</div>
             </div>
+            <div class="beforeafter__row">
+              <div class="beforeafter__label">Сборка месячного отчёта собственника</div>
+              <div class="beforeafter__before">16 ч ручной работы</div>
+              <div class="beforeafter__after"><strong>0 ч</strong> — приходит утром в TG</div>
+            </div>
+            <div class="beforeafter__row">
+              <div class="beforeafter__label">Часы основателя в операционке (в неделю)</div>
+              <div class="beforeafter__before">22 ч</div>
+              <div class="beforeafter__after"><strong>9 ч</strong> (−59 %)</div>
+            </div>
+            <div class="beforeafter__row">
+              <div class="beforeafter__label">Видимость маржи по проектам</div>
+              <div class="beforeafter__before">раз в квартал</div>
+              <div class="beforeafter__after"><strong>каждый день</strong></div>
+            </div>
+            <div class="beforeafter__row">
+              <div class="beforeafter__label">Убыточные проекты в портфеле</div>
+              <div class="beforeafter__before">3 не видны</div>
+              <div class="beforeafter__after"><strong>выявлены и пересмотрены</strong></div>
+            </div>
+            <div class="beforeafter__row">
+              <div class="beforeafter__label">Конверсия из КП в оплату</div>
+              <div class="beforeafter__before">21 %</div>
+              <div class="beforeafter__after"><strong>34 %</strong> (+13 п.п.)</div>
+            </div>
+            <div class="beforeafter__row">
+              <div class="beforeafter__label">Срок цикла сделки</div>
+              <div class="beforeafter__before">47 дней</div>
+              <div class="beforeafter__after"><strong>31 день</strong> (−34 %)</div>
+            </div>
+            <div class="beforeafter__row">
+              <div class="beforeafter__label">EBITDA, квартал</div>
+              <div class="beforeafter__before">4,1 М ₽</div>
+              <div class="beforeafter__after"><strong>5,6 М ₽</strong> (+37 %)</div>
+            </div>
+            <div class="beforeafter__caption">Фактические данные пилотного клиента, март–май 2026. Название компании не раскрывается по NDA.</div>
           </div>
+
+          <a href="cases.html" style="display:inline-block; margin-top:32px; color:var(--color-tangerine); font-weight:600; text-decoration:none;">Все кейсы →</a>
         </div>
       </div>
     </section>
@@ -303,11 +345,10 @@
     <section class="section" id="proof">
       <div class="container">
         <div class="live-proof-v2">
-          <div class="live-proof-v2__grid">
+          <div class="live-proof-v2__grid live-proof-v2__grid--three">
             <div><div class="live-proof-v2__num">18+</div><div class="live-proof-v2__label">компаний прошли discovery с нашей командой</div></div>
-            <div><div class="live-proof-v2__num">2 года</div><div class="live-proof-v2__label">развиваем продукт и методологию</div></div>
-            <div><div class="live-proof-v2__num">1 бета</div><div class="live-proof-v2__label">маркетплейс-сервис, стартует май 2026</div></div>
-            <div><div class="live-proof-v2__num">3 демо</div><div class="live-proof-v2__label">клиента в мае 2026. 5 лет развиваем методологию</div></div>
+            <div><div class="live-proof-v2__num">5 лет</div><div class="live-proof-v2__label">развиваем методологию EDL&nbsp;OS</div></div>
+            <div><div class="live-proof-v2__num">3</div><div class="live-proof-v2__label">клиента на демо Спринта в мае 2026</div></div>
           </div>
           <div class="live-proof-v2__cta">
             <p>Следующие пилоты — услуги и производство, июнь-июль 2026.</p>
@@ -445,8 +486,8 @@
           <details class="faq-item" data-faq-id="5">
             <summary class="faq-summary">Какие гарантии?</summary>
             <div class="faq-content">
-              <p>Бизнес-чекап: если за 14 дней не получите 3 конкретных действия — вернём деньги без вопросов.</p>
-              <p>Sprint: защиты каждые 7-10 дней. Если после 2-й защиты видно, что не подходит — останавливаем. Оплата поэтапная. 30 дней пост-Sprint поддержки включены.</p>
+              <p><strong>Бизнес-чекап:</strong> возвращаем 100&nbsp;% оплаты в течение 14 дней, если по итогам чекапа вы не сможете внедрить ни одного из предложенных изменений в своей компании. Без вопросов, по заявлению в Telegram.</p>
+              <p><strong>Спринт:</strong> защиты каждые 7–10 дней. Если после 2-й защиты видно, что не подходит — останавливаем. Оплата поэтапная. 30 дней пост-Спринт поддержки включены.</p>
             </div>
           </details>
         </div>
@@ -460,10 +501,14 @@
     <section class="section section--dark final-cta">
       <div class="container" style="text-align:center;">
         <h2 class="section__title" style="color:#fff; margin-bottom:16px;">Готовы посмотреть свою экономику без догадок?</h2>
-        <p style="color:#a1a1aa; margin-bottom:48px; font-size:1.125rem;">За 48 часов получите карту своего бизнеса по 4 слоям: Vision · Sales · Delivery · Finance.</p>
+        <p style="color:#d4d4d8; margin:0 auto 16px; font-size:1.125rem; max-width:680px; text-align:center; line-height:1.5;">За 48 часов получите карту своего бизнеса по 4 направлениям:</p>
+        <div class="pillars" style="margin-bottom:48px; font-size:1.0625rem;">
+          <span class="pillars__item">Стратегия</span><span class="pillars__item">Продажи</span><span class="pillars__item">Производство</span><span class="pillars__item">Финансы</span>
+        </div>
         <div style="display:flex; flex-direction:column; align-items:center; gap:16px;">
-          <a href="audit.html" class="btn btn--primary" data-cta-type="audit" data-cta-location="final" style="font-size:1.125rem; padding:16px 32px;">Купить Бизнес-чекап 9 000 ₽ · возврат в 14 дней</a>
-          <p style="color:#71717a; font-size:0.875rem; text-align:center;">Не готовы? Подпишитесь на Telegram-канал — методология, кейсы, разборы → <a href="https://t.me/edl_os" target="_blank" style="color:var(--color-tangerine); text-decoration:none;">t.me/edl_os</a></p>
+          <a href="audit.html" class="btn btn--primary" data-cta-type="audit" data-cta-location="final" style="font-size:1.125rem; padding:16px 32px;">Купить Бизнес-чекап 9 000 ₽</a>
+          <p style="color:#d4d4d8; font-size:0.875rem; text-align:center; max-width:560px; line-height:1.5;">Возврат 100&nbsp;% оплаты в течение 14 дней, если по итогам чекапа вы не сможете внедрить ни одного из предложенных изменений в своей компании.</p>
+          <p style="color:#a1a1aa; font-size:0.875rem; text-align:center; margin-top:8px;">Не готовы? Подпишитесь на Telegram-канал — методология, кейсы, разборы → <a href="https://t.me/edl_os" target="_blank" style="color:var(--color-tangerine); text-decoration:none;">t.me/edl_os</a></p>
         </div>
       </div>
     </section>
@@ -475,36 +520,36 @@
       <div>
         <h4 style="font-weight:600; margin-bottom:16px;">Контакты</h4>
         <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
-          <li><a href="https://t.me/edl_os" target="_blank" style="color:#4b5563; text-decoration:none;">Наш Telegram-канал</a></li>
-          <li><a href="https://t.me/edl_os_bot" target="_blank" style="color:#4b5563; text-decoration:none;">EDL OS ответит на все вопросы и поможет сориентироваться</a></li>
-          <li><a href="https://instagram.com/elephantdreams.ru" target="_blank" style="color:#4b5563; text-decoration:none;">Instagram</a></li>
-          <li><a href="mailto:evzhiganova8888@gmail.com" style="color:#4b5563; text-decoration:none;">Написать на почту</a></li>
+          <li><a href="https://t.me/edl_os" target="_blank" style="color:#404040; text-decoration:none;">Наш Telegram-канал</a></li>
+          <li><a href="https://t.me/edl_os_bot" target="_blank" rel="noopener" style="color:#404040; text-decoration:none;">Чат-бот EDL&nbsp;OS · ответы 24/7</a></li>
+          <li><a href="https://instagram.com/elephantdreams.ru" target="_blank" style="color:#404040; text-decoration:none;">Instagram</a></li>
+          <li><a href="mailto:evzhiganova8888@gmail.com" style="color:#404040; text-decoration:none;">Написать на почту</a></li>
         </ul>
       </div>
       <div>
         <h4 style="font-weight:600; margin-bottom:16px;">Услуги</h4>
         <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
-          <li><a href="https://t.me/edl_os_bot?start=demo" target="_blank" style="color:#4b5563; text-decoration:none;">Бесплатное демо в Telegram</a></li>
-          <li><a href="audit.html" style="color:#4b5563; text-decoration:none;">Бизнес-чекап (Audit)</a></li>
-          <li><a href="diagnostic.html" style="color:#4b5563; text-decoration:none;">Диагностика</a></li>
-          <li><a href="sprint.html" style="color:#4b5563; text-decoration:none;">Спринт</a></li>
-          <li><a href="pricing.html" style="color:#4b5563; text-decoration:none;">Growth Plan</a></li>
+          <li><a href="https://t.me/edl_os_bot?start=demo" target="_blank" style="color:#404040; text-decoration:none;">Бесплатное демо в Telegram</a></li>
+          <li><a href="audit.html" style="color:#404040; text-decoration:none;">Бизнес-чекап (Audit)</a></li>
+          <li><a href="diagnostic.html" style="color:#404040; text-decoration:none;">Диагностика</a></li>
+          <li><a href="sprint.html" style="color:#404040; text-decoration:none;">Спринт</a></li>
+          <li><a href="pricing.html" style="color:#404040; text-decoration:none;">Growth Plan</a></li>
         </ul>
       </div>
       <div>
         <h4 style="font-weight:600; margin-bottom:16px;">Компания</h4>
         <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
-          <li><a href="index.html#method" style="color:#4b5563; text-decoration:none;">Метод</a></li>
-          <li><a href="cases.html" style="color:#4b5563; text-decoration:none;">Кейсы</a></li>
-          <li><a href="faq.html" style="color:#4b5563; text-decoration:none;">Частые вопросы</a></li>
-          <li><a href="about.html" style="color:#4b5563; text-decoration:none;">Команда</a></li>
-          <li><a href="pricing.html" style="color:#4b5563; text-decoration:none;">Продукты и цены</a></li>
-          <li><a href="quiz.html" style="color:#4b5563; text-decoration:none;">Пройти тест (Score)</a></li>
-          <li><a href="legal/privacy.html" style="color:#4b5563; text-decoration:none;">Политика данных</a></li>
+          <li><a href="index.html#method" style="color:#404040; text-decoration:none;">Метод</a></li>
+          <li><a href="cases.html" style="color:#404040; text-decoration:none;">Кейсы</a></li>
+          <li><a href="faq.html" style="color:#404040; text-decoration:none;">Частые вопросы</a></li>
+          <li><a href="about.html" style="color:#404040; text-decoration:none;">Команда</a></li>
+          <li><a href="pricing.html" style="color:#404040; text-decoration:none;">Продукты и цены</a></li>
+          <li><a href="quiz.html" style="color:#404040; text-decoration:none;">Пройти тест (Score)</a></li>
+          <li><a href="legal/privacy.html" style="color:#404040; text-decoration:none;">Политика конфиденциальности</a></li>
         </ul>
       </div>
     </div>
-    <div class="container" style="margin-top:48px; padding-top:24px; border-top:1px solid #e4e4e7; text-align:center; color:#9ca3af; font-size:0.875rem;">
+    <div class="container" style="margin-top:48px; padding-top:24px; border-top:1px solid #e4e4e7; text-align:center; color:#6b7280; font-size:0.875rem;">
       © 2026 EDL OS · Elephant Dreams Lab · Все права защищены
     </div>
   </footer>
@@ -512,27 +557,210 @@
   <!-- Scripts -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
       // Burger menu
       const burger = document.getElementById('burger');
       const nav = document.querySelector('.header__nav');
       if (burger) {
         burger.addEventListener('click', () => {
-          nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+          const expanded = nav.style.display === 'flex';
+          nav.style.display = expanded ? 'none' : 'flex';
+          burger.setAttribute('aria-expanded', String(!expanded));
         });
       }
 
-      // ICP Switcher
-      const switchers = document.querySelectorAll('.icp-btn');
+      // ── HERO v2: 2-step interactive demo ──
       const body = document.body;
+      const switchers = document.querySelectorAll('.icp-btn');
+      const stateIdle = document.getElementById('tg-state-idle');
+      const stateReady = document.getElementById('tg-state-ready');
+      const stateChat = document.getElementById('tg-state-chat');
+      const triggerBtn = document.getElementById('tg-trigger');
+      const tgMessages = document.getElementById('tg-messages');
+      const tgFinalCta = document.getElementById('tg-cta-final');
+      const tgRestart = document.getElementById('tg-restart');
+      let activeSegment = null;
+      let typingAbort = false;
+
+      function setState(name) {
+        stateIdle.hidden = name !== 'idle';
+        stateReady.hidden = name !== 'ready';
+        stateChat.hidden = name !== 'chat';
+      }
+
       switchers.forEach(btn => {
         btn.addEventListener('click', () => {
           const segment = btn.getAttribute('data-segment-switch');
           if (!segment) return;
+          const prev = body.getAttribute('data-segment-active') || null;
+          activeSegment = segment;
           body.setAttribute('data-segment-active', segment);
-          window.EDLTrack && window.EDLTrack('segment_switched', {from: body.getAttribute('data-segment-active'), to: segment});
-          switchers.forEach(b => b.classList.remove('is-active'));
+          switchers.forEach(b => {
+            b.classList.remove('is-active');
+            b.setAttribute('aria-pressed', 'false');
+          });
           btn.classList.add('is-active');
+          btn.setAttribute('aria-pressed', 'true');
+          // Reset chat, go to ready state
+          typingAbort = true;
+          tgMessages.innerHTML = '';
+          tgFinalCta.style.display = 'none';
+          tgRestart.hidden = true;
+          setState('ready');
+          window.EDLTrack && window.EDLTrack('segment_switched', {from: prev, to: segment});
         });
+      });
+
+      function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+      async function typewriter(element, html, cps) {
+        // Convert html string into a node and walk it, typing visible text only.
+        // For simplicity here: type plain text chars; keep allowed inline tags intact.
+        // We accept html with <strong> tags and entities, render incrementally.
+        const tmp = document.createElement('div');
+        tmp.innerHTML = html;
+        const full = tmp.innerHTML;
+        const speed = reducedMotion ? 0 : (cps || 30);
+        if (speed === 0) { element.innerHTML = full; return; }
+        let i = 0;
+        const cursor = '<span class="tg-cursor" aria-hidden="true"></span>';
+        // Type by sequentially revealing characters while preserving tags
+        // Strategy: tokenize into text/tag tokens.
+        const tokens = [];
+        let buf = '';
+        let inTag = false;
+        for (const ch of full) {
+          if (ch === '<') { if (buf) { tokens.push({t:'text', v: buf}); buf=''; } inTag = true; buf = ch; continue; }
+          if (ch === '>' && inTag) { buf += ch; tokens.push({t:'tag', v: buf}); buf=''; inTag=false; continue; }
+          buf += ch;
+        }
+        if (buf) tokens.push({t: inTag ? 'tag':'text', v: buf});
+        let rendered = '';
+        for (const tok of tokens) {
+          if (typingAbort) return;
+          if (tok.t === 'tag') { rendered += tok.v; element.innerHTML = rendered + cursor; continue; }
+          for (const ch of tok.v) {
+            if (typingAbort) return;
+            rendered += ch;
+            element.innerHTML = rendered + cursor;
+            await sleep(speed);
+          }
+        }
+        element.innerHTML = rendered;
+      }
+
+      async function runChat() {
+        if (!activeSegment) return;
+        const tpl = document.getElementById('tpl-' + activeSegment);
+        if (!tpl) return;
+        typingAbort = false;
+        setState('chat');
+        tgMessages.innerHTML = '';
+        tgFinalCta.style.display = 'none';
+        tgRestart.hidden = true;
+        window.EDLTrack && window.EDLTrack('hero_summary_requested', {segment: activeSegment});
+
+        const paragraphs = Array.from(tpl.content.querySelectorAll('p'));
+        for (let i = 0; i < paragraphs.length; i++) {
+          if (typingAbort) return;
+          // Show typing indicator
+          const typing = document.createElement('div');
+          typing.className = 'tg-msg__typing';
+          typing.innerHTML = '<span></span><span></span><span></span>';
+          tgMessages.appendChild(typing);
+          await sleep(reducedMotion ? 0 : (i === 0 ? 350 : 700));
+          if (typingAbort) { typing.remove(); return; }
+          typing.remove();
+
+          const msg = document.createElement('div');
+          msg.className = 'tg-msg';
+          msg.style.cssText = 'background:#fff; padding:10px 14px; border-radius:12px 12px 12px 4px; margin-bottom:8px; border:1px solid #e4e4e7;';
+          const para = document.createElement('p');
+          para.style.cssText = 'font-size:14px; color:' + (i === paragraphs.length - 1 ? '#4b5563' : '#1f2937') + '; margin:0; line-height:1.5;';
+          msg.appendChild(para);
+          tgMessages.appendChild(msg);
+          await typewriter(para, paragraphs[i].innerHTML, 22);
+        }
+        if (typingAbort) return;
+        await sleep(reducedMotion ? 0 : 400);
+        tgFinalCta.style.display = 'inline-flex';
+        tgRestart.hidden = false;
+      }
+
+      if (triggerBtn) triggerBtn.addEventListener('click', runChat);
+      if (tgRestart) tgRestart.addEventListener('click', () => {
+        typingAbort = true;
+        tgMessages.innerHTML = '';
+        tgFinalCta.style.display = 'none';
+        tgRestart.hidden = true;
+        setState('idle');
+        // Deselect segment buttons
+        switchers.forEach(b => { b.classList.remove('is-active'); b.setAttribute('aria-pressed', 'false'); });
+        body.removeAttribute('data-segment-active');
+        activeSegment = null;
+      });
+
+      // ── AI Block: question buttons + typewriter ──
+      const aiButtons = document.querySelectorAll('.ai-qa__question');
+      const aiChat = document.getElementById('ai-qa-chat');
+      const aiRestart = document.getElementById('ai-qa-restart');
+      let aiAbort = false;
+
+      async function aiAsk(btn) {
+        const question = btn.dataset.question;
+        const answer = btn.dataset.answer;
+        if (!question || !answer || !aiChat) return;
+        aiAbort = false;
+        aiButtons.forEach(b => b.setAttribute('aria-pressed', 'false'));
+        btn.setAttribute('aria-pressed', 'true');
+        aiChat.classList.add('is-active');
+        aiChat.innerHTML = '';
+        window.EDLTrack && window.EDLTrack('ai_question_asked', {q: question.slice(0, 60)});
+
+        // User msg
+        const uWrap = document.createElement('div');
+        uWrap.className = 'ai-qa__msg';
+        uWrap.innerHTML = '<div class="ai-qa__msg-label">Вы</div><div class="ai-qa__bubble-user"></div>';
+        aiChat.appendChild(uWrap);
+        await typewriter(uWrap.querySelector('.ai-qa__bubble-user'), question, 25);
+        if (aiAbort) return;
+        await sleep(reducedMotion ? 0 : 600);
+
+        // Typing indicator
+        const tWrap = document.createElement('div');
+        tWrap.className = 'ai-qa__msg';
+        tWrap.innerHTML = '<div class="ai-qa__msg-label">EDL AI</div><div class="tg-msg__typing"><span></span><span></span><span></span></div>';
+        aiChat.appendChild(tWrap);
+        await sleep(reducedMotion ? 0 : 800);
+        if (aiAbort) { tWrap.remove(); return; }
+        tWrap.remove();
+
+        // AI msg
+        const aWrap = document.createElement('div');
+        aWrap.className = 'ai-qa__msg';
+        aWrap.innerHTML = '<div class="ai-qa__msg-label">EDL AI</div><div class="ai-qa__bubble-ai"></div>';
+        aiChat.appendChild(aWrap);
+        await typewriter(aWrap.querySelector('.ai-qa__bubble-ai'), answer, 18);
+        if (aiAbort) return;
+        if (aiRestart) {
+          aiChat.appendChild(aiRestart);
+          aiRestart.hidden = false;
+        }
+      }
+
+      aiButtons.forEach(b => b.addEventListener('click', () => {
+        aiAbort = true;
+        setTimeout(() => aiAsk(b), 30);
+      }));
+      if (aiRestart) aiRestart.addEventListener('click', () => {
+        aiAbort = true;
+        if (aiChat) {
+          aiChat.classList.remove('is-active');
+          aiChat.innerHTML = '';
+        }
+        aiButtons.forEach(b => b.setAttribute('aria-pressed', 'false'));
+        aiRestart.hidden = true;
       });
 
       // Battle Tabs Desktop
@@ -551,8 +779,7 @@
       });
 
       // Battle Accordion Mobile
-      const accordions = document.querySelectorAll('.battle-accordion-trigger');
-      accordions.forEach(acc => {
+      document.querySelectorAll('.battle-accordion-trigger').forEach(acc => {
         acc.addEventListener('click', () => {
           const panel = acc.parentElement;
           panel.classList.toggle('is-open');
@@ -563,18 +790,15 @@
       });
 
       // FAQ
-      const faqs = document.querySelectorAll('details.faq-item');
-      faqs.forEach(faq => {
+      document.querySelectorAll('details.faq-item').forEach(faq => {
         faq.addEventListener('toggle', () => {
-          if (faq.open) {
-            window.EDLTrack && window.EDLTrack('faq_opened', {faq_id: faq.getAttribute('data-faq-id')});
-          }
+          if (faq.open) window.EDLTrack && window.EDLTrack('faq_opened', {faq_id: faq.getAttribute('data-faq-id')});
         });
       });
 
       // CTA Tracking
       document.querySelectorAll('[data-cta-type]').forEach(cta => {
-        cta.addEventListener('click', (e) => {
+        cta.addEventListener('click', () => {
           window.EDLTrack && window.EDLTrack('cta_clicked', {
             cta_type: cta.getAttribute('data-cta-type'),
             cta_location: cta.getAttribute('data-cta-location')
@@ -589,11 +813,8 @@
         window.addEventListener('scroll', () => {
           if (scrollTimeout) cancelAnimationFrame(scrollTimeout);
           scrollTimeout = requestAnimationFrame(() => {
-            if (window.scrollY > 400) {
-              stickyCta.classList.add('is-visible');
-            } else {
-              stickyCta.classList.remove('is-visible');
-            }
+            if (window.scrollY > 400) stickyCta.classList.add('is-visible');
+            else stickyCta.classList.remove('is-visible');
           });
         });
       }
