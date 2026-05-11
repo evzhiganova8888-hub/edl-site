@@ -47,6 +47,11 @@
       window.addEventListener('DOMContentLoaded', () => track('page_view', {}));
     })();
   </script>
+  <link rel="icon" href="/assets/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+  <meta name="theme-color" content="#0A0A0A">
 </head>
 <body data-page="home" data-segment-active="services">
   <a href="#main" class="skip-link">Перейти к содержанию</a>
@@ -54,7 +59,7 @@
   <!-- Header -->
   <header class="header" id="header">
     <div class="container header__inner" style="display:flex; justify-content:space-between; align-items:center;">
-      <a href="/" class="header__logo" style="font-weight:700; color:var(--color-gray-900); text-decoration:none;">EDL OS</a>
+      <a href="/" class="header__logo" style="font-weight:700; color:var(--color-gray-900); text-decoration:none; display:inline-flex; align-items:center; gap:10px;"><img src="/assets/logo-192.png" alt="" width="28" height="28" style="border-radius:50%;" aria-hidden="true"><span>EDL&nbsp;OS</span></a>
       <nav class="header__nav" style="display:none;">
         <a href="#method">Метод</a>
         <a href="#cases">Кейсы</a>
@@ -103,7 +108,7 @@
             </div>
             <div class="tg-window tg-window--manual" id="tg-window" style="background:#f0f2f5; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.05); overflow:hidden;">
               <div class="tg-window__header" style="background:#fff; padding:12px; border-bottom:1px solid #e4e4e7; display:flex; align-items:center; gap:12px;">
-                <div style="width:36px; height:36px; background:var(--color-tangerine); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;" aria-hidden="true">E</div>
+                <img src="assets/logo-192.png" alt="" style="width:36px; height:36px; border-radius:50%;" aria-hidden="true">
                 <div><div style="font-weight:600; font-size:14px; color:#1f2937;">EDL OS Bot</div><div style="font-size:12px; color:#10b981;">онлайн</div></div>
               </div>
               <!-- State A: Idle -->
