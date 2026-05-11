@@ -598,3 +598,46 @@ body[data-segment-active="marketplace"] .icp-btn[data-segment-switch="marketplac
   color: var(--color-tangerine);
   font-weight: 700;
 }
+
+/* ── TG Window Animation ── */
+.tg-window--animated .tg-msg {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: tgMsgFadeIn 0.4s forwards;
+}
+.tg-window--animated .tg-window__body > div[data-segment] {
+  display: flex;
+  flex-direction: column;
+}
+.tg-window--animated .tg-msg:nth-child(1) { animation-delay: 0.2s; }
+.tg-window--animated .tg-msg:nth-child(2) { animation-delay: 1.2s; }
+.tg-window--animated .tg-msg:nth-child(3) { animation-delay: 2.2s; }
+.tg-window--animated .micro-cta.tg-msg { animation-delay: 3.2s; }
+
+@keyframes tgMsgFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── FAQ Improvements ── */
+.faq-item {
+  margin-bottom: var(--space-4);
+  background: var(--color-gray-50);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-gray-200);
+  overflow: hidden;
+}
+.faq-summary {
+  font-weight: 700;
+  font-size: 1.125rem;
+  padding: var(--space-4);
+  cursor: pointer;
+  color: var(--color-gray-900);
+}
+.faq-content {
+  padding: 0 var(--space-4) var(--space-4);
+  color: var(--color-gray-700);
+  line-height: 1.6;
+}

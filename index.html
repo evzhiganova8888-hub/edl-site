@@ -83,9 +83,9 @@
           <div class="hero__badge">Работает в Telegram. Собирается за 4 недели. Все данные остаются у вас.</div>
           <div style="display:flex; gap:16px; margin-top:24px; flex-wrap:wrap; align-items:center;">
             <a href="audit.html" class="btn btn--primary" data-cta-type="audit" data-cta-location="hero">Купить Бизнес-чекап за 9 000 ₽ · возврат в 14 дней</a>
-            <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" class="btn btn--outline" data-cta-type="demo" data-cta-location="hero">Бесплатное демо · 30 минут</a>
+            <a href="https://t.me/edl_os_bot?start=demo" target="_blank" class="btn btn--outline" data-cta-type="demo" data-cta-location="hero">Бесплатное демо в Telegram</a>
           </div>
-          <div class="hero__cta-note">48 часов от оплаты до bundle. PDF + HTML + 1-минутное видео от Кати лично.</div>
+          <div class="hero__cta-note">Через 48 часов вы получите: отчёт по 4 аспектам бизнеса, майнд-карту оцифровки вашего бизнеса (в Miro) и персональный видео-разбор вашего результата.</div>
         </div>
 
         <!-- Right Side: ICP Switcher & TG Widget -->
@@ -96,29 +96,35 @@
               <button class="icp-btn is-active" data-segment-switch="services">Услуги</button>
               <button class="icp-btn" data-segment-switch="manufacturing">Производство</button>
               <button class="icp-btn" data-segment-switch="marketplace">Маркетплейс-сервис</button>
+              <button class="icp-btn" data-segment-switch="wholesale">Опт / Торговля</button>
             </div>
-            <div class="tg-window" style="background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.05); overflow:hidden;">
+            <div class="tg-window tg-window--animated" style="background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.05); overflow:hidden;">
               <div class="tg-window__header" style="background:#f4f4f5; padding:12px; border-bottom:1px solid #e4e4e7; display:flex; align-items:center; gap:12px;">
-                <div style="width:36px; height:36px; background:var(--color-tangerine); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">E</div>
-                <div><div style="font-weight:600; font-size:14px;">EDL OS Bot</div><div style="font-size:12px; color:#10b981;">онлайн</div></div>
+                <div style="width:36px; height:36px; background:var(--color-tangerine); color:#1f2937; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">E</div>
+                <div><div style="font-weight:600; font-size:14px; color:#1f2937;">EDL OS Bot</div><div style="font-size:12px; color:#10b981;">онлайн</div></div>
               </div>
               <div class="tg-window__body" style="padding:16px;">
                 <div data-segment="services">
-                  <p style="font-size:14px; margin:0 0 8px;">Маржа по проектам апреля: <strong>-2.1 п.п.</strong> к плану. Убыточные: 3 из 24. Главный — клиент Z.</p>
-                  <p style="font-size:14px; margin:0 0 8px;">🔥 HOT-сделки: Петров (1.2М) без касания 28ч — открыть?</p>
-                  <p style="font-size:14px; color:#6b7280; margin:0;">Сегодня: 2 защиты, 1 КП на согласовании.</p>
+                  <div class="tg-msg"><p style="font-size:14px; margin:0 0 8px;">Маржа по проектам апреля: <strong>-2.1 п.п.</strong> к плану. Убыточные: 3 из 24. Главный — клиент Z.</p></div>
+                  <div class="tg-msg"><p style="font-size:14px; margin:0 0 8px;">🔥 HOT-сделки: Петров (1.2М) без касания 28ч — открыть?</p></div>
+                  <div class="tg-msg"><p style="font-size:14px; color:#6b7280; margin:0;">Сегодня: 2 защиты, 1 КП на согласовании.</p></div>
                 </div>
                 <div data-segment="manufacturing">
-                  <p style="font-size:14px; margin:0 0 8px;">Контракт ООО «Стройбаза» 1.2М — отгрузка завтра, аванс не пришёл (6 дней).</p>
-                  <p style="font-size:14px; margin:0 0 8px;">Прибыль по контрактам: <strong>3 из 17</strong> ниже порога после НДС.</p>
-                  <p style="font-size:14px; color:#6b7280; margin:0;">Рекомендация: пересмотр цен на 3 контрактах.</p>
+                  <div class="tg-msg"><p style="font-size:14px; margin:0 0 8px;">Контракт ООО «Стройбаза» 1.2М — отгрузка завтра, аванс не пришёл (6 дней).</p></div>
+                  <div class="tg-msg"><p style="font-size:14px; margin:0 0 8px;">Прибыль по контрактам: <strong>3 из 17</strong> ниже порога после НДС.</p></div>
+                  <div class="tg-msg"><p style="font-size:14px; color:#6b7280; margin:0;">Рекомендация: пересмотр цен на 3 контрактах.</p></div>
                 </div>
                 <div data-segment="marketplace">
-                  <p style="font-size:14px; margin:0 0 8px;">Новых заявок сегодня: <strong>47</strong> (+25% к норме пятницы).</p>
-                  <p style="font-size:14px; margin:0 0 8px;">🔥 HOT: 4 продавца >5М/мес — ответить сегодня.</p>
-                  <p style="font-size:14px; color:#6b7280; margin:0;">Бот отфильтровал 89 мусорных. Команда: Алина перегружена ×1.4. Прибыльность клиентов Q1: топ-3 дают 40% выручки.</p>
+                  <div class="tg-msg"><p style="font-size:14px; margin:0 0 8px;">Новых заявок сегодня: <strong>47</strong> (+25% к норме пятницы).</p></div>
+                  <div class="tg-msg"><p style="font-size:14px; margin:0 0 8px;">🔥 HOT: 4 продавца >5М/мес — ответить сегодня.</p></div>
+                  <div class="tg-msg"><p style="font-size:14px; color:#6b7280; margin:0;">Бот отфильтровал 89 мусорных. Команда: Алина перегружена ×1.4.</p></div>
                 </div>
-                <a href="audit.html" class="micro-cta" data-cta-type="audit" data-cta-location="tg_widget">Хочу такую сводку → Купить Audit 9 000 ₽</a>
+                <div data-segment="wholesale">
+                  <div class="tg-msg"><p style="font-size:14px; margin:0 0 8px;">НДС 22% съел <strong>4% маржи</strong> по оптовикам за месяц.</p></div>
+                  <div class="tg-msg"><p style="font-size:14px; margin:0 0 8px;">Дебиторка: Завод X торчит 1.5М уже 40 дней.</p></div>
+                  <div class="tg-msg"><p style="font-size:14px; color:#6b7280; margin:0;">Сборка счетов за вчера: 14 оплат на 3.2М.</p></div>
+                </div>
+                <a href="audit.html" class="micro-cta tg-msg" data-cta-type="audit" data-cta-location="tg_widget">Хочу такую сводку → Купить Audit 9 000 ₽</a>
               </div>
             </div>
           </div>
@@ -129,7 +135,7 @@
     <section class="section section--gray" id="triggers">
       <div class="container">
         <div class="section__header">
-          <h2 class="section__title">Что вы будете видеть утром в Telegram</h2>
+          <h2 class="section__title">Вы наверняка столкнулись с этими проблемами в 2026 году</h2>
           <p class="section__subtitle">Не нужно заходить в 10 систем. EDL собирает всё в одну выжимку.</p>
         </div>
         <div class="edl-cards__grid">
@@ -152,7 +158,7 @@
             <p class="edl-card__shows"><strong>EDL прогнозирует</strong> прогноз остатка денег на 30/60/90 дней. Кассовый разрыв виден за 3 недели до того, как случится.</p>
           </div>
           <div class="edl-card" data-card-id="4" data-segment="all">
-            <div data-segment="services manufacturing">
+            <div data-segment="services manufacturing wholesale">
               <div class="edl-card__icon">⚡</div>
               <h3 class="edl-card__title">ИИ-гонка</h3>
               <p class="edl-card__context">Все говорят «внедряй ИИ». Но ChatGPT не подключён к вашим данным и не знает ваш бизнес.</p>
@@ -198,7 +204,7 @@
               <div class="battle-accordion-content">
                 <div style="background:var(--color-gray-50); padding:32px; border-radius:16px; text-align:center;">
                   <h3 style="font-size:1.5rem; margin-bottom:16px;">CRM для менеджера. EDL — для владельца.</h3>
-                  <p style="color:var(--color-gray-700); max-width:600px; margin:0 auto; line-height:1.6;">Не заменяет CRM. Вытаскивает ключевые цифры: конверсия, pipeline, забытые сделки. Интеграция за 2 дня.</p>
+                  <p style="color:var(--color-gray-700); max-width:600px; margin:0 auto; line-height:1.6;">Не заменяет CRM. Вытаскивает ключевые цифры: конверсия, pipeline, забытые сделки. Интеграция за 2-5 дней.</p>
                 </div>
               </div>
             </div>
@@ -220,6 +226,36 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI Block -->
+    <section class="section section--dark" id="ai-block">
+      <div class="container">
+        <div class="section__header" style="text-align:center; color:#fff; max-width:800px; margin:0 auto 48px;">
+          <h2 class="section__title" style="color:#fff;">Задайте вопрос своему бизнесу. ИИ ответит цифрами.</h2>
+          <p class="section__subtitle" style="color:#a1a1aa; max-width:100%;">AI-ассистент EDL интегрирован напрямую в ваши данные. Он не гадает, он считает.</p>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px;">
+          <div style="background:#27272a; padding:24px; border-radius:16px; border:1px solid #3f3f46;">
+            <div style="font-size:14px; color:#a1a1aa; margin-bottom:12px;">Вы (Услуги)</div>
+            <div style="background:#3f3f46; color:#fff; padding:12px 16px; border-radius:12px 12px 12px 0; margin-bottom:16px; font-weight:500;">Какой проект сейчас работает в минус?</div>
+            <div style="font-size:14px; color:#a1a1aa; margin-bottom:12px;">EDL AI</div>
+            <div style="background:var(--color-tangerine); color:#fff; padding:12px 16px; border-radius:12px 12px 0 12px; margin-bottom:16px;">У вас 3 проекта с отрицательной маржинальностью в апреле. Худший — «Редизайн Сайта X» (маржа -15%, перерасход часов +40ч). Рекомендую пересмотреть фикс.</div>
+          </div>
+          <div style="background:#27272a; padding:24px; border-radius:16px; border:1px solid #3f3f46;">
+            <div style="font-size:14px; color:#a1a1aa; margin-bottom:12px;">Вы (Маркетплейс)</div>
+            <div style="background:#3f3f46; color:#fff; padding:12px 16px; border-radius:12px 12px 12px 0; margin-bottom:16px; font-weight:500;">Какая комиссия WB по клиенту Z за месяц?</div>
+            <div style="font-size:14px; color:#a1a1aa; margin-bottom:12px;">EDL AI</div>
+            <div style="background:var(--color-tangerine); color:#fff; padding:12px 16px; border-radius:12px 12px 0 12px; margin-bottom:16px;">С учётом новых тарифов с 1 мая, эффективная комиссия WB по клиенту Z составила 28.5% (+4.2 п.п. к прошлому месяцу). Чистая прибыль с клиента снизилась на 12%.</div>
+          </div>
+          <div style="background:#27272a; padding:24px; border-radius:16px; border:1px solid #3f3f46;">
+            <div style="font-size:14px; color:#a1a1aa; margin-bottom:12px;">Вы (Опт)</div>
+            <div style="background:#3f3f46; color:#fff; padding:12px 16px; border-radius:12px 12px 12px 0; margin-bottom:16px; font-weight:500;">Какая маржа по клиенту X после повышения НДС?</div>
+            <div style="font-size:14px; color:#a1a1aa; margin-bottom:12px;">EDL AI</div>
+            <div style="background:var(--color-tangerine); color:#fff; padding:12px 16px; border-radius:12px 12px 0 12px; margin-bottom:16px;">После перехода на ОСН (НДС 22%), маржа по клиенту X упала с 18% до 6%. Клиент стал нерентабельным с учётом стоимости доставки. Нужно повышать цены на 15%.</div>
           </div>
         </div>
       </div>
@@ -267,7 +303,7 @@
             <div><div class="live-proof-v2__num">18+</div><div class="live-proof-v2__label">компаний прошли discovery с нашей командой</div></div>
             <div><div class="live-proof-v2__num">2 года</div><div class="live-proof-v2__label">развиваем продукт и методологию</div></div>
             <div><div class="live-proof-v2__num">1 бета</div><div class="live-proof-v2__label">маркетплейс-сервис, стартует май 2026</div></div>
-            <div><div class="live-proof-v2__num">50+ лет</div><div class="live-proof-v2__label">суммарный опыт команды: Точка · Додо · karpov.courses</div></div>
+            <div><div class="live-proof-v2__num">3 демо</div><div class="live-proof-v2__label">клиента в мае 2026. 5 лет развиваем методологию</div></div>
           </div>
           <div class="live-proof-v2__cta">
             <p>Следующие пилоты — услуги и производство, июнь-июль 2026.</p>
@@ -290,7 +326,7 @@
             <div>
               <div class="team-v2-card__name">Екатерина Жиганова</div>
               <div class="team-v2-card__role">Founder, Product Lead</div>
-              <div class="team-v2-card__bg">7+ лет в продакт-менеджменте. Запускала продукты в Точке и karpov.courses.</div>
+              <div class="team-v2-card__bg">JTBD-исследования и развитие продуктов 7+ лет. Запускала масштабируемые B2B продукты.</div>
             </div>
           </div>
           <div class="team-v2-card">
@@ -351,18 +387,18 @@
             <div class="pricing-v2-card__price">0 ₽</div>
             <div class="pricing-v2-card__duration">30 минут</div>
             <p class="pricing-v2-card__desc">Знакомство с системой. Покажем, как EDL OS работает, ответим на вопросы и обсудим вашу специфику.</p>
-            <a href="https://calendly.com/evzhiganova8888/30min" target="_blank" class="btn btn--outline" data-cta-type="demo" data-cta-location="pricing" style="width:100%;">Записаться на демо</a>
+            <a href="https://t.me/edl_os_bot?start=demo" target="_blank" class="btn btn--outline" data-cta-type="demo" data-cta-location="pricing" style="width:100%;">Записаться на демо в Telegram</a>
           </div>
           <div class="pricing-v2-card pricing-v2-card--primary">
             <h3 class="pricing-v2-card__name">Бизнес-чекап</h3>
             <div class="pricing-v2-card__price">9 000 ₽</div>
             <div class="pricing-v2-card__duration">48 часов</div>
-            <p class="pricing-v2-card__desc">30 мин звонок + 48ч AI-обработка. PDF + HTML + персональное видео Кати. Возврат в 14 дней.</p>
+            <p class="pricing-v2-card__desc">30 мин звонок + 48ч AI-обработка. PDF + HTML + персональный видео-разбор вашего результата. Возврат в 14 дней.</p>
             <a href="audit.html" class="btn btn--primary" data-cta-type="audit" data-cta-location="pricing" style="width:100%;">Купить чекап</a>
           </div>
         </div>
         <div class="pricing-v2__link">
-          <a href="pricing.html" style="color:var(--color-gray-500); font-size:0.875rem; text-decoration:none;">Посмотреть полный pricing →</a>
+          <a href="pricing.html" style="color:var(--color-gray-500); font-size:0.875rem; text-decoration:none;">Посмотреть все продукты/услуги →</a>
         </div>
       </div>
     </section>
@@ -378,7 +414,7 @@
             <summary class="faq-summary">Чем Бизнес-чекап отличается от бесплатного демо?</summary>
             <div class="faq-content">
               <p>Демо — это знакомство с системой. 30 минут, мы покажем, как EDL OS работает, ответим на вопросы. Бесплатно.</p>
-              <p>Бизнес-чекап — это аудит ВАШЕГО бизнеса. 30 минут звонка, 48 часов AI-обработки, и вы получаете персональный разбор: PDF на 5-7 страниц, HTML-страницу (живёт навсегда), 1-минутное видео от Кати лично, 3 конкретных действия на следующую неделю и 90-дневный roadmap.</p>
+              <p>Бизнес-чекап — это аудит ВАШЕГО бизнеса. 30 минут звонка, 48 часов AI-обработки, и вы получаете персональный разбор: PDF на 5-7 страниц, майнд-карту оцифровки вашего бизнеса (в Miro), персональный видео-разбор вашего результата, 3 конкретных действия на следующую неделю и 90-дневный план.</p>
             </div>
           </details>
           <details class="faq-item" data-faq-id="2">
@@ -423,7 +459,7 @@
         <p style="color:#a1a1aa; margin-bottom:48px; font-size:1.125rem;">За 48 часов получите карту своего бизнеса по 4 слоям: Vision · Sales · Delivery · Finance.</p>
         <div style="display:flex; flex-direction:column; align-items:center; gap:16px;">
           <a href="audit.html" class="btn btn--primary" data-cta-type="audit" data-cta-location="final" style="font-size:1.125rem; padding:16px 32px;">Купить Бизнес-чекап 9 000 ₽ · возврат в 14 дней</a>
-          <p style="color:#71717a; font-size:0.875rem;">Не готовы? Подпишитесь на Telegram-канал — методология, кейсы, разборы → <a href="https://t.me/edl_os" target="_blank" style="color:var(--color-tangerine); text-decoration:none;">t.me/edl_os</a></p>
+          <p style="color:#71717a; font-size:0.875rem; text-align:center;">Не готовы? Подпишитесь на Telegram-канал — методология, кейсы, разборы → <a href="https://t.me/edl_os" target="_blank" style="color:var(--color-tangerine); text-decoration:none;">t.me/edl_os</a></p>
         </div>
       </div>
     </section>
@@ -435,32 +471,32 @@
       <div>
         <h4 style="font-weight:600; margin-bottom:16px;">Контакты</h4>
         <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
-          <li><a href="https://t.me/edl_os" target="_blank" style="color:#4b5563; text-decoration:none;">Telegram: t.me/edl_os</a></li>
-          <li><a href="https://t.me/edl_os_bot" target="_blank" style="color:#4b5563; text-decoration:none;">TG-бот: t.me/edl_os_bot</a></li>
-          <li><a href="mailto:evzhiganova8888@gmail.com" style="color:#4b5563; text-decoration:none;">evzhiganova8888@gmail.com</a></li>
-          <li><a href="#" style="color:#4b5563; text-decoration:none;">LinkedIn Кати</a></li>
+          <li><a href="https://t.me/edl_os" target="_blank" style="color:#4b5563; text-decoration:none;">Наш Telegram-канал</a></li>
+          <li><a href="https://t.me/edl_os_bot" target="_blank" style="color:#4b5563; text-decoration:none;">EDL OS ответит на все вопросы и поможет сориентироваться</a></li>
+          <li><a href="https://instagram.com/elephantdreams.ru" target="_blank" style="color:#4b5563; text-decoration:none;">Instagram</a></li>
+          <li><a href="mailto:evzhiganova8888@gmail.com" style="color:#4b5563; text-decoration:none;">Написать на почту</a></li>
         </ul>
       </div>
       <div>
         <h4 style="font-weight:600; margin-bottom:16px;">Услуги</h4>
         <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
-          <li><a href="https://calendly.com/evzhiganova8888/30min" target="_blank" style="color:#4b5563; text-decoration:none;">Бесплатное демо</a></li>
+          <li><a href="https://t.me/edl_os_bot?start=demo" target="_blank" style="color:#4b5563; text-decoration:none;">Бесплатное демо в Telegram</a></li>
           <li><a href="audit.html" style="color:#4b5563; text-decoration:none;">Бизнес-чекап (Audit)</a></li>
-          <li><a href="diagnostic.html" style="color:#4b5563; text-decoration:none;">Diagnostic</a></li>
-          <li><a href="sprint.html" style="color:#4b5563; text-decoration:none;">Sprint</a></li>
+          <li><a href="diagnostic.html" style="color:#4b5563; text-decoration:none;">Диагностика</a></li>
+          <li><a href="sprint.html" style="color:#4b5563; text-decoration:none;">Спринт</a></li>
           <li><a href="pricing.html" style="color:#4b5563; text-decoration:none;">Growth Plan</a></li>
         </ul>
       </div>
       <div>
         <h4 style="font-weight:600; margin-bottom:16px;">Компания</h4>
         <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
-          <li><a href="#method" style="color:#4b5563; text-decoration:none;">Метод</a></li>
+          <li><a href="index.html#method" style="color:#4b5563; text-decoration:none;">Метод</a></li>
           <li><a href="cases.html" style="color:#4b5563; text-decoration:none;">Кейсы</a></li>
-          <li><a href="faq.html" style="color:#4b5563; text-decoration:none;">FAQ</a></li>
+          <li><a href="faq.html" style="color:#4b5563; text-decoration:none;">Частые вопросы</a></li>
           <li><a href="about.html" style="color:#4b5563; text-decoration:none;">Команда</a></li>
-          <li><a href="pricing.html" style="color:#4b5563; text-decoration:none;">Pricing</a></li>
-          <li><a href="quiz.html" style="color:#4b5563; text-decoration:none;">Quiz</a></li>
-          <li><a href="#" style="color:#4b5563; text-decoration:none;">Политика данных</a></li>
+          <li><a href="pricing.html" style="color:#4b5563; text-decoration:none;">Продукты и цены</a></li>
+          <li><a href="quiz.html" style="color:#4b5563; text-decoration:none;">Пройти тест (Score)</a></li>
+          <li><a href="legal/privacy.html" style="color:#4b5563; text-decoration:none;">Политика данных</a></li>
         </ul>
       </div>
     </div>
