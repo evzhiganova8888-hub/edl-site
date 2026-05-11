@@ -238,6 +238,12 @@ body[data-segment-active="wholesale"] .icp-btn[data-segment-switch="wholesale"] 
   font-size: 1.5rem;
   color: var(--color-tangerine);
   font-weight: 700;
+  overflow: hidden;
+}
+.team-v2-card__photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
 }
 .team-v2-card__name {
   font-size: 1rem;
@@ -599,6 +605,12 @@ body[data-segment-active="wholesale"] .icp-btn[data-segment-switch="wholesale"] 
   font-size: 2rem;
   color: var(--color-tangerine);
   font-weight: 700;
+  overflow: hidden;
+}
+.about-bio__photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 /* ── TG Window Animation ── */
