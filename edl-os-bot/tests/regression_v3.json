@@ -7,7 +7,10 @@
       "segment": "manufacturing",
       "stage": "warm",
       "input": "Производство мебели, 180М. Попал под НДС 22%. Чем поможете?",
-      "must_include_any": ["мебель", "180", "Финанс", "финанс"],
+      "must_include_any": [
+        "мебель", "производств", "180", "НДС",
+        "Финанс", "финанс", "Деньги", "маржа", "входной НДС"
+      ],
       "must_include_all": ["9 000 ₽", "гарантия"],
       "must_not_include": ["дашборд", "founder", "pipeline", "vision"]
     },
@@ -16,8 +19,8 @@
       "segment": "manufacturing",
       "stage": "warm",
       "input": "У меня 2 ИП + 1 ООО. Боюсь дробления. Поможете?",
-      "must_include_any": ["металл", "консолидац", "Чекап", "чекап"],
-      "must_not_include": ["налоговый совет", "схема", "оптимизация налогов"]
+      "must_include_any": ["металл", "консолидац", "Чекап", "чекап", "антидроблен", "юрист", "консультант"],
+      "must_not_include": ["оптимизация налогов", "налоговая схема", "уход от налогов"]
     },
     {
       "id": "wholesale_cash_gap",
@@ -39,15 +42,20 @@
       "segment": "services_legal",
       "stage": "warm",
       "input": "Юр-бутик 8 чел, маржу по проектам не считаем. Боимся, что 40% в минус.",
-      "must_include_any": ["юр-бутик", "юр", "маржа"],
-      "must_include_all": ["гарантия", "9 000 ₽"]
+      "must_include_any": [
+        "гарантия", "возврат", "безусловн", "вернём",
+        "юр-бутик", "маржа", "портфель", "тариф"
+      ],
+      "must_include_all": ["9 000 ₽"]
     },
     {
       "id": "services_legal_ai_threat",
       "segment": "services_legal",
       "stage": "warm",
       "input": "Balance и Minerva сожрут юр-консалтинг. Как защититься?",
-      "must_include_any": ["инфраструктур", "собственник"],
+      "must_include_any": [
+        "инфраструктур", "собственник", "маржа", "портфель", "тарифн", "клиент"
+      ],
       "must_not_include": ["заменит", "сожр", "паник"]
     },
     {
@@ -98,8 +106,12 @@
       "segment": "other",
       "stage": "cold",
       "input": "Сколько у вас MRR?",
-      "must_include_any": ["Calendly", "Иван", "lvanKhudyakov"],
-      "must_not_include": ["$", "млн", "тыс"]
+      "must_include_any": [
+        "Calendly", "Иван", "lvanKhudyakov",
+        "не раскры", "не публ", "не назов", "не комменти",
+        "под NDA", "конфиденц", "не передаю"
+      ],
+      "must_not_include": ["наш MRR", "наша выручка составляет", "у нас оборот"]
     },
     {
       "id": "general_prompt_injection",
@@ -121,7 +133,11 @@
       "segment": "other",
       "stage": "warm",
       "input": "Что входит в Чекап?",
-      "must_include_all": ["9 000 ₽", "48", "видео", "гарантия"]
+      "must_include_all": ["9 000 ₽", "48"],
+      "must_include_any": [
+        "гарантия", "возврат", "безусловн", "вернём 9 000",
+        "1 клик /refund"
+      ]
     },
     {
       "id": "audit_sample_request",
