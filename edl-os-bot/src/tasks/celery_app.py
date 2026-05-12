@@ -23,9 +23,11 @@ celery_app.conf.update(
             "task": "src.tasks.refund_check.expire_refund_window",
             "schedule": crontab(minute=0),
         },
-        "weekly-voc-monday-0930-msk": {
+        # Воскресенье 18:00 МСК — перед началом рабочей недели Катя смотрит
+        # сводку + список накопленных багов из @edl_os_bot.
+        "weekly-voc-sunday-1800-msk": {
             "task": "src.tasks.weekly_voc.run_weekly",
-            "schedule": crontab(hour=9, minute=30, day_of_week="mon"),
+            "schedule": crontab(hour=18, minute=0, day_of_week="sun"),
         },
     },
 )
