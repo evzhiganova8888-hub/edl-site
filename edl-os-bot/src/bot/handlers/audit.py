@@ -25,6 +25,7 @@ from src.core import offer as offer_core
 from src.core.config import settings
 from src.core.contact import normalize_company, normalize_email, normalize_full_name
 from src.core.input_validation import InputValidationError, validate_user_text
+from src.core.notifications import build_manual_payment_brief, send_to_admin_chat
 from src.core.payments import RobokassaClient
 from src.core.payments.robokassa import RobokassaInvoice
 from src.db.models import Application, Payment
@@ -357,6 +358,68 @@ async def _plan_from_application(app: Application | None) -> str:
     return plan if plan in (PLAN_BASE, PLAN_PLUS) else PLAN_BASE
 
 
+async def _handoff_manual_payment(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE,
+    application_id: str,
+    plan: str,
+    amount: float,
+) -> None:
+    """Manual-payment режим: бот собрал данные, передаёт Ивану в Sales-чат
+    для ручного оформления счёта через бухгалтерию.
+
+    Юзеру шлём MANUAL_PAYMENT_SUBMITTED. Application.status = awaiting_manual_payment.
+    """
+    factory = async_session_factory()
+    async with factory() as session:
+        stmt = select(Application).where(Application.id == UUID(application_id))
+        app = (await session.execute(stmt)).scalar_one_or_none()
+        user, _ = await get_or_create_user(session, telegram_id=update.effective_user.id)
+        if app is None:
+            await update.effective_message.reply_text(
+                "Заявка не найдена. /audit — попробуем ещё раз.",
+                reply_markup=keyboards.main_menu(),
+            )
+            return
+
+        app.status = "awaiting_manual_payment"
+        await log_event(
+            session,
+            user_id=user.id,
+            event="manual_payment_submitted",
+            payload={
+                "application_id": application_id,
+                "inv_id": app.inv_id,
+                "plan": plan,
+                "amount_rub": amount,
+            },
+        )
+
+        full_name = " ".join(
+            filter(None, [user.last_name, user.first_name])
+        ).strip() or None
+        brief = build_manual_payment_brief(
+            user=user,
+            application=app,
+            plan=plan,
+            amount_rub=amount,
+            full_name=full_name,
+            company=user.company_name,
+        )
+        await session.commit()
+
+    await update.effective_message.reply_text(
+        texts.MANUAL_PAYMENT_SUBMITTED,
+        reply_markup=keyboards.main_menu(),
+        disable_web_page_preview=True,
+    )
+
+    try:
+        await send_to_admin_chat(context.bot, brief)
+    except Exception:
+        logger.exception("manual_payment: send_to_admin_chat failed")
+
+
 async def _send_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE, application_id: str) -> None:
     # P0-3 fix: читаем plan из БД, не из context (context мог истечь / /reset).
     factory = async_session_factory()
@@ -365,6 +428,12 @@ async def _send_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE, appl
         app = (await session.execute(stmt)).scalar_one_or_none()
         plan = await _plan_from_application(app)
     amount = _plan_amount(plan)
+
+    # Manual режим (Май 2026) — Robokassa ещё на модерации. Бот собирает
+    # данные, шлёт детальный бриф Ивану, тот оформляет счёт через бухгалтерию.
+    if settings.payment_mode == "manual":
+        await _handoff_manual_payment(update, context, application_id, plan, amount)
+        return
 
     client = RobokassaClient()
     if not client.configured:
