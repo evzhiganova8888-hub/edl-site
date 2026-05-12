@@ -137,9 +137,11 @@ def _format_telegram_summary(report: dict) -> str:
     if report["refunded_rub"]:
         lines.append(f"• Возвращено: {report['refunded_rub']:,.0f} ₽")
     bugs = report["unresolved_bug_errors"]
-    lines.append(f"• ⚠️ Bug-reports неразобранных: {len(bugs)}")
     if bugs:
-        lines.append("\n*Топ нерешённых bug-reports:*")
+        lines.append(f"\n⚠️ *Bug-reports неразобранных: {len(bugs)}*")
+        lines.append("Открой /bugs в @edl_os_bot для разбора по одному.")
+        lines.append("Или /bugs export — выгрузка md для batch-разбора со мной.\n")
+        lines.append("*Топ-5 свежих:*")
         for b in bugs[:5]:
             preview = (b["bot_message_preview"] or "—")[:120].replace("\n", " ")
             lines.append(f"  · `#{b['id']}` u/{b['user_id']}: {preview}…")
