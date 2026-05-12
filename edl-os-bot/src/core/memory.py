@@ -20,6 +20,7 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.core.pd_sanitize import sanitize
 from src.db.models import Application, MessageLog, Payment, User
 
 _GAP_FOR_RECAP = timedelta(hours=24)
@@ -91,10 +92,13 @@ async def build_user_recap(
         "stage": user.stage,
         "company_name": user.company_name,
         "quiz_score": user.quiz_score,
+        # CRITICAL: previews идут в system prompt → Anthropic API. Применяем
+        # sanitize_pd ДО включения, чтобы email/телефон/ИНН/секреты не утекали
+        # за рубеж (152-ФЗ). См. P0-1 в docs/threat_model.md.
         "recent_inbound": [
             {
                 "at": m.occurred_at.isoformat() if m.occurred_at else None,
-                "preview": (m.text or "")[:200],
+                "preview": sanitize((m.text or "")[:200]),
                 "intent": m.intent_detected,
             }
             for m in recent

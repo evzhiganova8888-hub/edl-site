@@ -96,13 +96,19 @@ async def handle_refund_callback(update: Update, context: ContextTypes.DEFAULT_T
             )
             return
 
-        # Dedup: не создаём второй refund по той же заявке
+        # Dedup: не создаём второй refund. Учитываем все нон-терминальные
+        # статусы (включая processing/failed — failed может быть retry'ed
+        # Иваном вручную, не пользователем).
         existing = (
             await session.execute(
                 select(Refund)
                 .join(Payment, Refund.payment_id == Payment.id)
                 .where(Payment.application_id == app.id)
-                .where(Refund.status.in_(["requested", "completed"]))
+                .where(
+                    Refund.status.in_(
+                        ["requested", "processing", "completed", "failed"]
+                    )
+                )
             )
         ).scalars().first()
         if existing:
