@@ -8,6 +8,7 @@ from sqlalchemy import func, select
 
 from src.admin.auth import require_admin
 from src.core.flags import FLAG_VITACONSULT_PUBLIC, get_flag, set_flag
+from src.core.payment_marking import find_application_by_id, mark_application_paid
 from src.db.models import Application, BotError, Event, MessageLog, Payment, User
 from src.db.session import async_session_factory
 
@@ -205,6 +206,53 @@ async def list_bot_errors(
             }
             for err, text in rows
         ]
+
+
+@router.post("/applications/{application_id}/mark-paid")
+async def mark_paid(
+    application_id: str,
+    amount_rub: float = Query(..., gt=0, description="Сумма оплаты в ₽"),
+    payment_reference: str = Query(
+        ...,
+        min_length=3,
+        description="Номер платёжного поручения / банковская выписка для аудита",
+    ),
+    receipt_url: str | None = Query(
+        default=None, description="Опц. ссылка на электронный чек, если есть"
+    ),
+    admin_id: int = Depends(require_admin),
+) -> dict:
+    """Иван помечает заявку оплаченной в manual-режиме.
+
+    Идемпотентно: повторный вызов на уже оплаченной заявке возвращает
+    `already_paid=true` без побочных эффектов.
+    """
+    factory = async_session_factory()
+    async with factory() as session:
+        app = await find_application_by_id(session, application_id)
+        if app is None:
+            return {"detail": "application not found"}
+        user = await session.get(User, app.user_id)
+        if user is None:
+            return {"detail": "user not found"}
+
+        result = await mark_application_paid(
+            session,
+            app=app,
+            user=user,
+            amount_rub=amount_rub,
+            payment_provider="manual_invoice",
+            provider_payment_id=payment_reference,
+            receipt_url=receipt_url,
+            payment_reference=payment_reference,
+            actor=f"admin:{admin_id}",
+        )
+        await session.commit()
+
+        # TODO (июнь): после mark_paid также шлём юзеру уведомление в Telegram
+        # через ботовый Application. Сейчас просто возвращаем результат —
+        # Иван сам уведомит клиента ручной перепиской.
+        return result
 
 
 @router.post("/bot_errors/{error_id}/review")

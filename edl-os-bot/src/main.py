@@ -33,6 +33,7 @@ from src.bot import texts
 from src.bot.handlers import register
 from src.core.config import settings
 from src.core.notifications import build_payment_success_brief, send_to_admin_chat
+from src.core.payment_marking import mark_application_paid
 from src.core.payments import RobokassaClient
 from src.db.models import Application as ApplicationModel
 from src.db.models import Payment, User
@@ -162,45 +163,20 @@ async def _process_successful_payment(
             logger.warning("ResultURL: user not found for application %s", app.id)
             return
 
-        # Update payment
-        pay_stmt = (
-            select(Payment)
-            .where(Payment.application_id == app.id)
-            .where(Payment.status == "pending")
-        )
-        payment = (await session.execute(pay_stmt)).scalars().first()
-        if payment is None:
-            logger.warning("ResultURL: no pending payment for application %s", app.id)
-        else:
-            payment.status = "succeeded"
-            payment.paid_at = datetime.now(timezone.utc)
-            payment.provider_payment_id = raw_params.get("PaymentMethod", "")
-            payment.fiscal_receipt_url = raw_params.get("ReceiptUrl")
-
-        # Update application
-        now = datetime.now(timezone.utc)
-        app.status = "paid"
-        app.payment_succeeded_at = now
-        # 14-дневное окно отсчитывается с момента доставки материалов; здесь
-        # консервативно стартуем с оплаты, скорректируется когда статус
-        # перейдёт в delivered.
-        app.refund_eligible_until = now + timedelta(days=14)
-
-        # Лог
-        from src.db.models import Event
-
-        session.add(
-            Event(
-                user_id=user.id,
-                event="payment_succeeded",
-                payload={
-                    "application_id": str(app.id),
-                    "inv_id": inv_id,
-                    "amount_rub": amount_rub,
-                },
-            )
+        result = await mark_application_paid(
+            session,
+            app=app,
+            user=user,
+            amount_rub=amount_rub,
+            payment_provider="robokassa",
+            provider_payment_id=raw_params.get("PaymentMethod"),
+            receipt_url=raw_params.get("ReceiptUrl"),
+            actor="robokassa_callback",
         )
         await session.commit()
+        if result.get("already_paid"):
+            logger.info("Idempotent: app %s already paid, callback noop", app.id)
+            return
 
         brief = build_payment_success_brief(
             user=user,
