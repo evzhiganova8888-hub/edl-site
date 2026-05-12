@@ -66,9 +66,13 @@ class Application(Base):
     __tablename__ = "applications"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    # inv_id заполняется через Postgres sequence `applications_inv_id_seq`
+    # (создан в миграции 0002). `autoincrement=True` для не-PK колонок в
+    # SQLAlchemy игнорируется, поэтому используем явный server_default,
+    # чтобы SQLAlchemy не отправлял `inv_id=NULL` в INSERT.
     inv_id: Mapped[int] = mapped_column(
         BigInteger,
-        autoincrement=True,
+        server_default=sql_text("nextval('applications_inv_id_seq')"),
         unique=True,
         nullable=False,
     )
