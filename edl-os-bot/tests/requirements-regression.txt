@@ -1,0 +1,8 @@
+# Минимум deps для запуска регрессии v3.1.
+# НЕ ставим полный pyproject — там asyncpg/redis/fastapi/telegram (~200 МБ),
+# которые регрессии не нужны (она вызывает только Anthropic API + читает
+# markdown-промпты).
+anthropic>=0.39.0
+pydantic>=2.0
+pydantic-settings>=2.0
+tenacity>=8.0
