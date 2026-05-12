@@ -24,6 +24,7 @@ from src.core import consent as consent_core
 from src.core import offer as offer_core
 from src.core.config import settings
 from src.core.contact import normalize_company, normalize_email, normalize_full_name
+from src.core.input_validation import InputValidationError, validate_user_text
 from src.core.payments import RobokassaClient
 from src.core.payments.robokassa import RobokassaInvoice
 from src.db.models import Application, Payment
@@ -79,7 +80,9 @@ async def audit_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         await session.commit()
 
     await update.effective_message.reply_text(
-        texts.AUDIT_INTRO, reply_markup=keyboards.audit_pay_keyboard()
+        texts.AUDIT_INTRO,
+        parse_mode="Markdown",
+        reply_markup=keyboards.audit_pay_keyboard(),
     )
 
 
@@ -90,6 +93,8 @@ async def audit_sample_command(update: Update, context: ContextTypes.DEFAULT_TYP
         await log_event(session, user_id=user.id, event="audit_sample_requested")
         await session.commit()
 
+    # PDF — основной формат; HTML — fallback, когда PDF ещё не сделан.
+    # Шлём ОДИН файл, не оба (P2 fix QA v3.1).
     sent_any = False
     if _AUDIT_SAMPLE_PDF.exists():
         await update.effective_message.reply_text(texts.AUDIT_SAMPLE_INTRO)
@@ -98,9 +103,8 @@ async def audit_sample_command(update: Update, context: ContextTypes.DEFAULT_TYP
                 document=f, filename="EDL_OS_audit_sample.pdf"
             )
         sent_any = True
-    if _AUDIT_SAMPLE_HTML.exists():
-        if not sent_any:
-            await update.effective_message.reply_text(texts.AUDIT_SAMPLE_INTRO)
+    elif _AUDIT_SAMPLE_HTML.exists():
+        await update.effective_message.reply_text(texts.AUDIT_SAMPLE_INTRO)
         with _AUDIT_SAMPLE_HTML.open("rb") as f:
             await update.effective_message.reply_document(
                 document=f, filename="EDL_OS_audit_sample.html"
@@ -194,7 +198,15 @@ async def handle_text_step(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     if state not in (FLOW_AWAIT_FULL_NAME, FLOW_AWAIT_EMAIL, FLOW_AWAIT_COMPANY):
         return False
 
-    text = (update.effective_message.text or "").strip()
+    # Валидация на длину/control chars (§C.9 v3.1)
+    try:
+        text = validate_user_text((update.effective_message.text or "").strip())
+    except InputValidationError as e:
+        await update.effective_message.reply_text(
+            str(e), reply_markup=keyboards.cancel_collection_keyboard()
+        )
+        return True
+
     application_id = context.user_data.get(KEY_APP_ID)
     if not application_id:
         context.user_data.pop(KEY_FLOW, None)
@@ -336,8 +348,22 @@ async def handle_offer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 # ----------------------- Build invoice URL ------------------------
 
 
+async def _plan_from_application(app: Application | None) -> str:
+    """Plan — единый источник истины: Application.payload['plan']."""
+    if app is None:
+        return PLAN_BASE
+    payload = app.payload or {}
+    plan = payload.get("plan", PLAN_BASE)
+    return plan if plan in (PLAN_BASE, PLAN_PLUS) else PLAN_BASE
+
+
 async def _send_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE, application_id: str) -> None:
-    plan = context.user_data.get(KEY_PLAN, PLAN_BASE)
+    # P0-3 fix: читаем plan из БД, не из context (context мог истечь / /reset).
+    factory = async_session_factory()
+    async with factory() as session:
+        stmt = select(Application).where(Application.id == UUID(application_id))
+        app = (await session.execute(stmt)).scalar_one_or_none()
+        plan = await _plan_from_application(app)
     amount = _plan_amount(plan)
 
     client = RobokassaClient()

@@ -16,6 +16,7 @@ from sqlalchemy import (
     String,
     Text,
     func,
+    text as sql_text,
 )
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
@@ -216,3 +217,13 @@ class BotError(Base):
     reviewed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     resolution: Mapped[str | None] = mapped_column(Text)
     prompt_patched: Mapped[bool] = mapped_column(Boolean, default=False)
+
+    # Зеркало миграции 0004 — чтобы alembic --autogenerate не дрейфовал.
+    __table_args__ = (
+        Index(
+            "idx_bot_errors_unresolved",
+            "reported_at",
+            postgresql_where=sql_text("reviewed_at IS NULL"),
+        ),
+        Index("idx_bot_errors_user", "user_id", "reported_at"),
+    )

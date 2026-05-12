@@ -57,26 +57,46 @@ class LimitDecision:
 
 
 async def _check_sliding_window(
-    *, key: str, window_seconds: int, limit: int, increment: int = 1
+    *,
+    key: str,
+    window_seconds: int,
+    limit: int,
+    increment: int = 1,
+    fail_open: bool = True,
 ) -> LimitDecision:
-    """ZSET sliding window: добавляем timestamp, чистим старые, считаем.
+    """ZSET sliding window: атомарно через pipeline.
 
-    Если Redis недоступен — пропускаем (failure-open). Это сознательное решение:
-    лучше пропустить лишнее сообщение, чем заблокировать всех пользователей.
+    `fail_open=True` (по умолчанию) — при недоступности Redis пропускаем
+    запрос. Используется для message-rate (нельзя блокировать пользователя
+    из-за инфра-проблем).
+    `fail_open=False` — при недоступности Redis запрос блокируется. Нужно
+    для payment-rate (двойная оплата дороже временного отказа).
+
+    Race-safe: zremrangebyscore + zcard + zadd выполняются в одном pipeline,
+    без межтранзакционных окон.
     """
     r = _get_redis()
     if not r:
-        return LimitDecision(allowed=True, name=key, used=0, limit=limit)
+        return LimitDecision(allowed=fail_open, name=key, used=0, limit=limit)
 
     try:
         now = time.time()
         cutoff = now - window_seconds
+        # uniqueness гарантируем через uuid-подобный suffix вместо коллизий на ms
+        import uuid as _uuid
+        member = f"{now}:{_uuid.uuid4().hex[:8]}"
+
+        # Атомарный pipeline: чистка → добавление → подсчёт.
+        # Если limit пробит — откатываем добавление через zrem.
         pipe = r.pipeline()
         pipe.zremrangebyscore(key, 0, cutoff)
+        pipe.zadd(key, {member: now})
         pipe.zcard(key)
-        _, used = await pipe.execute()
-        if used + increment > limit:
-            # вычислим, когда освободится одно место
+        pipe.expire(key, window_seconds + 10)
+        _, _, used, _ = await pipe.execute()
+
+        if used > limit:
+            await r.zrem(key, member)
             oldest = await r.zrange(key, 0, 0, withscores=True)
             retry = None
             if oldest:
@@ -84,20 +104,19 @@ async def _check_sliding_window(
             return LimitDecision(
                 allowed=False,
                 name=key,
-                used=used,
+                used=used - 1,
                 limit=limit,
                 retry_after_seconds=retry,
             )
-        # Записываем
-        member = f"{now}:{used + 1}"
-        await r.zadd(key, {member: now})
-        await r.expire(key, window_seconds + 10)
-        return LimitDecision(
-            allowed=True, name=key, used=used + increment, limit=limit
-        )
+        return LimitDecision(allowed=True, name=key, used=used, limit=limit)
     except Exception as e:
-        logger.warning("Rate limit Redis error (%s) on %s — allowing", e, key)
-        return LimitDecision(allowed=True, name=key, used=0, limit=limit)
+        logger.warning(
+            "Rate limit Redis error (%s) on %s — %s",
+            e,
+            key,
+            "allowing" if fail_open else "BLOCKING (fail-closed)",
+        )
+        return LimitDecision(allowed=fail_open, name=key, used=0, limit=limit)
 
 
 async def check_message(telegram_id: int) -> LimitDecision:
@@ -118,10 +137,12 @@ async def check_message(telegram_id: int) -> LimitDecision:
 
 
 async def check_payment_attempt(telegram_id: int) -> LimitDecision:
+    """Платежи лимитируем строго (fail-closed): двойная оплата дороже отказа."""
     return await _check_sliding_window(
         key=f"rl:pay:hour:{telegram_id}",
         window_seconds=3600,
         limit=RATE_LIMITS["payment_attempts_per_hour"],
+        fail_open=False,
     )
 
 
