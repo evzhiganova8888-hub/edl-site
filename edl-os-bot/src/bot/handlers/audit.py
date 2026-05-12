@@ -38,9 +38,9 @@ from src.db.session import async_session_factory
 
 logger = logging.getLogger(__name__)
 
-_AUDIT_SAMPLE_PDF = (
-    Path(__file__).resolve().parent.parent.parent.parent / "assets" / "audit_sample.pdf"
-)
+_ASSETS_DIR = Path(__file__).resolve().parent.parent.parent.parent / "assets"
+_AUDIT_SAMPLE_PDF = _ASSETS_DIR / "audit_sample.pdf"
+_AUDIT_SAMPLE_HTML = _ASSETS_DIR / "audit_sample.html"
 
 AUDIT_AMOUNT_RUB = 9000.0
 AUDIT_PLUS_AMOUNT_RUB = 14000.0
@@ -90,17 +90,34 @@ async def audit_sample_command(update: Update, context: ContextTypes.DEFAULT_TYP
         await log_event(session, user_id=user.id, event="audit_sample_requested")
         await session.commit()
 
+    sent_any = False
     if _AUDIT_SAMPLE_PDF.exists():
         await update.effective_message.reply_text(texts.AUDIT_SAMPLE_INTRO)
         with _AUDIT_SAMPLE_PDF.open("rb") as f:
             await update.effective_message.reply_document(
                 document=f, filename="EDL_OS_audit_sample.pdf"
             )
-    else:
+        sent_any = True
+    if _AUDIT_SAMPLE_HTML.exists():
+        if not sent_any:
+            await update.effective_message.reply_text(texts.AUDIT_SAMPLE_INTRO)
+        with _AUDIT_SAMPLE_HTML.open("rb") as f:
+            await update.effective_message.reply_document(
+                document=f, filename="EDL_OS_audit_sample.html"
+            )
+        sent_any = True
+    if not sent_any:
         await update.effective_message.reply_text(
             texts.AUDIT_SAMPLE_NOT_READY,
             reply_markup=keyboards.audit_pay_keyboard(),
         )
+        return
+    # CTA после превью
+    await update.effective_message.reply_text(
+        "Это обезличенный пример. Ваш отчёт будет содержать цифры именно "
+        "по вашей компании. Заказать свой Чекап ниже.",
+        reply_markup=keyboards.audit_pay_keyboard(),
+    )
 
 
 # --------------------- Callback: start purchase -------------------

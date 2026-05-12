@@ -37,16 +37,21 @@ async def reply(
     history: list[dict[str, str]] | None = None,
     vitaconsult_public: bool | None = None,
     temperature: float | None = None,
+    recap_snippet: str | None = None,
 ) -> tuple[str, int]:
     """Returns (response_text, total_tokens). Caches static system prompt.
 
     `temperature` — опционально (для статистической регрессии v3.1: 0.0/0.3/0.7).
-    Если не задано — используется значение Anthropic по умолчанию (~1.0).
+    `recap_snippet` — короткая сводка прошлых обращений пользователя
+    (см. core.memory.recap_to_prompt_snippet). Опц.
     """
     client = get_client()
     safe_text = sanitize(user_text)
     system_blocks = build_system_prompt(
-        segment=segment, stage=stage, vitaconsult_public=vitaconsult_public
+        segment=segment,
+        stage=stage,
+        vitaconsult_public=vitaconsult_public,
+        recap_snippet=recap_snippet,
     )
 
     messages: list[dict[str, str]] = list(history or [])

@@ -19,6 +19,7 @@ from src.core import llm, rate_limit
 from src.core.config import settings
 from src.core.flags import FLAG_VITACONSULT_PUBLIC, get_flag
 from src.core.input_validation import InputValidationError, validate_user_text
+from src.core.memory import build_user_recap, recap_to_prompt_snippet
 from src.core.pd_sanitize import contains_pd
 from src.core.segment import detect_from_text, detect_sub_profile
 from src.core.stickers import StickerContext, pick_emoji, should_send_sticker
@@ -30,6 +31,7 @@ logger = logging.getLogger(__name__)
 _HISTORY_KEY = "chat_history"
 _MAX_HISTORY = 8
 _FIRST_RESPONSE_KEY = "first_response_sent"
+_RECAP_KEY = "session_recap_snippet"  # подгружаем 1 раз за сессию
 
 
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -121,6 +123,15 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             vat_topic_mentioned=any(t in user_text.lower() for t in ("ндс", "vat", "дроблен")),
         )
         vitaconsult = await get_flag(session, FLAG_VITACONSULT_PUBLIC, default=False)
+
+        # Memory / continuity (§I.4 v3.1): подгружаем recap 1 раз за сессию,
+        # если пользователь возвращается через 24+ часа.
+        recap_snippet: str | None = context.user_data.get(_RECAP_KEY)
+        if recap_snippet is None:
+            recap = await build_user_recap(session, user)
+            recap_snippet = recap_to_prompt_snippet(recap) if recap else ""
+            context.user_data[_RECAP_KEY] = recap_snippet
+
         await session.commit()
         segment = user.segment or "other"
         stage = user.stage or "cold"
@@ -158,6 +169,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
                 stage=stage,
                 history=history,
                 vitaconsult_public=vitaconsult,
+                recap_snippet=recap_snippet or None,
             )
             history = (history + [
                 {"role": "user", "content": user_text},

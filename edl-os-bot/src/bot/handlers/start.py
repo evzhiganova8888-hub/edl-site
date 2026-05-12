@@ -135,6 +135,11 @@ async def menu_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 
 async def reset_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Полный сброс in-memory FSM-состояния (включая recap, history, pending bug-report).
+
+    Не трогает БД — пользовательские данные в users/applications/refunds
+    остаются. Очищаются только переходные context.user_data ключи.
+    """
     context.user_data.clear()
     await update.effective_message.reply_text(
         "Контекст диалога сброшен. /menu — главное меню."

@@ -10,7 +10,7 @@ celery_app = Celery(
     "edl-os-bot",
     broker=settings.redis_url,
     backend=settings.redis_url,
-    include=["src.tasks.refund_check"],
+    include=["src.tasks.refund_check", "src.tasks.weekly_voc"],
 )
 celery_app.conf.update(
     timezone=settings.timezone,
@@ -22,6 +22,10 @@ celery_app.conf.update(
         "refund-window-check-every-hour": {
             "task": "src.tasks.refund_check.expire_refund_window",
             "schedule": crontab(minute=0),
+        },
+        "weekly-voc-monday-0930-msk": {
+            "task": "src.tasks.weekly_voc.run_weekly",
+            "schedule": crontab(hour=9, minute=30, day_of_week="mon"),
         },
     },
 )

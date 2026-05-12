@@ -61,14 +61,18 @@ def build_system_prompt(
     segment: str,
     stage: str,
     vitaconsult_public: bool | None = None,
+    recap_snippet: str | None = None,
 ) -> list[dict]:
     """Возвращает массив system-блоков для Anthropic API.
 
-    Все статические блоки помечаем `cache_control: ephemeral` — Anthropic
-    кэширует их и берёт $0.08/1M вместо $1/1M.
+    Статическая часть промпта помечается `cache_control: ephemeral` — Anthropic
+    кэширует её ($0.08 вместо $1 за 1M). Recap и runtime-флаги — отдельными
+    блоками без кэширования (динамические).
 
     `vitaconsult_public` передаётся динамически (из core.flags). Если None —
     fallback на env-значение.
+    `recap_snippet` — короткая сводка прошлых обращений (см. core.memory),
+    если пользователь возвращается через 24+ ч.
     """
     base = _read(_PROMPTS_DIR / "base.md")
     output_format = _read(_PROMPTS_DIR / "output_format.md")
@@ -89,14 +93,19 @@ def build_system_prompt(
 
     flag_value = bool(settings.vitaconsult_public) if vitaconsult_public is None else vitaconsult_public
 
-    return [
+    blocks: list[dict] = [
         {
             "type": "text",
             "text": static_part,
             "cache_control": {"type": "ephemeral"},
         },
+    ]
+    if recap_snippet:
+        blocks.append({"type": "text", "text": recap_snippet})
+    blocks.append(
         {
             "type": "text",
             "text": _runtime_flags(vitaconsult_public=flag_value),
-        },
-    ]
+        }
+    )
+    return blocks
