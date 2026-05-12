@@ -14,7 +14,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from src.bot import keyboards, texts
-from src.bot.handlers import admin as admin_handler, audit, bug_report, faq, lead_capture, refund
+from src.bot.handlers import admin as admin_handler, audit, bug_report, faq, feedback as feedback_handler, lead_capture, refund
 from src.core import llm, rate_limit
 from src.core.config import settings
 from src.core.flags import FLAG_VITACONSULT_PUBLIC, get_flag
@@ -86,6 +86,8 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     if await admin_handler.handle_text_step(update, context):
         return
     if await bug_report.handle_text_step(update, context):
+        return
+    if await feedback_handler.handle_text_step(update, context):
         return
     if await audit.handle_text_step(update, context):
         return

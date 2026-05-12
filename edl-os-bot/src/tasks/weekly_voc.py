@@ -23,7 +23,7 @@ from sqlalchemy import desc, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.config import settings
-from src.db.models import Application, BotError, Event, MessageLog, Payment, Refund
+from src.db.models import Application, BotError, Event, Feedback, MessageLog, Payment, Refund, User
 from src.db.session import async_session_factory
 from src.tasks.celery_app import celery_app
 
@@ -97,6 +97,38 @@ async def _collect(session: AsyncSession, since: datetime) -> dict:
         )
     ).all()
 
+    # Beta 12-19 мая: feedback по step / category + e-mail opt-in
+    fb_by_step = (
+        await session.execute(
+            select(Feedback.step, func.count(Feedback.id))
+            .where(Feedback.reported_at >= since)
+            .group_by(Feedback.step)
+            .order_by(desc(func.count(Feedback.id)))
+        )
+    ).all()
+    fb_by_category = (
+        await session.execute(
+            select(Feedback.category, func.count(Feedback.id))
+            .where(Feedback.reported_at >= since)
+            .group_by(Feedback.category)
+            .order_by(desc(func.count(Feedback.id)))
+        )
+    ).all()
+    fb_recent = (
+        await session.execute(
+            select(Feedback)
+            .where(Feedback.reported_at >= since)
+            .order_by(Feedback.reported_at.desc())
+            .limit(5)
+        )
+    ).scalars().all()
+    fb_unresolved = await session.scalar(
+        select(func.count(Feedback.id)).where(Feedback.reviewed_at.is_(None))
+    )
+    email_optins = await session.scalar(
+        select(func.count(User.id)).where(User.wants_followup_report.is_(True))
+    )
+
     return {
         "since": since.isoformat(),
         "until": datetime.now(timezone.utc).isoformat(),
@@ -121,6 +153,25 @@ async def _collect(session: AsyncSession, since: datetime) -> dict:
             }
             for err, text in bug_rows
         ],
+        "feedback_by_step": [
+            {"step": step, "count": cnt} for step, cnt in fb_by_step
+        ],
+        "feedback_by_category": [
+            {"category": cat, "count": cnt} for cat, cnt in fb_by_category
+        ],
+        "feedback_unresolved_total": fb_unresolved or 0,
+        "feedback_recent": [
+            {
+                "id": fb.id,
+                "user_id": fb.user_id,
+                "step": fb.step,
+                "category": fb.category,
+                "comment": (fb.comment or "")[:300],
+                "reported_at": fb.reported_at.isoformat() if fb.reported_at else None,
+            }
+            for fb in fb_recent
+        ],
+        "followup_email_optins_total": email_optins or 0,
     }
 
 
@@ -145,6 +196,41 @@ def _format_telegram_summary(report: dict) -> str:
         for b in bugs[:5]:
             preview = (b["bot_message_preview"] or "—")[:120].replace("\n", " ")
             lines.append(f"  · `#{b['id']}` u/{b['user_id']}: {preview}…")
+
+    # Beta 12-19 мая: feedback breakdown
+    fb_by_step = report.get("feedback_by_step", [])
+    fb_by_cat = report.get("feedback_by_category", [])
+    fb_recent = report.get("feedback_recent", [])
+    if fb_by_step or fb_recent:
+        lines.append(
+            f"\n📨 *Feedback за неделю: {sum(x['count'] for x in fb_by_step)}* "
+            f"(неразобранных: {report.get('feedback_unresolved_total', 0)})"
+        )
+        if fb_by_cat:
+            cat_emoji = {"bug": "👾", "missing": "🤔", "idea": "💡", "praise": "👍"}
+            cat_line = " · ".join(
+                f"{cat_emoji.get(c['category'], '·')} {c['category']}: {c['count']}"
+                for c in fb_by_cat
+            )
+            lines.append(cat_line)
+        if fb_by_step:
+            steps_line = ", ".join(f"{s['step']}={s['count']}" for s in fb_by_step[:6])
+            lines.append(f"Шаги: {steps_line}")
+        if fb_recent:
+            lines.append("\n*Топ-5 свежих:*")
+            for fb in fb_recent[:5]:
+                preview = (fb.get("comment") or "—")[:120].replace("\n", " ")
+                lines.append(
+                    f"  · `FB#{fb['id']}` u/{fb['user_id']} `{fb['step']}/{fb['category']}`: {preview}"
+                )
+        lines.append("/feedback в @edl_os_bot — разбор. /feedback export — md.")
+
+    optins = report.get("followup_email_optins_total", 0)
+    if optins:
+        lines.append(
+            f"\n📬 На отчёт «что починили по ОС» подписалось: {optins}"
+        )
+
     lines.append("\nПолный отчёт — `weekly_voc/{date}.json` в репо.")
     return "\n".join(lines)
 
