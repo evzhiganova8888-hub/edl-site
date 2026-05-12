@@ -40,13 +40,30 @@ class Settings(BaseSettings):
     # Anthropic
     anthropic_api_key: str = ""
     anthropic_model: str = "claude-haiku-4-5-20251001"
-    anthropic_max_tokens: int = 1024
+    # 600 — потолок ответа. Реальные ответы 200-400 токенов, 1024 был расхлябан
+    # (модель иногда выдавала «простыни»). 600 дисциплинирует и экономит
+    # ~10-15% output-токенов. Поднять через env при жалобах на обрезку.
+    anthropic_max_tokens: int = 600
+    # ANTHROPIC_BASE_URL: опц. URL прокси для оплаты рублями (Май 2026):
+    # - пусто = оригинальный Anthropic (https://api.anthropic.com)
+    # - "https://api.proxyapi.ru/anthropic" = proxyapi.ru (нативный Anthropic API,
+    #   prompt caching работает, оплата СБП/ЮКасса)
+    # Когда появится зарубежная карта — убрать переменную, бот пойдёт напрямую.
+    anthropic_base_url: str = ""
 
     # Robokassa
     robokassa_merchant_login: str = ""
     robokassa_password_1: str = ""
     robokassa_password_2: str = ""
     robokassa_is_test: int = 1
+    # PAYMENT_MODE: "manual" | "robokassa".
+    # - manual: бот собирает контакты + оферту, шлёт детальный бриф Ивану в
+    #   Sales-чат, Иван оформляет счёт через бухгалтерию, после прихода денег
+    #   помечает оплату через POST /admin/applications/{id}/mark-paid.
+    # - robokassa: создаётся invoice URL, пользователь оплачивает картой,
+    #   ResultURL callback автоматом ставит status=paid.
+    # Май 2026: ждём активацию Robokassa, работаем в manual. В июне переключим.
+    payment_mode: str = "manual"
 
     # ЮKassa
     yookassa_shop_id: str = ""

@@ -126,6 +126,51 @@ def build_payment_success_brief(
     return "\n".join(lines)
 
 
+def build_manual_payment_brief(
+    *,
+    user: User,
+    application: Application,
+    plan: str,
+    amount_rub: float,
+    full_name: str | None,
+    company: str | None,
+) -> str:
+    """Бриф Ивану для ручного оформления счёта в manual-payment режиме (Май 2026,
+    до активации Robokassa)."""
+    plan_label = "Plus" if plan == "plus" else "Базовый"
+    plan_details = (
+        "PDF-отчёт по 4 слоям + FigJam + 3 действия на неделю + 90-дневный план"
+        if plan == "base"
+        else "Всё из Базового + персональный видео-разбор от Кати"
+    )
+    lines = [
+        "🧾 РУЧНОЙ ПЛАТЁЖ — оформить счёт",
+        "",
+        f"Тариф: {plan_label} · {amount_rub:.0f} ₽",
+        f"Состав: {plan_details}",
+        "",
+        "Контактные данные клиента:",
+        f"  ФИО: {full_name or '—'}",
+        f"  Email: {user.email or '—'}",
+        f"  Компания: {company or '—'}",
+        f"  TG: @{user.telegram_username or '—'} (id {user.telegram_id})",
+        f"  Сегмент: {SEGMENT_LABELS.get(user.segment or 'other', user.segment or '—')}",
+        "",
+        f"Application ID (для трекинга): {application.id}",
+        f"Inv ID: {application.inv_id}",
+        "",
+        "Что сделать:",
+        "1. Передать ФИО + email + компанию в бухгалтерию, попросить счёт.",
+        "2. Прислать клиенту счёт на email.",
+        "3. После прихода денег на расчётный счёт — пометить оплату:",
+        f"   POST /admin/applications/{application.id}/mark-paid",
+        "   (или через будущую Telegram-кнопку в /admin)",
+        "",
+        "Связаться с клиентом в течение часа в рабочее окно (10:00–19:00 МСК Пн–Пт).",
+    ]
+    return "\n".join(lines)
+
+
 def build_refund_request_brief(
     *,
     user: User,

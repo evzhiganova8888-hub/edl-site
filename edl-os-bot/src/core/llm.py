@@ -20,11 +20,21 @@ _client: AsyncAnthropic | None = None
 
 
 def get_client() -> AsyncAnthropic:
+    """Возвращает AsyncAnthropic-клиент.
+
+    Если задан `ANTHROPIC_BASE_URL` — используется прокси (для оплаты рублями
+    через proxyapi.ru, пока нет зарубежной карты). Прокси прозрачно ретранслирует
+    запрос → prompt caching работает.
+    """
     global _client
     if _client is None:
         if not settings.anthropic_api_key:
             raise RuntimeError("ANTHROPIC_API_KEY is not set")
-        _client = AsyncAnthropic(api_key=settings.anthropic_api_key)
+        kwargs: dict = {"api_key": settings.anthropic_api_key}
+        if settings.anthropic_base_url:
+            kwargs["base_url"] = settings.anthropic_base_url
+            logger.info("Using Anthropic via proxy: %s", settings.anthropic_base_url)
+        _client = AsyncAnthropic(**kwargs)
     return _client
 
 
@@ -73,5 +83,19 @@ async def reply(
         if getattr(block, "type", None) == "text":
             text_parts.append(block.text)
     answer = "\n".join(text_parts).strip()
-    total_tokens = response.usage.input_tokens + response.usage.output_tokens
+
+    usage = response.usage
+    input_uncached = getattr(usage, "input_tokens", 0)
+    output_tokens = getattr(usage, "output_tokens", 0)
+    cache_read = getattr(usage, "cache_read_input_tokens", 0) or 0
+    cache_creation = getattr(usage, "cache_creation_input_tokens", 0) or 0
+    total_input = input_uncached + cache_read + cache_creation
+    total_tokens = total_input + output_tokens
+
+    if cache_read or cache_creation:
+        hit_rate = (cache_read / total_input * 100) if total_input else 0
+        logger.info(
+            "LLM tokens: in=%d (cache_read=%d, cache_write=%d, hit=%.0f%%), out=%d, segment=%s",
+            input_uncached, cache_read, cache_creation, hit_rate, output_tokens, segment,
+        )
     return answer, total_tokens
