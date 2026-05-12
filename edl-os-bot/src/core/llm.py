@@ -20,11 +20,21 @@ _client: AsyncAnthropic | None = None
 
 
 def get_client() -> AsyncAnthropic:
+    """Возвращает AsyncAnthropic-клиент.
+
+    Если задан `ANTHROPIC_BASE_URL` — используется прокси (для оплаты рублями
+    через proxyapi.ru, пока нет зарубежной карты). Прокси прозрачно ретранслирует
+    запрос → prompt caching работает.
+    """
     global _client
     if _client is None:
         if not settings.anthropic_api_key:
             raise RuntimeError("ANTHROPIC_API_KEY is not set")
-        _client = AsyncAnthropic(api_key=settings.anthropic_api_key)
+        kwargs: dict = {"api_key": settings.anthropic_api_key}
+        if settings.anthropic_base_url:
+            kwargs["base_url"] = settings.anthropic_base_url
+            logger.info("Using Anthropic via proxy: %s", settings.anthropic_base_url)
+        _client = AsyncAnthropic(**kwargs)
     return _client
 
 
