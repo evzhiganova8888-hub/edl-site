@@ -46,12 +46,13 @@ def _ivan_row() -> list[InlineKeyboardButton]:
 
 
 def consent_keyboard() -> InlineKeyboardMarkup:
+    # «К Ивану» убрана — на этом первом экране лишний шум, юзер ещё
+    # не дошёл до сути. Доступна через /menu.
     return InlineKeyboardMarkup(
         [
             [InlineKeyboardButton("✅ Даю согласие", callback_data="consent:accept")],
             [InlineKeyboardButton("❌ Не сейчас", callback_data="consent:decline")],
             [InlineKeyboardButton("📜 Политика", url=settings.privacy_policy_url)],
-            _ivan_row(),
         ]
     )
 
@@ -76,7 +77,6 @@ def segments_keyboard() -> InlineKeyboardMarkup:
         ]
         rows.append(row)
     rows.append([InlineKeyboardButton("Другое", callback_data="segment:other")])
-    rows.append(_ivan_row())
     return InlineKeyboardMarkup(rows)
 
 
@@ -144,19 +144,13 @@ def refund_keyboard(application_id: str) -> InlineKeyboardMarkup:
 
 def cancel_collection_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
-        [
-            [InlineKeyboardButton("Отменить", callback_data="audit:cancel_collection")],
-            _ivan_row(),
-        ]
+        [[InlineKeyboardButton("Отменить", callback_data="audit:cancel_collection")]]
     )
 
 
 def back_to_menu() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
-        [
-            [InlineKeyboardButton("← В главное меню", callback_data="menu:main")],
-            _ivan_row(),
-        ]
+        [[InlineKeyboardButton("← В главное меню", callback_data="menu:main")]]
     )
 
 
