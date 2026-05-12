@@ -1,7 +1,18 @@
 """Регистрация хендлеров на python-telegram-bot Application."""
 from __future__ import annotations
 
-from telegram.ext import Application, CallbackQueryHandler, CommandHandler, MessageHandler, filters
+import logging
+import traceback
+
+from telegram import Update
+from telegram.ext import (
+    Application,
+    CallbackQueryHandler,
+    CommandHandler,
+    ContextTypes,
+    MessageHandler,
+    filters,
+)
 
 from src.bot.handlers import (
     admin,
@@ -15,6 +26,58 @@ from src.bot.handlers import (
     refund,
     start,
 )
+from src.core.config import settings
+from src.db.repos import log_event
+from src.db.session import async_session_factory
+
+logger = logging.getLogger(__name__)
+
+
+async def _global_error_handler(
+    update: object, context: ContextTypes.DEFAULT_TYPE
+) -> None:
+    """Ловит все неперехваченные exception. Юзер получает понятный fallback,
+    мы — лог + запись в events.
+
+    Без этого handler exception проглатывается python-telegram-bot и юзер
+    видит «ничего не происходит» (см. inv_id NULL bug 12.05.2026).
+    """
+    err = context.error
+    tb = "".join(traceback.format_exception(type(err), err, err.__traceback__)) if err else "<no error>"
+    logger.error("Unhandled exception in handler: %s\n%s", err, tb)
+
+    user_id = None
+    if isinstance(update, Update):
+        if update.effective_user:
+            user_id = update.effective_user.id
+        msg = update.effective_message
+        if msg:
+            try:
+                await msg.reply_text(
+                    "Что-то пошло не так на нашей стороне. Я уже сообщил команде.\n"
+                    f"Если срочно — напишите Ивану: @{settings.sales_username}.\n"
+                    "Чтобы вернуться в меню: /menu"
+                )
+            except Exception:
+                logger.exception("Failed to notify user about error")
+
+    # Лог в БД для VoC
+    try:
+        factory = async_session_factory()
+        async with factory() as session:
+            await log_event(
+                session,
+                user_id=user_id,
+                event="unhandled_exception",
+                payload={
+                    "error": str(err)[:500] if err else None,
+                    "type": type(err).__name__ if err else None,
+                    "tb_tail": tb[-1500:],
+                },
+            )
+            await session.commit()
+    except Exception:
+        logger.exception("Failed to log unhandled_exception event")
 
 
 def register(app: Application) -> None:
@@ -50,3 +113,7 @@ def register(app: Application) -> None:
 
     # Free-form text — FSM-маршрутизатор (audit / refund / lead / faq / dialog)
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, dialog.handle_text))
+
+    # Глобальный error_handler: ловим всё неперехваченное, чтобы юзер не
+    # видел «ничего не происходит» при exception (см. P0 bug inv_id NULL).
+    app.add_error_handler(_global_error_handler)
