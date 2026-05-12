@@ -1,6 +1,7 @@
 """/admin команда для команды EDL (Катя, Иван) — сводка + toggle.
 
 Доступ — только telegram_id из ADMIN_USER_IDS.
+Toggle VITACONSULT_PUBLIC требует обязательной причины (§C.6 v3.1).
 """
 from __future__ import annotations
 
@@ -13,10 +14,12 @@ from telegram.ext import ContextTypes
 
 from src.admin.auth import is_admin
 from src.core.flags import FLAG_VITACONSULT_PUBLIC, get_flag, set_flag
-from src.db.models import Application, Event, Payment
+from src.db.models import Application, BotError, Event, Payment
 from src.db.session import async_session_factory
 
 logger = logging.getLogger(__name__)
+
+_PENDING_TOGGLE_KEY = "admin_pending_toggle"  # ждём reason для VITACONSULT toggle
 
 
 async def admin_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -47,6 +50,9 @@ async def admin_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
             .where(Event.event == "bot_start")
             .where(Event.occurred_at >= since)
         )
+        unresolved_bugs = await session.scalar(
+            select(func.count(BotError.id)).where(BotError.reviewed_at.is_(None))
+        ) or 0
         vitaconsult = await get_flag(session, FLAG_VITACONSULT_PUBLIC, default=False)
 
     text = (
@@ -55,6 +61,7 @@ async def admin_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         f"Новые заявки: {new_apps or 0}\n"
         f"Оплаты: {paid or 0}\n"
         f"Выручка: {revenue_kop / 100:,.0f} ₽\n\n"
+        f"⚠️ Bug-report'ы (неразобранные): {unresolved_bugs}\n\n"
         f"VITACONSULT_PUBLIC: {'✅ включено' if vitaconsult else '❌ выключено'}"
     )
     toggle_label = (
@@ -81,11 +88,65 @@ async def handle_admin_callback(update: Update, context: ContextTypes.DEFAULT_TY
         factory = async_session_factory()
         async with factory() as session:
             current = await get_flag(session, FLAG_VITACONSULT_PUBLIC, default=False)
-            await set_flag(
-                session, FLAG_VITACONSULT_PUBLIC, enabled=not current, actor=str(user_id)
-            )
-            await session.commit()
-            new_value = not current
+        # Просим причину перед переключением (§C.6 v3.1)
+        context.user_data[_PENDING_TOGGLE_KEY] = {
+            "key": FLAG_VITACONSULT_PUBLIC,
+            "from": current,
+            "to": not current,
+        }
         await query.message.reply_text(
-            f"VITACONSULT_PUBLIC = {'✅ true' if new_value else '❌ false'}"
+            f"Готовим переключение VITACONSULT_PUBLIC: "
+            f"{'true' if current else 'false'} → "
+            f"{'true' if not current else 'false'}.\n\n"
+            "Напишите *причину* одним сообщением (≥3 символов). "
+            "Без причины toggle не сработает.\n\n"
+            "Чтобы отменить — /reset.",
+            parse_mode="Markdown",
         )
+
+
+async def handle_text_step(update: Update, context: ContextTypes.DEFAULT_TYPE) -> bool:
+    """Если админ переключает VITACONSULT и ждём reason — обрабатываем тут."""
+    pending = context.user_data.get(_PENDING_TOGGLE_KEY)
+    if not pending:
+        return False
+    user_id = update.effective_user.id
+    if not is_admin(user_id):
+        # Чужак не должен застрять в admin FSM
+        context.user_data.pop(_PENDING_TOGGLE_KEY, None)
+        return False
+
+    text = (update.effective_message.text or "").strip()
+    if len(text) < 3:
+        await update.effective_message.reply_text(
+            "Причина слишком короткая. Минимум 3 символа. Попробуйте ещё раз "
+            "или /reset для отмены."
+        )
+        return True
+
+    factory = async_session_factory()
+    async with factory() as session:
+        await set_flag(
+            session, pending["key"], enabled=pending["to"], actor=str(user_id)
+        )
+        session.add(
+            Event(
+                user_id=user_id,
+                event="feature_flag_toggled",
+                payload={
+                    "key": pending["key"],
+                    "old": pending["from"],
+                    "new": pending["to"],
+                    "actor_telegram_id": user_id,
+                    "reason": text[:500],
+                    "via": "telegram_admin",
+                },
+            )
+        )
+        await session.commit()
+    context.user_data.pop(_PENDING_TOGGLE_KEY, None)
+    await update.effective_message.reply_text(
+        f"✅ {pending['key']} = {'true' if pending['to'] else 'false'}\n"
+        f"Причина зафиксирована в audit-log."
+    )
+    return True

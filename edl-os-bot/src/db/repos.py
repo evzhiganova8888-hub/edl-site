@@ -55,18 +55,20 @@ async def log_message(
     sticker_sent: bool = False,
     vat_topic_mentioned: bool = False,
     intent_detected: str | None = None,
-) -> None:
-    session.add(
-        MessageLog(
-            user_id=user_id,
-            direction=direction,
-            text=text,
-            llm_tokens=llm_tokens,
-            sticker_sent=sticker_sent,
-            vat_topic_mentioned=vat_topic_mentioned,
-            intent_detected=intent_detected,
-        )
+) -> MessageLog:
+    """Сохраняет сообщение в БД. Возвращает запись с id (после flush)."""
+    row = MessageLog(
+        user_id=user_id,
+        direction=direction,
+        text=text,
+        llm_tokens=llm_tokens,
+        sticker_sent=sticker_sent,
+        vat_topic_mentioned=vat_topic_mentioned,
+        intent_detected=intent_detected,
     )
+    session.add(row)
+    await session.flush()  # нужен id для bug-report (§E.3 v3.1)
+    return row
 
 
 async def log_pd_access(

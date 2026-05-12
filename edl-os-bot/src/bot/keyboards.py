@@ -113,3 +113,29 @@ def back_to_menu() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         [[InlineKeyboardButton("← В главное меню", callback_data="menu:main")]]
     )
+
+
+def bug_report_keyboard(message_log_id: int) -> InlineKeyboardMarkup:
+    """Кнопка «⚠️ Ответ неверный» под ответом бота (§E.1 v3.1).
+
+    Двойная функция: bug-report для VoC + escape hatch к Ивану (D.2).
+    """
+    return InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    "⚠️ Ответ неверный", callback_data=f"bugreport:msg:{message_log_id}"
+                ),
+                InlineKeyboardButton(
+                    "💬 К Ивану", url=f"https://t.me/{settings.sales_username}"
+                ),
+            ]
+        ]
+    )
+
+
+def bug_report_skip_keyboard() -> InlineKeyboardMarkup:
+    """После «Ответ неверный» — необязательный комментарий."""
+    return InlineKeyboardMarkup(
+        [[InlineKeyboardButton("Пропустить", callback_data="bugreport:skip")]]
+    )

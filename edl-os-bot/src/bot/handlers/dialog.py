@@ -13,8 +13,8 @@ import logging
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from src.bot import texts
-from src.bot.handlers import audit, faq, lead_capture, refund
+from src.bot import keyboards, texts
+from src.bot.handlers import admin as admin_handler, audit, bug_report, faq, lead_capture, refund
 from src.core import llm
 from src.core.config import settings
 from src.core.flags import FLAG_VITACONSULT_PUBLIC, get_flag
@@ -36,7 +36,11 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     if not msg or not msg.text:
         return
 
-    # 1. FSM checks
+    # 1. FSM checks (порядок важен)
+    if await admin_handler.handle_text_step(update, context):
+        return
+    if await bug_report.handle_text_step(update, context):
+        return
     if await audit.handle_text_step(update, context):
         return
     if await refund.handle_text_step(update, context):
@@ -107,9 +111,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             logger.exception("LLM call failed")
             answer = texts.ERROR_GENERIC
 
-    await msg.reply_text(answer)
-
-    # 3. Стикер (segment-aware, см. core/stickers.py)
+    # 3. Стикер — определяем заранее, чтобы записать в один лог
     sticker_sent = False
     trigger = None if context.user_data.get(_FIRST_RESPONSE_KEY) else "first_response"
     if trigger:
@@ -121,23 +123,20 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         trigger=trigger,
         last_response_was_refusal=False,
     )
-    if should_send_sticker(sticker_ctx):
-        try:
-            await msg.reply_text(pick_emoji())
-            sticker_sent = True
-        except Exception:
-            logger.exception("send sticker failed")
+    send_sticker = should_send_sticker(sticker_ctx)
 
+    # 4. Логируем outbound заранее — получаем id для bug-report кнопки (§E.1 v3.1)
     factory = async_session_factory()
     async with factory() as session:
-        await log_message(
+        out_row = await log_message(
             session,
             user_id=user_id_for_log,
             direction="outbound",
             text=answer,
             llm_tokens=tokens,
-            sticker_sent=sticker_sent,
+            sticker_sent=send_sticker,
         )
+        out_id = out_row.id
         if contains_pd(user_text):
             await log_event(
                 session,
@@ -146,3 +145,13 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
                 payload={"sanitized": True},
             )
         await session.commit()
+
+    # 5. Отправляем ответ с кнопкой «⚠️ Ответ неверный» + «К Ивану» (D.2 + E.1)
+    await msg.reply_text(answer, reply_markup=keyboards.bug_report_keyboard(out_id))
+
+    if send_sticker:
+        try:
+            await msg.reply_text(pick_emoji())
+            sticker_sent = True
+        except Exception:
+            logger.exception("send sticker failed")

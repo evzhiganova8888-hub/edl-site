@@ -8,7 +8,7 @@ from sqlalchemy import func, select
 
 from src.admin.auth import require_admin
 from src.core.flags import FLAG_VITACONSULT_PUBLIC, get_flag, set_flag
-from src.db.models import Application, Event, Payment, User
+from src.db.models import Application, BotError, Event, MessageLog, Payment, User
 from src.db.session import async_session_factory
 
 router = APIRouter(prefix="/admin", tags=["admin"])
@@ -145,11 +145,99 @@ async def get_flag_route(key: str, admin_id: int = Depends(require_admin)) -> di
 async def set_flag_route(
     key: str,
     enabled: bool = Query(...),
+    reason: str = Query(..., min_length=3, description="Why is the toggle changing? (§C.6 v3.1)"),
     admin_id: int = Depends(require_admin),
 ) -> dict:
+    """Переключение toggle'а. `reason` обязателен — пишется в events (audit log)."""
     factory = async_session_factory()
     async with factory() as session:
+        prev = await get_flag(session, key)
         await set_flag(session, key, enabled=enabled, actor=str(admin_id))
+        session.add(
+            Event(
+                user_id=None,
+                event="feature_flag_toggled",
+                payload={
+                    "key": key,
+                    "old": prev,
+                    "new": enabled,
+                    "actor_telegram_id": admin_id,
+                    "reason": reason,
+                },
+            )
+        )
         await session.commit()
         new_value = await get_flag(session, key)
-    return {"key": key, "enabled": new_value, "updated_by": admin_id}
+    return {"key": key, "enabled": new_value, "updated_by": admin_id, "reason": reason}
+
+
+@router.get("/bot_errors")
+async def list_bot_errors(
+    admin_id: int = Depends(require_admin),
+    only_unresolved: bool = Query(default=True),
+    limit: int = Query(default=50, le=500),
+) -> list[dict]:
+    """Bug-report'ы от пользователей (§E.1 v3.1). По умолчанию — неразобранные."""
+    factory = async_session_factory()
+    async with factory() as session:
+        stmt = (
+            select(BotError, MessageLog.text)
+            .join(MessageLog, BotError.message_log_id == MessageLog.id, isouter=True)
+            .order_by(BotError.reported_at.desc())
+            .limit(limit)
+        )
+        if only_unresolved:
+            stmt = stmt.where(BotError.reviewed_at.is_(None))
+        rows = (await session.execute(stmt)).all()
+        return [
+            {
+                "id": err.id,
+                "user_id": err.user_id,
+                "message_log_id": err.message_log_id,
+                "bot_message_preview": (text or "")[:300],
+                "user_comment": err.user_comment,
+                "category": err.category,
+                "reported_at": err.reported_at.isoformat() if err.reported_at else None,
+                "reviewed_by": err.reviewed_by,
+                "reviewed_at": err.reviewed_at.isoformat() if err.reviewed_at else None,
+                "resolution": err.resolution,
+                "prompt_patched": err.prompt_patched,
+            }
+            for err, text in rows
+        ]
+
+
+@router.post("/bot_errors/{error_id}/review")
+async def review_bot_error(
+    error_id: int,
+    resolution: str = Query(..., min_length=3),
+    category: str | None = Query(
+        default=None,
+        description="sycophancy | hallucination | wrong_segment | tone_violation | other",
+    ),
+    prompt_patched: bool = Query(default=False),
+    admin_id: int = Depends(require_admin),
+) -> dict:
+    """Закрыть bug-report: проставить категорию, резолюцию, ник ревьюера."""
+    factory = async_session_factory()
+    async with factory() as session:
+        row = (
+            await session.execute(select(BotError).where(BotError.id == error_id))
+        ).scalar_one_or_none()
+        if row is None:
+            return {"detail": "not found"}
+        row.reviewed_by = str(admin_id)
+        row.reviewed_at = datetime.now(timezone.utc)
+        row.resolution = resolution
+        if category:
+            row.category = category
+        row.prompt_patched = prompt_patched
+        await session.commit()
+        return {
+            "id": row.id,
+            "reviewed_by": row.reviewed_by,
+            "reviewed_at": row.reviewed_at.isoformat(),
+            "category": row.category,
+            "resolution": row.resolution,
+            "prompt_patched": row.prompt_patched,
+        }
