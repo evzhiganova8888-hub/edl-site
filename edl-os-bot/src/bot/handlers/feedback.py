@@ -88,8 +88,14 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 async def _start_flow(update: Update, context: ContextTypes.DEFAULT_TYPE, *, step: str) -> None:
     context.user_data[_FB_STEP] = step
     await update.callback_query.message.reply_text(
-        "Что хотите отметить?",
+        "Что хотите отметить по этому шагу?\n\n"
+        "👾 *Баг* — что-то не сработало или сломалось\n"
+        "🤔 *Не хватает* — на экране не было нужного\n"
+        "💡 *Идея* — что добавить или сделать иначе\n"
+        "👍 *Понравилось* — что зашло (нам тоже важно знать)\n\n"
+        "Это занимает 30 секунд. Спасибо, что помогаете.",
         reply_markup=keyboards.feedback_categories_keyboard(step),
+        parse_mode="Markdown",
     )
 
 
@@ -101,11 +107,31 @@ async def _select_category(
     context.user_data[_FB_STEP] = step
     context.user_data[_FB_CAT] = category
 
+    # Подсказки специально конкретные — это улучшает actionability ОС:
+    # вместо «всё плохо» получаем «жму X, ждал Y, увидел Z».
     prompts = {
-        "bug": "Что именно сломалось? Опишите кратко — ваш текст и шаг (где это произошло).",
-        "missing": "Чего не хватило на этом шаге? Можно в свободной форме.",
-        "idea": "Расскажите идею — мы посмотрим, как её встроить.",
-        "praise": "Что именно понравилось? (можно пропустить — мы и так рады).",
+        "bug": (
+            "Что именно сломалось? Чтобы починить быстро, помогите так:\n"
+            "1) что вы сделали (нажал X / написал Y);\n"
+            "2) что ожидали увидеть;\n"
+            "3) что увидели на самом деле.\n"
+            "Одно сообщение, можно коротко."
+        ),
+        "missing": (
+            "Чего не хватило на этом шаге?\n"
+            "Что бы вы хотели увидеть здесь — цифру, кнопку, объяснение, "
+            "пример? Опишите одной фразой."
+        ),
+        "idea": (
+            "Расскажите идею.\n"
+            "Если можно — два слова про контекст (для какой задачи / "
+            "когда бы это пригодилось). Мы посмотрим, как встроить."
+        ),
+        "praise": (
+            "Что именно понравилось?\n"
+            "(Можно пропустить — мы и так рады. Но если назовёте «вот это "
+            "зашло» — будем знать, чего не сломать.)"
+        ),
     }
     text = prompts.get(category, "Расскажите подробнее (одно сообщение).")
     await update.callback_query.message.reply_text(
@@ -117,20 +143,29 @@ async def _finalize_without_comment(
     update: Update, context: ContextTypes.DEFAULT_TYPE, *, step: str
 ) -> None:
     category = context.user_data.get(_FB_CAT, "missing")
-    user_id = await _user_id_from_update(update)
+    already_subscribed = False
     factory = async_session_factory()
     async with factory() as session:
-        fb_id = await record_feedback(
-            session, user_id=user_id, step=step, category=category, comment=None
+        user, _ = await get_or_create_user(
+            session, telegram_id=update.effective_user.id
         )
+        fb_id = await record_feedback(
+            session, user_id=user.id, step=step, category=category, comment=None
+        )
+        already_subscribed = bool(user.wants_followup_report)
         await session.commit()
 
     context.user_data[_FB_ID] = fb_id
     _clear_pending_text(context)
-    await update.callback_query.message.reply_text(
-        "Спасибо, записала. " + _email_pitch(),
-        reply_markup=keyboards.followup_subscribe_keyboard(step),
-    )
+    if already_subscribed:
+        await update.callback_query.message.reply_text(
+            "Спасибо, записала. Вы уже подписаны на email-отчёт — пришлём 20 мая."
+        )
+    else:
+        await update.callback_query.message.reply_text(
+            "Спасибо, записала. " + _email_pitch(),
+            reply_markup=keyboards.followup_subscribe_keyboard(step),
+        )
 
 
 async def handle_text_step(
@@ -143,24 +178,34 @@ async def handle_text_step(
         return False
 
     text = (update.effective_message.text or "").strip()
-    user_id = await _user_id_from_update(update)
+    already_subscribed = False
     factory = async_session_factory()
     async with factory() as session:
+        user, _ = await get_or_create_user(
+            session, telegram_id=update.effective_user.id
+        )
         fb_id = await record_feedback(
             session,
-            user_id=user_id,
+            user_id=user.id,
             step=step,
             category=category,
             comment=text[:2000] if text else None,
         )
+        already_subscribed = bool(user.wants_followup_report)
         await session.commit()
 
     context.user_data[_FB_ID] = fb_id
     _clear_pending_text(context)
-    await update.effective_message.reply_text(
-        "Спасибо, добавила в разбор. " + _email_pitch(),
-        reply_markup=keyboards.followup_subscribe_keyboard(step),
-    )
+    if already_subscribed:
+        await update.effective_message.reply_text(
+            "Спасибо, добавила в разбор. Вы уже подписаны на email-отчёт — "
+            "пришлём 20 мая."
+        )
+    else:
+        await update.effective_message.reply_text(
+            "Спасибо, добавила в разбор. " + _email_pitch(),
+            reply_markup=keyboards.followup_subscribe_keyboard(step),
+        )
     return True
 
 
@@ -183,15 +228,19 @@ async def _subscribe_email(
         await session.commit()
 
     if wants and not user.email:
+        # Email FSM на стороне Чекапа — сюда не дублируем, чтобы текст
+        # пользователя не попал в LLM-диалог по ошибке.
         await update.callback_query.message.reply_text(
-            "Подписала. Если на бота ещё не привязан email — пришлите его одним "
-            "сообщением сейчас или позже через /audit (он сохранится в профиле).\n\n"
-            "После 19 мая пришлём отчёт: что починили, что добавили по вашим ОС."
+            "Подписала. Email привяжется автоматически, когда вы оформите "
+            "Чекап (там есть шаг с email для чека). Или напишите Ивану "
+            "напрямую — он добавит вас в список вручную: @lvanKhudyakov.\n\n"
+            "20 мая пришлём один email: что починили, что добавили по "
+            "вашим ОС."
         )
     elif wants:
         await update.callback_query.message.reply_text(
-            f"Подписала на {user.email}. После 19 мая пришлём отчёт: что починили, "
-            "что добавили по вашим ОС."
+            f"Подписала на {user.email}. 20 мая пришлём один email: "
+            "что починили, что добавили по вашим ОС."
         )
     else:
         await update.callback_query.message.reply_text(

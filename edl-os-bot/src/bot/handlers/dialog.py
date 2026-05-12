@@ -83,11 +83,12 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     #  очищен (control chars удалены), длина в пределах лимита.)
 
     # 1. FSM checks (порядок важен)
+    # P0-fix beta 12.05: feedback FSM в самый низ, чтобы «зависшее»
+    # состояние ОС не съело ФИО/email при возврате к покупке Чекапа.
+    # bug_report остаётся раньше — он короткий и закрывается «Пропустить».
     if await admin_handler.handle_text_step(update, context):
         return
     if await bug_report.handle_text_step(update, context):
-        return
-    if await feedback_handler.handle_text_step(update, context):
         return
     if await audit.handle_text_step(update, context):
         return
@@ -96,6 +97,8 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     if await lead_capture.handle_text_step(update, context):
         return
     if await faq.handle_text_step(update, context):
+        return
+    if await feedback_handler.handle_text_step(update, context):
         return
 
     # 2. Свободный диалог

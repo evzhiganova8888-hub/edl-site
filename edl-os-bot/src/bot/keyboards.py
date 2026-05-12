@@ -239,12 +239,17 @@ def feedback_categories_keyboard(step: str) -> InlineKeyboardMarkup:
 
 
 def feedback_after_comment_keyboard(step: str) -> InlineKeyboardMarkup:
-    """После выбора категории — пропустить комментарий или подписаться на отчёт."""
+    """После выбора категории — пропустить комментарий или отменить целиком."""
     return InlineKeyboardMarkup(
         [
             [
                 InlineKeyboardButton(
                     "Пропустить комментарий", callback_data=f"feedback:skip:{step}"
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    "Отменить ОС", callback_data="feedback:cancel"
                 )
             ],
         ]
