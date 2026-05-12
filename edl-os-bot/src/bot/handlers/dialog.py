@@ -29,7 +29,9 @@ from src.db.session import async_session_factory
 logger = logging.getLogger(__name__)
 
 _HISTORY_KEY = "chat_history"
-_MAX_HISTORY = 8
+# 6 = 3 пары (user+assistant). В 95% случаев этого достаточно для контекста;
+# уменьшение с 8 → 6 экономит ~25% от history-токенов на каждый запрос.
+_MAX_HISTORY = 6
 _FIRST_RESPONSE_KEY = "first_response_sent"
 _RECAP_KEY = "session_recap_snippet"  # подгружаем 1 раз за сессию
 

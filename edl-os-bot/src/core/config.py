@@ -40,7 +40,10 @@ class Settings(BaseSettings):
     # Anthropic
     anthropic_api_key: str = ""
     anthropic_model: str = "claude-haiku-4-5-20251001"
-    anthropic_max_tokens: int = 1024
+    # 600 — потолок ответа. Реальные ответы 200-400 токенов, 1024 был расхлябан
+    # (модель иногда выдавала «простыни»). 600 дисциплинирует и экономит
+    # ~10-15% output-токенов. Поднять через env при жалобах на обрезку.
+    anthropic_max_tokens: int = 600
     # ANTHROPIC_BASE_URL: опц. URL прокси для оплаты рублями (Май 2026):
     # - пусто = оригинальный Anthropic (https://api.anthropic.com)
     # - "https://api.proxyapi.ru/anthropic" = proxyapi.ru (нативный Anthropic API,

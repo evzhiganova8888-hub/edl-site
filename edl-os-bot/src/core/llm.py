@@ -83,5 +83,19 @@ async def reply(
         if getattr(block, "type", None) == "text":
             text_parts.append(block.text)
     answer = "\n".join(text_parts).strip()
-    total_tokens = response.usage.input_tokens + response.usage.output_tokens
+
+    usage = response.usage
+    input_uncached = getattr(usage, "input_tokens", 0)
+    output_tokens = getattr(usage, "output_tokens", 0)
+    cache_read = getattr(usage, "cache_read_input_tokens", 0) or 0
+    cache_creation = getattr(usage, "cache_creation_input_tokens", 0) or 0
+    total_input = input_uncached + cache_read + cache_creation
+    total_tokens = total_input + output_tokens
+
+    if cache_read or cache_creation:
+        hit_rate = (cache_read / total_input * 100) if total_input else 0
+        logger.info(
+            "LLM tokens: in=%d (cache_read=%d, cache_write=%d, hit=%.0f%%), out=%d, segment=%s",
+            input_uncached, cache_read, cache_creation, hit_rate, output_tokens, segment,
+        )
     return answer, total_tokens
