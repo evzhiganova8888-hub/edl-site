@@ -6,3 +6,7 @@ anthropic>=0.39.0
 pydantic>=2.0
 pydantic-settings>=2.0
 tenacity>=8.0
+# eval_type_backport нужен для Python 3.9 (macOS 13 системный), чтобы pydantic
+# мог парсить annotations типа `int | None` (PEP 604, добавлен в Python 3.10).
+# На Python 3.10+ пакет no-op.
+eval_type_backport>=0.2.0
