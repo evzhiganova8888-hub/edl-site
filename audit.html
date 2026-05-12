@@ -162,12 +162,49 @@
       </div>
     </section>
 
+    <!-- Tariffs (2 plans visible on page, not only in modal) -->
+    <section class="section" style="background:#fafafa;">
+      <div class="container" style="max-width:920px; margin:0 auto;">
+        <h2 class="section__title" style="margin-bottom:8px; text-align:center;">Два тарифа на выбор</h2>
+        <p style="text-align:center; color:#71717a; margin-bottom:40px;">Один разбор по 4 слоям. Plus добавляет персональный видео-разбор от Екатерины Жигановой.</p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:24px;">
+          <!-- Базовый -->
+          <div style="background:#fff; border:1px solid #e4e4e7; border-radius:16px; padding:32px;">
+            <div style="font-size:0.875rem; color:#71717a; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;">📋 Базовый</div>
+            <div style="font-size:2.5rem; font-weight:800; line-height:1; margin-bottom:4px;">9 000 ₽</div>
+            <div style="color:#71717a; margin-bottom:24px;">48 часов с момента интервью</div>
+            <ul style="list-style:none; padding:0; margin:0 0 24px 0; display:flex; flex-direction:column; gap:8px; font-size:0.9375rem; line-height:1.5;">
+              <li>✓ 30-минутный звонок-интервью с Иваном или Катей</li>
+              <li>✓ PDF-отчёт 5–7 страниц по 4 слоям EDL OS</li>
+              <li>✓ Майнд-карта оцифровки в FigJam</li>
+              <li>✓ 3 действия на неделю и план на 90 дней</li>
+            </ul>
+            <button class="btn btn--outline open-checkout" data-cta-type="audit_checkout" data-cta-location="tariffs_base" style="width:100%;">Выбрать Базовый</button>
+          </div>
+          <!-- Plus -->
+          <div style="background:#fff; border:2px solid var(--color-tangerine); border-radius:16px; padding:32px; position:relative;">
+            <div style="position:absolute; top:-12px; right:24px; background:var(--color-tangerine); color:#000; font-weight:700; font-size:0.75rem; padding:4px 12px; border-radius:12px; letter-spacing:0.05em;">С ВИДЕО КАТИ</div>
+            <div style="font-size:0.875rem; color:#71717a; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;">🎥 Plus</div>
+            <div style="font-size:2.5rem; font-weight:800; line-height:1; margin-bottom:4px;">14 000 ₽</div>
+            <div style="color:#71717a; margin-bottom:24px;">7 рабочих дней с момента интервью</div>
+            <ul style="list-style:none; padding:0; margin:0 0 24px 0; display:flex; flex-direction:column; gap:8px; font-size:0.9375rem; line-height:1.5;">
+              <li>✓ Всё из Базового, плюс:</li>
+              <li>🎥 <strong>Персональный видео-разбор от Екатерины Жигановой</strong> на ваши конкретные узкие места</li>
+              <li>✓ Глубже разбор слоя «Деньги» (НДС, антидробление)</li>
+            </ul>
+            <button class="btn btn--primary open-checkout" data-cta-type="audit_checkout" data-cta-location="tariffs_plus" style="width:100%;">Выбрать Plus</button>
+          </div>
+        </div>
+        <p style="text-align:center; color:#71717a; margin-top:24px; font-size:0.875rem;">Безусловный возврат 14 дней для обоих тарифов · оплата по счёту от ИП Жигановой Е.В. (СБП / банк)</p>
+      </div>
+    </section>
+
     <!-- Guarantee -->
     <section class="section">
       <div class="container" style="max-width:800px; margin:0 auto;">
         <div class="guarantee-block">
           <h3 class="guarantee-block__title">Гарантия возврата 14 дней</h3>
-          <p class="guarantee-block__text">Возвращаем 100&nbsp;% оплаты в течение 14 дней, если по итогам Бизнес-чекапа вы не сможете внедрить ни одного из предложенных изменений в своей компании. Без вопросов, по заявлению в Telegram — деньги возвращаем тем же способом, которым была получена оплата.</p>
+          <p class="guarantee-block__text"><strong>Безусловный</strong> возврат 100&nbsp;% оплаты в течение 14 календарных дней с момента передачи материалов. Причину указывать не нужно — один клик <code>/refund</code> в Telegram-боте. Деньги возвращаем тем же способом, которым была получена оплата, в течение 5 рабочих дней.</p>
         </div>
       </div>
     </section>
@@ -206,7 +243,10 @@
       <div class="container" style="text-align:center;">
         <h2 class="section__title" style="color:#fff; margin-bottom:24px;">Готовы увидеть карту своего бизнеса?</h2>
         <p style="color:#d4d4d8; margin:0 auto 32px; max-width:560px; font-size:1rem; line-height:1.5;">Безусловный возврат 100&nbsp;% оплаты в течение 14 календарных дней с момента передачи материалов. Причину указывать не нужно — один клик <code>/refund</code> в боте.</p>
-        <button class="btn btn--primary open-checkout" data-cta-type="audit_checkout" data-cta-location="final" style="font-size:1.125rem; padding:16px 32px;">Купить Бизнес-чекап за 9 000 ₽</button>
+        <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+          <button class="btn btn--outline open-checkout" data-cta-type="audit_checkout" data-cta-location="final_base" style="font-size:1rem; padding:16px 24px; color:#fff; border-color:#fff;">📋 Базовый · 9 000 ₽</button>
+          <button class="btn btn--primary open-checkout" data-cta-type="audit_checkout" data-cta-location="final_plus" style="font-size:1rem; padding:16px 24px;">🎥 Plus · 14 000 ₽ (с видео Кати)</button>
+        </div>
       </div>
     </section>
   </main>
