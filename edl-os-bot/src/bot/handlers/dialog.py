@@ -14,7 +14,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from src.bot import keyboards, texts
-from src.bot.handlers import admin as admin_handler, audit, bug_report, faq, lead_capture, refund
+from src.bot.handlers import admin as admin_handler, audit, bug_report, faq, feedback as feedback_handler, lead_capture, refund
 from src.core import llm, rate_limit
 from src.core.config import settings
 from src.core.flags import FLAG_VITACONSULT_PUBLIC, get_flag
@@ -83,6 +83,9 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     #  очищен (control chars удалены), длина в пределах лимита.)
 
     # 1. FSM checks (порядок важен)
+    # P0-fix beta 12.05: feedback FSM в самый низ, чтобы «зависшее»
+    # состояние ОС не съело ФИО/email при возврате к покупке Чекапа.
+    # bug_report остаётся раньше — он короткий и закрывается «Пропустить».
     if await admin_handler.handle_text_step(update, context):
         return
     if await bug_report.handle_text_step(update, context):
@@ -94,6 +97,8 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     if await lead_capture.handle_text_step(update, context):
         return
     if await faq.handle_text_step(update, context):
+        return
+    if await feedback_handler.handle_text_step(update, context):
         return
 
     # 2. Свободный диалог

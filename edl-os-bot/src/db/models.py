@@ -57,6 +57,8 @@ class User(Base):
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
+    # Beta 12.05-19.05: подписка на e-mail отчёт «что мы сделали по ОС».
+    wants_followup_report: Mapped[bool] = mapped_column(Boolean, default=False)
 
     applications: Mapped[list[Application]] = relationship(back_populates="user")
     payments: Mapped[list[Payment]] = relationship(back_populates="user")
@@ -230,4 +232,38 @@ class BotError(Base):
             postgresql_where=sql_text("reviewed_at IS NULL"),
         ),
         Index("idx_bot_errors_user", "user_id", "reported_at"),
+    )
+
+
+class Feedback(Base):
+    """Структурированная обратная связь от пользователя (beta 12.05-19.05).
+
+    В отличие от BotError (баги под конкретным ответом AI), Feedback — это
+    «мне не хватает X / классно сделали Y / идея Z» на любом экране бота.
+    """
+
+    __tablename__ = "feedback"
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    user_id: Mapped[int | None] = mapped_column(BigInteger, ForeignKey("users.id"))
+    # welcome / audit / quiz / offer / payment / ai_reply / refund / privacy / other
+    step: Mapped[str] = mapped_column(Text, nullable=False)
+    # bug / missing / idea / praise
+    category: Mapped[str] = mapped_column(Text, nullable=False)
+    severity: Mapped[str | None] = mapped_column(Text)
+    comment: Mapped[str | None] = mapped_column(Text)
+    reported_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    reviewed_by: Mapped[str | None] = mapped_column(Text)
+    reviewed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    resolution: Mapped[str | None] = mapped_column(Text)
+
+    __table_args__ = (
+        Index(
+            "idx_feedback_unresolved",
+            "reported_at",
+            postgresql_where=sql_text("reviewed_at IS NULL"),
+        ),
+        Index("idx_feedback_step_category", "step", "category"),
     )

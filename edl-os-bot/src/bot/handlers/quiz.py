@@ -133,6 +133,7 @@ async def _finish(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 [InlineKeyboardButton("📋 Заявка на Диагностику", callback_data="menu:diagnostic")],
                 [InlineKeyboardButton("Сначала Чекап за 9 000 ₽", callback_data="menu:audit")],
                 [InlineKeyboardButton("← В меню", callback_data="menu:main")],
+                keyboards.feedback_row("quiz"),
             ]
         )
     else:
@@ -140,6 +141,7 @@ async def _finish(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             [
                 [InlineKeyboardButton("🏗 Лист ожидания Спринта", callback_data="menu:sprint_waitlist")],
                 [InlineKeyboardButton("← В меню", callback_data="menu:main")],
+                keyboards.feedback_row("quiz"),
             ]
         )
 

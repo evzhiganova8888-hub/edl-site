@@ -114,7 +114,7 @@ async def audit_sample_command(update: Update, context: ContextTypes.DEFAULT_TYP
     if not sent_any:
         await update.effective_message.reply_text(
             texts.AUDIT_SAMPLE_NOT_READY,
-            reply_markup=keyboards.audit_pay_keyboard(),
+            reply_markup=keyboards.waitlist_keyboard("audit_pdf"),
         )
         return
     # CTA после превью
@@ -410,7 +410,7 @@ async def _handoff_manual_payment(
 
     await update.effective_message.reply_text(
         texts.MANUAL_PAYMENT_SUBMITTED,
-        reply_markup=keyboards.main_menu(),
+        reply_markup=keyboards.payment_submitted_keyboard(),
         disable_web_page_preview=True,
     )
 
