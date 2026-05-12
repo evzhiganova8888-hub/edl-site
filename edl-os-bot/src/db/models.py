@@ -195,3 +195,24 @@ class FeatureFlag(Base):
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
+
+
+class BotError(Base):
+    """Bug-report от пользователя «⚠️ Ответ неверный» (§E.3 v3.1)."""
+
+    __tablename__ = "bot_errors"
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    user_id: Mapped[int | None] = mapped_column(BigInteger, ForeignKey("users.id"))
+    message_log_id: Mapped[int | None] = mapped_column(
+        BigInteger, ForeignKey("messages_log.id")
+    )
+    user_comment: Mapped[str | None] = mapped_column(Text)
+    category: Mapped[str | None] = mapped_column(Text)
+    reported_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    reviewed_by: Mapped[str | None] = mapped_column(Text)
+    reviewed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    resolution: Mapped[str | None] = mapped_column(Text)
+    prompt_patched: Mapped[bool] = mapped_column(Boolean, default=False)

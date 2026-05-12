@@ -38,19 +38,34 @@ from src.db.session import async_session_factory
 
 logger = logging.getLogger(__name__)
 
-_AUDIT_SAMPLE_PDF = (
-    Path(__file__).resolve().parent.parent.parent.parent / "assets" / "audit_sample.pdf"
-)
+_ASSETS_DIR = Path(__file__).resolve().parent.parent.parent.parent / "assets"
+_AUDIT_SAMPLE_PDF = _ASSETS_DIR / "audit_sample.pdf"
+_AUDIT_SAMPLE_HTML = _ASSETS_DIR / "audit_sample.html"
 
 AUDIT_AMOUNT_RUB = 9000.0
+AUDIT_PLUS_AMOUNT_RUB = 14000.0
+
+PLAN_BASE = "base"
+PLAN_PLUS = "plus"
 
 # FSM keys в context.user_data
 KEY_FLOW = "audit_flow_state"
 KEY_APP_ID = "audit_application_id"
+KEY_PLAN = "audit_plan"
 
 FLOW_AWAIT_FULL_NAME = "await_full_name"
 FLOW_AWAIT_EMAIL = "await_email"
 FLOW_AWAIT_COMPANY = "await_company"
+
+
+def _plan_amount(plan: str) -> float:
+    return AUDIT_PLUS_AMOUNT_RUB if plan == PLAN_PLUS else AUDIT_AMOUNT_RUB
+
+
+def _plan_description(plan: str) -> str:
+    if plan == PLAN_PLUS:
+        return "Бизнес-чекап Plus EDL OS · отчёт + видео-разбор от Кати"
+    return "Бизнес-чекап EDL OS · аналитический отчёт по 4 слоям"
 
 
 # ----------------------------- /audit -----------------------------
@@ -75,26 +90,50 @@ async def audit_sample_command(update: Update, context: ContextTypes.DEFAULT_TYP
         await log_event(session, user_id=user.id, event="audit_sample_requested")
         await session.commit()
 
+    sent_any = False
     if _AUDIT_SAMPLE_PDF.exists():
         await update.effective_message.reply_text(texts.AUDIT_SAMPLE_INTRO)
         with _AUDIT_SAMPLE_PDF.open("rb") as f:
             await update.effective_message.reply_document(
                 document=f, filename="EDL_OS_audit_sample.pdf"
             )
-    else:
+        sent_any = True
+    if _AUDIT_SAMPLE_HTML.exists():
+        if not sent_any:
+            await update.effective_message.reply_text(texts.AUDIT_SAMPLE_INTRO)
+        with _AUDIT_SAMPLE_HTML.open("rb") as f:
+            await update.effective_message.reply_document(
+                document=f, filename="EDL_OS_audit_sample.html"
+            )
+        sent_any = True
+    if not sent_any:
         await update.effective_message.reply_text(
             texts.AUDIT_SAMPLE_NOT_READY,
             reply_markup=keyboards.audit_pay_keyboard(),
         )
+        return
+    # CTA после превью
+    await update.effective_message.reply_text(
+        "Это обезличенный пример. Ваш отчёт будет содержать цифры именно "
+        "по вашей компании. Заказать свой Чекап ниже.",
+        reply_markup=keyboards.audit_pay_keyboard(),
+    )
 
 
 # --------------------- Callback: start purchase -------------------
 
 
 async def start_purchase(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Колбэк `audit:start_purchase` — старт сбора контактов."""
+    """Колбэк `audit:start_purchase:<plan>` — старт сбора контактов.
+
+    plan ∈ {base, plus}. base — Чекап 9 000 ₽, plus — 14 000 ₽ с видео.
+    """
     query = update.callback_query
     await query.answer()
+
+    data = query.data or ""
+    parts = data.split(":")
+    plan = parts[2] if len(parts) >= 3 and parts[2] in (PLAN_BASE, PLAN_PLUS) else PLAN_BASE
 
     factory = async_session_factory()
     async with factory() as session:
@@ -112,20 +151,27 @@ async def start_purchase(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             user=user,
             type="audit",
             source="purchase_intent",
+            payload={"plan": plan},
         )
         await log_event(
             session,
             user_id=user.id,
             event="audit_purchase_started",
-            payload={"application_id": str(application.id)},
+            payload={"application_id": str(application.id), "plan": plan},
         )
         await session.commit()
         application_id = str(application.id)
 
     context.user_data[KEY_APP_ID] = application_id
+    context.user_data[KEY_PLAN] = plan
     context.user_data[KEY_FLOW] = FLOW_AWAIT_FULL_NAME
 
-    await query.message.reply_text(texts.AUDIT_PURCHASE_START)
+    plan_label = "Plus · 14 000 ₽" if plan == PLAN_PLUS else "Базовый · 9 000 ₽"
+    await query.message.reply_text(
+        f"Хорошо, оформляем Бизнес-чекап {plan_label}.\n\n"
+        "Соберу минимум — ФИО, email для чека и название компании. "
+        "Это нужно для договора и фискального чека (54-ФЗ)."
+    )
     await query.message.reply_text(
         texts.ASK_FULL_NAME, reply_markup=keyboards.cancel_collection_keyboard()
     )
@@ -291,6 +337,9 @@ async def handle_offer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 
 async def _send_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE, application_id: str) -> None:
+    plan = context.user_data.get(KEY_PLAN, PLAN_BASE)
+    amount = _plan_amount(plan)
+
     client = RobokassaClient()
     if not client.configured:
         await update.effective_message.reply_text(
@@ -308,7 +357,7 @@ async def _send_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE, appl
                 session,
                 user_id=user.id,
                 event="audit_payment_skipped_unconfigured",
-                payload={"application_id": application_id},
+                payload={"application_id": application_id, "plan": plan},
             )
             await session.commit()
         return
@@ -325,8 +374,8 @@ async def _send_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE, appl
             return
         invoice = RobokassaInvoice(
             inv_id=app.inv_id,
-            amount_rub=AUDIT_AMOUNT_RUB,
-            description="Бизнес-чекап EDL OS · аналитический отчёт + видео-разбор",
+            amount_rub=amount,
+            description=_plan_description(plan),
             email=user.email,
             user_telegram_id=user.telegram_id,
         )
@@ -337,7 +386,7 @@ async def _send_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE, appl
             Payment(
                 application_id=app.id,
                 user_id=user.id,
-                amount_kopecks=int(AUDIT_AMOUNT_RUB * 100),
+                amount_kopecks=int(amount * 100),
                 currency="RUB",
                 provider="robokassa",
                 provider_invoice_id=str(app.inv_id),
@@ -348,10 +397,16 @@ async def _send_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE, appl
             session,
             user_id=user.id,
             event="audit_invoice_created",
-            payload={"application_id": application_id, "inv_id": app.inv_id},
+            payload={
+                "application_id": application_id,
+                "inv_id": app.inv_id,
+                "plan": plan,
+                "amount_rub": amount,
+            },
         )
         await session.commit()
 
     await update.effective_message.reply_text(
-        texts.PAYMENT_LINK_READY, reply_markup=keyboards.audit_pay_keyboard(invoice_url=url)
+        texts.PAYMENT_LINK_READY,
+        reply_markup=keyboards.audit_pay_keyboard(invoice_url=url, plan=plan),
     )

@@ -36,23 +36,37 @@ async def reply(
     stage: str = "cold",
     history: list[dict[str, str]] | None = None,
     vitaconsult_public: bool | None = None,
+    temperature: float | None = None,
+    recap_snippet: str | None = None,
 ) -> tuple[str, int]:
-    """Returns (response_text, total_tokens). Caches static system prompt."""
+    """Returns (response_text, total_tokens). Caches static system prompt.
+
+    `temperature` — опционально (для статистической регрессии v3.1: 0.0/0.3/0.7).
+    `recap_snippet` — короткая сводка прошлых обращений пользователя
+    (см. core.memory.recap_to_prompt_snippet). Опц.
+    """
     client = get_client()
     safe_text = sanitize(user_text)
     system_blocks = build_system_prompt(
-        segment=segment, stage=stage, vitaconsult_public=vitaconsult_public
+        segment=segment,
+        stage=stage,
+        vitaconsult_public=vitaconsult_public,
+        recap_snippet=recap_snippet,
     )
 
     messages: list[dict[str, str]] = list(history or [])
     messages.append({"role": "user", "content": safe_text})
 
-    response = await client.messages.create(
+    kwargs: dict = dict(
         model=settings.anthropic_model,
         max_tokens=settings.anthropic_max_tokens,
         system=system_blocks,
         messages=messages,
     )
+    if temperature is not None:
+        kwargs["temperature"] = temperature
+
+    response = await client.messages.create(**kwargs)
 
     text_parts: list[str] = []
     for block in response.content:

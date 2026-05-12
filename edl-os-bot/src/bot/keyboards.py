@@ -16,7 +16,7 @@ def main_menu() -> InlineKeyboardMarkup:
             InlineKeyboardButton("📅 Бесплатное демо · 30 мин", callback_data="menu:demo"),
         ],
         [
-            InlineKeyboardButton("📋 Бизнес-чекап · 9 000 ₽", callback_data="menu:audit"),
+            InlineKeyboardButton("📋 Чекап · от 9 000 ₽", callback_data="menu:audit"),
             InlineKeyboardButton("📄 Пример отчёта", callback_data="menu:audit_sample"),
         ],
         [
@@ -24,7 +24,7 @@ def main_menu() -> InlineKeyboardMarkup:
         ],
         [
             InlineKeyboardButton(
-                "💬 Написать Ивану", url=f"https://t.me/{settings.sales_username}"
+                "💬 Написать Ивану напрямую", url=f"https://t.me/{settings.sales_username}"
             ),
         ],
         [
@@ -35,12 +35,23 @@ def main_menu() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(rows)
 
 
+def _ivan_row() -> list[InlineKeyboardButton]:
+    """«К Ивану напрямую» — escape hatch на каждом экране (D.2 v3.1)."""
+    return [
+        InlineKeyboardButton(
+            "💬 Написать Ивану напрямую",
+            url=f"https://t.me/{settings.sales_username}",
+        )
+    ]
+
+
 def consent_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         [
             [InlineKeyboardButton("✅ Даю согласие", callback_data="consent:accept")],
             [InlineKeyboardButton("❌ Не сейчас", callback_data="consent:decline")],
             [InlineKeyboardButton("📜 Политика", url=settings.privacy_policy_url)],
+            _ivan_row(),
         ]
     )
 
@@ -65,22 +76,42 @@ def segments_keyboard() -> InlineKeyboardMarkup:
         ]
         rows.append(row)
     rows.append([InlineKeyboardButton("Другое", callback_data="segment:other")])
+    rows.append(_ivan_row())
     return InlineKeyboardMarkup(rows)
 
 
-def audit_pay_keyboard(invoice_url: str | None = None) -> InlineKeyboardMarkup:
-    """Кнопка оплаты Чекапа. URL появляется после согласия + оферты + email."""
-    buttons = []
+def audit_pay_keyboard(
+    invoice_url: str | None = None, *, plan: str = "base"
+) -> InlineKeyboardMarkup:
+    """Кнопка оплаты Чекапа. URL появляется после согласия + оферты + email.
+
+    plan: 'base' (9 000 ₽) | 'plus' (14 000 ₽ — с видео-разбором от Кати).
+    """
+    buttons: list[list[InlineKeyboardButton]] = []
     if invoice_url:
-        buttons.append([InlineKeyboardButton("💳 Оплатить 9 000 ₽", url=invoice_url)])
+        label = "💳 Оплатить 14 000 ₽" if plan == "plus" else "💳 Оплатить 9 000 ₽"
+        buttons.append([InlineKeyboardButton(label, url=invoice_url)])
     else:
-        buttons.append([InlineKeyboardButton("🛒 Купить Чекап за 9 000 ₽", callback_data="audit:start_purchase")])
+        buttons.append(
+            [
+                InlineKeyboardButton(
+                    "🛒 Чекап Базовый · 9 000 ₽",
+                    callback_data="audit:start_purchase:base",
+                )
+            ]
+        )
+        buttons.append(
+            [
+                InlineKeyboardButton(
+                    "🎥 Чекап Plus · 14 000 ₽ (с видео Кати)",
+                    callback_data="audit:start_purchase:plus",
+                )
+            ]
+        )
     buttons.append(
-        [InlineKeyboardButton("📄 Сначала посмотреть пример", callback_data="menu:audit_sample")]
+        [InlineKeyboardButton("📄 Сначала пример отчёта", callback_data="menu:audit_sample")]
     )
-    buttons.append(
-        [InlineKeyboardButton(f"💬 Спросить Ивана", url=f"https://t.me/{settings.sales_username}")]
-    )
+    buttons.append(_ivan_row())
     return InlineKeyboardMarkup(buttons)
 
 
@@ -90,26 +121,66 @@ def offer_keyboard() -> InlineKeyboardMarkup:
             [InlineKeyboardButton("📜 Открыть полный текст оферты", url=settings.offer_url)],
             [InlineKeyboardButton("✅ Я принимаю оферту", callback_data="offer:accept")],
             [InlineKeyboardButton("❌ Не сейчас", callback_data="offer:decline")],
+            _ivan_row(),
         ]
     )
 
 
 def refund_keyboard(application_id: str) -> InlineKeyboardMarkup:
+    """1-click refund (§D.6 v3.1): запускаем возврат сразу, причина — потом и опционально."""
     return InlineKeyboardMarkup(
         [
-            [InlineKeyboardButton("↩️ Запросить возврат", callback_data=f"refund:request:{application_id}")],
+            [
+                InlineKeyboardButton(
+                    "↩️ Получить возврат",
+                    callback_data=f"refund:request:{application_id}",
+                )
+            ],
             [InlineKeyboardButton("← В меню", callback_data="menu:main")],
+            _ivan_row(),
         ]
     )
 
 
 def cancel_collection_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
-        [[InlineKeyboardButton("Отменить", callback_data="audit:cancel_collection")]]
+        [
+            [InlineKeyboardButton("Отменить", callback_data="audit:cancel_collection")],
+            _ivan_row(),
+        ]
     )
 
 
 def back_to_menu() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
-        [[InlineKeyboardButton("← В главное меню", callback_data="menu:main")]]
+        [
+            [InlineKeyboardButton("← В главное меню", callback_data="menu:main")],
+            _ivan_row(),
+        ]
+    )
+
+
+def bug_report_keyboard(message_log_id: int) -> InlineKeyboardMarkup:
+    """Кнопка «⚠️ Ответ неверный» под ответом бота (§E.1 v3.1).
+
+    Двойная функция: bug-report для VoC + escape hatch к Ивану (D.2).
+    """
+    return InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    "⚠️ Ответ неверный", callback_data=f"bugreport:msg:{message_log_id}"
+                ),
+                InlineKeyboardButton(
+                    "💬 К Ивану", url=f"https://t.me/{settings.sales_username}"
+                ),
+            ]
+        ]
+    )
+
+
+def bug_report_skip_keyboard() -> InlineKeyboardMarkup:
+    """После «Ответ неверный» — необязательный комментарий."""
+    return InlineKeyboardMarkup(
+        [[InlineKeyboardButton("Пропустить", callback_data="bugreport:skip")]]
     )
