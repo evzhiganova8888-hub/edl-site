@@ -112,14 +112,21 @@ async def _send_main_menu(update: Update, *, greeting: bool) -> None:
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.effective_message.reply_text(
+        "Я — AI-помощник EDL OS на Claude Haiku 4.5.\n\n"
         "Команды:\n"
         "/start — главное меню\n"
         "/menu — показать меню ещё раз\n"
-        "/audit — Бизнес-чекап\n"
-        "/audit_sample — пример отчёта\n"
-        "/faq — частые вопросы\n"
-        "/privacy — мои данные и согласия\n"
-        "/reset — сбросить контекст диалога"
+        "/audit — Бизнес-чекап (базовый 9 000 ₽ или Plus 14 000 ₽)\n"
+        "/audit_sample — пример отчёта Чекапа\n"
+        "/faq — частые вопросы (без AI, мгновенные ответы)\n"
+        "/refund — возврат за Чекап (14 дней с момента оплаты)\n"
+        "/privacy — ваши данные и согласия (152-ФЗ)\n"
+        "/delete_my_data — удалить все мои данные\n"
+        "/export_my_data — выгрузить мои данные в JSON\n"
+        "/reset — сбросить контекст диалога\n\n"
+        "Под каждым моим ответом есть кнопка ⚠️ «Ответ неверный» — "
+        "если что-то не так, нажмите, мы перепроверим.\n\n"
+        "Кнопка «💬 Написать Ивану напрямую» доступна на любом экране."
     )
 
 
