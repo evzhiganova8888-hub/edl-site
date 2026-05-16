@@ -43,3 +43,24 @@ def test_long_query_without_markers_blocked():
 def test_blacklist_overrides_whitelist():
     # политика — blacklist, но тут есть и маркер EDL (выручка)
     assert is_off_topic("политика влияет на нашу выручку и CAC") is True
+
+
+# --- §7.5 golden-flow test cases (exact messages from smoke test spec) ---
+
+@pytest.mark.parametrize("text", [
+    "Какая погода в Москве?",          # погод → blacklist
+    "Биткоин ещё растёт?",             # биткоин → blacklist
+    "Как переехать в Грузию?",         # нет whitelist-маркеров, >3 слов
+    "Помоги с кодом на Python",        # нет whitelist-маркеров, >3 слов
+    "Знаешь хороший рецепт борща?",   # нет whitelist-маркеров, >3 слов
+    "Привет",                          # ≤3 слова, нет whitelist-маркера
+])
+def test_section_7_5_off_topic(text: str):
+    """Кейсы из §7.5 ТЗ: должны блокироваться scope_guard."""
+    assert is_off_topic(text) is True, f"§7.5: should be blocked: {text!r}"
+
+
+def test_section_7_5_on_topic():
+    """Кейс #7 из §7.5: бизнес-вопрос с маркерами должен пройти в LLM."""
+    text = "Как считать маржу по проектам в IT-услугах при выручке 80 млн в год?"
+    assert is_off_topic(text) is False, f"§7.5: should be allowed: {text!r}"
