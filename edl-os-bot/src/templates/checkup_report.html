@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Бизнес-чекап EDL OS — {{ company }}</title>
+<link rel="stylesheet" href="checkup_report.css">
+</head>
+<body>
+
+{% if is_draft %}
+<div class="watermark">⚠️ ЧЕРНОВИК — ожидает ревью команды EDL OS. Финальный разбор будет добавлен Катей.</div>
+{% endif %}
+
+<!-- ОБЛОЖКА -->
+<section class="cover">
+  <h1>Бизнес-чекап EDL OS</h1>
+  <div class="cover-meta">
+    <p><strong>Компания:</strong> {{ company }}</p>
+    <p><strong>Участник:</strong> {{ full_name }}</p>
+    <p><strong>Тариф:</strong> {{ plan_label }}</p>
+    <p><strong>Дата:</strong> {{ generated_at }}</p>
+    {% if quiz_score is not none %}
+    <p><strong>Founder OS Score:</strong> {{ quiz_score }}/100</p>
+    {% endif %}
+  </div>
+  <div class="quality-badge {% if quality_summary.passed >= 16 %}quality-good{% elif quality_summary.passed >= 12 %}quality-warn{% else %}quality-bad{% endif %}">
+    Качество ответов: {{ quality_summary.passed }}/{{ quality_summary.total }} прошли рубрику
+  </div>
+</section>
+
+<div class="page-break"></div>
+
+<!-- РЕЗЮМЕ -->
+<section class="summary">
+  <h2>Резюме</h2>
+  <p class="placeholder-note">📝 Финальный аналитический разбор будет добавлен командой EDL OS после проверки ваших ответов. Ниже — структурированные ответы по 4 слоям.</p>
+  <p><em>Услуга: <a href="{{ offer_url }}">{{ offer_url }}</a></em></p>
+</section>
+
+<div class="page-break"></div>
+
+<!-- СЛОИ -->
+{% set layer_configs = [
+  ('strategy', '📍 Слой 1 · Стратегия', 'Вопросы 1–5'),
+  ('sales', '📈 Слой 2 · Воронка', 'Вопросы 6–10'),
+  ('operations', '⚙️ Слой 3 · Операционка', 'Вопросы 11–15'),
+  ('finance', '💰 Слой 4 · Деньги', 'Вопросы 16–20'),
+] %}
+
+{% for layer_key, layer_title, layer_range in layer_configs %}
+{% set items = answers_by_layer.get(layer_key, []) %}
+{% if items %}
+<section class="layer layer-{{ layer_key }}">
+  <h2>{{ layer_title }} <span class="layer-range">{{ layer_range }}</span></h2>
+
+  {% for item in items %}
+  <div class="question-block {% if item.skipped %}skipped{% elif item.quality_passed %}passed{% else %}needs-improvement{% endif %}">
+    <h3>
+      {% if item.skipped %}⏭{% elif item.quality_passed %}✅{% else %}⚠️{% endif %}
+      {{ item.order }}. {{ item.question }}
+    </h3>
+    <div class="answer-text">{{ item.answer }}</div>
+    {% if item.quality_notes %}
+    <div class="quality-notes">
+      <strong>Не прошло рубрику:</strong>
+      <ul>{% for note in item.quality_notes %}<li>{{ note }}</li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+</section>
+<div class="page-break"></div>
+{% endif %}
+{% endfor %}
+
+<!-- 90-ДНЕВНЫЙ ПЛАН -->
+<section class="plan">
+  <h2>Дальше: 90-дневный план</h2>
+  <p class="placeholder-note">📝 Таблица «действие × ответственный × deadline × метрика» будет добавлена командой EDL OS.</p>
+</section>
+
+{% if plan == 'plus' %}
+<section class="plus-only">
+  <h2>Видео-разбор (Plus)</h2>
+  <p>Персональный видео-разбор от Екатерины Жигановой — ссылка будет добавлена после ревью.</p>
+</section>
+{% endif %}
+
+<!-- ПОДВАЛ -->
+<footer>
+  <p>ИП Жиганова Екатерина Викторовна · ИНН 027507994838 · ОГРНИП 325028000082251</p>
+  <p>Оферта: <a href="{{ offer_url }}">{{ offer_url }}</a></p>
+  <p>Гарантия возврата 100% в течение 14 дней с момента передачи материалов.</p>
+</footer>
+
+</body>
+</html>

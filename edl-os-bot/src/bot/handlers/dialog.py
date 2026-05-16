@@ -14,7 +14,8 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from src.bot import keyboards, texts
-from src.bot.handlers import admin as admin_handler, audit, bug_report, faq, feedback as feedback_handler, lead_capture, refund
+from src.bot.handlers import admin as admin_handler, audit, bug_report, checkup as checkup_handler, faq, feedback as feedback_handler, lead_capture, refund
+from src.core.scope_guard import is_off_topic
 from src.core import llm, rate_limit
 from src.core.config import settings
 from src.core.flags import FLAG_VITACONSULT_PUBLIC, get_flag
@@ -90,6 +91,8 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         return
     if await bug_report.handle_text_step(update, context):
         return
+    if await checkup_handler.handle_text_step(update, context):
+        return
     if await audit.handle_text_step(update, context):
         return
     if await refund.handle_text_step(update, context):
@@ -99,6 +102,21 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     if await faq.handle_text_step(update, context):
         return
     if await feedback_handler.handle_text_step(update, context):
+        return
+
+    # 1.5 Safety guard: off-topic фильтр до LLM
+    if is_off_topic(msg_text_clean):
+        factory = async_session_factory()
+        async with factory() as session:
+            user, _ = await get_or_create_user(session, telegram_id=tg_id)
+            await log_event(
+                session,
+                user_id=user.id,
+                event="off_topic_blocked",
+                payload={"query": msg_text_clean[:120]},
+            )
+            await session.commit()
+        await msg.reply_text(texts.OFF_TOPIC_RESPONSE, reply_markup=keyboards.scope_guard_keyboard())
         return
 
     # 2. Свободный диалог
