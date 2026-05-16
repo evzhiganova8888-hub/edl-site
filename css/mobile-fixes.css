@@ -1,0 +1,408 @@
+/* ============================================
+   EDL OS — Mobile-first UX fixes
+   Addresses 10 bottlenecks audited from index.html
+   Load LAST after main-v2.css
+   ============================================ */
+
+/* 1. Min tap-target 44x44 for all interactive elements (WCAG 2.5.5) */
+@media (max-width: 768px) {
+  .btn, .ai-qa__question, .icp-btn, .battle-accordion-trigger,
+  .header__burger, .faq-summary, .open-checkout {
+    min-height: 44px;
+  }
+  .ai-qa__question { padding: 12px 16px; }
+}
+
+/* 2. Hero — на мобиле сначала CTA, потом demo (порядок) */
+@media (max-width: 900px) {
+  .hero__grid {
+    display: flex !important;
+    flex-direction: column;
+  }
+  .hero__demo { order: 2; }
+  .hero__content { order: 1; }
+}
+
+/* 3. ICP-switcher: horizontal scroll-snap row on mobile (вместо неровного wrap) */
+@media (max-width: 560px) {
+  .icp-switcher {
+    display: flex !important;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    padding: 4px 0 8px;
+    margin: 0 -4px;
+    scrollbar-width: none;
+  }
+  .icp-switcher::-webkit-scrollbar { display: none; }
+  .icp-switcher__label {
+    flex-shrink: 0;
+    padding-right: 8px;
+    align-self: center;
+    font-size: 0.8125rem;
+  }
+  .icp-switcher .icp-btn {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    min-height: 44px;
+    padding: 10px 16px;
+  }
+}
+
+/* 4. Battle tabs: hide desktop tab row on mobile (avoid duplicate with accordion) */
+@media (max-width: 768px) {
+  .battle-tabs .tabs { display: none !important; }
+  .battle-tabs .tab-panel {
+    display: block !important;
+    margin-bottom: 12px;
+  }
+  .battle-accordion-content {
+    display: none;
+    padding-top: 8px;
+  }
+  .battle-tabs .tab-panel.is-open .battle-accordion-content {
+    display: block;
+  }
+  .battle-accordion-trigger {
+    width: 100%;
+    text-align: left;
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--color-gray-900);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 44px;
+  }
+  .battle-accordion-trigger::after {
+    content: "▾";
+    color: var(--color-tangerine);
+    transition: transform 200ms;
+    margin-left: 12px;
+  }
+  .battle-tabs .tab-panel.is-open .battle-accordion-trigger::after {
+    transform: rotate(180deg);
+  }
+}
+@media (min-width: 769px) {
+  .battle-accordion-trigger { display: none !important; }
+  .battle-accordion-content { display: block !important; }
+}
+
+/* 5. Sticky-cta: добавить scroll-padding для якорных переходов */
+html {
+  scroll-padding-top: 80px;
+  scroll-padding-bottom: 96px;
+}
+
+/* 6. Hero buttons: stack vertically на 360px, full-width */
+@media (max-width: 400px) {
+  .hero__content > div[style*="flex-wrap:wrap"] {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .hero__content .btn { width: 100%; justify-content: center; }
+}
+
+/* 7. Pricing card: визуальный якорь для primary */
+.pricing-v2-card--primary {
+  position: relative;
+  border: 2px solid var(--color-tangerine) !important;
+}
+.pricing-v2-card--primary::before {
+  content: "Популярный";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-tangerine);
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* 8. TG-window: clamp padding */
+@media (max-width: 480px) {
+  .tg-window__body { padding: clamp(10px, 3vw, 16px) !important; }
+  .tg-window .tg-msg p { font-size: 13px !important; }
+}
+
+/* 9. Use 100dvh where 100vh would cut off behind mobile address bar */
+.full-h { min-height: 100dvh; }
+
+/* 10. ai-qa__question: ensure readable wrap, no overflow */
+@media (max-width: 600px) {
+  .ai-qa__questions {
+    display: flex !important;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .ai-qa__question {
+    width: 100%;
+    text-align: left;
+    white-space: normal;
+    line-height: 1.4;
+  }
+}
+
+/* Sticky CTA: don't overlap last section content */
+main { padding-bottom: 80px; }
+@media (min-width: 769px) { main { padding-bottom: 0; } }
+
+/* Better focus rings for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--color-tangerine);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* New: "blind spots" section cards */
+.blindspots {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+.blindspot-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 220ms var(--ease-default), box-shadow 220ms var(--ease-default);
+}
+.blindspot-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+.blindspot-card__icon {
+  font-size: 1.75rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--color-tangerine-light);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.blindspot-card__problem {
+  font-weight: 700;
+  font-size: 1.0625rem;
+  color: var(--color-gray-900);
+  line-height: 1.3;
+}
+.blindspot-card__arrow {
+  color: var(--color-tangerine);
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.blindspot-card__source {
+  font-size: 0.875rem;
+  color: var(--color-gray-700);
+  line-height: 1.5;
+}
+.blindspot-card__source strong { color: var(--color-gray-900); font-style: italic; }
+.blindspots-synth {
+  background: linear-gradient(135deg, #fff8f1 0%, var(--color-white) 100%);
+  border: 1px solid var(--color-tangerine-light);
+  border-radius: 16px;
+  padding: 28px;
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.blindspots-synth__text {
+  font-size: 1.0625rem;
+  color: var(--color-gray-900);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.blindspots-synth__text strong { color: var(--color-tangerine); }
+.blindspots-synth__link {
+  color: var(--color-tangerine);
+  font-weight: 600;
+  text-decoration: none;
+}
+.blindspots-synth__link:hover { text-decoration: underline; }
+
+/* Open Source Manifesto */
+.os-manifesto {
+  background: linear-gradient(135deg, #0A0A0A 0%, #1a1a1a 100%);
+  color: #fff;
+  border-radius: 20px;
+  padding: 40px 32px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 28px;
+  align-items: center;
+}
+@media (max-width: 720px) {
+  .os-manifesto {
+    grid-template-columns: 1fr;
+    padding: 28px 20px;
+    gap: 16px;
+    text-align: center;
+  }
+}
+.os-manifesto__badge {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--color-tangerine) 0%, #ff8c4a 100%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.25rem;
+  flex-shrink: 0;
+}
+@media (max-width: 720px) {
+  .os-manifesto__badge { margin: 0 auto; }
+}
+.os-manifesto__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #fff;
+}
+.os-manifesto__text {
+  color: #d4d4d8;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  font-size: 0.9375rem;
+}
+.os-manifesto__text code {
+  background: rgba(255,255,255,0.08);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--color-tangerine);
+}
+.os-manifesto__links {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+@media (max-width: 720px) {
+  .os-manifesto__links { justify-content: center; }
+}
+.os-manifesto__link {
+  color: var(--color-tangerine);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.os-manifesto__link:hover { text-decoration: underline; }
+
+/* Trust-strip under hero (TZ §2.2) */
+.trust-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 16px 24px;
+  background: var(--color-gray-100);
+  border: 1px solid var(--color-gray-200);
+  border-radius: 12px;
+  margin: 24px 0 0;
+  font-size: 0.875rem;
+  color: var(--color-gray-700);
+}
+.trust-strip__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+.trust-strip__sep {
+  color: var(--color-gray-300);
+  font-weight: 400;
+}
+@media (max-width: 560px) {
+  .trust-strip { font-size: 0.8125rem; gap: 10px; padding: 12px 16px; }
+}
+
+/* 5-step product ladder visual */
+.ladder-5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin: 32px 0 24px;
+  position: relative;
+}
+@media (max-width: 900px) {
+  .ladder-5 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+.ladder-step {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  position: relative;
+  transition: all var(--duration-fast) var(--ease-default);
+}
+.ladder-step--free {
+  border-color: var(--color-tangerine);
+  background: linear-gradient(180deg, #fff8f1 0%, var(--color-white) 100%);
+}
+.ladder-step__num {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-gray-400);
+  text-transform: uppercase;
+}
+.ladder-step__name {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 4px 0;
+  color: var(--color-gray-900);
+}
+.ladder-step__price {
+  font-size: 0.875rem;
+  color: var(--color-tangerine);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.ladder-step__duration {
+  font-size: 0.75rem;
+  color: var(--color-gray-500);
+  margin-bottom: 12px;
+}
+.ladder-step__cta {
+  display: inline-block;
+  color: var(--color-tangerine);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+.ladder-step__cta:hover { text-decoration: underline; }
+.ladder-step--free .ladder-step__num { color: var(--color-tangerine); }

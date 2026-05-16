@@ -1,6 +1,6 @@
 {
-  "version": "1.0",
-  "date": "2026-05-11",
+  "version": "1.1",
+  "date": "2026-05-16",
   "endpoint_required": true,
   "endpoint_placeholder": "window.EDL_ANALYTICS_ENDPOINT",
   "events": [
@@ -51,15 +51,58 @@
       "triggers": ["Clicking the final Telegram deep-link in the checkout modal"],
       "payload": {},
       "pages": ["audit"]
+    },
+    {
+      "name": "mc_opened",
+      "triggers": ["Click on any [data-mc-open] trigger"],
+      "payload": {"source": "string (hero, sticky, ladder, audit_hero, meth_hero, mcp_bottom, etc.)"},
+      "pages": ["home", "methodology", "try-in-claude", "audit"]
+    },
+    {
+      "name": "mc_resumed",
+      "triggers": ["Mini-Checkup modal reopened with saved progress (<24h old)"],
+      "payload": {"step": "number"},
+      "pages": ["all with widget"]
+    },
+    {
+      "name": "mc_answer",
+      "triggers": ["User submits an answer (text or chip click) inside Mini-Checkup"],
+      "payload": {"layer": "strategy|funnel|ops|money|bonus", "stage": "q|followup", "len": "number"},
+      "pages": ["all with widget"]
+    },
+    {
+      "name": "mc_completed",
+      "triggers": ["User reaches final summary screen of Mini-Checkup"],
+      "payload": {"durationSec": "number"},
+      "pages": ["all with widget"]
+    },
+    {
+      "name": "mc_email_lead",
+      "triggers": ["User submits email at end of Mini-Checkup summary"],
+      "payload": {"domain": "string (email domain only, never full email — privacy)"},
+      "pages": ["all with widget"]
+    },
+    {
+      "name": "mc_closed",
+      "triggers": ["Close button, Escape key, or backdrop click on Mini-Checkup modal"],
+      "payload": {"step": "number", "stage": "q|followup|done"},
+      "pages": ["all with widget"]
+    },
+    {
+      "name": "mcp_url_copied",
+      "triggers": ["Click on copy-URL button on /try-in-claude"],
+      "payload": {"what": "URL"},
+      "pages": ["try-in-claude"]
     }
   ],
   "data_attributes": [
-    {"attribute": "data-cta-type", "values": ["audit", "demo", "audit_checkout", "waitlist", "telegram_pay"], "locations": ["Buttons and links"]},
-    {"attribute": "data-cta-location", "values": ["hero", "tg_widget", "pricing", "final", "sticky"], "locations": ["Buttons and links"]},
+    {"attribute": "data-cta-type", "values": ["audit", "demo", "audit_checkout", "waitlist", "telegram_pay", "methodology", "mcp", "github", "claude_download"], "locations": ["Buttons and links"]},
+    {"attribute": "data-cta-location", "values": ["hero", "tg_widget", "pricing", "final", "sticky", "blindspots", "os_manifesto", "meth_hero", "meth_synth", "meth_bottom", "mini_checkup", "audit_hero", "audit_faq", "mcp_page", "mcp_bottom", "step1"], "locations": ["Buttons and links"]},
+    {"attribute": "data-mc-open", "values": ["hero", "sticky", "ladder", "pricing_card", "audit_hero", "audit_faq", "meth_hero", "meth_synth", "mcp_bottom"], "locations": ["Buttons that open Mini-Checkup modal"]},
     {"attribute": "data-segment-active", "values": ["services", "manufacturing", "marketplace"], "locations": ["body tag on home page"]},
     {"attribute": "data-segment-switch", "values": ["services", "manufacturing", "marketplace"], "locations": ["ICP switcher buttons"]},
     {"attribute": "data-battle-tab", "values": ["1c", "crm", "notion", "chatgpt"], "locations": ["Battle block tabs"]},
-    {"attribute": "data-faq-id", "values": ["1..12"], "locations": ["details elements in FAQ lists"]}
+    {"attribute": "data-faq-id", "values": ["1..16"], "locations": ["details elements in FAQ lists"]}
   ],
   "buffer_strategy": "localStorage + fetch keepalive",
   "endpoint_payload_format": "POST application/json, body: array of events",

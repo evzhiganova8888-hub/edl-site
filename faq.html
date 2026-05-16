@@ -5,13 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FAQ · Частые вопросы о EDL OS</title>
   <meta name="description" content="Ответы на частые вопросы про EDL OS. Безопасность, гарантии, цены, форматы работы и интеграции.">
-  <meta property="og:title" content="Частые вопросы о EDL OS">
-  <meta property="og:description" content="Гарантии, безопасность данных, форматы работы, цены и интеграции — ответы на 11 ключевых вопросов.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://elephantdreams.ru/faq.html">
-  <meta property="og:image" content="https://elephantdreams.ru/assets/og-cover.png">
-  <meta property="og:locale" content="ru_RU">
-  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -19,27 +12,20 @@
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/main-v2.css">
+  <link rel="stylesheet" href="css/mobile-fixes.css">
   <script>
     (function(){
       const ENDPOINT = window.EDL_ANALYTICS_ENDPOINT || null;
       const buffer = JSON.parse(localStorage.getItem('edl_events') || '[]');
       function track(event, payload) {
-        const data = {
-          event: event,
-          timestamp: new Date().toISOString(),
-          page: 'faq',
-          segment: document.body.dataset.segmentActive || 'services',
-          referrer: document.referrer,
-          ...payload
-        };
+        const data = {event, timestamp: new Date().toISOString(), page: 'faq', referrer: document.referrer, ...payload};
         buffer.push(data);
         if (ENDPOINT) flush(); else localStorage.setItem('edl_events', JSON.stringify(buffer));
       }
       function flush() {
         if (!ENDPOINT || !buffer.length) return;
         fetch(ENDPOINT, {method:'POST', body:JSON.stringify(buffer), keepalive:true}).catch(console.error);
-        buffer.length = 0;
-        localStorage.removeItem('edl_events');
+        buffer.length = 0; localStorage.removeItem('edl_events');
       }
       window.EDLTrack = track;
       window.addEventListener('beforeunload', flush);
@@ -47,186 +33,66 @@
     })();
   </script>
   <link rel="icon" href="/assets/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
   <meta name="theme-color" content="#0A0A0A">
 </head>
 <body data-page="faq">
   <a href="#main" class="skip-link">Перейти к содержанию</a>
-
   <header class="header" id="header" style="background:var(--color-white); border-bottom:1px solid var(--color-gray-200);">
     <div class="container header__inner site-header">
-      <a href="/" class="header__logo site-logo" aria-label="EDL OS — на главную"><img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true"><span>EDL&nbsp;OS</span></a>
+      <a href="/" class="header__logo site-logo"><img src="/assets/logo-192.png" alt="" width="28" height="28"><span>EDL&nbsp;OS</span></a>
       <nav class="site-nav" id="site-nav" aria-label="Главное меню">
+        <a href="/methodology.html">Методология</a>
+        <a href="/try-in-claude.html">Claude&nbsp;/&nbsp;MCP</a>
         <a href="/index.html#cases">Кейсы</a>
         <a href="/pricing.html">Цены</a>
         <a href="/about.html">Команда</a>
         <a href="/faq.html">FAQ</a>
       </nav>
       <div class="site-header__cta">
-        <a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--outline site-header__channel" aria-label="Telegram-канал EDL OS">
-          <span aria-hidden="true">✈️</span> Канал
-        </a>
+        <a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--outline site-header__channel"><span aria-hidden="true">✈️</span> Канал</a>
         <button class="header__burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav" id="burger">☰</button>
       </div>
     </div>
   </header>
-
   <main id="main">
     <section class="section" style="padding-top:120px;">
       <div class="container">
         <h1 class="section__title" style="text-align:center; margin-bottom:64px;">Частые вопросы</h1>
-        
         <div class="faq-list" style="max-width:800px; margin:0 auto;">
-          <!-- Questions from index -->
-          <details class="faq-item" data-faq-id="1">
-            <summary class="faq-summary">Чем Бизнес-чекап отличается от бесплатного демо?</summary>
-            <div class="faq-content">
-              <p>Демо — это знакомство с системой. 30 минут, мы покажем, как EDL OS работает, ответим на вопросы. Бесплатно.</p>
-              <p>Бизнес-чекап — это аудит ВАШЕГО бизнеса. 30 минут звонка, 48 часов AI-обработки, и вы получаете персональный разбор: PDF на 5-7 страниц, майнд-карту оцифровки вашего бизнеса в FigJam, персональный видео-разбор вашего результата, 3 конкретных действия на следующую неделю и план действий на 90 дней.</p>
-            </div>
-          </details>
-          <details class="faq-item" data-faq-id="2">
-            <summary class="faq-summary">Что вы понимаете про антидробление и НДС 2026?</summary>
-            <div class="faq-content">
-              <p>Антидробление — когда ФНС считает несколько юр.лиц одним бизнесом для целей налогообложения. Маркеры: синхронность оборотов по связанным юр.лицам, дробление вокруг лимита УСН, общие сотрудники и инфраструктура (ст. 54.1 НК РФ).</p>
-              <p>EDL OS показывает экономику «как есть»: прибыль по каждому юр.лицу и консолидированно. Система подсвечивает, если оборот по двум юр.лицам растёт синхронно или приближается к лимиту.</p>
-              <p>Что EDL OS НЕ делает: не даёт советов по уклонению, не передаёт данные третьим сторонам, не имеет доступа к налоговой отчётности.</p>
-            </div>
-          </details>
-          <details class="faq-item" data-faq-id="3">
-            <summary class="faq-summary">Это безопасно? EDL и налоговая?</summary>
-            <div class="faq-content">
-              <p>Все данные на вашей инфраструктуре. EDL не имеет доступа к налоговой отчётности и не передаёт данные третьим сторонам. NDA подписываем стандартно. Если вы захотите остановить работу — все данные, интеграции и код остаются у вас, система продолжает работать автономно.</p>
-            </div>
-          </details>
-          <details class="faq-item" data-faq-id="4">
-            <summary class="faq-summary">Вы работаете с моей нишей?</summary>
-            <div class="faq-content">
-              <p>Да. Система горизонтальная — подстраивается под вашу специфику. Сейчас в бете — маркетплейс-сервисы. Услуги и производство — пилоты июнь-июль 2026.</p>
-              <p>Если вашего стека нет в списке (1С, Битрикс, amoCRM, Google Sheets, TG-боты) — интегрируемся через API за 2-5 дней.</p>
-            </div>
-          </details>
-          <details class="faq-item" data-faq-id="5">
-            <summary class="faq-summary">Какие гарантии?</summary>
-            <div class="faq-content">
-              <p><strong>Бизнес-чекап:</strong> безусловный возврат 100&nbsp;% оплаты в течение 14 календарных дней с момента передачи материалов. Причину указывать не нужно — один клик <code>/refund</code> в Telegram-боте. Деньги возвращаем тем же способом, которым была получена оплата, в течение 5 рабочих дней.</p>
-              <p><strong>Спринт:</strong> защиты каждые 7–10 дней. Если после 2-й защиты видно, что не подходит — останавливаем. Оплата поэтапная. 30 дней пост-Спринт поддержки включены.</p>
-            </div>
-          </details>
-          <!-- Additional Questions for /faq page -->
-          <details class="faq-item" data-faq-id="6">
-            <summary class="faq-summary">Идут ли 9 000 ₽ в зачёт Диагностики?</summary>
-            <div class="faq-content">
-              <p>Нет, разные продукты. Чекап — взгляд снаружи. Диагностика — погружение внутрь.</p>
-            </div>
-          </details>
-          <details class="faq-item" data-faq-id="7">
-            <summary class="faq-summary">Что если ваша компания закроется?</summary>
-            <div class="faq-content">
-              <p>Все данные, интеграции и код у вас. После Sprint — полный доступ к настройкам. Ваша система продолжит работать автономно.</p>
-            </div>
-          </details>
-          <details class="faq-item" data-faq-id="8">
-            <summary class="faq-summary">Можно ли остановить Спринт на середине?</summary>
-            <div class="faq-content">
-              <p>Да, защиты каждые 7-10 дней. Если после 2-й защиты видно, что не подходит — останавливаем. Оплата поэтапная.</p>
-            </div>
-          </details>
-          <details class="faq-item" data-faq-id="9">
-            <summary class="faq-summary">У нас всё в Google Sheets и TG-ботах. Подключитесь?</summary>
-            <div class="faq-content">
-              <p>Да, это наш стандартный стек. Google Sheets, TG-боты, 1С, CRM — интегрируемся через API за 2-5 дней.</p>
-            </div>
-          </details>
-          <details class="faq-item" data-faq-id="10">
-            <summary class="faq-summary">Сколько это стоит на самом деле?</summary>
-            <div class="faq-content">
-              <p>Бизнес-чекап 9 000 ₽. Диагностика 25 000 ₽. Спринт от 135 000 ₽. План Роста от 50 000 ₽/мес. Демо бесплатно.</p>
-            </div>
-          </details>
-          <details class="faq-item" data-faq-id="11">
-            <summary class="faq-summary">Кто работает над моим Бизнес-чекапом?</summary>
-            <div class="faq-content">
-              <p>Иван или Катя проводит 30-минутный звонок-интервью. Затем сетка ИИ-агентов EDL OS обрабатывает данные по нашей методологии EDL OS. Екатерина Жиганова — основательница и автор методологии EDL OS — лично контролирует старт анализа, интерпретирует результат и записывает персональный видео-разбор для собственника.</p>
-            </div>
-          </details>
-          <details class="faq-item" data-faq-id="12">
-            <summary class="faq-summary">Какие документы я подписываю перед Sprint?</summary>
-            <div class="faq-content">
-              <p>Договор, NDA, спецификация задач.</p>
-            </div>
-          </details>
+          <details class="faq-item" data-faq-id="1"><summary class="faq-summary">Чем Бизнес-чекап отличается от бесплатного демо?</summary><div class="faq-content"><p>Демо — знакомство с системой, 30 минут, бесплатно. Бизнес-чекап — персональный разбор вашего бизнеса за 24-48 часов по 4 слоям EDL OS: PDF, майнд-карта в FigJam, видео-разбор, 3 действия и 90-дневный план.</p></div></details>
+          <details class="faq-item" data-faq-id="2"><summary class="faq-summary">Что вы понимаете про антидробление и НДС 2026?</summary><div class="faq-content"><p>EDL OS показывает экономику «как есть» по каждому юр.лицу и консолидированно. Не даёт советов по уклонению, не передаёт данные третьим сторонам. Подсвечивает риски вокруг лимита УСН.</p></div></details>
+          <details class="faq-item" data-faq-id="3"><summary class="faq-summary">Это безопасно?</summary><div class="faq-content"><p>Данные на вашей инфраструктуре. NDA стандартно. Если хотите остановить работу — всё остаётся у вас, система работает автономно.</p></div></details>
+          <details class="faq-item" data-faq-id="4"><summary class="faq-summary">Вы работаете с моей нишей?</summary><div class="faq-content"><p>Да. Система горизонтальная. Сейчас в бете — маркетплейс-сервисы. Услуги и производство — пилоты июнь-июль 2026. Интеграции через API за 2-5 дней.</p></div></details>
+          <details class="faq-item" data-faq-id="5"><summary class="faq-summary">Какие гарантии?</summary><div class="faq-content"><p><strong>Бизнес-чекап:</strong> безусловный возврат 100&nbsp;% в течение 14 календарных дней, /refund в боте.</p><p><strong>Спринт:</strong> защиты каждые 7–10 дней. Оплата поэтапная.</p></div></details>
+          <details class="faq-item" data-faq-id="6"><summary class="faq-summary">Идут ли 9 000 ₽ в зачёт Диагностики?</summary><div class="faq-content"><p>Нет, разные продукты. Чекап — взгляд снаружи. Диагностика — погружение внутрь.</p></div></details>
+          <details class="faq-item" data-faq-id="7"><summary class="faq-summary">Что если ваша компания закроется?</summary><div class="faq-content"><p>Все данные, интеграции и код у вас. После Sprint — полный доступ. Система продолжит работать автономно.</p></div></details>
+          <details class="faq-item" data-faq-id="8"><summary class="faq-summary">Можно ли остановить Спринт на середине?</summary><div class="faq-content"><p>Да, защиты каждые 7-10 дней. Оплата поэтапная.</p></div></details>
+          <details class="faq-item" data-faq-id="9"><summary class="faq-summary">У нас всё в Google Sheets и TG-ботах. Подключитесь?</summary><div class="faq-content"><p>Да, это наш стандартный стек. Интегрируемся через API за 2-5 дней.</p></div></details>
+          <details class="faq-item" data-faq-id="10"><summary class="faq-summary">Сколько это стоит на самом деле?</summary><div class="faq-content"><p>Бизнес-чекап 9-14k. Диагностика 25k. Спринт от 135k. План Роста от 50k/мес. Демо бесплатно.</p></div></details>
+          <details class="faq-item" data-faq-id="11"><summary class="faq-summary">Кто работает над моим Бизнес-чекапом?</summary><div class="faq-content"><p>Сетка ИИ-агентов EDL OS обрабатывает ваши ответы в боте. Екатерина Жиганова лично контролирует старт анализа, интерпретирует результат и записывает видео-разбор.</p></div></details>
+          <details class="faq-item" data-faq-id="12"><summary class="faq-summary">Какие документы перед Sprint?</summary><div class="faq-content"><p>Договор, NDA, спецификация задач.</p></div></details>
+          <details class="faq-item" data-faq-id="13"><summary class="faq-summary">На какой методологии вы работаете?</summary><div class="faq-content"><p>EDL OS — синтез трёх управленческих традиций: <strong>Big Tech operations</strong> (McKinsey, Google, Amazon), <strong>CRAFT</strong> (ИКРА, Латур) и <strong>AI Fluency Framework</strong> (Anthropic, UCC, Ringling).</p><p>Подробно: <a href="/methodology.html" style="color:var(--color-tangerine);">/methodology</a>.</p></div></details>
+          <details class="faq-item" data-faq-id="14"><summary class="faq-summary">Можно попробовать EDL OS в Claude / ChatGPT / Cursor?</summary><div class="faq-content"><p>Да. Публичный MCP-сервер подключается за 3 шага к Claude Desktop, Cursor, ChatGPT Desktop, Gemini CLI. Тот же Mini-Чекап внутри вашего AI-инструмента. Инструкция: <a href="/try-in-claude.html" style="color:var(--color-tangerine);">/try-in-claude</a>. Open source MIT.</p></div></details>
+          <details class="faq-item" data-faq-id="15"><summary class="faq-summary">Где хранятся мои данные и как их отозвать?</summary><div class="faq-content"><p><strong>Сырые данные бизнеса</strong> — физически у вас. <strong>У нас:</strong> логин/email, история Mini-Чекапа, audit-log. 152-ФЗ. <strong>Отозвать:</strong> кнопка в ЛК или <code>/revoke</code> в боте.</p></div></details>
+          <details class="faq-item" data-faq-id="16"><summary class="faq-summary">Юридические условия возврата?</summary><div class="faq-content"><p><strong>Гарантия применимости:</strong> 100% возврат в течение 10 рабочих дней при доказательстве попыток. <strong>Безусловный возврат:</strong> 14 календарных дней без причины, <code>/refund</code> в боте. Полная формулировка — <a href="/legal/offer.html" style="color:var(--color-tangerine);">/legal/offer.html</a>.</p></div></details>
         </div>
       </div>
     </section>
   </main>
-
   <footer class="footer" style="background:#fff; border-top:1px solid #e4e4e7; padding:48px 0;">
-    <div class="container" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:32px;">
-      <div>
-        <h4 style="font-weight:600; margin-bottom:16px;">Контакты</h4>
-        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
-          <li><a href="https://t.me/edl_os" target="_blank" style="color:#404040; text-decoration:none;">Наш Telegram-канал</a></li>
-          <li><a href="https://t.me/edl_os_bot" target="_blank" rel="noopener" style="color:#404040; text-decoration:none;">Чат-бот EDL&nbsp;OS · ответы 24/7</a></li>
-          <li><a href="https://instagram.com/edl.os.app" target="_blank" style="color:#404040; text-decoration:none;">Instagram</a></li>
-          <li><a href="mailto:evzhiganova8888@gmail.com" style="color:#404040; text-decoration:none;">Написать на почту</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 style="font-weight:600; margin-bottom:16px;">Услуги</h4>
-        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
-          <li><a href="https://t.me/edl_os_bot?start=demo" target="_blank" style="color:#404040; text-decoration:none;">Бесплатное демо в Telegram</a></li>
-          <li><a href="audit.html" style="color:#404040; text-decoration:none;">Бизнес-чекап (Audit)</a></li>
-          <li><a href="diagnostic.html" style="color:#404040; text-decoration:none;">Диагностика</a></li>
-          <li><a href="sprint.html" style="color:#404040; text-decoration:none;">Спринт</a></li>
-          <li><a href="pricing.html" style="color:#404040; text-decoration:none;">Growth Plan</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 style="font-weight:600; margin-bottom:16px;">Компания</h4>
-        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
-          <li><a href="index.html#method" style="color:#404040; text-decoration:none;">Метод</a></li>
-          <li><a href="cases.html" style="color:#404040; text-decoration:none;">Кейсы</a></li>
-          <li><a href="faq.html" style="color:#404040; text-decoration:none;">Частые вопросы</a></li>
-          <li><a href="about.html" style="color:#404040; text-decoration:none;">Команда</a></li>
-          <li><a href="pricing.html" style="color:#404040; text-decoration:none;">Продукты и цены</a></li>
-          <li><a href="quiz.html" style="color:#404040; text-decoration:none;">Пройти тест (Score)</a></li>
-          <li><a href="legal/privacy.html" style="color:#404040; text-decoration:none;">Политика конфиденциальности</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="container" style="margin-top:48px; padding-top:24px; border-top:1px solid #e4e4e7; text-align:center; color:#6b7280; font-size:0.875rem;">
-      © 2026 EDL OS · Elephant Dreams Lab · Все права защищены
-    </div>
+    <div class="container" style="text-align:center; color:#6b7280; font-size:0.875rem;">© 2026 EDL OS · Elephant Dreams Lab</div>
   </footer>
-
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('details.faq-item').forEach(faq => {
-        faq.addEventListener('toggle', () => {
-          if (faq.open) {
-            window.EDLTrack && window.EDLTrack('faq_opened', {faq_id: faq.getAttribute('data-faq-id')});
-          }
-        });
-      });
+      document.querySelectorAll('details.faq-item').forEach(faq => faq.addEventListener('toggle', () => { if (faq.open) window.EDLTrack && window.EDLTrack('faq_opened', {faq_id: faq.getAttribute('data-faq-id')}); }));
     });
-  </script>
-
-  <script>
     (function(){
       const b = document.getElementById('burger');
       const n = document.getElementById('site-nav');
       if (b && n) {
-        b.addEventListener('click', () => {
-          const open = n.classList.toggle('is-open');
-          b.setAttribute('aria-expanded', String(open));
-        });
-        n.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-          n.classList.remove('is-open');
-          b.setAttribute('aria-expanded','false');
-        }));
+        b.addEventListener('click', () => { const open = n.classList.toggle('is-open'); b.setAttribute('aria-expanded', String(open)); });
+        n.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { n.classList.remove('is-open'); b.setAttribute('aria-expanded','false'); }));
       }
     })();
   </script>
