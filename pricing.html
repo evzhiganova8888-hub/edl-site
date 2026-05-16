@@ -1,197 +1,40 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Полный pricing EDL OS</title>
-  <meta name="description" content="Стоимость и продукты EDL OS: Бесплатное демо, Бизнес-чекап, Диагностика, Спринт и План Роста.">
-  <meta property="og:title" content="Стоимость и продукты EDL OS">
-  <meta property="og:description" content="От бесплатного демо до Плана роста: 5 шагов внедрения операционной системы для собственника.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://elephantdreams.ru/pricing.html">
-  <meta property="og:image" content="https://elephantdreams.ru/assets/og-cover.png">
-  <meta property="og:locale" content="ru_RU">
-  <meta name="twitter:card" content="summary_large_image">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta name="description" content="Стоимость и продукты EDL OS: Mini-Чекап, Бизнес-чекап, Диагностика, Спринт и План Роста.">
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/main-v2.css">
-  <script>
-    (function(){
-      const ENDPOINT = window.EDL_ANALYTICS_ENDPOINT || null;
-      const buffer = JSON.parse(localStorage.getItem('edl_events') || '[]');
-      function track(event, payload) {
-        const data = {
-          event: event,
-          timestamp: new Date().toISOString(),
-          page: 'pricing',
-          segment: document.body.dataset.segmentActive || 'services',
-          referrer: document.referrer,
-          ...payload
-        };
-        buffer.push(data);
-        if (ENDPOINT) flush(); else localStorage.setItem('edl_events', JSON.stringify(buffer));
-      }
-      function flush() {
-        if (!ENDPOINT || !buffer.length) return;
-        fetch(ENDPOINT, {method:'POST', body:JSON.stringify(buffer), keepalive:true}).catch(console.error);
-        buffer.length = 0;
-        localStorage.removeItem('edl_events');
-      }
-      window.EDLTrack = track;
-      window.addEventListener('beforeunload', flush);
-      window.addEventListener('DOMContentLoaded', () => track('page_view', {}));
-    })();
-  </script>
-  <link rel="icon" href="/assets/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-  <meta name="theme-color" content="#0A0A0A">
+  <link rel="stylesheet" href="css/tokens.css"><link rel="stylesheet" href="css/components.css"><link rel="stylesheet" href="css/main.css"><link rel="stylesheet" href="css/main-v2.css"><link rel="stylesheet" href="css/mobile-fixes.css">
+  <link rel="icon" href="/assets/favicon.ico"><meta name="theme-color" content="#0A0A0A">
 </head>
 <body data-page="pricing">
-  <a href="#main" class="skip-link">Перейти к содержанию</a>
-
+  <a href="#main" class="skip-link">Перейти</a>
   <header class="header" id="header" style="background:var(--color-white); border-bottom:1px solid var(--color-gray-200);">
     <div class="container header__inner site-header">
-      <a href="/" class="header__logo site-logo" aria-label="EDL OS — на главную"><img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true"><span>EDL&nbsp;OS</span></a>
+      <a href="/" class="header__logo site-logo"><img src="/assets/logo-192.png" alt="" width="28" height="28"><span>EDL&nbsp;OS</span></a>
       <nav class="site-nav" id="site-nav" aria-label="Главное меню">
-        <a href="/index.html#cases">Кейсы</a>
-        <a href="/pricing.html">Цены</a>
-        <a href="/about.html">Команда</a>
-        <a href="/faq.html">FAQ</a>
+        <a href="/methodology.html">Методология</a><a href="/try-in-claude.html">Claude&nbsp;/&nbsp;MCP</a><a href="/index.html#cases">Кейсы</a><a href="/pricing.html">Цены</a><a href="/about.html">Команда</a><a href="/faq.html">FAQ</a>
       </nav>
-      <div class="site-header__cta">
-        <a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--outline site-header__channel" aria-label="Telegram-канал EDL OS">
-          <span aria-hidden="true">✈️</span> Канал
-        </a>
-        <button class="header__burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav" id="burger">☰</button>
-      </div>
+      <div class="site-header__cta"><a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--outline site-header__channel"><span aria-hidden="true">✈️</span> Канал</a><button class="header__burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav" id="burger">☰</button></div>
     </div>
   </header>
-
   <main id="main">
     <section class="section" style="padding-top:120px;">
       <div class="container">
         <h1 class="section__title" style="text-align:center; margin-bottom:64px;">Полный pricing EDL OS</h1>
-        
         <div class="ladder">
-          <!-- Step 1 -->
-          <div class="ladder__step" data-step="1">
-            <div style="flex:1;">
-              <h2 class="ladder__name">Бесплатное демо</h2>
-              <div class="ladder__price">0 ₽ · 30 минут</div>
-              <p class="ladder__desc">Знакомство с системой. Мы покажем, как EDL OS работает на примерах, ответим на вопросы и обсудим вашу специфику.</p>
-              <a href="https://t.me/edl_os_bot?start=demo" target="_blank" class="btn btn--outline" style="margin-top:16px;" data-cta-type="demo" data-cta-location="pricing">Записаться на демо</a>
-            </div>
-          </div>
-          
-          <!-- Step 2 -->
-          <div class="ladder__step ladder__step--highlight" data-step="2">
-            <div style="flex:1;">
-              <h2 class="ladder__name">Бизнес-чекап (Audit)</h2>
-              <div class="ladder__price">от 9 000 ₽ · 48 часов</div>
-              <p class="ladder__desc">30 минут звонка, 48 часов AI-обработки — и вы получаете персональный разбор по 4 слоям EDL OS (Стратегия · Воронка · Операционка · Деньги): PDF на 5–7 страниц, майнд-карту оцифровки в FigJam, 3 конкретных действия на следующую неделю и план на 90 дней.<br><br><strong>Два тарифа:</strong> <em>Базовый — 9 000 ₽, 48 часов</em>. <em>Plus — 14 000 ₽, 7 рабочих дней</em>, добавляет персональный видео-разбор от Екатерины Жигановой.<br><br><strong>Безусловный возврат 100&nbsp;% оплаты в течение 14 календарных дней</strong> с момента передачи материалов — один клик <code>/refund</code> в боте, причину указывать не нужно.</p>
-              <a href="audit.html" class="btn btn--primary" style="margin-top:16px;" data-cta-type="audit" data-cta-location="pricing">Подробнее про Чекап</a>
-            </div>
-          </div>
-          
-          <!-- Step 3 -->
-          <div class="ladder__step" data-step="3">
-            <div style="flex:1;">
-              <h2 class="ladder__name">Диагностика</h2>
-              <div class="ladder__price">25 000 ₽ · 3-5 дней</div>
-              <p class="ladder__desc">Погружение внутрь вашего бизнеса. Команда заходит в ваши данные на 3-5 дней. Проводим интервью с командой, смотрим структуру баз данных, оцениваем качество ведения CRM. На выходе — детальная спецификация для Спринта.</p>
-              <a href="diagnostic.html" class="btn btn--outline" style="margin-top:16px;" data-cta-type="diagnostic" data-cta-location="pricing">Подробнее про Диагностику</a>
-            </div>
-          </div>
-
-          <!-- Step 4 -->
-          <div class="ladder__step" data-step="4">
-            <div style="flex:1;">
-              <h2 class="ladder__name">Спринт (флагман)</h2>
-              <div class="ladder__price">от 135 000 ₽ · 4 недели</div>
-              <p class="ladder__desc">За 4 недели собираем работающую систему. Синхронизируем базы, настраиваем Telegram-бота, подключаем ИИ-помощника к вашим данным. Защиты каждые 7-10 дней. Оплата поэтапная. 30 дней пост-Sprint поддержки включены.</p>
-              <a href="sprint.html" class="btn btn--outline" style="margin-top:16px;" data-cta-type="sprint" data-cta-location="pricing">Подробнее про Спринт</a>
-            </div>
-          </div>
-
-          <!-- Step 5 -->
-          <div class="ladder__step" data-step="5" style="border-left-color:transparent;">
-            <div style="flex:1;">
-              <h2 class="ladder__name">Growth Plan (рекуррент)</h2>
-              <div class="ladder__price">от 50 000 ₽/мес · от 3 мес</div>
-              <p class="ladder__desc">Развиваем и масштабируем внедрённую систему. Новые интеграции, обучение команды, улучшение ИИ-агентов. Выделенный аналитик и продуктолог для вашего бизнеса.</p>
-            </div>
-          </div>
+          <div class="ladder__step" data-step="0" style="border-left:4px solid var(--color-tangerine);"><div style="flex:1;"><h2 class="ladder__name">Mini-Чекап (Бесплатно)</h2><div class="ladder__price">0 ₽ · 15 минут</div><p class="ladder__desc">5 вопросов ИИ-консультанту по 4 слоям Founder OS в браузере. Разбор + 2-3 рекомендации. Без регистрации.</p><a href="/index.html#hero" class="btn btn--outline" style="margin-top:16px;">Начать Mini-Чекап →</a></div></div>
+          <div class="ladder__step" data-step="1"><div style="flex:1;"><h2 class="ladder__name">Бесплатное демо</h2><div class="ladder__price">0 ₽ · 30 минут</div><p class="ladder__desc">Знакомство с системой, демо на примерах.</p><a href="https://t.me/edl_os_bot?start=demo" target="_blank" class="btn btn--outline" style="margin-top:16px;" data-cta-type="demo" data-cta-location="pricing">Записаться на демо</a></div></div>
+          <div class="ladder__step ladder__step--highlight" data-step="2"><div style="flex:1;"><h2 class="ladder__name">Бизнес-чекап (Audit)</h2><div class="ladder__price">9 000–14 000 ₽ · 1-2 часа в боте + 24ч</div><p class="ladder__desc">20 вопросов в Telegram-боте, 24ч AI-обработки — PDF, FigJam, 3 действия и 90-дневный план. <strong>Базовый 9 000 ₽</strong> (PDF 10 стр + 5 рекомендаций). <strong>Plus 14 000 ₽</strong> + 15-мин видео от Екатерины + PDF 15 стр + 7 рекомендаций. Безусловный возврат 14 дней, /refund в боте.</p><a href="audit.html" class="btn btn--primary" style="margin-top:16px;" data-cta-type="audit" data-cta-location="pricing">Подробнее про Чекап</a></div></div>
+          <div class="ladder__step" data-step="3"><div style="flex:1;"><h2 class="ladder__name">Диагностика</h2><div class="ladder__price">25 000 ₽ · 2 недели</div><p class="ladder__desc">Погружение в ваш бизнес и данные. Детальная спецификация для Спринта.</p><a href="diagnostic.html" class="btn btn--outline" style="margin-top:16px;" data-cta-type="diagnostic" data-cta-location="pricing">Подробнее про Диагностику</a></div></div>
+          <div class="ladder__step" data-step="4"><div style="flex:1;"><h2 class="ladder__name">Спринт (флагман)</h2><div class="ladder__price">от 135 000 ₽ · 4 недели</div><p class="ladder__desc">Собираем работающую систему: базы, Telegram-бот, ИИ-помощник. Защиты каждые 7-10 дней. 30 дней пост-Sprint поддержки.</p><a href="sprint.html" class="btn btn--outline" style="margin-top:16px;" data-cta-type="sprint" data-cta-location="pricing">Подробнее про Спринт</a></div></div>
+          <div class="ladder__step" data-step="5" style="border-left-color:transparent;"><div style="flex:1;"><h2 class="ladder__name">Growth Plan</h2><div class="ladder__price">от 50 000 ₽/мес · от 3 мес</div><p class="ladder__desc">Развиваем и масштабируем внедрённую систему. Выделенный аналитик и продуктолог.</p></div></div>
         </div>
-
-        <div style="max-width:700px; margin:48px auto 0; padding:24px; background:var(--color-gray-50); border-radius:12px; text-align:center;">
-          <p style="font-size:0.875rem; color:var(--color-gray-700); margin:0;"><strong>Не обязательно идти по порядку.</strong> После Бизнес-чекапа станет ясно, какой шаг нужен именно вам. Можно перейти к Плану Роста сразу после Чекапа, если Sprint пока рано — обсудим на демо.</p>
-        </div>
-
+        <div style="max-width:700px; margin:48px auto 0; padding:24px; background:var(--color-gray-50); border-radius:12px; text-align:center;"><p style="font-size:0.875rem; color:var(--color-gray-700); margin:0;"><strong>Не обязательно идти по порядку.</strong> После Бизнес-чекапа станет ясно, какой шаг нужен именно вам.</p></div>
       </div>
     </section>
   </main>
-
-  <footer class="footer" style="background:#fff; border-top:1px solid #e4e4e7; padding:48px 0;">
-    <div class="container" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:32px;">
-      <div>
-        <h4 style="font-weight:600; margin-bottom:16px;">Контакты</h4>
-        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
-          <li><a href="https://t.me/edl_os" target="_blank" style="color:#404040; text-decoration:none;">Наш Telegram-канал</a></li>
-          <li><a href="https://t.me/edl_os_bot" target="_blank" rel="noopener" style="color:#404040; text-decoration:none;">Чат-бот EDL&nbsp;OS · ответы 24/7</a></li>
-          <li><a href="https://instagram.com/edl.os.app" target="_blank" style="color:#404040; text-decoration:none;">Instagram</a></li>
-          <li><a href="mailto:evzhiganova8888@gmail.com" style="color:#404040; text-decoration:none;">Написать на почту</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 style="font-weight:600; margin-bottom:16px;">Услуги</h4>
-        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
-          <li><a href="https://t.me/edl_os_bot?start=demo" target="_blank" style="color:#404040; text-decoration:none;">Бесплатное демо в Telegram</a></li>
-          <li><a href="audit.html" style="color:#404040; text-decoration:none;">Бизнес-чекап (Audit)</a></li>
-          <li><a href="diagnostic.html" style="color:#404040; text-decoration:none;">Диагностика</a></li>
-          <li><a href="sprint.html" style="color:#404040; text-decoration:none;">Спринт</a></li>
-          <li><a href="pricing.html" style="color:#404040; text-decoration:none;">Growth Plan</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 style="font-weight:600; margin-bottom:16px;">Компания</h4>
-        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
-          <li><a href="index.html#method" style="color:#404040; text-decoration:none;">Метод</a></li>
-          <li><a href="cases.html" style="color:#404040; text-decoration:none;">Кейсы</a></li>
-          <li><a href="faq.html" style="color:#404040; text-decoration:none;">Частые вопросы</a></li>
-          <li><a href="about.html" style="color:#404040; text-decoration:none;">Команда</a></li>
-          <li><a href="pricing.html" style="color:#404040; text-decoration:none;">Продукты и цены</a></li>
-          <li><a href="quiz.html" style="color:#404040; text-decoration:none;">Пройти тест (Score)</a></li>
-          <li><a href="legal/privacy.html" style="color:#404040; text-decoration:none;">Политика конфиденциальности</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="container" style="margin-top:48px; padding-top:24px; border-top:1px solid #e4e4e7; text-align:center; color:#6b7280; font-size:0.875rem;">
-      © 2026 EDL OS · Elephant Dreams Lab · Все права защищены
-    </div>
-  </footer>
-
-
-  <script>
-    (function(){
-      const b = document.getElementById('burger');
-      const n = document.getElementById('site-nav');
-      if (b && n) {
-        b.addEventListener('click', () => {
-          const open = n.classList.toggle('is-open');
-          b.setAttribute('aria-expanded', String(open));
-        });
-        n.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-          n.classList.remove('is-open');
-          b.setAttribute('aria-expanded','false');
-        }));
-      }
-    })();
-  </script>
-</body>
-</html>
+  <footer class="footer" style="background:#fff; border-top:1px solid #e4e4e7; padding:48px 0;"><div class="container" style="text-align:center; color:#6b7280; font-size:0.875rem;">© 2026 EDL OS · Elephant Dreams Lab</div></footer>
+  <script>(function(){const b=document.getElementById('burger');const n=document.getElementById('site-nav');if(b&&n){b.addEventListener('click',()=>{const o=n.classList.toggle('is-open');b.setAttribute('aria-expanded',String(o));});n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{n.classList.remove('is-open');b.setAttribute('aria-expanded','false');}));}})();</script>
+</body></html>
