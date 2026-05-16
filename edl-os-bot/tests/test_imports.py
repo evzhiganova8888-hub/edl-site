@@ -8,7 +8,9 @@ def test_import_main():
 def test_import_handlers():
     from src.bot.handlers import (
         admin,
+        admin_login,
         audit,
+        checkup,
         consent,
         dialog,
         faq,
@@ -22,6 +24,8 @@ def test_import_handlers():
 
 def test_import_core():
     from src.core import (
+        checkup_questions,
+        checkup_report,
         config,
         consent,
         contact,
@@ -34,11 +38,12 @@ def test_import_core():
         pd_sanitize,
         prompts,
         quiz,
+        scope_guard,
         segment,
         stickers,
         working_hours,
     )  # noqa: F401
-    from src.core.payments import RobokassaClient  # noqa: F401
+    from src.core.payments import StubPaymentClient  # noqa: F401
 
 
 def test_import_tasks():
