@@ -26,6 +26,8 @@ dependencies = [
     "tenacity>=9.0",
     "jinja2>=3.1",
     "python-multipart>=0.0.20",
+    "weasyprint>=63",
+    "Pillow>=10.0",
 ]
 
 [project.optional-dependencies]

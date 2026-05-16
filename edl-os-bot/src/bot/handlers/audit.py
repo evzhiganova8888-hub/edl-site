@@ -26,8 +26,6 @@ from src.core.config import settings
 from src.core.contact import normalize_company, normalize_email, normalize_full_name
 from src.core.input_validation import InputValidationError, validate_user_text
 from src.core.notifications import build_manual_payment_brief, send_to_admin_chat
-from src.core.payments import RobokassaClient
-from src.core.payments.robokassa import RobokassaInvoice
 from src.db.models import Application, Payment
 from src.db.repos import (
     create_application,
@@ -429,79 +427,10 @@ async def _send_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE, appl
         plan = await _plan_from_application(app)
     amount = _plan_amount(plan)
 
-    # Manual режим (Май 2026) — Robokassa ещё на модерации. Бот собирает
-    # данные, шлёт детальный бриф Ивану, тот оформляет счёт через бухгалтерию.
-    if settings.payment_mode == "manual":
+    # stub / manual — бот собирает данные, шлёт бриф Ивану, тот оформляет счёт.
+    if settings.payment_mode in ("stub", "manual"):
         await _handoff_manual_payment(update, context, application_id, plan, amount)
         return
 
-    client = RobokassaClient()
-    if not client.configured:
-        await update.effective_message.reply_text(
-            texts.PAYMENT_NOT_CONFIGURED, reply_markup=keyboards.main_menu()
-        )
-        # Регистрируем заявку как qualified для ручной обработки
-        factory = async_session_factory()
-        async with factory() as session:
-            stmt = select(Application).where(Application.id == UUID(application_id))
-            app = (await session.execute(stmt)).scalar_one_or_none()
-            if app:
-                app.status = "qualified"
-            user, _ = await get_or_create_user(session, telegram_id=update.effective_user.id)
-            await log_event(
-                session,
-                user_id=user.id,
-                event="audit_payment_skipped_unconfigured",
-                payload={"application_id": application_id, "plan": plan},
-            )
-            await session.commit()
-        return
-
-    factory = async_session_factory()
-    async with factory() as session:
-        stmt = select(Application).where(Application.id == UUID(application_id))
-        app = (await session.execute(stmt)).scalar_one_or_none()
-        user, _ = await get_or_create_user(session, telegram_id=update.effective_user.id)
-        if app is None:
-            await update.effective_message.reply_text(
-                "Заявка не найдена. /audit — попробуем ещё раз."
-            )
-            return
-        invoice = RobokassaInvoice(
-            inv_id=app.inv_id,
-            amount_rub=amount,
-            description=_plan_description(plan),
-            email=user.email,
-            user_telegram_id=user.telegram_id,
-        )
-        url = client.build_invoice_url(invoice)
-
-        # Создаём pending платёж
-        session.add(
-            Payment(
-                application_id=app.id,
-                user_id=user.id,
-                amount_kopecks=int(amount * 100),
-                currency="RUB",
-                provider="robokassa",
-                provider_invoice_id=str(app.inv_id),
-                status="pending",
-            )
-        )
-        await log_event(
-            session,
-            user_id=user.id,
-            event="audit_invoice_created",
-            payload={
-                "application_id": application_id,
-                "inv_id": app.inv_id,
-                "plan": plan,
-                "amount_rub": amount,
-            },
-        )
-        await session.commit()
-
-    await update.effective_message.reply_text(
-        texts.PAYMENT_LINK_READY,
-        reply_markup=keyboards.audit_pay_keyboard(invoice_url=url, plan=plan),
-    )
+    # yookassa — пока не реализовано, fallback в stub
+    await _handoff_manual_payment(update, context, application_id, plan, amount)
