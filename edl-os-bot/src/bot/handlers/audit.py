@@ -1,11 +1,11 @@
-"""/audit и /audit_sample — Бизнес-чекап (§7.4, §7.5 ТЗ v3).
+"""/audit и /audit_sample — Бизнес-чекап.
 
-Полный flow Этапа 2:
-1. Согласие на ПД (§13)
+Полный flow:
+1. Согласие на ПД
 2. Сбор контактов: ФИО → email → компания (FSM в context.user_data)
 3. Принятие оферты
-4. Robokassa invoice URL → пользователь оплачивает на стороне
-5. ResultURL callback (см. main.py) переводит status=paid + шлёт бриф Ивану
+4. stub-режим: бриф Ивану в Sales-чат + status=awaiting_manual_payment
+5. Иван помечает оплату через /mark_paid — юзер получает уведомление + /checkup
 """
 from __future__ import annotations
 
@@ -186,6 +186,24 @@ async def cancel_collection(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     context.user_data.pop(KEY_FLOW, None)
     context.user_data.pop(KEY_APP_ID, None)
     await query.message.reply_text(texts.CANCELLED_COLLECTION, reply_markup=keyboards.main_menu())
+
+
+async def notify_waiting(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Колбэк audit:notify_waiting — юзер хочет уведомление при активации."""
+    query = update.callback_query
+    await query.answer(
+        "Хорошо, пришлю уведомление как только статус заявки изменится на paid.",
+        show_alert=False,
+    )
+    factory = async_session_factory()
+    async with factory() as session:
+        user, _ = await get_or_create_user(session, telegram_id=update.effective_user.id)
+        await log_event(
+            session,
+            user_id=user.id,
+            event="audit_user_subscribed_to_paid_event",
+        )
+        await session.commit()
 
 
 # -------------------- FSM text input handler ----------------------
