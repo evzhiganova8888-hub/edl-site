@@ -20,6 +20,9 @@ def main_menu() -> InlineKeyboardMarkup:
             InlineKeyboardButton("📄 Пример отчёта", callback_data="menu:audit_sample"),
         ],
         [
+            InlineKeyboardButton("🚀 Я уже оплатил — продолжить Чекап", callback_data="menu:checkup"),
+        ],
+        [
             InlineKeyboardButton("🏗 Лист ожидания Спринта", callback_data="menu:sprint_waitlist"),
         ],
         [
@@ -30,6 +33,9 @@ def main_menu() -> InlineKeyboardMarkup:
         [
             InlineKeyboardButton("❓ FAQ", callback_data="menu:faq"),
             InlineKeyboardButton("🔒 Мои данные", callback_data="menu:privacy"),
+        ],
+        [
+            InlineKeyboardButton("🔐 Войти как админ", callback_data="admin_login:hint"),
         ],
         # Beta 12.05-19.05: ОС по любому шагу.
         feedback_row("welcome"),

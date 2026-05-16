@@ -102,6 +102,8 @@ def register(app: Application) -> None:
     app.add_handler(CommandHandler("admin_logout", admin_login.admin_logout_command))
     app.add_handler(CommandHandler("mark_paid", admin.mark_paid_command))
     app.add_handler(CommandHandler("applications", admin.applications_command))
+    app.add_handler(CommandHandler("emails_dump", admin.emails_dump_command))
+    app.add_handler(CommandHandler("beta_summary", admin.beta_summary_command))
     app.add_handler(CommandHandler("checkup", checkup.checkup_command))
     app.add_handler(CommandHandler("bugs", bugs.bugs_command))
     app.add_handler(CommandHandler("feedback", feedback_handler.feedback_command))

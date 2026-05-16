@@ -293,3 +293,174 @@ async def applications_command(update: Update, context: ContextTypes.DEFAULT_TYP
         )
 
     await msg.reply_text("\n".join(lines)[:4000])
+
+
+# ─── /emails_dump ─────────────────────────────────────────────────────────────
+
+_BETA_SINCE = datetime(2026, 5, 12, 0, 0, 0, tzinfo=timezone.utc)
+_BETA_UNTIL = datetime(2026, 5, 19, 23, 59, 59, tzinfo=timezone.utc)
+
+
+async def emails_dump_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """/emails_dump — CSV с email'ами пользователей беты 12–19 мая."""
+    user_id = update.effective_user.id
+    msg = update.effective_message
+    factory = async_session_factory()
+    async with factory() as session:
+        if not await is_admin_active(session, user_id):
+            await msg.reply_text("Только для команды EDL. /admin_login <KEY>")
+            return
+
+    async with factory() as session:
+        stmt = (
+            select(User, Application)
+            .outerjoin(Application, Application.user_id == User.id)
+            .where(User.created_at >= _BETA_SINCE)
+            .where(User.created_at <= _BETA_UNTIL)
+            .order_by(User.created_at)
+        )
+        rows = (await session.execute(stmt)).all()
+
+        session.add(Event(
+            user_id=user_id,
+            event="emails_dumped",
+            payload={"actor": user_id, "rows": len(rows)},
+        ))
+        from src.db.models import PDAccessLog
+        session.add(PDAccessLog(
+            actor=str(user_id),
+            action="export",
+            fields=["telegram_id", "telegram_username", "first_name", "last_name",
+                    "email", "company_name", "segment", "quiz_score", "created_at"],
+        ))
+        await session.commit()
+
+    buf = io.StringIO()
+    writer = csv.writer(buf)
+    writer.writerow([
+        "telegram_id", "telegram_username", "first_name", "last_name",
+        "email", "company_name", "segment", "quiz_score",
+        "created_at", "has_application", "application_status",
+        "consent_marketing_given_at",
+    ])
+    seen_users: set[int] = set()
+    for u, app in rows:
+        if u.id in seen_users:
+            continue
+        seen_users.add(u.id)
+        # Не включаем email если нет согласия на маркетинг
+        email = u.email if u.consent_marketing_given_at else ""
+        writer.writerow([
+            u.telegram_id, u.telegram_username or "",
+            u.first_name or "", u.last_name or "",
+            email, u.company_name or "",
+            u.segment or "", u.quiz_score or "",
+            u.created_at.strftime("%Y-%m-%d %H:%M") if u.created_at else "",
+            "yes" if app else "no",
+            app.status if app else "",
+            u.consent_marketing_given_at.strftime("%Y-%m-%d") if u.consent_marketing_given_at else "",
+        ])
+
+    buf.seek(0)
+    await msg.reply_document(
+        document=buf.getvalue().encode("utf-8"),
+        filename="edl_beta_emails_12_19_may_2026.csv",
+        caption=f"Пользователи беты 12–19 мая 2026. Уникальных: {len(seen_users)}.",
+    )
+
+
+# ─── /beta_summary ────────────────────────────────────────────────────────────
+
+
+async def beta_summary_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """/beta_summary — сводка по событиям беты 12–19 мая."""
+    user_id = update.effective_user.id
+    msg = update.effective_message
+    factory = async_session_factory()
+    async with factory() as session:
+        if not await is_admin_active(session, user_id):
+            await msg.reply_text("Только для команды EDL. /admin_login <KEY>")
+            return
+
+    async with factory() as session:
+        # Уникальные старты
+        starts = await session.scalar(
+            select(func.count(func.distinct(Event.user_id)))
+            .where(Event.event == "bot_start")
+            .where(Event.occurred_at.between(_BETA_SINCE, _BETA_UNTIL))
+        ) or 0
+
+        # Прошли Quiz
+        quiz_done = await session.scalar(
+            select(func.count(func.distinct(Event.user_id)))
+            .where(Event.event == "quiz_completed")
+            .where(Event.occurred_at.between(_BETA_SINCE, _BETA_UNTIL))
+        ) or 0
+
+        # Открыли /audit
+        audit_open = await session.scalar(
+            select(func.count(Event.id))
+            .where(Event.event == "audit_intro_shown")
+            .where(Event.occurred_at.between(_BETA_SINCE, _BETA_UNTIL))
+        ) or 0
+
+        # Дали согласие на оферту
+        offer_accepted = await session.scalar(
+            select(func.count(Event.id))
+            .where(Event.event == "offer_accepted")
+            .where(Event.occurred_at.between(_BETA_SINCE, _BETA_UNTIL))
+        ) or 0
+
+        # Оплаты
+        paid_count = await session.scalar(
+            select(func.count(Application.id))
+            .where(Application.status == "paid")
+            .where(Application.payment_succeeded_at.between(_BETA_SINCE, _BETA_UNTIL))
+        ) or 0
+
+        paid_sum = await session.scalar(
+            select(func.sum(Payment.amount_kopecks))
+            .where(Payment.status == "succeeded")
+            .where(Payment.paid_at.between(_BETA_SINCE, _BETA_UNTIL))
+        ) or 0
+
+        # Bug reports
+        bug_count = await session.scalar(
+            select(func.count(BotError.id))
+            .where(BotError.reported_at.between(_BETA_SINCE, _BETA_UNTIL))
+        ) or 0
+
+        # Feedback
+        feedback_count = await session.scalar(
+            select(func.count(Feedback.id))
+            .where(Feedback.reported_at.between(_BETA_SINCE, _BETA_UNTIL))
+        ) or 0
+
+        # Off-topic blocks
+        off_topic = await session.scalar(
+            select(func.count(Event.id))
+            .where(Event.event == "off_topic_blocked")
+            .where(Event.occurred_at.between(_BETA_SINCE, _BETA_UNTIL))
+        ) or 0
+
+        # Чекапы завершены
+        checkups_done = await session.scalar(
+            select(func.count(Event.id))
+            .where(Event.event == "checkup_completed")
+            .where(Event.occurred_at.between(_BETA_SINCE, _BETA_UNTIL))
+        ) or 0
+
+    text = (
+        "📊 *Итоги беты 12–19 мая 2026*\n\n"
+        f"🚀 Уникальных /start: {starts}\n"
+        f"🎯 Прошли Quiz: {quiz_done}\n"
+        f"📋 Открыли /audit: {audit_open}\n"
+        f"✅ Приняли оферту: {offer_accepted}\n\n"
+        f"💰 Оплаты: {paid_count} шт · {paid_sum / 100:,.0f} ₽\n"
+        f"✅ Завершили Чекап: {checkups_done}\n\n"
+        f"⚠️ Bug-reports: {bug_count}\n"
+        f"💬 Feedback: {feedback_count}\n"
+        f"🚫 Off-topic заблокировано: {off_topic}\n\n"
+        "Подробный CSV: /emails_dump"
+    )
+    await msg.reply_text(text, parse_mode="Markdown")
