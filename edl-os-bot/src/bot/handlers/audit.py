@@ -26,8 +26,7 @@ from src.core.config import settings
 from src.core.contact import normalize_company, normalize_email, normalize_full_name
 from src.core.input_validation import InputValidationError, validate_user_text
 from src.core.notifications import build_manual_payment_brief, send_to_admin_chat
-from src.core.payments import RobokassaClient
-from src.core.payments.robokassa import RobokassaInvoice
+from src.core.payments.yookassa import YookassaClient, YookassaInvoice
 from src.db.models import Application, Payment
 from src.db.repos import (
     create_application,
@@ -435,7 +434,7 @@ async def _send_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE, appl
         await _handoff_manual_payment(update, context, application_id, plan, amount)
         return
 
-    client = RobokassaClient()
+    client = YookassaClient(account_id=settings.yookassa_shop_id, secret_key=settings.yookassa_secret_key)
     if not client.configured:
         await update.effective_message.reply_text(
             texts.PAYMENT_NOT_CONFIGURED, reply_markup=keyboards.main_menu()
@@ -467,7 +466,7 @@ async def _send_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE, appl
                 "Заявка не найдена. /audit — попробуем ещё раз."
             )
             return
-        invoice = RobokassaInvoice(
+        invoice = YookassaInvoice(
             inv_id=app.inv_id,
             amount_rub=amount,
             description=_plan_description(plan),
@@ -483,7 +482,7 @@ async def _send_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE, appl
                 user_id=user.id,
                 amount_kopecks=int(amount * 100),
                 currency="RUB",
-                provider="robokassa",
+                provider="yookassa",
                 provider_invoice_id=str(app.inv_id),
                 status="pending",
             )

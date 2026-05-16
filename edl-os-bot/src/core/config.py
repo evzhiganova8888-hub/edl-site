@@ -60,10 +60,9 @@ class Settings(BaseSettings):
     # - manual: бот собирает контакты + оферту, шлёт детальный бриф Ивану в
     #   Sales-чат, Иван оформляет счёт через бухгалтерию, после прихода денег
     #   помечает оплату через POST /admin/applications/{id}/mark-paid.
-    # - robokassa: создаётся invoice URL, пользователь оплачивает картой,
+    # - yookassa: создаётся invoice URL, пользователь оплачивает картой,
     #   ResultURL callback автоматом ставит status=paid.
-    # Май 2026: ждём активацию Robokassa, работаем в manual. В июне переключим.
-    payment_mode: str = "manual"
+    payment_mode: str = "yookassa"
 
     # ЮKassa
     yookassa_shop_id: str = ""
