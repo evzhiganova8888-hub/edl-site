@@ -19,6 +19,8 @@
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/main-v2.css">
+  <link rel="stylesheet" href="css/mobile-fixes.css">
+  <link rel="stylesheet" href="css/mini-checkup.css">
   <!-- Analytics tracking script (Inline buffer as per TZ) -->
   <script>
     (function(){
@@ -61,6 +63,8 @@
     <div class="container header__inner site-header">
       <a href="/" class="header__logo site-logo" aria-label="EDL OS — на главную"><img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true"><span>EDL&nbsp;OS</span></a>
       <nav class="site-nav" id="site-nav" aria-label="Главное меню">
+        <a href="methodology.html">Методология</a>
+        <a href="try-in-claude.html">Claude&nbsp;/&nbsp;MCP</a>
         <a href="index.html#cases">Кейсы</a>
         <a href="pricing.html">Цены</a>
         <a href="about.html">Команда</a>
@@ -77,7 +81,7 @@
 
   <!-- Mobile sticky CTA -->
   <div class="sticky-cta" id="sticky-cta">
-    <a href="audit.html" class="btn btn--primary" data-cta-type="audit" data-cta-location="sticky">Бизнес-чекап 9 000 ₽</a>
+    <button type="button" class="btn btn--primary" data-mc-open="sticky" style="flex:1;">💬 Mini-Чекап · 15 мин · бесплатно</button>
   </div>
 
   <main id="main">
@@ -85,14 +89,26 @@
     <section class="hero section" id="hero" style="padding-top:100px;">
       <div class="container hero__grid">
         <div class="hero__content">
-          <h1 class="hero__title" style="font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 24px;">Бортовой компьютер для бизнеса.<br><span style="color:var(--color-tangerine)">Операционная система собственника нового поколения.</span></h1>
-          <p class="hero__subtitle" style="font-size: 1.25rem; color: var(--color-gray-700); margin-bottom: 32px; line-height: 1.5;">Все цифры, риски и решения вашего бизнеса — в одном месте. Каждое утро в Telegram. Без дашбордов, без новых паролей, без IT-отдела.</p>
+          <h1 class="hero__title" style="font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 24px;">Бортовой компьютер для бизнеса <span style="color:var(--color-tangerine); white-space:nowrap;">10–50 человек.</span><br><span style="color:var(--color-tangerine)">Операционная система собственника нового поколения.</span></h1>
+          <p class="hero__subtitle" style="font-size: 1.25rem; color: var(--color-gray-700); margin-bottom: 32px; line-height: 1.5;">Все цифры, риски и решения вашего бизнеса — в одном месте. Утренняя сводка в Telegram + ИИ-консультант под рукой. Без дашбордов, без новых паролей, без IT-отдела.</p>
           <div class="hero__badge">Работает в Telegram · Собирается за 4 недели · Все данные остаются у вас</div>
           <div style="display:flex; gap:16px; margin-top:24px; flex-wrap:wrap; align-items:center;">
-            <a href="https://t.me/edl_os_bot?start=demo" target="_blank" rel="noopener" class="btn btn--primary" data-cta-type="demo" data-cta-location="hero">Бесплатное демо · 30 минут</a>
-            <a href="audit.html" class="btn btn--outline" data-cta-type="audit" data-cta-location="hero">Бизнес-чекап 9 000 ₽</a>
+            <button type="button" class="mc-trigger" data-mc-open="hero">
+              <span class="mc-trigger__icon" aria-hidden="true">💬</span>
+              <span>Mini-Чекап за 15 минут
+                <span class="mc-trigger__meta">бесплатно · без регистрации</span>
+              </span>
+            </button>
+            <a href="audit.html" class="btn btn--outline" data-cta-type="audit" data-cta-location="hero">Бизнес-чекап 9 000 ₽ →</a>
           </div>
-          <div class="hero__cta-note">За 48 часов после чекапа: отчёт по 4 слоям EDL OS (Стратегия · Воронка · Операционка · Деньги), майнд-карта в FigJam, видео-разбор от основательницы (Plus, 14 000 ₽). Безусловный возврат 14 дней — один клик в боте.</div>
+          <div class="trust-strip" role="list">
+            <span class="trust-strip__badge" role="listitem"><span aria-hidden="true">🛡</span> Open source MCP</span>
+            <span class="trust-strip__sep" aria-hidden="true">·</span>
+            <span class="trust-strip__badge" role="listitem"><span aria-hidden="true">🔌</span> 1С · amoCRM · Битрикс</span>
+            <span class="trust-strip__sep" aria-hidden="true">·</span>
+            <span class="trust-strip__badge" role="listitem"><span aria-hidden="true">🇷🇺</span> Геткурс · Тинькофф</span>
+          </div>
+          <div class="hero__cta-note">Бизнес-чекап за 48 часов: разбор по 4 слоям (Стратегия · Воронка · Операционка · Деньги), майнд-карта в FigJam, видео-разбор от основательницы (Plus, 14 000 ₽). <strong>Безусловный возврат 14 дней</strong> — один клик в боте.</div>
         </div>
 
         <!-- Right Side: ICP Switcher & TG Widget (2-step interactive) -->
@@ -154,6 +170,40 @@
         </div>
       </div>
     </section>
+    <!-- Three Blind Spots — synthesis intro for /methodology -->
+    <section class="section" id="blindspots" aria-labelledby="bs-title">
+      <div class="container">
+        <div class="section__header">
+          <h2 class="section__title" id="bs-title">Три слепых пятна основателя 10–50</h2>
+          <p class="section__subtitle">Не «ещё одна теория». EDL OS — синтез трёх управленческих традиций, каждая с десятилетиями практики.</p>
+        </div>
+        <div class="blindspots">
+          <article class="blindspot-card">
+            <div class="blindspot-card__icon" aria-hidden="true">📉</div>
+            <p class="blindspot-card__problem">«Не вижу, куда уплывает маржа»</p>
+            <span class="blindspot-card__arrow">↓ решение</span>
+            <p class="blindspot-card__source"><strong>Big Tech operations</strong> — практика Google, Amazon, McKinsey: «no metric, no management». Маржа на уровне каждого клиента, каждого проекта, ежедневно.</p>
+          </article>
+          <article class="blindspot-card">
+            <div class="blindspot-card__icon" aria-hidden="true">🎯</div>
+            <p class="blindspot-card__problem">«Нет времени думать стратегически»</p>
+            <span class="blindspot-card__arrow">↓ решение</span>
+            <p class="blindspot-card__source"><strong>Методология CRAFT</strong> — Центр развития мышления ИКРА (с 2009), идеи Бруно Латура. Стратегия как недельные ставки, а не как абстрактный документ.</p>
+          </article>
+          <article class="blindspot-card">
+            <div class="blindspot-card__icon" aria-hidden="true">🤖</div>
+            <p class="blindspot-card__problem">«Не понимаю, где граница с ИИ»</p>
+            <span class="blindspot-card__arrow">↓ решение</span>
+            <p class="blindspot-card__source"><strong>AI Fluency Framework</strong> — Anthropic, UCC, Ringling. Не «использовать ИИ везде», а рамка из 4 компетенций: когда автоматизировать, когда оставить человеку.</p>
+          </article>
+        </div>
+        <div class="blindspots-synth">
+          <p class="blindspots-synth__text"><strong>Founder OS = синтез</strong> этих трёх подходов. Четыре слоя — Стратегия, Воронка, Операционка, Деньги — собраны в одну сводку и одного ИИ-консультанта.</p>
+          <a href="methodology.html" class="blindspots-synth__link" data-cta-type="methodology" data-cta-location="blindspots">Подробно про методологию Founder OS →</a>
+        </div>
+      </div>
+    </section>
+
     <!-- What EDL Shows (4 cards) -->
     <section class="section section--gray" id="triggers">
       <div class="container">
@@ -424,30 +474,93 @@
         </div>
       </div>
     </section>
-    <!-- Pricing (2 levels) -->
+    <!-- Pricing — 5-step ladder + 2 quick-start tiles -->
     <section class="section section--gray" id="pricing">
       <div class="container">
         <div class="section__header">
-          <h2 class="section__title">С чего начать?</h2>
+          <h2 class="section__title">Лестница продуктов</h2>
+          <p class="section__subtitle">От 15 минут диагностики до полной интеграции. Каждый шаг — самостоятельный результат, не воронка ради воронки.</p>
         </div>
+        <ol class="ladder-5" aria-label="Лестница продуктов EDL OS">
+          <li class="ladder-step ladder-step--free">
+            <div class="ladder-step__num">Шаг 1 · Free</div>
+            <div class="ladder-step__name">Mini-Чекап</div>
+            <div class="ladder-step__price">0 ₽</div>
+            <div class="ladder-step__duration">15 минут</div>
+            <button type="button" class="ladder-step__cta" data-mc-open="ladder">Начать бесплатно →</button>
+          </li>
+          <li class="ladder-step">
+            <div class="ladder-step__num">Шаг 2</div>
+            <div class="ladder-step__name">Бизнес-чекап</div>
+            <div class="ladder-step__price">9 000–14 000 ₽</div>
+            <div class="ladder-step__duration">1-2 часа + 24ч</div>
+            <a href="audit.html" class="ladder-step__cta">Подробнее →</a>
+          </li>
+          <li class="ladder-step">
+            <div class="ladder-step__num">Шаг 3</div>
+            <div class="ladder-step__name">Диагностика</div>
+            <div class="ladder-step__price">от 25 000 ₽</div>
+            <div class="ladder-step__duration">2 недели</div>
+            <a href="diagnostic.html" class="ladder-step__cta">Подробнее →</a>
+          </li>
+          <li class="ladder-step">
+            <div class="ladder-step__num">Шаг 4</div>
+            <div class="ladder-step__name">Спринт</div>
+            <div class="ladder-step__price">по проекту</div>
+            <div class="ladder-step__duration">4 недели</div>
+            <a href="sprint.html" class="ladder-step__cta">Подробнее →</a>
+          </li>
+          <li class="ladder-step">
+            <div class="ladder-step__num">Шаг 5</div>
+            <div class="ladder-step__name">План роста</div>
+            <div class="ladder-step__price">по запросу</div>
+            <div class="ladder-step__duration">квартал+</div>
+            <a href="pricing.html" class="ladder-step__cta">Подробнее →</a>
+          </li>
+        </ol>
+
         <div class="pricing-v2__grid">
           <div class="pricing-v2-card">
-            <h3 class="pricing-v2-card__name">Бесплатное демо</h3>
+            <h3 class="pricing-v2-card__name">Mini-Чекап</h3>
             <div class="pricing-v2-card__price">0 ₽</div>
-            <div class="pricing-v2-card__duration">30 минут</div>
-            <p class="pricing-v2-card__desc">Знакомство с системой. Покажем, как EDL OS работает, ответим на вопросы и обсудим вашу специфику.</p>
-            <a href="https://t.me/edl_os_bot?start=demo" target="_blank" class="btn btn--outline" data-cta-type="demo" data-cta-location="pricing" style="width:100%;">Записаться на демо в Telegram</a>
+            <div class="pricing-v2-card__duration">15 минут · в браузере</div>
+            <p class="pricing-v2-card__desc">5 вопросов ИИ-консультанту по 4 слоям Founder OS. В конце — короткий разбор и 2-3 рекомендации. Без регистрации.</p>
+            <button type="button" class="btn btn--outline mc-open-link" data-mc-open="pricing_card" style="width:100%;">Начать Mini-Чекап →</button>
           </div>
           <div class="pricing-v2-card pricing-v2-card--primary">
             <h3 class="pricing-v2-card__name">Бизнес-чекап</h3>
             <div class="pricing-v2-card__price">9 000 ₽</div>
-            <div class="pricing-v2-card__duration">48 часов</div>
-            <p class="pricing-v2-card__desc">30 мин звонок + 48ч AI-обработка. PDF + HTML + персональный видео-разбор вашего результата. Возврат в 14 дней.</p>
+            <div class="pricing-v2-card__duration">1-2 часа + 24ч обработка</div>
+            <p class="pricing-v2-card__desc">20 вопросов в Telegram-боте + ИИ-разбор. PDF + майнд-карта в FigJam + видео от Кати (Plus 14k). Безусловный возврат 14 дней.</p>
             <a href="audit.html" class="btn btn--primary" data-cta-type="audit" data-cta-location="pricing" style="width:100%;">Купить чекап</a>
           </div>
         </div>
         <div class="pricing-v2__link">
           <a href="pricing.html" style="color:var(--color-gray-500); font-size:0.875rem; text-decoration:none;">Посмотреть все продукты/услуги →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Open Source Manifesto -->
+    <section class="section" id="open-source" aria-labelledby="os-title">
+      <div class="container">
+        <div class="os-manifesto">
+          <div class="os-manifesto__badge" aria-hidden="true">⌬</div>
+          <div>
+            <h3 class="os-manifesto__title" id="os-title">Open source + MCP-native</h3>
+            <p class="os-manifesto__text">
+              Наш <code>mcp-server-core</code> открыт под <code>MIT</code> — форкайте, аудитьте, разворачивайте у себя. Бизнес-логика и production-коннекторы (1С, amoCRM, Битрикс, Геткурс) — наша IP, доступны по подписке.
+              Вы не «попадаете в вендор-лок»: если уйдёте, всё, что собрали — останется у вас.
+            </p>
+            <div class="os-manifesto__links">
+              <a href="https://github.com/edl-os/mcp-server-core" target="_blank" rel="noopener" class="os-manifesto__link" data-cta-type="github" data-cta-location="os_manifesto">
+                <span aria-hidden="true">⎗</span> github.com/edl-os/mcp-server-core →
+              </a>
+              <a href="try-in-claude.html" class="os-manifesto__link" data-cta-type="mcp" data-cta-location="os_manifesto">
+                <span aria-hidden="true">⚙</span> Подключить к Claude/Cursor →
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -492,6 +605,28 @@
             <div class="faq-content">
               <p><strong>Бизнес-чекап:</strong> безусловный возврат 100&nbsp;% оплаты в течение 14 календарных дней с момента передачи материалов. Причину указывать не нужно — один клик <code>/refund</code> в Telegram-боте. Деньги возвращаем тем же способом, которым была получена оплата, в течение 5 рабочих дней.</p>
               <p><strong>Спринт:</strong> защиты каждые 7–10 дней. Если после 2-й защиты видно, что не подходит — останавливаем. Оплата поэтапная. 30 дней пост-Спринт поддержки включены.</p>
+              <p>Полная юридическая формулировка — в <a href="legal/offer.html" style="color:var(--color-tangerine);">оферте</a>.</p>
+            </div>
+          </details>
+          <details class="faq-item" data-faq-id="6">
+            <summary class="faq-summary">На какой методологии вы работаете?</summary>
+            <div class="faq-content">
+              <p>EDL OS — это синтез трёх управленческих традиций: Big Tech operations (McKinsey, Google, Amazon), методология CRAFT (ИКРА, идеи Бруно Латура) и AI Fluency Framework (Anthropic, UCC, Ringling).</p>
+              <p>Подробно с источниками и логикой синтеза — на странице <a href="methodology.html" style="color:var(--color-tangerine);">/methodology</a>.</p>
+            </div>
+          </details>
+          <details class="faq-item" data-faq-id="7">
+            <summary class="faq-summary">Можно ли попробовать EDL OS прямо в Claude / Cursor / ChatGPT?</summary>
+            <div class="faq-content">
+              <p>Да. Mы выкатываем <strong>MCP-сервер</strong> (Model Context Protocol) — подключается за 3 шага к Claude Desktop, Cursor, ChatGPT Desktop и Gemini CLI. Тот же Mini-Чекап и ИИ-консультант работают внутри вашего AI-инструмента, OAuth 2.1.</p>
+              <p>Инструкция: <a href="try-in-claude.html" style="color:var(--color-tangerine);">/try-in-claude</a>. Open source core — <code>github.com/edl-os/mcp-server-core</code> (MIT).</p>
+            </div>
+          </details>
+          <details class="faq-item" data-faq-id="8">
+            <summary class="faq-summary">Где хранятся мои данные?</summary>
+            <div class="faq-content">
+              <p>Сырые данные бизнеса (имена клиентов, ИНН, содержимое 1С/amoCRM, финансовые отчёты, переписки) — <strong>физически у вас</strong>. Мы их не копируем и не храним.</p>
+              <p>У нас хранятся: ваш логин/email (через Clerk), история диалогов Mini-Чекапа, audit-log. Всё под 152-ФЗ. Кнопка «Отозвать доступ» в личном кабинете отзывает токены за секунды.</p>
             </div>
           </details>
         </div>
@@ -563,7 +698,6 @@
     document.addEventListener('DOMContentLoaded', () => {
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // Burger menu
       const burger = document.getElementById('burger');
       const nav = document.getElementById('site-nav') || document.querySelector('.site-nav');
       if (burger && nav) {
@@ -571,14 +705,12 @@
           const open = nav.classList.toggle('is-open');
           burger.setAttribute('aria-expanded', String(open));
         });
-        // close on link click (mobile)
         nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
           nav.classList.remove('is-open');
           burger.setAttribute('aria-expanded', 'false');
         }));
       }
 
-      // ── HERO v2: 2-step interactive demo ──
       const body = document.body;
       const switchers = document.querySelectorAll('.icp-btn');
       const stateIdle = document.getElementById('tg-state-idle');
@@ -610,7 +742,6 @@
           });
           btn.classList.add('is-active');
           btn.setAttribute('aria-pressed', 'true');
-          // Reset chat, go to ready state
           typingAbort = true;
           tgMessages.innerHTML = '';
           tgFinalCta.style.display = 'none';
@@ -623,18 +754,12 @@
       function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
       async function typewriter(element, html, cps) {
-        // Convert html string into a node and walk it, typing visible text only.
-        // For simplicity here: type plain text chars; keep allowed inline tags intact.
-        // We accept html with <strong> tags and entities, render incrementally.
         const tmp = document.createElement('div');
         tmp.innerHTML = html;
         const full = tmp.innerHTML;
         const speed = reducedMotion ? 0 : (cps || 30);
         if (speed === 0) { element.innerHTML = full; return; }
-        let i = 0;
         const cursor = '<span class="tg-cursor" aria-hidden="true"></span>';
-        // Type by sequentially revealing characters while preserving tags
-        // Strategy: tokenize into text/tag tokens.
         const tokens = [];
         let buf = '';
         let inTag = false;
@@ -672,7 +797,6 @@
         const paragraphs = Array.from(tpl.content.querySelectorAll('p'));
         for (let i = 0; i < paragraphs.length; i++) {
           if (typingAbort) return;
-          // Show typing indicator
           const typing = document.createElement('div');
           typing.className = 'tg-msg__typing';
           typing.innerHTML = '<span></span><span></span><span></span>';
@@ -703,13 +827,11 @@
         tgFinalCta.style.display = 'none';
         tgRestart.hidden = true;
         setState('idle');
-        // Deselect segment buttons
         switchers.forEach(b => { b.classList.remove('is-active'); b.setAttribute('aria-pressed', 'false'); });
         body.removeAttribute('data-segment-active');
         activeSegment = null;
       });
 
-      // ── AI Block: question buttons + typewriter ──
       const aiButtons = document.querySelectorAll('.ai-qa__question');
       const aiChat = document.getElementById('ai-qa-chat');
       const aiRestart = document.getElementById('ai-qa-restart');
@@ -726,7 +848,6 @@
         aiChat.innerHTML = '';
         window.EDLTrack && window.EDLTrack('ai_question_asked', {q: question.slice(0, 60)});
 
-        // User msg
         const uWrap = document.createElement('div');
         uWrap.className = 'ai-qa__msg';
         uWrap.innerHTML = '<div class="ai-qa__msg-label">Вы</div><div class="ai-qa__bubble-user"></div>';
@@ -735,7 +856,6 @@
         if (aiAbort) return;
         await sleep(reducedMotion ? 0 : 600);
 
-        // Typing indicator
         const tWrap = document.createElement('div');
         tWrap.className = 'ai-qa__msg';
         tWrap.innerHTML = '<div class="ai-qa__msg-label">EDL AI</div><div class="tg-msg__typing"><span></span><span></span><span></span></div>';
@@ -744,7 +864,6 @@
         if (aiAbort) { tWrap.remove(); return; }
         tWrap.remove();
 
-        // AI msg
         const aWrap = document.createElement('div');
         aWrap.className = 'ai-qa__msg';
         aWrap.innerHTML = '<div class="ai-qa__msg-label">EDL AI</div><div class="ai-qa__bubble-ai"></div>';
@@ -771,7 +890,6 @@
         aiRestart.hidden = true;
       });
 
-      // Battle Tabs Desktop
       const tabs = document.querySelectorAll('.tabs button');
       const panels = document.querySelectorAll('.tab-panel');
       tabs.forEach(tab => {
@@ -786,7 +904,6 @@
         });
       });
 
-      // Battle Accordion Mobile
       document.querySelectorAll('.battle-accordion-trigger').forEach(acc => {
         acc.addEventListener('click', () => {
           const panel = acc.parentElement;
@@ -797,14 +914,12 @@
         });
       });
 
-      // FAQ
       document.querySelectorAll('details.faq-item').forEach(faq => {
         faq.addEventListener('toggle', () => {
           if (faq.open) window.EDLTrack && window.EDLTrack('faq_opened', {faq_id: faq.getAttribute('data-faq-id')});
         });
       });
 
-      // CTA Tracking
       document.querySelectorAll('[data-cta-type]').forEach(cta => {
         cta.addEventListener('click', () => {
           window.EDLTrack && window.EDLTrack('cta_clicked', {
@@ -814,7 +929,6 @@
         });
       });
 
-      // Sticky CTA Visibility
       const stickyCta = document.getElementById('sticky-cta');
       if (stickyCta) {
         let scrollTimeout;
@@ -828,5 +942,29 @@
       }
     });
   </script>
+
+  <!-- Mini-Чекап modal (TZ §4) -->
+  <div class="mc-modal" id="mc-modal" role="dialog" aria-modal="true" aria-labelledby="mc-title" aria-hidden="true">
+    <div class="mc-dialog">
+      <div class="mc-header">
+        <div class="mc-header__avatar" aria-hidden="true">AI</div>
+        <div class="mc-header__title">
+          <div class="mc-header__name" id="mc-title">EDL OS · Mini-Чекап</div>
+          <div class="mc-header__status">онлайн · ИИ-консультант</div>
+        </div>
+        <button class="mc-header__close" id="mc-close" aria-label="Закрыть Mini-Чекап">×</button>
+      </div>
+      <div class="mc-progress"><div class="mc-progress__bar" id="mc-progress-bar"></div></div>
+      <div class="mc-body" id="mc-body" role="log" aria-live="polite"></div>
+      <div class="mc-composer" id="mc-composer">
+        <div class="mc-composer__row">
+          <textarea class="mc-input" id="mc-input" placeholder="Напишите ответ или выберите вариант выше..." rows="1" aria-label="Ваш ответ"></textarea>
+          <button class="mc-send" id="mc-send" aria-label="Отправить">→</button>
+        </div>
+        <div class="mc-composer__hint"><kbd>Enter</kbd> отправить · <kbd>Shift+Enter</kbd> новая строка</div>
+      </div>
+    </div>
+  </div>
+  <script src="js/mini-checkup.js" defer></script>
 </body>
 </html>

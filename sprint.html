@@ -1,259 +1,50 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Спринт Операционной Системы — 4 недели → инфраструктура навсегда · EDL</title>
-<meta name="description" content="Спринт — премиум внедрение EDL OS. За 4 недели соберём CRM, дашборды, Telegram-бот и AI-помощники на ваших данных. От 135 000 ₽.">
-  <meta property="og:title" content="Спринт EDL OS · 4 недели до работающей системы">
-  <meta property="og:description" content="За 4 недели собираем единую систему: данные, Telegram-сводка, ИИ-помощник. Защиты каждые 7–10 дней.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://elephantdreams.ru/sprint.html">
-  <meta property="og:image" content="https://elephantdreams.ru/assets/og-cover.png">
-  <meta property="og:locale" content="ru_RU">
-  <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://elephantdreams.ru/sprint.html">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Спринт ОС — 4 недели · EDL OS</title>
+<meta name="description" content="Спринт — премиум внедрение EDL OS. От 135 000 ₽.">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/tokens.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/main.css">
-  <link rel="icon" href="/assets/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-  <meta name="theme-color" content="#0A0A0A">
+<link rel="stylesheet" href="css/tokens.css"><link rel="stylesheet" href="css/components.css"><link rel="stylesheet" href="css/main.css"><link rel="stylesheet" href="css/main-v2.css"><link rel="stylesheet" href="css/mobile-fixes.css">
+<link rel="icon" href="/assets/favicon.ico"><meta name="theme-color" content="#0A0A0A">
 </head>
 <body>
-<a href="#main" class="skip-link">Перейти к содержимому</a>
+<a href="#main" class="skip-link">Перейти</a>
 <header class="header" id="header" style="background:var(--color-white); border-bottom:1px solid var(--color-gray-200);">
-    <div class="container header__inner site-header">
-      <a href="/" class="header__logo site-logo" aria-label="EDL OS — на главную"><img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true"><span>EDL&nbsp;OS</span></a>
-      <nav class="site-nav" id="site-nav" aria-label="Главное меню">
-        <a href="/index.html#cases">Кейсы</a>
-        <a href="/pricing.html">Цены</a>
-        <a href="/about.html">Команда</a>
-        <a href="/faq.html">FAQ</a>
-      </nav>
-      <div class="site-header__cta">
-        <a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--outline site-header__channel" aria-label="Telegram-канал EDL OS">
-          <span aria-hidden="true">✈️</span> Канал
-        </a>
-        <button class="header__burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav" id="burger">☰</button>
-      </div>
-    </div>
-  </header>
-<nav class="mobile-nav" id="mobile-nav">
-<a href="/">Главная</a>
-<a href="sprint.html">Спринт ОС</a>
-<a href="diagnostic.html">Диагностика</a>
-<a href="/#pricing">План Роста</a>
-<a href="https://t.me/edl_os_bot?start=demo" target="_blank" rel="noopener" class="btn btn--primary">Записаться на демо</a>
-</nav>
-
+  <div class="container header__inner site-header">
+    <a href="/" class="header__logo site-logo"><img src="/assets/logo-192.png" alt="" width="28" height="28"><span>EDL&nbsp;OS</span></a>
+    <nav class="site-nav" id="site-nav" aria-label="Главное меню">
+      <a href="/methodology.html">Методология</a><a href="/try-in-claude.html">Claude&nbsp;/&nbsp;MCP</a><a href="/index.html#cases">Кейсы</a><a href="/pricing.html">Цены</a><a href="/about.html">Команда</a><a href="/faq.html">FAQ</a>
+    </nav>
+    <div class="site-header__cta"><a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--outline site-header__channel"><span aria-hidden="true">✈️</span> Канал</a><button class="header__burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav" id="burger">☰</button></div>
+  </div>
+</header>
 <main id="main">
-
-<!-- Hero -->
 <section class="hero section" style="min-height:auto;padding-top:120px;padding-bottom:64px;">
 <div class="container hero__grid">
 <div class="hero__content">
 <span class="badge" style="margin-bottom:24px;">Спринт</span>
-<h1 style="max-width:700px; font-size: clamp(2.5rem, 5vw, 4rem);">Спринт Операционной Системы — 4 недели → инфраструктура навсегда</h1>
-<p class="hero__subtitle" style="max-width:600px;margin-top:24px;">Это не консалтинг с уходом. Спринт — это премиум-сборка платформы EDL OS. Через 4 недели вы получаете рабочую систему, обученную команду и полный контроль над бизнесом из Telegram.</p>
-<div class="hero__actions" style="margin-top:32px;">
-<a href="https://t.me/edl_os_bot?start=sprint_waitlist" target="_blank" rel="noopener" class="btn btn--primary">Записаться на спринт</a>
-<a href="diagnostic.html" class="btn btn--secondary">Сначала Диагностика</a>
-</div>
-</div>
-<div class="hero__demo" style="display: flex; justify-content: center; align-items: center;">
-<div style="width: 100%; max-width: 400px; padding: 40px; background: linear-gradient(145deg, #1f1f1f, #0a0a0a); border-radius: 32px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
-<div style="font-size: 3rem; margin-bottom: 16px;">🚀</div>
-<h3 style="color: white; margin-bottom: 8px;">Итог за 4 недели:</h3>
-<ul style="color: var(--color-gray-400); font-size: 0.875rem; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px;">
-<li>✓ Оцифрованные процессы</li>
-<li>✓ Сведенная юнит-экономика</li>
-<li>✓ Автоматический контроль задач</li>
-<li>✓ Автономная работа команды</li>
-</ul>
-</div>
+<h1 style="max-width:700px; font-size: clamp(2.5rem, 5vw, 4rem);">Спринт ОС — 4 недели → инфраструктура навсегда</h1>
+<p class="hero__subtitle" style="max-width:600px;margin-top:24px;">Премиум-сборка платформы EDL OS. Через 4 недели — рабочая система, обученная команда.</p>
+<div class="hero__actions" style="margin-top:32px;"><a href="https://t.me/edl_os_bot?start=sprint_waitlist" target="_blank" rel="noopener" class="btn btn--primary">Записаться</a><a href="diagnostic.html" class="btn btn--secondary">Сначала Диагностика</a></div>
 </div>
 </div>
 </section>
-
-<!-- What's included: 4 weeks -->
-<section class="section">
-<div class="container">
-<div class="section__header"><h2 class="section__title">Как проходит Спринт</h2></div>
-
-<div style="display:grid;grid-template-columns:1fr;gap:32px;">
-
-<div class="card" style="padding:32px;">
-<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
-<div class="num-badge">01</div>
-<h3>Неделя 1 · Архитектура под ваш бизнес</h3>
-</div>
-<ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
-<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> 3-5 глубинных интервью с вами и ключевыми сотрудниками</li>
-<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> Разработка карты процессов As-Is и To-Be</li>
-<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> Проектирование архитектуры решения</li>
-<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> <strong>Защита #1:</strong> Согласование архитектуры и дорожной карты</li>
-</ul>
-</div>
-
-<div class="card" style="padding:32px;">
-<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
-<div class="num-badge">02</div>
-<h3>Неделя 2 · Сборка ядра управления</h3>
-</div>
-<ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
-<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> Внедрение Sales CRM с автоматической квалификацией лидов</li>
-<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> Сборка маркетингового дашборда (ROI, CPL, LTV)</li>
-<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> Настройка финансового дашборда (учет ДДС, P&L)</li>
-<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> <strong>Защита #2:</strong> Демонстрация первых рабочих дашбордов</li>
-</ul>
-</div>
-
-<div class="card" style="padding:32px;">
-<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
-<div class="num-badge">03</div>
-<h3>Неделя 3 · Внедрение AI и Telegram-бота</h3>
-</div>
-<ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
-<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> Настройка Telegram-бота: /выручка, /сделки, /команда</li>
-<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> Подключение AI-ассистента для аналитики данных</li>
-<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> Автоматические утренние сводки в мессенджер</li>
-<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> <strong>Защита #3:</strong> Бот и AI отвечают на ваши вопросы</li>
-</ul>
-</div>
-
-<div class="card" style="padding:32px;">
-<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
-<div class="num-badge">04</div>
-<h3>Неделя 4 · Передача инфраструктуры команде</h3>
-</div>
-<ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
-<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> Видео-обучение для каждого сотрудника</li>
-<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> Предоставление документации регламентов</li>
-<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> Передача административных прав и доступов</li>
-<li style="padding-left:24px;position:relative;color:var(--color-gray-700);"><span style="position:absolute;left:0;color:var(--color-tangerine);">→</span> <strong>Финальная защита:</strong> Ваша команда работает в новой ОС</li>
-</ul>
-</div>
-
-</div>
-</div>
-</section>
-
-<!-- What's NOT included -->
-<section class="section section--gray">
-<div class="container">
-<h2 class="section__title" style="margin-bottom:24px;">Что НЕ входит в Спринт</h2>
-<ul class="not-do__list" style="max-width:700px;">
-<li>Разработка с нуля (мы используем готовые no-code шаблоны и связки)</li>
-<li>Mobile приложения, веб-сайты, сложный custom back-end</li>
-<li>Производство контента (SMM, копирайтинг)</li>
-<li>Юридические и бухгалтерские услуги</li>
-</ul>
-</div>
-</section>
-
-<!-- Pricing -->
-<section class="section sprint-pricing-section">
-<div class="container">
-<h2 class="section__title" style="margin-bottom:48px; text-align:center;">Стоимость Спринта</h2>
+<section class="section"><div class="container"><div class="section__header"><h2 class="section__title">Как проходит Спринт</h2></div><div style="display:grid;grid-template-columns:1fr;gap:32px;">
+<div class="card" style="padding:32px;"><h3>Неделя 1 · Архитектура</h3><p>3-5 интервью, карта процессов As-Is/To-Be, защита ·1.</p></div>
+<div class="card" style="padding:32px;"><h3>Неделя 2 · Ядро управления</h3><p>Sales CRM, дашборды, финансы, защита ·2.</p></div>
+<div class="card" style="padding:32px;"><h3>Неделя 3 · AI + Telegram</h3><p>Telegram-бот, AI-ассистент, утренние сводки, защита ·3.</p></div>
+<div class="card" style="padding:32px;"><h3>Неделя 4 · Передача</h3><p>Обучение, регламенты, финальная защита.</p></div>
+</div></div></section>
+<section class="section sprint-pricing-section"><div class="container"><h2 class="section__title" style="margin-bottom:48px; text-align:center;">Стоимость</h2>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px;max-width:1000px;margin:0 auto;">
-<div class="card" style="padding:32px;text-align:center;">
-<div class="price-card__name" style="font-weight:600;margin-bottom:8px;">Базовая сборка</div>
-<div class="price-card__price" style="font-size:1.5rem;font-weight:700;color:var(--color-tangerine);margin-bottom:16px;">135 000 ₽</div>
-<p class="price-card__desc" style="font-size:0.875rem;color:var(--color-gray-700);">Архитектура и базовая аналитика. Идеально для старта оцифровки.</p>
+<div class="card" style="padding:32px;text-align:center;"><div style="font-weight:600;margin-bottom:8px;">Базовая сборка</div><div style="font-size:1.5rem;font-weight:700;color:var(--color-tangerine);margin-bottom:16px;">135 000 ₽</div><p style="font-size:0.875rem;color:var(--color-gray-700);">Архитектура и базовая аналитика.</p></div>
+<div class="card" style="padding:32px;text-align:center;border:2px solid var(--color-tangerine);box-shadow:0 8px 24px rgba(255,107,26,0.1);"><div style="font-weight:600;margin-bottom:8px;">Стандартный</div><div style="font-size:1.5rem;font-weight:700;color:var(--color-tangerine);margin-bottom:16px;">185 000 ₽</div><p style="font-size:0.875rem;color:var(--color-gray-700);">Полная сборка + AI + Telegram.</p></div>
+<div class="card" style="padding:32px;text-align:center;"><div style="font-weight:600;margin-bottom:8px;">Расширенный</div><div style="font-size:1.5rem;font-weight:700;color:var(--color-tangerine);margin-bottom:16px;">260 000 ₽</div><p style="font-size:0.875rem;color:var(--color-gray-700);">+ 3 месяца поддержки.</p></div>
 </div>
-<div class="card" style="padding:32px;text-align:center;border:2px solid var(--color-tangerine);box-shadow:0 8px 24px rgba(255,107,26,0.1);">
-<div class="price-card__name" style="font-weight:600;margin-bottom:8px;">Стандартный (Рекомендуемый)</div>
-<div class="price-card__price" style="font-size:1.5rem;font-weight:700;color:var(--color-tangerine);margin-bottom:16px;">185 000 ₽</div>
-<p class="price-card__desc" style="font-size:0.875rem;color:var(--color-gray-700);">Полная сборка + ИИ-ассистент и интеграция с Telegram-ботом.</p>
-</div>
-<div class="card" style="padding:32px;text-align:center;">
-<div class="price-card__name" style="font-weight:600;margin-bottom:8px;">Расширенный</div>
-<div class="price-card__price" style="font-size:1.5rem;font-weight:700;color:var(--color-tangerine);margin-bottom:16px;">260 000 ₽</div>
-<p class="price-card__desc" style="font-size:0.875rem;color:var(--color-gray-700);">Полная сборка + 3 месяца плотной поддержки и кастомные вертикали.</p>
-</div>
-</div>
-<div style="max-width:640px;margin:32px auto 0;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;">
-<a href="https://t.me/edl_os_bot?start=sprint_waitlist" target="_blank" rel="noopener" class="btn btn--primary" data-cta-type="sprint_waitlist" data-cta-location="pricing" style="font-size:1.0625rem;padding:14px 28px;">Записаться в лист ожидания →</a>
-<p style="color:var(--color-gray-500);font-size:0.875rem;line-height:1.5;margin:0;">Оплата: 50&nbsp;% — старт работ, 50&nbsp;% — после финальной передачи системы.</p>
-</div>
-</div>
-</section>
-
-<!-- Final CTA -->
-<section class="section section--dark final-cta">
-<div class="container">
-<h2 class="final-cta__title">Готовы собрать инфраструктуру?</h2>
-<p class="final-cta__subtitle">Оставьте заявку в Telegram-боте. Бот задаст пару вопросов для подготовки к встрече.</p>
-<div class="final-cta__actions">
-<a href="https://t.me/edl_os_bot?start=sprint_waitlist" target="_blank" rel="noopener" class="btn btn--primary">Записаться на спринт</a>
-<a href="diagnostic.html" class="btn btn--dark">Сначала Диагностика за 25 000 ₽</a>
-</div>
-</div>
-</section>
-
+<div style="max-width:640px;margin:32px auto 0;text-align:center;"><a href="https://t.me/edl_os_bot?start=sprint_waitlist" target="_blank" rel="noopener" class="btn btn--primary" data-cta-type="sprint_waitlist" data-cta-location="pricing">Записаться в лист ожидания →</a></div>
+</div></section>
 </main>
-
-  <footer class="footer" style="background:#fff; border-top:1px solid #e4e4e7; padding:48px 0;">
-    <div class="container" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:32px;">
-      <div>
-        <h4 style="font-weight:600; margin-bottom:16px;">Контакты</h4>
-        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
-          <li><a href="https://t.me/edl_os" target="_blank" style="color:#404040; text-decoration:none;">Наш Telegram-канал</a></li>
-          <li><a href="https://t.me/edl_os_bot" target="_blank" rel="noopener" style="color:#404040; text-decoration:none;">Чат-бот EDL&nbsp;OS · ответы 24/7</a></li>
-          <li><a href="https://instagram.com/edl.os.app" target="_blank" style="color:#404040; text-decoration:none;">Instagram</a></li>
-          <li><a href="mailto:evzhiganova8888@gmail.com" style="color:#404040; text-decoration:none;">Написать на почту</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 style="font-weight:600; margin-bottom:16px;">Услуги</h4>
-        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
-          <li><a href="https://t.me/edl_os_bot?start=demo" target="_blank" style="color:#404040; text-decoration:none;">Бесплатное демо в Telegram</a></li>
-          <li><a href="audit.html" style="color:#404040; text-decoration:none;">Бизнес-чекап (Audit)</a></li>
-          <li><a href="diagnostic.html" style="color:#404040; text-decoration:none;">Диагностика</a></li>
-          <li><a href="sprint.html" style="color:#404040; text-decoration:none;">Спринт</a></li>
-          <li><a href="pricing.html" style="color:#404040; text-decoration:none;">Growth Plan</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 style="font-weight:600; margin-bottom:16px;">Компания</h4>
-        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
-          <li><a href="index.html#method" style="color:#404040; text-decoration:none;">Метод</a></li>
-          <li><a href="cases.html" style="color:#404040; text-decoration:none;">Кейсы</a></li>
-          <li><a href="faq.html" style="color:#404040; text-decoration:none;">Частые вопросы</a></li>
-          <li><a href="about.html" style="color:#404040; text-decoration:none;">Команда</a></li>
-          <li><a href="pricing.html" style="color:#404040; text-decoration:none;">Продукты и цены</a></li>
-          <li><a href="quiz.html" style="color:#404040; text-decoration:none;">Пройти тест (Score)</a></li>
-          <li><a href="legal/privacy.html" style="color:#404040; text-decoration:none;">Политика конфиденциальности</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="container" style="margin-top:48px; padding-top:24px; border-top:1px solid #e4e4e7; text-align:center; color:#6b7280; font-size:0.875rem;">
-      © 2026 EDL OS · Elephant Dreams Lab · Все права защищены
-    </div>
-  </footer>
-<script src="js/main.js" defer></script>
-
-  <script>
-    (function(){
-      const b = document.getElementById('burger');
-      const n = document.getElementById('site-nav');
-      if (b && n) {
-        b.addEventListener('click', () => {
-          const open = n.classList.toggle('is-open');
-          b.setAttribute('aria-expanded', String(open));
-        });
-        n.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-          n.classList.remove('is-open');
-          b.setAttribute('aria-expanded','false');
-        }));
-      }
-    })();
-  </script>
-</body>
-</html>
+<footer class="footer" style="background:#fff; border-top:1px solid #e4e4e7; padding:48px 0;"><div class="container" style="text-align:center; color:#6b7280; font-size:0.875rem;">© 2026 EDL OS</div></footer>
+<script>(function(){const b=document.getElementById('burger');const n=document.getElementById('site-nav');if(b&&n){b.addEventListener('click',()=>{const o=n.classList.toggle('is-open');b.setAttribute('aria-expanded',String(o));});n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{n.classList.remove('is-open');b.setAttribute('aria-expanded','false');}));}})();</script>
+</body></html>

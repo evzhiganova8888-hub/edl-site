@@ -26,6 +26,13 @@ from src.core.config import settings
 from src.core.contact import normalize_company, normalize_email, normalize_full_name
 from src.core.input_validation import InputValidationError, validate_user_text
 from src.core.notifications import build_manual_payment_brief, send_to_admin_chat
+
+try:
+    from src.core.payments.yookassa import YookassaClient, YookassaInvoice
+except ImportError:
+    YookassaClient = None  # type: ignore
+    YookassaInvoice = None  # type: ignore
+
 from src.db.models import Application, Payment
 from src.db.repos import (
     create_application,
@@ -450,5 +457,82 @@ async def _send_invoice(update: Update, context: ContextTypes.DEFAULT_TYPE, appl
         await _handoff_manual_payment(update, context, application_id, plan, amount)
         return
 
-    # yookassa — пока не реализовано, fallback в stub
+    if settings.payment_mode == "yookassa":
+        if YookassaClient is None:
+            logger.error("YooKassa import failed, falling back to manual")
+            await _handoff_manual_payment(update, context, application_id, plan, amount)
+            return
+
+        client = YookassaClient(
+            account_id=settings.yookassa_shop_id, secret_key=settings.yookassa_secret_key
+        )
+        if not client.configured:
+            await update.effective_message.reply_text(
+                texts.PAYMENT_NOT_CONFIGURED, reply_markup=keyboards.main_menu()
+            )
+            factory = async_session_factory()
+            async with factory() as session:
+                stmt = select(Application).where(Application.id == UUID(application_id))
+                app = (await session.execute(stmt)).scalar_one_or_none()
+                if app:
+                    app.status = "qualified"
+                user, _ = await get_or_create_user(session, telegram_id=update.effective_user.id)
+                await log_event(
+                    session,
+                    user_id=user.id,
+                    event="audit_payment_skipped_unconfigured",
+                    payload={"application_id": application_id, "plan": plan},
+                )
+                await session.commit()
+            return
+
+        factory = async_session_factory()
+        async with factory() as session:
+            stmt = select(Application).where(Application.id == UUID(application_id))
+            app = (await session.execute(stmt)).scalar_one_or_none()
+            user, _ = await get_or_create_user(session, telegram_id=update.effective_user.id)
+            if app is None:
+                await update.effective_message.reply_text(
+                    "Заявка не найдена. /audit — попробуем ещё раз."
+                )
+                return
+            invoice = YookassaInvoice(
+                inv_id=app.inv_id,
+                amount_rub=amount,
+                description=_plan_description(plan),
+                email=user.email,
+                user_telegram_id=user.telegram_id,
+            )
+            url = client.build_invoice_url(invoice)
+            session.add(
+                Payment(
+                    application_id=app.id,
+                    user_id=user.id,
+                    amount_kopecks=int(amount * 100),
+                    currency="RUB",
+                    provider="yookassa",
+                    provider_invoice_id=str(app.inv_id),
+                    status="pending",
+                )
+            )
+            await log_event(
+                session,
+                user_id=user.id,
+                event="audit_invoice_created",
+                payload={
+                    "application_id": application_id,
+                    "inv_id": app.inv_id,
+                    "plan": plan,
+                    "amount_rub": amount,
+                },
+            )
+            await session.commit()
+
+        await update.effective_message.reply_text(
+            texts.PAYMENT_LINK_READY,
+            reply_markup=keyboards.audit_pay_keyboard(invoice_url=url, plan=plan),
+        )
+        return
+
+    # Неизвестный режим — fallback
     await _handoff_manual_payment(update, context, application_id, plan, amount)

@@ -5,13 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Команда EDL OS · Куда мы движемся</title>
   <meta name="description" content="Команда EDL OS, наш путь от первых чекапов в марте 2026 до выхода на западный рынок в сентябре.">
-  <meta property="og:title" content="Команда EDL OS · Куда мы движемся">
-  <meta property="og:description" content="Наш план: бета — апрель, рынок РФ — май, App Store / Google Play — июнь, западный рынок — сентябрь 2026.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://elephantdreams.ru/about.html">
-  <meta property="og:image" content="https://elephantdreams.ru/assets/og-cover.png">
-  <meta property="og:locale" content="ru_RU">
-  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -19,215 +12,59 @@
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/main-v2.css">
-  <script>
-    (function(){
-      const ENDPOINT = window.EDL_ANALYTICS_ENDPOINT || null;
-      const buffer = JSON.parse(localStorage.getItem('edl_events') || '[]');
-      function track(event, payload) {
-        const data = {
-          event: event,
-          timestamp: new Date().toISOString(),
-          page: 'about',
-          segment: document.body.dataset.segmentActive || 'services',
-          referrer: document.referrer,
-          ...payload
-        };
-        buffer.push(data);
-        if (ENDPOINT) flush(); else localStorage.setItem('edl_events', JSON.stringify(buffer));
-      }
-      function flush() {
-        if (!ENDPOINT || !buffer.length) return;
-        fetch(ENDPOINT, {method:'POST', body:JSON.stringify(buffer), keepalive:true}).catch(console.error);
-        buffer.length = 0;
-        localStorage.removeItem('edl_events');
-      }
-      window.EDLTrack = track;
-      window.addEventListener('beforeunload', flush);
-      window.addEventListener('DOMContentLoaded', () => track('page_view', {}));
-    })();
-  </script>
+  <link rel="stylesheet" href="css/mobile-fixes.css">
   <link rel="icon" href="/assets/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
   <meta name="theme-color" content="#0A0A0A">
 </head>
 <body data-page="about">
   <a href="#main" class="skip-link">Перейти к содержанию</a>
-
   <header class="header" id="header" style="background:var(--color-white); border-bottom:1px solid var(--color-gray-200);">
     <div class="container header__inner site-header">
-      <a href="/" class="header__logo site-logo" aria-label="EDL OS — на главную"><img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true"><span>EDL&nbsp;OS</span></a>
+      <a href="/" class="header__logo site-logo"><img src="/assets/logo-192.png" alt="" width="28" height="28"><span>EDL&nbsp;OS</span></a>
       <nav class="site-nav" id="site-nav" aria-label="Главное меню">
+        <a href="/methodology.html">Методология</a>
+        <a href="/try-in-claude.html">Claude&nbsp;/&nbsp;MCP</a>
         <a href="/index.html#cases">Кейсы</a>
         <a href="/pricing.html">Цены</a>
         <a href="/about.html">Команда</a>
         <a href="/faq.html">FAQ</a>
       </nav>
       <div class="site-header__cta">
-        <a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--outline site-header__channel" aria-label="Telegram-канал EDL OS">
-          <span aria-hidden="true">✈️</span> Канал
-        </a>
+        <a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--outline site-header__channel"><span aria-hidden="true">✈️</span> Канал</a>
         <button class="header__burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav" id="burger">☰</button>
       </div>
     </div>
   </header>
-
   <main id="main">
     <section class="section" style="padding-top:120px;">
       <div class="container" style="max-width:800px; margin:0 auto;">
         <h1 class="section__title" style="text-align:center; margin-bottom:32px;">Команда EDL OS</h1>
-        <p style="font-size:1.125rem; color:var(--color-gray-700); text-align:center; line-height:1.6; margin-bottom:64px;">
-          Более 2 лет мы развиваем продукт и методологию. Мы сами строили операционку в B2B и финтехе, работая в Точке, Додо, karpov.courses, ВШЭ и ИТМО. Теперь мы делаем систему, которой не хватало нам самим.
-        </p>
-
+        <p style="font-size:1.125rem; color:var(--color-gray-700); text-align:center; line-height:1.6; margin-bottom:64px;">Более 2 лет мы развиваем продукт и методологию. Мы сами строили операционку в B2B и финтехе, работая в Точке, Додо, karpov.courses, ВШЭ и ИТМО. Теперь мы делаем систему, которой не хватало нам самим.</p>
         <div class="about-bio">
-          <div class="about-bio__item">
-            <div class="about-bio__photo"><img src="/assets/team/ekaterina.jpg" alt="Екатерина Жиганова" loading="lazy" width="120" height="120"></div>
-            <div>
-              <h3 style="font-size:1.5rem; margin-bottom:4px;">Екатерина Жиганова</h3>
-              <div style="font-size:1rem; color:var(--color-tangerine); font-weight:600; margin-bottom:12px;">Founder, Product Lead</div>
-              <p style="color:var(--color-gray-700); line-height:1.6;">7+ лет в B2B-продуктах. Запускала продукты в Точке и EdTech (karpov.courses). Основательница и автор методологии EDL OS. Лично запускает анализ Бизнес-чекапа и записывает персональный видео-разбор каждому собственнику.</p>
-            </div>
-          </div>
-          
-          <div class="about-bio__item">
-            <div class="about-bio__photo"><img src="/assets/team/ivan.jpg" alt="Иван Худяков" loading="lazy" width="120" height="120"></div>
-            <div>
-              <h3 style="font-size:1.5rem; margin-bottom:4px;">Иван Худяков</h3>
-              <div style="font-size:1rem; color:var(--color-tangerine); font-weight:600; margin-bottom:12px;">Head of Sales</div>
-              <p style="color:var(--color-gray-700); line-height:1.6;">9+ лет в B2B-продажах. Закрывал миллионные контракты в финтехе и SaaS. Специалист по выстраиванию масштабируемых B2B воронок.</p>
-            </div>
-          </div>
-          
-          <div class="about-bio__item">
-            <div class="about-bio__photo"><img src="/assets/team/anton.jpg" alt="Антон Чиков" loading="lazy" width="120" height="120"></div>
-            <div>
-              <h3 style="font-size:1.5rem; margin-bottom:4px;">Антон Чиков</h3>
-              <div style="font-size:1rem; color:var(--color-tangerine); font-weight:600; margin-bottom:12px;">CMO</div>
-              <p style="color:var(--color-gray-700); line-height:1.6;">10+ лет в маркетинге. Запускал performance и контент-стратегии для крупных tech-брендов. Строит маркетинговый движок EDL OS.</p>
-            </div>
-          </div>
-          
-          <div class="about-bio__item">
-            <div class="about-bio__photo"><img src="/assets/team/danil.jpg" alt="Данил Усик" loading="lazy" width="120" height="120"></div>
-            <div>
-              <h3 style="font-size:1.5rem; margin-bottom:4px;">Данил Усик</h3>
-              <div style="font-size:1rem; color:var(--color-tangerine); font-weight:600; margin-bottom:12px;">AI Lead</div>
-              <p style="color:var(--color-gray-700); line-height:1.6;">Эксперт по AI-автоматизации, RAG-инфраструктуре и LLM. Интегрирует ИИ-агентов глубоко в данные клиентских компаний.</p>
-            </div>
-          </div>
-          
-          <div class="about-bio__item">
-            <div class="about-bio__photo"><img src="/assets/team/darya.jpg" alt="Дарья Шалаева" loading="lazy" width="120" height="120"></div>
-            <div>
-              <h3 style="font-size:1.5rem; margin-bottom:4px;">Дарья Шалаева</h3>
-              <div style="font-size:1rem; color:var(--color-tangerine); font-weight:600; margin-bottom:12px;">SMM & Content</div>
-              <p style="color:var(--color-gray-700); line-height:1.6;">5+ лет опыта. Telegram, LinkedIn, визуальный сторителлинг. Упаковывает сложные методологии в понятные форматы.</p>
-            </div>
-          </div>
-          
-          <div class="about-bio__item">
-            <div class="about-bio__photo"><img src="/assets/team/veronika.jpg" alt="Вероника Касаткина" loading="lazy" width="120" height="120"></div>
-            <div>
-              <h3 style="font-size:1.5rem; margin-bottom:4px;">Вероника Касаткина</h3>
-              <div style="font-size:1rem; color:var(--color-tangerine); font-weight:600; margin-bottom:12px;">CFO</div>
-              <p style="color:var(--color-gray-700); line-height:1.6;">Финансовое моделирование, P&L, Cash Flow, налоговое планирование. Гарантирует финансовую прочность компании и клиентов.</p>
-            </div>
-          </div>
+          <div class="about-bio__item"><div class="about-bio__photo"><img src="/assets/team/ekaterina.jpg" alt="Екатерина Жиганова" loading="lazy" width="120" height="120"></div><div><h3 style="font-size:1.5rem; margin-bottom:4px;">Екатерина Жиганова</h3><div style="font-size:1rem; color:var(--color-tangerine); font-weight:600; margin-bottom:12px;">Founder, Product Lead</div><p style="color:var(--color-gray-700); line-height:1.6;">7+ лет в B2B-продуктах. Запускала продукты в Точке и EdTech (karpov.courses). Основательница и автор методологии EDL OS.</p></div></div>
+          <div class="about-bio__item"><div class="about-bio__photo"><img src="/assets/team/ivan.jpg" alt="Иван Худяков" loading="lazy" width="120" height="120"></div><div><h3 style="font-size:1.5rem; margin-bottom:4px;">Иван Худяков</h3><div style="font-size:1rem; color:var(--color-tangerine); font-weight:600; margin-bottom:12px;">Head of Sales</div><p style="color:var(--color-gray-700); line-height:1.6;">9+ лет в B2B-продажах. Специалист по выстраиванию B2B воронок.</p></div></div>
+          <div class="about-bio__item"><div class="about-bio__photo"><img src="/assets/team/anton.jpg" alt="Антон Чиков" loading="lazy" width="120" height="120"></div><div><h3 style="font-size:1.5rem; margin-bottom:4px;">Антон Чиков</h3><div style="font-size:1rem; color:var(--color-tangerine); font-weight:600; margin-bottom:12px;">CMO</div><p style="color:var(--color-gray-700); line-height:1.6;">10+ лет в маркетинге. Строит маркетинговый движок EDL OS.</p></div></div>
+          <div class="about-bio__item"><div class="about-bio__photo"><img src="/assets/team/danil.jpg" alt="Данил Усик" loading="lazy" width="120" height="120"></div><div><h3 style="font-size:1.5rem; margin-bottom:4px;">Данил Усик</h3><div style="font-size:1rem; color:var(--color-tangerine); font-weight:600; margin-bottom:12px;">AI Lead</div><p style="color:var(--color-gray-700); line-height:1.6;">Эксперт по AI-автоматизации, RAG-инфраструктуре и LLM.</p></div></div>
+          <div class="about-bio__item"><div class="about-bio__photo"><img src="/assets/team/darya.jpg" alt="Дарья Шалаева" loading="lazy" width="120" height="120"></div><div><h3 style="font-size:1.5rem; margin-bottom:4px;">Дарья Шалаева</h3><div style="font-size:1rem; color:var(--color-tangerine); font-weight:600; margin-bottom:12px;">SMM & Content</div><p style="color:var(--color-gray-700); line-height:1.6;">5+ лет опыта. Упаковывает сложные методологии в понятные форматы.</p></div></div>
+          <div class="about-bio__item"><div class="about-bio__photo"><img src="/assets/team/veronika.jpg" alt="Вероника Касаткина" loading="lazy" width="120" height="120"></div><div><h3 style="font-size:1.5rem; margin-bottom:4px;">Вероника Касаткина</h3><div style="font-size:1rem; color:var(--color-tangerine); font-weight:600; margin-bottom:12px;">CFO</div><p style="color:var(--color-gray-700); line-height:1.6;">Финансовое моделирование, P&L, Cash Flow, налоговое планирование.</p></div></div>
         </div>
-
         <div style="margin-top:64px; padding-top:48px; border-top:1px solid var(--color-gray-200);">
           <h2 class="section__title" style="text-align:center; margin-bottom:16px;">Куда мы движемся</h2>
-          <p style="color:var(--color-gray-700); line-height:1.6; text-align:center; max-width:560px; margin:0 auto;">Дорожная карта 2026 — публичный план, по которому работает команда EDL OS.</p>
-
-          <ol class="timeline" aria-label="Дорожная карта EDL OS на 2026 год" style="list-style:none; padding:0;">
-            <li class="timeline__item timeline__item--done">
-              <div class="timeline__date">Март 2026</div>
-              <div class="timeline__title">Провели первых клиентов через Бизнес-чекап и Диагностику.</div>
-            </li>
-            <li class="timeline__item timeline__item--done">
-              <div class="timeline__date">Апрель 2026</div>
-              <div class="timeline__title">Запустили первых 3 клиентов на демо Спринта.</div>
-            </li>
-            <li class="timeline__item timeline__item--now">
-              <div class="timeline__date">Май 2026 <span class="timeline__badge">сейчас</span></div>
-              <div class="timeline__title">Выходим полноценно на российский рынок — открываем платные Спринты и план роста.</div>
-            </li>
-            <li class="timeline__item">
-              <div class="timeline__date">Июнь 2026</div>
-              <div class="timeline__title">Выпускаем мобильные приложения EDL&nbsp;OS в App Store и Google Play.</div>
-            </li>
-            <li class="timeline__item">
-              <div class="timeline__date">Сентябрь 2026</div>
-              <div class="timeline__title">Тестовый выход на западный рынок — английская версия и первые пилоты в ЕС/США.</div>
-            </li>
+          <p style="color:var(--color-gray-700); line-height:1.6; text-align:center; max-width:560px; margin:0 auto;">Дорожная карта 2026.</p>
+          <ol class="timeline" style="list-style:none; padding:0;">
+            <li class="timeline__item timeline__item--done"><div class="timeline__date">Март 2026</div><div class="timeline__title">Провели первых клиентов через Бизнес-чекап и Диагностику.</div></li>
+            <li class="timeline__item timeline__item--done"><div class="timeline__date">Апрель 2026</div><div class="timeline__title">Запустили первых 3 клиентов на демо Спринта.</div></li>
+            <li class="timeline__item timeline__item--now"><div class="timeline__date">Май 2026 <span class="timeline__badge">сейчас</span></div><div class="timeline__title">Выходим на российский рынок.</div></li>
+            <li class="timeline__item"><div class="timeline__date">Июнь 2026</div><div class="timeline__title">Мобильные приложения.</div></li>
+            <li class="timeline__item"><div class="timeline__date">Сентябрь 2026</div><div class="timeline__title">Выход на западный рынок.</div></li>
           </ol>
-
-          <div class="timeline__cta">
-            <p class="timeline__cta-text">Чтобы следить за нашими успехами, разборами и закулисьем, оставайтесь на связи через Telegram-канал.</p>
-            <a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--primary" data-cta-type="telegram_channel" data-cta-location="about_timeline">Подписаться на @edl_os</a>
-          </div>
+          <div class="timeline__cta"><p class="timeline__cta-text">Оставайтесь на связи через Telegram-канал.</p><a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--primary">Подписаться @edl_os</a></div>
         </div>
       </div>
     </section>
   </main>
-
-  <footer class="footer" style="background:#fff; border-top:1px solid #e4e4e7; padding:48px 0;">
-    <div class="container" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:32px;">
-      <div>
-        <h4 style="font-weight:600; margin-bottom:16px;">Контакты</h4>
-        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
-          <li><a href="https://t.me/edl_os" target="_blank" style="color:#404040; text-decoration:none;">Наш Telegram-канал</a></li>
-          <li><a href="https://t.me/edl_os_bot" target="_blank" rel="noopener" style="color:#404040; text-decoration:none;">Чат-бот EDL&nbsp;OS · ответы 24/7</a></li>
-          <li><a href="https://instagram.com/edl.os.app" target="_blank" style="color:#404040; text-decoration:none;">Instagram</a></li>
-          <li><a href="mailto:evzhiganova8888@gmail.com" style="color:#404040; text-decoration:none;">Написать на почту</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 style="font-weight:600; margin-bottom:16px;">Услуги</h4>
-        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
-          <li><a href="https://t.me/edl_os_bot?start=demo" target="_blank" style="color:#404040; text-decoration:none;">Бесплатное демо в Telegram</a></li>
-          <li><a href="audit.html" style="color:#404040; text-decoration:none;">Бизнес-чекап (Audit)</a></li>
-          <li><a href="diagnostic.html" style="color:#404040; text-decoration:none;">Диагностика</a></li>
-          <li><a href="sprint.html" style="color:#404040; text-decoration:none;">Спринт</a></li>
-          <li><a href="pricing.html" style="color:#404040; text-decoration:none;">Growth Plan</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 style="font-weight:600; margin-bottom:16px;">Компания</h4>
-        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
-          <li><a href="index.html#method" style="color:#404040; text-decoration:none;">Метод</a></li>
-          <li><a href="cases.html" style="color:#404040; text-decoration:none;">Кейсы</a></li>
-          <li><a href="faq.html" style="color:#404040; text-decoration:none;">Частые вопросы</a></li>
-          <li><a href="about.html" style="color:#404040; text-decoration:none;">Команда</a></li>
-          <li><a href="pricing.html" style="color:#404040; text-decoration:none;">Продукты и цены</a></li>
-          <li><a href="quiz.html" style="color:#404040; text-decoration:none;">Пройти тест (Score)</a></li>
-          <li><a href="legal/privacy.html" style="color:#404040; text-decoration:none;">Политика конфиденциальности</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="container" style="margin-top:48px; padding-top:24px; border-top:1px solid #e4e4e7; text-align:center; color:#6b7280; font-size:0.875rem;">
-      © 2026 EDL OS · Elephant Dreams Lab · Все права защищены
-    </div>
-  </footer>
-
-
-  <script>
-    (function(){
-      const b = document.getElementById('burger');
-      const n = document.getElementById('site-nav');
-      if (b && n) {
-        b.addEventListener('click', () => {
-          const open = n.classList.toggle('is-open');
-          b.setAttribute('aria-expanded', String(open));
-        });
-        n.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-          n.classList.remove('is-open');
-          b.setAttribute('aria-expanded','false');
-        }));
-      }
-    })();
-  </script>
+  <footer class="footer" style="background:#fff; border-top:1px solid #e4e4e7; padding:48px 0;"><div class="container" style="text-align:center; color:#6b7280; font-size:0.875rem;">© 2026 EDL OS · Elephant Dreams Lab</div></footer>
+  <script>(function(){const b=document.getElementById('burger');const n=document.getElementById('site-nav');if(b&&n){b.addEventListener('click',()=>{const o=n.classList.toggle('is-open');b.setAttribute('aria-expanded',String(o));});n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{n.classList.remove('is-open');b.setAttribute('aria-expanded','false');}));}})();</script>
 </body>
 </html>
