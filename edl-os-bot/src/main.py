@@ -7,24 +7,46 @@
 HTTP endpoints:
 - GET  /health — liveness
 - POST /webhook — Telegram updates
+- POST /webhook/yookassa — YooKassa payment events (F1)
+- POST /widget/message — веб-виджет входящее сообщение (F4)
+- GET  /widget/stream/{session_id} — SSE ответы бота в виджет (F4)
 
 Запуск: `python -m src.main`.
 """
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
 import os
 from contextlib import asynccontextmanager
 
 import uvicorn
 from fastapi import FastAPI, Header, HTTPException, Request
+from fastapi.responses import StreamingResponse
 from telegram import Update
 from telegram.ext import Application, ApplicationBuilder
 
 from src.admin.routes import router as admin_router
 from src.bot.handlers import register
 from src.core.config import settings
+
+# F11: Sentry SDK — инициализируем до basicConfig чтобы поймать все ошибки
+_sentry_dsn = os.getenv("SENTRY_DSN", "")
+if _sentry_dsn:
+    try:
+        import sentry_sdk
+        from sentry_sdk.integrations.fastapi import FastApiIntegration
+        from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
+
+        sentry_sdk.init(
+            dsn=_sentry_dsn,
+            integrations=[FastApiIntegration(), SqlalchemyIntegration()],
+            traces_sample_rate=0.1,
+            environment=os.getenv("ENVIRONMENT", "production"),
+        )
+    except ImportError:
+        pass  # sentry-sdk не установлен — не блокирует запуск
 
 logging.basicConfig(
     level=settings.log_level,
@@ -159,6 +181,212 @@ async def telegram_webhook(
     update = Update.de_json(data, _ptb_app.bot)
     await _ptb_app.update_queue.put(update)
     return {"ok": True}
+
+
+@api.post("/webhook/yookassa")
+async def yookassa_webhook(request: Request) -> dict:
+    """F1: YooKassa payment events webhook.
+
+    Принимает payment.succeeded / payment.canceled / refund.succeeded.
+    Для payment.succeeded — помечает заявку как оплаченную через
+    mark_application_paid (idempotent).
+    """
+    try:
+        body = await request.json()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON")
+
+    event_type = body.get("event", "")
+    obj = body.get("object", {})
+    payment_id = obj.get("id")
+    metadata = obj.get("metadata", {})
+
+    logger.info("YooKassa webhook: event=%s payment_id=%s", event_type, payment_id)
+
+    if event_type == "payment.succeeded":
+        application_id = metadata.get("application_id") or metadata.get("inv_id")
+        if not application_id:
+            logger.error("YooKassa webhook: no application_id in metadata: %s", metadata)
+            return {"status": "ok"}
+
+        amount_str = obj.get("amount", {}).get("value", "0")
+        try:
+            amount_rub = float(amount_str)
+        except ValueError:
+            amount_rub = 0.0
+
+        from src.core.payment_marking import find_application_by_id, mark_application_paid
+        from src.db.models import User
+        from src.db.session import async_session_factory
+        from sqlalchemy import select
+
+        factory = async_session_factory()
+        async with factory() as session:
+            app = await find_application_by_id(session, application_id)
+            if app is None:
+                logger.error("YooKassa webhook: application %s not found", application_id)
+                return {"status": "ok"}
+            user = (await session.execute(
+                select(User).where(User.id == app.user_id)
+            )).scalar_one_or_none()
+            if user is None:
+                logger.error("YooKassa webhook: user not found for application %s", application_id)
+                return {"status": "ok"}
+
+            result = await mark_application_paid(
+                session,
+                app=app,
+                user=user,
+                amount_rub=amount_rub,
+                payment_provider="yookassa",
+                provider_payment_id=payment_id,
+                actor="yookassa_webhook",
+            )
+            await session.commit()
+
+        if not result.get("already_paid"):
+            # F8: если план Plus — планируем Celery-задачу видео-брифа
+            plan = (app.payload or {}).get("plan", "base")
+            if plan == "plus":
+                try:
+                    from src.tasks.notify_plus_video import schedule_plus_video_brief
+                    schedule_plus_video_brief.delay(str(app.id))
+                except Exception:
+                    logger.exception("YooKassa webhook: failed to schedule plus video brief")
+
+            # Уведомить пользователя через бот
+            if _ptb_app and user.telegram_id:
+                try:
+                    await _ptb_app.bot.send_message(
+                        chat_id=user.telegram_id,
+                        text=(
+                            "✅ Оплата получена! Спасибо.\n\n"
+                            "Доступ к Чекапу открыт. Введите /checkup чтобы начать."
+                        ),
+                    )
+                except Exception:
+                    logger.exception("YooKassa webhook: failed to notify user %s", user.telegram_id)
+
+    return {"status": "ok"}
+
+
+# --------------- F4: Widget endpoints ---------------
+
+
+_widget_subscribers: dict[str, list[asyncio.Queue]] = {}
+
+
+@api.post("/widget/message")
+async def widget_message(request: Request) -> dict:
+    """F4: Входящее сообщение из веб-виджета.
+
+    Создаёт виртуального пользователя с source_channel='widget',
+    перенаправляет сообщение через PTB update queue.
+    """
+    try:
+        body = await request.json()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON")
+
+    session_id = body.get("session_id", "")
+    text = body.get("text", "").strip()
+
+    if not session_id or not session_id.startswith("widget_"):
+        raise HTTPException(status_code=400, detail="Invalid session_id")
+    if not text:
+        raise HTTPException(status_code=400, detail="Empty text")
+    if _ptb_app is None:
+        raise HTTPException(status_code=503, detail="Bot not ready")
+
+    from src.db.models import User, WidgetSession
+    from src.db.session import async_session_factory
+    from sqlalchemy import select
+
+    factory = async_session_factory()
+    async with factory() as session:
+        ws = (await session.execute(
+            select(WidgetSession).where(WidgetSession.session_id == session_id)
+        )).scalar_one_or_none()
+
+        if ws is None:
+            # Создаём виртуального user + session
+            virtual_tg_id = abs(hash(session_id)) % (10 ** 12) + 10 ** 12
+            user_row = User(
+                telegram_id=virtual_tg_id,
+                widget_session_id=session_id,
+                source_channel="widget",
+            )
+            session.add(user_row)
+            await session.flush()
+            ws = WidgetSession(
+                session_id=session_id,
+                user_id=user_row.id,
+                page_referrer=body.get("referrer"),
+                utm_source=body.get("utm_source"),
+                utm_campaign=body.get("utm_campaign"),
+            )
+            session.add(ws)
+            await session.commit()
+            tg_id = virtual_tg_id
+        else:
+            tg_id = (await session.execute(
+                select(User.telegram_id).where(User.id == ws.user_id)
+            )).scalar_one()
+            await session.commit()
+
+    # Строим синтетический Update и кладём в очередь PTB
+    synthetic = {
+        "update_id": abs(hash(f"{session_id}:{text}")) % (2 ** 31),
+        "message": {
+            "message_id": abs(hash(f"{session_id}:{text}:msg")) % (2 ** 31),
+            "from": {
+                "id": tg_id,
+                "is_bot": False,
+                "first_name": "WebWidget",
+                "language_code": "ru",
+            },
+            "chat": {"id": tg_id, "type": "private"},
+            "date": int(asyncio.get_event_loop().time()),
+            "text": text,
+        },
+    }
+    update_obj = Update.de_json(synthetic, _ptb_app.bot)
+    await _ptb_app.update_queue.put(update_obj)
+    return {"status": "queued", "session_id": session_id}
+
+
+@api.get("/widget/stream/{session_id}")
+async def widget_stream(session_id: str) -> StreamingResponse:
+    """F4: SSE endpoint — реал-тайм ответы бота в виджет."""
+    if not session_id.startswith("widget_"):
+        raise HTTPException(status_code=400, detail="Invalid session_id")
+
+    queue: asyncio.Queue = asyncio.Queue()
+    _widget_subscribers.setdefault(session_id, []).append(queue)
+
+    async def event_generator():
+        try:
+            while True:
+                try:
+                    msg = await asyncio.wait_for(queue.get(), timeout=30)
+                    yield f"data: {json.dumps(msg, ensure_ascii=False)}\n\n"
+                except asyncio.TimeoutError:
+                    yield ": keep-alive\n\n"
+        finally:
+            subs = _widget_subscribers.get(session_id, [])
+            if queue in subs:
+                subs.remove(queue)
+
+    return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+
+async def push_widget_message(session_id: str, message: dict) -> None:
+    """Публикует сообщение бота в SSE-стримы виджета для данной сессии."""
+    for q in list(_widget_subscribers.get(session_id, [])):
+        try:
+            q.put_nowait(message)
+        except asyncio.QueueFull:
+            pass
 
 
 def main() -> None:

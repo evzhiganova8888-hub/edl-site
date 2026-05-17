@@ -1,6 +1,6 @@
 # EDL OS Bot — source of truth
 
-> Project memory для Claude Code. Описывает что реально работает в коде и в проде на 2026-05-17.
+> Project memory для Claude Code. Описывает что реально работает в коде и в проде на 2026-05-18.
 > При расхождениях между этим документом и старыми ТЗ (`/BOT_TZ.md`, `/BOT_TZ_v3.md`) — **доверяй коду и этому файлу**.
 > Старые ТЗ оставлены для исторического контекста, но они описывают цели, а не реализацию.
 
@@ -205,8 +205,12 @@ Source of truth: `src/core/config.py:Settings` (pydantic-settings). Реальн
 | `0005_feedback.py` | feedback + users.wants_followup_report |
 | `0006_admin_sessions.py` | admin_sessions + applications.checkup_* колонки |
 | `0007_checkup_answers.py` | checkup_answers (uniq на (application_id, question_key)) |
+| `0008_widget_sessions.py` | widget_sessions + users.source_channel + users.widget_session_id |
+| `0009_add_lead_stage.py` | users.lead_stage (default='cold') + users.lead_stage_updated_at |
+| `0010_add_checkup_progress.py` | applications.checkup_current_question_index + checkup_last_active_at |
+| `0011_plus_video_fields.py` | applications.plus_video_recommended_at/uploaded_at/url/sent_to_client_at |
 
-**Текущий head**: `0007_checkup_answers`. Применяется автоматически через `railway.json:preDeployCommand`.
+**Текущий head**: `0011_plus_video_fields`. Применяется автоматически через `railway.json:preDeployCommand`.
 
 ### 6.3 alembic/env.py
 
@@ -365,10 +369,10 @@ docker compose up -d postgres redis
 ## 13. Тестирование
 
 ```bash
-.venv312/bin/pytest -q  # → 165 passed, 1 skipped
+.venv312/bin/pytest -q  # → 184 passed, 1 skipped
 ```
 
-36 файлов в `tests/`:
+37+ файлов в `tests/`:
 - `test_*_sanitize.py`, `test_scope_guard.py`, `test_admin_auth.py`, `test_admin_session.py` — security
 - `test_checkup_*.py` — 20 вопросов content + quality + report
 - `test_pricing_consistency.py` — цены 9000/14000/25000 не выдуманы
@@ -423,6 +427,6 @@ Conftest подставляет SQLite in-memory для async session. **1 skipp
 
 ---
 
-_Версия документа: 1.0_
-_Последнее обновление: 2026-05-17 23:00 МСК (Claude Sonnet 4.6)_
-_Прод-состояние: alembic_version=0007_checkup_answers; webhook=active; pytest=165/0._
+_Версия документа: 1.1_
+_Последнее обновление: 2026-05-18 МСК (Claude Sonnet 4.6)_
+_Прод-состояние: alembic_version=0011_plus_video_fields; webhook=active; pytest=184/0._

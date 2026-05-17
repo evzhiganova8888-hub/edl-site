@@ -59,6 +59,12 @@ class User(Base):
     )
     # Beta 12.05-19.05: подписка на e-mail отчёт «что мы сделали по ОС».
     wants_followup_report: Mapped[bool] = mapped_column(Boolean, default=False)
+    # F4: виджет-источник
+    source_channel: Mapped[str | None] = mapped_column(Text)
+    widget_session_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True))
+    # F6: воронка лида
+    lead_stage: Mapped[str] = mapped_column(Text, default="cold")
+    lead_stage_updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
     applications: Mapped[list[Application]] = relationship(back_populates="user")
     payments: Mapped[list[Payment]] = relationship(back_populates="user")
@@ -90,6 +96,14 @@ class Application(Base):
     checkup_started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     checkup_completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     checkup_pdf_url: Mapped[str | None] = mapped_column(Text)
+    # F7: прогресс чекапа для паузы/возобновления
+    checkup_current_question_index: Mapped[int] = mapped_column(Integer, default=0)
+    checkup_last_active_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # F8: Plus видео-разбор
+    plus_video_recommended_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    plus_video_uploaded_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    plus_video_url: Mapped[str | None] = mapped_column(Text)
+    plus_video_sent_to_client_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
@@ -305,3 +319,16 @@ class CheckupAnswer(Base):
         Index("idx_checkup_answers_app", "application_id"),
         Index("uq_checkup_answers_app_q", "application_id", "question_key", unique=True),
     )
+
+
+class WidgetSession(Base):
+    """Сессия виджета на сайте (F4)."""
+
+    __tablename__ = "widget_sessions"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    telegram_id: Mapped[int] = mapped_column(BigInteger, nullable=False, index=True)
+    source_channel: Mapped[str | None] = mapped_column(Text)
+    page_url: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    last_active_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

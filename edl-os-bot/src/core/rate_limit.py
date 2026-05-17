@@ -175,6 +175,62 @@ async def add_llm_tokens(telegram_id: int, tokens: int) -> LimitDecision:
         )
 
 
+# --------------- F10: Global hourly LLM budget ---------------
+
+# Константы (можно переопределить через env в будущем)
+_GLOBAL_HOURLY_BUDGET_RUB = 500
+_HAIKU_INPUT_KOPECKS_PER_1K = 25   # ~0.25₽ за 1k input tokens (proxyapi.ru)
+_HAIKU_OUTPUT_KOPECKS_PER_1K = 125  # ~1.25₽ за 1k output tokens
+
+
+def estimate_cost_kopecks(input_tokens: int, output_tokens: int) -> int:
+    """Грубая оценка стоимости вызова в копейках (Haiku 4.5 через proxyapi.ru)."""
+    in_cost = (input_tokens / 1000) * _HAIKU_INPUT_KOPECKS_PER_1K
+    out_cost = (output_tokens / 1000) * _HAIKU_OUTPUT_KOPECKS_PER_1K
+    return max(1, int(in_cost + out_cost))
+
+
+async def check_global_llm_budget() -> LimitDecision:
+    """Проверяет глобальный почасовой бюджет LLM.
+
+    fail_open=True: при недоступности Redis пропускаем запрос (LLM дешевле downtime).
+    """
+    r = _get_redis()
+    if not r:
+        return LimitDecision(allowed=True, name="global_llm_budget", used=0,
+                             limit=_GLOBAL_HOURLY_BUDGET_RUB * 100)
+    try:
+        from datetime import datetime as _dt
+        key = f"llm_budget:{_dt.now().strftime('%Y%m%d%H')}"
+        spent = int(await r.get(key) or 0)
+        limit = _GLOBAL_HOURLY_BUDGET_RUB * 100  # в копейках
+        return LimitDecision(
+            allowed=spent < limit,
+            name="global_llm_budget",
+            used=spent,
+            limit=limit,
+        )
+    except Exception as e:
+        logger.warning("Global LLM budget check Redis error: %s — allowing", e)
+        return LimitDecision(allowed=True, name="global_llm_budget", used=0,
+                             limit=_GLOBAL_HOURLY_BUDGET_RUB * 100)
+
+
+async def track_global_llm_cost(input_tokens: int, output_tokens: int) -> None:
+    """Учитывает стоимость LLM-вызова в глобальном почасовом счётчике."""
+    r = _get_redis()
+    if not r:
+        return
+    try:
+        from datetime import datetime as _dt
+        key = f"llm_budget:{_dt.now().strftime('%Y%m%d%H')}"
+        kopecks = estimate_cost_kopecks(input_tokens, output_tokens)
+        await r.incrby(key, kopecks)
+        await r.expire(key, 3600 + 60)
+    except Exception as e:
+        logger.warning("Global LLM cost tracking error: %s", e)
+
+
 async def check_llm_quota(telegram_id: int) -> LimitDecision:
     """Заглядываем не превышен ли дневной потолок (без инкремента)."""
     r = _get_redis()

@@ -7,7 +7,7 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
-from src.core.checkup_questions import by_key
+from src.core.checkup_questions import by_key, determine_vat_zone
 from src.core.config import settings
 from src.db.models import Application, CheckupAnswer, User
 
@@ -53,6 +53,38 @@ def _quality_summary(answers: list[CheckupAnswer]) -> dict:
     return {"total": total, "passed": passed, "failed": total - passed}
 
 
+def render_vat_section(answers: list[CheckupAnswer]) -> str:
+    """F2: Генерирует HTML-раздел «НДС-флажок 2026» для отчёта.
+
+    Использует ответы на m2_ebitda (выручка) и m3_tax (налоговый режим).
+    Возвращает пустую строку если нужные ответы не найдены.
+    """
+    revenue_answer = next(
+        (a for a in answers if a.question_key in ("m2_ebitda", "m3_tax")),
+        None,
+    )
+    if not revenue_answer:
+        return ""
+
+    vat_info = determine_vat_zone(revenue_answer.text)
+    zone = vat_info["zone"]
+    zone_color = {
+        "below_threshold": "#22c55e",
+        "approaching": "#f59e0b",
+        "first_time": "#ef4444",
+        "established": "#6b7280",
+    }.get(zone, "#6b7280")
+
+    return (
+        f'<div class="vat-section" style="border-left:4px solid {zone_color};'
+        f'padding:12px 16px;margin:24px 0;background:#fafafa;">'
+        f"<h2>НДС-флажок 2026</h2>"
+        f'<p><strong>Ваша зона:</strong> {vat_info["description"]}</p>'
+        f'<p><strong>Что делать:</strong> {vat_info["advice"]}</p>'
+        f"</div>"
+    )
+
+
 def render_report(
     *,
     application: Application,
@@ -75,6 +107,7 @@ def render_report(
         "answers_by_layer": _group_answers(answers),
         "quality_summary": _quality_summary(answers),
         "offer_url": settings.offer_checkup_url,
+        "vat_section_html": render_vat_section(answers),
         "is_draft": True,
     }
     try:

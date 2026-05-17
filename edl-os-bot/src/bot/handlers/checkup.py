@@ -536,6 +536,13 @@ async def handle_text_step(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 quality_notes=json.dumps(missing, ensure_ascii=False) if missing else None,
             ))
         await log_event(session, user_id=user.id, event="checkup_answer_saved", payload={"q": q.key, "passed": passed})
+        # F7: обновляем persistent progress
+        app = await session.get(Application, app_uuid)
+        if app is not None:
+            if hasattr(app, "checkup_current_question_index"):
+                app.checkup_current_question_index = q_idx + 1
+            if hasattr(app, "checkup_last_active_at"):
+                app.checkup_last_active_at = datetime.now(timezone.utc)
         await session.commit()
 
     if not passed:
@@ -557,3 +564,48 @@ async def handle_text_step(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     )
     await _advance_to_next(update, context, q_idx + 1)
     return True
+
+
+# ─── F7: Pause/Resume helpers ─────────────────────────────────────────────────
+
+
+def is_in_checkup_fsm(user_data: dict) -> bool:
+    """True если пользователь сейчас активно проходит чекап."""
+    return bool(user_data.get(_KEY_STATE) and user_data.get(_KEY_APP_ID))
+
+
+async def get_paused_checkup(telegram_id: int) -> Application | None:
+    """Возвращает незавершённую Application если есть пауза > 30 минут.
+
+    Используется в dialog.py для реактивного предложения продолжить.
+    """
+    from datetime import timedelta
+
+    factory = async_session_factory()
+    async with factory() as session:
+        user, _ = await get_or_create_user(session, telegram_id=telegram_id)
+        stmt = (
+            select(Application)
+            .where(Application.user_id == user.id)
+            .where(Application.type == "audit")
+            .where(Application.status == "paid")
+            .where(Application.checkup_completed_at.is_(None))
+            .where(Application.checkup_started_at.isnot(None))
+            .order_by(Application.created_at.desc())
+            .limit(1)
+        )
+        app = (await session.execute(stmt)).scalar_one_or_none()
+        if app is None:
+            return None
+
+        # Пауза > 30 минут?
+        last_active = getattr(app, "checkup_last_active_at", None) or app.checkup_started_at
+        if last_active is None:
+            return None
+        minutes_idle = (datetime.now(timezone.utc) - last_active).total_seconds() / 60
+        if minutes_idle < 30:
+            return None
+
+        # Есть ли хотя бы один ответ (иначе чекап не начат)?
+        answered = await _count_answered(session, app.id)
+        return app if answered > 0 else None
