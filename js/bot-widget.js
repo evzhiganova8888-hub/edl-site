@@ -3,7 +3,8 @@
 
   var SESSION_KEY = 'edl_widget_session';
   var DISMISSED_KEY = 'edl_widget_dismissed';
-  var API_BASE = 'https://api.elephantdreams.ru/widget';
+  // Можно переопределить из HTML: <script>window.EDL_API_BASE='https://...'</script>
+  var API_BASE = (window.EDL_API_BASE || 'https://api.elephantdreams.ru') + '/widget';
   var TRIGGER_TIME_MS = 30000;
   var TRIGGER_SCROLL_PCT = 30;
 

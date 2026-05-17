@@ -251,7 +251,7 @@
           <input type="email" name="email" placeholder="ваш@email.ru" required>
           <button type="submit">Скачать PDF →</button>
         </form>
-        <p class="email-gate-fallback">Или <a href="/assets/pdf/edl-founder-os-v1.pdf" download
+        <p class="email-gate-fallback">Или <a href="/assets/EDL_Founder_OS_v1.pdf" download
            onclick="if(typeof gtag!=='undefined'){gtag('event','pdf_download',{'pdf_name':'founder_os_v1','source':'methodology_page','has_email':false});}">скачайте без email</a></p>
       </div>
     </div>
@@ -317,7 +317,8 @@
         btn.disabled = true;
         btn.textContent = 'Отправляем...';
         try {
-          const res = await fetch('https://api.elephantdreams.ru/leads/whitepaper', {
+          const apiBase = window.EDL_API_BASE || 'https://api.elephantdreams.ru';
+          const res = await fetch(apiBase + '/leads/whitepaper', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({email, source: 'methodology_page_pdf', pdf: 'founder_os_v1'})
@@ -325,7 +326,7 @@
           if (res.ok) {
             btn.textContent = 'Проверьте почту ✓';
             btn.style.background = '#10B981';
-            window.open('/assets/pdf/edl-founder-os-v1.pdf', '_blank');
+            window.open('/assets/EDL_Founder_OS_v1.pdf', '_blank');
             if (typeof gtag !== 'undefined') gtag('event', 'pdf_download', {pdf_name: 'founder_os_v1', source: 'methodology_page', has_email: true});
           } else { throw new Error('err'); }
         } catch(_) {

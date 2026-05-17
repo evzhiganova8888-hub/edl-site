@@ -305,3 +305,21 @@ class CheckupAnswer(Base):
         Index("idx_checkup_answers_app", "application_id"),
         Index("uq_checkup_answers_app_q", "application_id", "question_key", unique=True),
     )
+
+
+class WhitepaperLead(Base):
+    """Email-захват перед скачиванием PDF-whitepaper с methodology.html."""
+
+    __tablename__ = "whitepaper_leads"
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    email: Mapped[str] = mapped_column(Text, nullable=False)
+    pdf: Mapped[str] = mapped_column(Text, nullable=False)
+    source: Mapped[str | None] = mapped_column(Text)
+    user_agent: Mapped[str | None] = mapped_column(Text)
+    ip_hash: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+    __table_args__ = (Index("idx_whitepaper_leads_email", "email", "created_at"),)

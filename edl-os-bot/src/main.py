@@ -19,12 +19,15 @@ from contextlib import asynccontextmanager
 
 import uvicorn
 from fastapi import FastAPI, Header, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from telegram import Update
 from telegram.ext import Application, ApplicationBuilder
 
 from src.admin.routes import router as admin_router
 from src.bot.handlers import register
 from src.core.config import settings
+from src.leads.routes import router as leads_router
+from src.widget.routes import router as widget_router
 
 logging.basicConfig(
     level=settings.log_level,
@@ -95,7 +98,29 @@ async def _run_polling(app: Application) -> None:
 
 
 api = FastAPI(title="EDL OS Bot", version="0.3.2", lifespan=lifespan)
+
+# CORS — для web-виджета и whitepaper-формы с elephantdreams.ru.
+# Локальные дев-домены добавлены, чтобы можно было тестировать с file://localhost.
+_allowed_origins = [
+    settings.site_url,
+    "https://elephantdreams.ru",
+    "https://www.elephantdreams.ru",
+    "http://localhost:8000",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+]
+api.add_middleware(
+    CORSMiddleware,
+    allow_origins=_allowed_origins,
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type"],
+    max_age=600,
+)
+
 api.include_router(admin_router)
+api.include_router(widget_router)
+api.include_router(leads_router)
 
 
 @api.middleware("http")
