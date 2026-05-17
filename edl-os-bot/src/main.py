@@ -60,10 +60,18 @@ async def lifespan(_app: FastAPI):
             secret_token=settings.webhook_secret_token or None,
             drop_pending_updates=True,
         )
-        logger.info("Webhook set to %s", webhook_url)
+        logger.info("Starting in WEBHOOK mode. URL=%s", webhook_url)
     else:
         asyncio.create_task(_run_polling(_ptb_app))
-        logger.info("Polling started")
+        if settings.environment == "production":
+            logger.warning(
+                "Starting in POLLING mode in production — Railway deployments will "
+                "cause 409 Conflict (two instances polling at once) and the user "
+                "may see 'menu + error' duplicate replies. Set WEBHOOK_BASE_URL to "
+                "switch to webhook mode. See docs/qa_audit_2026-05-17/RAILWAY_WEBHOOK_SETUP.md"
+            )
+        else:
+            logger.info("Starting in POLLING mode (development)")
 
     try:
         yield
