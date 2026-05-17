@@ -39,6 +39,20 @@ _MAX_ANSWER_CHARS = 4000
 _QUALITY_PASS_THRESHOLD = 16
 
 
+def _safe_uuid(s: str | None) -> UUID | None:
+    """Безопасный парс UUID из callback_data. None — если значение пустое
+    или не парсится (защита от malformed callback / устаревшей клавиатуры).
+    Без try-except здесь ValueError всплыл бы в _global_error_handler и
+    пользователь получил бы «Что-то пошло не так на нашей стороне».
+    """
+    if not s:
+        return None
+    try:
+        return UUID(s)
+    except (ValueError, TypeError):
+        return None
+
+
 def _progress_bar(current: int, total: int = 20) -> str:
     filled = round(current / total * 10)
     return "█" * filled + "░" * (10 - filled)
@@ -197,7 +211,9 @@ async def handle_checkup_callback(update: Update, context: ContextTypes.DEFAULT_
 async def _start_checkup(update: Update, context: ContextTypes.DEFAULT_TYPE, app_id_str: str | None) -> None:
     if not app_id_str:
         return
-    app_uuid = UUID(app_id_str)
+    app_uuid = _safe_uuid(app_id_str)
+    if app_uuid is None:
+        return
     factory = async_session_factory()
     async with factory() as session:
         app = await session.get(Application, app_uuid)
@@ -215,7 +231,9 @@ async def _start_checkup(update: Update, context: ContextTypes.DEFAULT_TYPE, app
 async def _resume_checkup(update: Update, context: ContextTypes.DEFAULT_TYPE, app_id_str: str | None) -> None:
     if not app_id_str:
         return
-    app_uuid = UUID(app_id_str)
+    app_uuid = _safe_uuid(app_id_str)
+    if app_uuid is None:
+        return
     answered_keys: set[str] = set()
     factory = async_session_factory()
     async with factory() as session:
@@ -244,7 +262,9 @@ async def _resume_checkup(update: Update, context: ContextTypes.DEFAULT_TYPE, ap
 async def _restart_checkup(update: Update, context: ContextTypes.DEFAULT_TYPE, app_id_str: str | None) -> None:
     if not app_id_str:
         return
-    app_uuid = UUID(app_id_str)
+    app_uuid = _safe_uuid(app_id_str)
+    if app_uuid is None:
+        return
     factory = async_session_factory()
     async with factory() as session:
         # Удаляем все ответы
@@ -300,7 +320,9 @@ async def _skip_question(update: Update, context: ContextTypes.DEFAULT_TYPE, q_k
     if not app_id_str:
         return
 
-    app_uuid = UUID(app_id_str)
+    app_uuid = _safe_uuid(app_id_str)
+    if app_uuid is None:
+        return
     q = next((x for x in CHECKUP_QUESTIONS if x.key == q_key), None)
     if q is None:
         return
@@ -362,7 +384,9 @@ async def _finalize_checkup(
 ) -> None:
     if not app_id_str:
         return
-    app_uuid = UUID(app_id_str)
+    app_uuid = _safe_uuid(app_id_str)
+    if app_uuid is None:
+        return
     msg = update.effective_message or (update.callback_query.message if update.callback_query else None)
 
     factory = async_session_factory()
@@ -397,7 +421,9 @@ async def _submit_checkup(update: Update, context: ContextTypes.DEFAULT_TYPE, ap
     """Юзер нажал «Отправить как есть» при < порога quality."""
     if not app_id_str:
         return
-    app_uuid = UUID(app_id_str)
+    app_uuid = _safe_uuid(app_id_str)
+    if app_uuid is None:
+        return
     factory = async_session_factory()
     async with factory() as session:
         answers = await _get_answers(session, app_uuid)
@@ -474,7 +500,9 @@ async def handle_text_step(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         raw = raw[:_MAX_ANSWER_CHARS]
 
     q = CHECKUP_QUESTIONS[q_idx]
-    app_uuid = UUID(app_id_str)
+    app_uuid = _safe_uuid(app_id_str)
+    if app_uuid is None:
+        return
     passed, missing = _quality_check(raw, q)
     word_count = len(raw.split())
 

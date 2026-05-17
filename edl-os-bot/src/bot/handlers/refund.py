@@ -76,11 +76,20 @@ async def handle_refund_callback(update: Update, context: ContextTypes.DEFAULT_T
     if len(parts) < 3:
         return
     application_id = parts[2]
+    try:
+        app_uuid = UUID(application_id)
+    except (ValueError, TypeError):
+        # Защита от malformed callback (старая клавиатура / искажённый payload).
+        # Молча возвращаем в меню — лучше, чем сорваться в _global_error_handler.
+        await query.message.reply_text(
+            texts.REFUND_NO_ACTIVE, reply_markup=keyboards.main_menu()
+        )
+        return
 
     factory = async_session_factory()
     async with factory() as session:
         user, _ = await get_or_create_user(session, telegram_id=update.effective_user.id)
-        stmt = select(Application).where(Application.id == UUID(application_id))
+        stmt = select(Application).where(Application.id == app_uuid)
         app = (await session.execute(stmt)).scalar_one_or_none()
         if not app:
             await query.message.reply_text(
