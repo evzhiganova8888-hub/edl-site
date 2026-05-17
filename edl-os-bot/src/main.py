@@ -96,6 +96,18 @@ api = FastAPI(title="EDL OS Bot", version="0.3.2", lifespan=lifespan)
 api.include_router(admin_router)
 
 
+@api.middleware("http")
+async def _log_requests(request: Request, call_next):
+    """Лог каждого входящего HTTP-запроса. Нужен для диагностики Railway
+    proxy 502 — без него видно только uvicorn-логи, по которым нельзя
+    отличить «запрос не дошёл» от «запрос дошёл и упал»."""
+    response = await call_next(request)
+    logger.info(
+        "HTTP %s %s -> %d", request.method, request.url.path, response.status_code
+    )
+    return response
+
+
 @api.get("/health")
 async def health() -> dict:
     return {
@@ -110,6 +122,20 @@ async def telegram_webhook(
     request: Request,
     x_telegram_bot_api_secret_token: str | None = Header(default=None),
 ) -> dict:
+    """Telegram webhook receiver.
+
+    Кладёт update в `_ptb_app.update_queue` и сразу отвечает 200 OK.
+    Обработку handlers'ом делает фоновая таска `_update_fetcher`, которую
+    запустил `Application.start()`.
+
+    Почему не `await process_update(update)`:
+    1) Telegram ставит таймаут на POST /webhook ~30 сек; если handler
+       делает LLM-вызов (Claude Haiku 5–15 сек) или медленный DB-запрос,
+       Railway proxy успевает закрыть соединение по таймауту → 502 Bad
+       Gateway → Telegram повторяет тот же update до 24 часов.
+    2) В polling mode update тоже идёт через `update_queue` → одинаковый
+       processing-path для обоих режимов.
+    """
     if (
         settings.webhook_secret_token
         and x_telegram_bot_api_secret_token != settings.webhook_secret_token
@@ -119,7 +145,7 @@ async def telegram_webhook(
         raise HTTPException(status_code=503, detail="Bot is not ready")
     data = await request.json()
     update = Update.de_json(data, _ptb_app.bot)
-    await _ptb_app.process_update(update)
+    await _ptb_app.update_queue.put(update)
     return {"ok": True}
 
 
