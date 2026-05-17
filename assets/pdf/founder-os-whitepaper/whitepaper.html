@@ -1,0 +1,1380 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>EDL OS · Founder OS Whitepaper v4</title>
+<style>
+  /* ─────────────────────────────────────────────────
+     EDL OS · Founder OS Whitepaper
+     Print-ready PDF source (A4, render with WeasyPrint)
+     ───────────────────────────────────────────────── */
+
+  @page {
+    size: A4;
+    margin: 24mm 16mm 22mm 16mm;
+    @top-left {
+      content: "● EDL OS · Founder OS Whitepaper";
+      font-family: 'Inter', sans-serif;
+      font-size: 7.4pt;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #525252;
+      font-weight: 500;
+      padding-bottom: 6mm;
+    }
+    @top-right {
+      font-family: 'Inter', sans-serif;
+      font-size: 7.4pt;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #525252;
+      font-weight: 500;
+      padding-bottom: 6mm;
+    }
+    @bottom-left {
+      content: "elephantdreams.ru · hello@edl-os.ru";
+      font-family: 'Inter', sans-serif;
+      font-size: 7.4pt;
+      letter-spacing: 0.06em;
+      color: #737373;
+      padding-top: 4mm;
+      border-top: 1px solid #E5E5E5;
+      width: 100%;
+    }
+    @bottom-right {
+      content: counter(page, decimal-leading-zero) " / 11";
+      font-family: 'Inter', sans-serif;
+      font-size: 7.4pt;
+      letter-spacing: 0.08em;
+      color: #FF6B1A;
+      font-weight: 700;
+      padding-top: 4mm;
+      border-top: 1px solid #E5E5E5;
+      width: 100%;
+      text-align: right;
+    }
+  }
+  @page :first {
+    @top-left {
+      content: "● EDL OS · Операционная методология · Whitepaper";
+      font-family: 'Inter', sans-serif;
+      font-size: 7.4pt;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #FF6B1A;
+      font-weight: 700;
+      padding-bottom: 6mm;
+    }
+    @bottom-left {
+      content: "elephantdreams.ru · hello@edl-os.ru · Лицензия CC BY-SA";
+      font-family: 'Inter', sans-serif;
+      font-size: 7.4pt;
+      letter-spacing: 0.06em;
+      color: #737373;
+      padding-top: 4mm;
+      border-top: 1px solid #E5E5E5;
+      width: 100%;
+    }
+  }
+
+  :root {
+    --ink:        #0A0A0A;
+    --ink-2:      #171717;
+    --muted:      #525252;
+    --muted-2:    #737373;
+    --soft:       #A3A3A3;
+    --line:       #E5E5E5;
+    --line-2:     #EFEFEF;
+    --bg:         #FFFFFF;
+    --bg-soft:    #FAFAFA;
+    --bg-card:    #FCFCFC;
+    --orange:     #FF6B1A;
+    --orange-2:   #E55A0A;
+    --orange-50:  #FFF1E8;
+    --orange-100: #FFE2D1;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+    font-size: 9.2pt;
+    line-height: 1.5;
+    color: var(--ink-2);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01", "cv11", "tnum";
+  }
+
+  h1, h2, h3, h4 { margin: 0; color: var(--ink); letter-spacing: -0.02em; font-weight: 700; line-height: 1.1; }
+  p { margin: 0; }
+  small { font-size: 7.4pt; }
+
+  /* ── Page chrome ─────────────────────────────── */
+  .page {
+    page-break-after: always;
+  }
+  .page:last-of-type { page-break-after: auto; }
+
+  /* Named pages — used to render correct section title in @top-right */
+  .pg-cover { page: cover; }
+  .pg-toc      { page: toc; }       @page toc      { @top-right { content: "00 · Краткое содержание"; } }
+  .pg-market   { page: market; }    @page market   { @top-right { content: "01 · Рынок"; } }
+  .pg-pains    { page: pains; }     @page pains    { @top-right { content: "02 · Боли"; } }
+  .pg-sol      { page: sol; }       @page sol      { @top-right { content: "03 · Состояние решений"; } }
+  .pg-method   { page: method; }    @page method   { @top-right { content: "04 · Методология"; } }
+  .pg-arch     { page: arch; }      @page arch     { @top-right { content: "05 · Архитектура"; } }
+  .pg-product  { page: product; }   @page product  { @top-right { content: "06 · Продукт"; } }
+  .pg-stories  { page: stories; }   @page stories  { @top-right { content: "07 · Применение"; } }
+  .pg-next     { page: next; }      @page next     { @top-right { content: "08 · Следующий шаг"; } }
+  .pg-sources  { page: sources; }   @page sources  { @top-right { content: "Приложение · Источники"; } }
+
+  .sec-title, .page-head, .page-foot { display: none; }
+
+  /* ── Helpers ─────────────────────────────────── */
+  .eyebrow {
+    font-size: 7.6pt; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .eyebrow .num { color: var(--orange); font-weight: 700; margin-right: 6pt; }
+
+  .lead {
+    font-size: 9.6pt; line-height: 1.6; color: var(--muted);
+    max-width: 140mm;
+  }
+
+  .h-section {
+    font-size: 24pt; font-weight: 700; letter-spacing: -0.025em; line-height: 1.08;
+    color: var(--ink); margin: 8pt 0 12pt;
+  }
+  .h-page {
+    font-size: 28pt; font-weight: 700; letter-spacing: -0.03em; line-height: 1.05;
+  }
+
+  .rule { height: 1px; background: var(--line); margin: 10pt 0; }
+
+  /* ── Cover (page 1) ──────────────────────────── */
+  .cover {
+    display: flex;
+    gap: 16mm;
+    margin-top: 4mm;
+  }
+  .cover .cover-left  { flex: 1.35 1 0; min-width: 0; }
+  .cover .cover-right { flex: 1 1 0; min-width: 0; }
+  .cover-left .logo-row {
+    display: flex; align-items: center; gap: 8pt;
+    font-size: 7.6pt; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--orange); font-weight: 700;
+    margin-bottom: 14mm;
+  }
+  .cover-left .logo-row .sep { color: var(--soft); font-weight: 500; }
+  .cover-left h1 {
+    font-size: 64pt; line-height: 0.92; letter-spacing: -0.045em;
+    color: var(--ink); font-weight: 700;
+  }
+  .cover-left .sub {
+    margin-top: 12pt; font-size: 11pt; line-height: 1.4; color: var(--ink-2); font-weight: 500;
+    max-width: 95mm;
+  }
+  .cover-left .body {
+    margin-top: 10pt; color: var(--muted); font-size: 9.4pt; line-height: 1.6; max-width: 92mm;
+  }
+  .guarantee {
+    margin-top: 14mm;
+    display: flex; gap: 12pt; align-items: flex-start;
+    padding-top: 10pt; border-top: 1px solid var(--line);
+  }
+  .guarantee > div:first-child { flex: 0 0 44mm; }
+  .guarantee > .right { flex: 1; }
+  .guarantee .label {
+    font-size: 7pt; letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange); font-weight: 700;
+    margin-bottom: 3pt;
+  }
+  .guarantee .big {
+    font-size: 13pt; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; line-height: 1.2;
+  }
+  .guarantee .right {
+    font-size: 8.6pt; color: var(--muted); line-height: 1.5;
+  }
+
+  .stats-panel {
+    border: 1px solid var(--line);
+    border-radius: 6pt;
+    padding: 14pt 16pt 6pt;
+    background: var(--bg-soft);
+  }
+  .stats-panel .cap {
+    font-size: 7pt; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); font-weight: 700;
+    margin-bottom: 10pt;
+  }
+  .stat {
+    padding: 7pt 0;
+    border-top: 1px solid var(--line);
+  }
+  .stat:first-of-type { border-top: 0; padding-top: 0; }
+  .stat .num {
+    font-size: 28pt; font-weight: 800; line-height: 1;
+    letter-spacing: -0.02em; color: var(--orange);
+  }
+  .stat .sub-1 { font-size: 9pt; color: var(--ink); font-weight: 600; margin-top: 3pt; }
+  .stat .sub-2 { font-size: 7.6pt; color: var(--muted-2); margin-top: 1pt; }
+
+  .meta-row {
+    margin-top: 14mm;
+    display: flex;
+    border-top: 1px solid var(--line);
+    padding-top: 10pt;
+  }
+  .meta-row .cell { flex: 1; }
+  .meta-row .cell { }
+  .meta-row .cap {
+    font-size: 6.8pt; letter-spacing: 0.18em; text-transform: uppercase; color: var(--soft); font-weight: 600;
+  }
+  .meta-row .val { font-size: 9.2pt; font-weight: 600; color: var(--ink); margin-top: 2pt; }
+
+  .toc-list {
+    margin-top: 8mm;
+    border-top: 1px solid var(--line);
+  }
+  .toc-list .row {
+    display: grid; grid-template-columns: 22pt 1fr; gap: 10pt;
+    padding: 6pt 0;
+    border-bottom: 1px solid var(--line-2);
+    align-items: baseline;
+  }
+  .toc-list .row .n  { color: var(--orange); font-weight: 700; font-size: 7.8pt; letter-spacing: 0.12em; }
+  .toc-list .row .t  { color: var(--ink); font-size: 9.4pt; font-weight: 500; }
+
+  /* ── TOC page (2) ────────────────────────────── */
+  .toc-grid {
+    display: flex; gap: 14mm;
+    margin-top: 4mm;
+  }
+  .toc-grid > .left { flex: 1; min-width: 0; }
+  .toc-grid > .right { flex: 1.05; min-width: 0; }
+  .toc-grid .left .intro {
+    font-size: 12.5pt; font-weight: 600; color: var(--ink); line-height: 1.35;
+    letter-spacing: -0.01em; max-width: 70mm;
+  }
+  .toc-list-block { margin-top: 12mm; }
+  .toc-list-block .item {
+    margin-bottom: 6mm;
+  }
+  .toc-list-block .item .label {
+    font-size: 7pt; letter-spacing: 0.18em; text-transform: uppercase; color: var(--orange); font-weight: 700;
+  }
+  .toc-list-block .item .title {
+    font-size: 10.2pt; font-weight: 700; color: var(--ink); margin-top: 2pt;
+  }
+  .toc-list-block .item .desc {
+    font-size: 8.6pt; color: var(--muted); margin-top: 2pt; line-height: 1.5;
+  }
+  .toc-list-block .quote {
+    margin-top: 10mm;
+    border-left: 2pt solid var(--orange);
+    padding: 4pt 0 4pt 10pt;
+    font-size: 8.6pt; line-height: 1.55; color: var(--muted);
+  }
+  .toc-list-block .quote .src {
+    margin-top: 4pt; font-size: 7.6pt; color: var(--ink); font-weight: 600;
+  }
+
+  .toc-grid .right .cap {
+    font-size: 7pt; letter-spacing: 0.18em; text-transform: uppercase; color: var(--soft); font-weight: 700;
+    border-bottom: 1px solid var(--line); padding-bottom: 6pt; margin-bottom: 4pt;
+  }
+  .toc-grid .right .row {
+    display: flex; gap: 8pt;
+    padding: 7pt 0;
+    border-bottom: 1px solid var(--line-2);
+    align-items: baseline;
+  }
+  .toc-grid .right .row > .n { flex: 0 0 18pt; }
+  .toc-grid .right .row > .t { flex: 1; }
+  .toc-grid .right .row > .p { flex: 0 0 22pt; text-align: right; }
+  .toc-grid .right .row .n  { color: var(--orange); font-weight: 700; font-size: 7.8pt; }
+  .toc-grid .right .row .t  { color: var(--ink); font-size: 9.6pt; font-weight: 600; line-height: 1.3; }
+  .toc-grid .right .row .t small { display: block; color: var(--muted); font-weight: 400; font-size: 7.8pt; margin-top: 1pt; letter-spacing: 0; text-transform: none; }
+  .toc-grid .right .row .p  { color: var(--muted-2); text-align: right; font-size: 8.4pt; }
+
+  /* ── Stat cards (page 3) ─────────────────────── */
+  .stat-row {
+    display: flex; gap: 8pt;
+    margin: 10pt 0 8pt;
+  }
+  .stat-row .stat-card { flex: 1; }
+  .stat-card {
+    border: 1px solid var(--line);
+    border-radius: 5pt;
+    padding: 12pt;
+    background: var(--bg);
+  }
+  .stat-card .num {
+    font-size: 26pt; font-weight: 800; color: var(--orange); line-height: 1; letter-spacing: -0.02em;
+  }
+  .stat-card .lab { font-size: 8.4pt; color: var(--ink); font-weight: 600; margin-top: 6pt; }
+  .stat-card .src { font-size: 7.4pt; color: var(--muted-2); margin-top: 2pt; }
+
+  .chart-block { margin: 6pt 0 4pt; }
+  .chart-block .cap {
+    font-size: 7pt; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); font-weight: 700;
+    margin-bottom: 6pt;
+  }
+  .chart-block svg { display: block; width: 100%; height: auto; }
+  .chart-source {
+    font-size: 7.6pt; color: var(--muted-2); margin-top: 4pt;
+  }
+
+  .callout {
+    margin-top: 12pt;
+    border-left: 3pt solid var(--orange);
+    background: var(--orange-50);
+    padding: 9pt 12pt;
+    border-radius: 0 4pt 4pt 0;
+    font-size: 8.6pt; line-height: 1.55; color: var(--ink-2);
+  }
+  .callout b { color: var(--orange-2); }
+  .callout .src { color: var(--muted-2); font-weight: 500; }
+
+  /* ── Pain cards (page 4) ─────────────────────── */
+  .pain-card {
+    display: flex; gap: 14pt; align-items: stretch;
+    border: 1px solid var(--line);
+    border-radius: 5pt;
+    padding: 14pt 16pt;
+    margin-bottom: 9pt;
+    background: var(--bg);
+  }
+  .pain-card .badge-wrap { flex: 0 0 26pt; }
+  .pain-card .body { flex: 1.4 1 0; min-width: 0; }
+  .pain-card .stat-side-wrap { flex: 1 1 0; min-width: 0; }
+  .pain-card .badge {
+    width: 22pt; height: 22pt;
+    background: var(--orange); color: #fff;
+    border-radius: 999px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8pt; font-weight: 700; letter-spacing: 0.04em;
+  }
+  .pain-card .body .quote {
+    font-size: 10.6pt; font-weight: 700; color: var(--ink); letter-spacing: -0.01em;
+    margin-bottom: 5pt; line-height: 1.25;
+  }
+  .pain-card .body .text { font-size: 8.4pt; color: var(--muted); line-height: 1.55; }
+  .pain-card .stat-side {
+    text-align: right; padding-left: 10pt; border-left: 1px solid var(--line);
+  }
+  .pain-card .stat-side .big {
+    font-size: 30pt; font-weight: 800; color: var(--orange); line-height: 1; letter-spacing: -0.02em;
+  }
+  .pain-card .stat-side .lbl {
+    font-size: 7.6pt; color: var(--ink); margin-top: 5pt; font-weight: 600; line-height: 1.35;
+  }
+  .pain-card .stat-side .src {
+    font-size: 7pt; color: var(--muted-2); margin-top: 4pt;
+  }
+
+  /* ── Comparison table (page 5) ───────────────── */
+  .cmp {
+    width: 100%; border-collapse: collapse;
+    margin-top: 10pt; font-size: 8.4pt;
+  }
+  .cmp thead th {
+    text-align: left; font-size: 7pt; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted-2); font-weight: 700; padding: 8pt 8pt 8pt 0; border-bottom: 1px solid var(--ink);
+    vertical-align: bottom;
+  }
+  .cmp thead th small { display: block; color: var(--soft); font-weight: 500; text-transform: none; letter-spacing: 0; margin-top: 2pt; font-size: 6.8pt; }
+  .cmp tbody td {
+    padding: 9pt 8pt 9pt 0; border-bottom: 1px solid var(--line-2); vertical-align: top;
+  }
+  .cmp tbody td.name { color: var(--ink); font-weight: 600; }
+  .cmp tbody td.name small { display: block; color: var(--muted-2); font-weight: 400; font-size: 7.4pt; margin-top: 2pt; }
+  .cmp tbody td.cell { text-align: center; }
+  .cmp tbody tr.own td { background: var(--orange-50); }
+  .cmp tbody tr.own td.name { color: var(--orange-2); font-weight: 700; }
+  .cmp .ico {
+    display: inline-block;
+    width: 12pt; height: 12pt; line-height: 12pt;
+    font-size: 12pt; font-weight: 700; text-align: center;
+  }
+  .cmp .ico-yes { color: #16a34a; }
+  .cmp .ico-no  { color: var(--soft); }
+  .cmp svg.ico  { width: 11pt; height: 11pt; vertical-align: -1.5pt; }
+  .legend svg { width: 9pt; height: 9pt; vertical-align: -1pt; margin-right: 2pt; }
+  .legend { margin-top: 6pt; font-size: 7.6pt; color: var(--muted-2); }
+  .legend span { margin-right: 14pt; }
+
+  .pull-quote {
+    margin-top: 14pt;
+    border-left: 3pt solid var(--orange);
+    background: var(--orange-50);
+    padding: 10pt 12pt;
+    font-size: 9pt; line-height: 1.55; color: var(--ink-2);
+  }
+  .pull-quote b { color: var(--orange-2); }
+
+  /* ── Methodology cards (page 6) ──────────────── */
+  .src-card {
+    border: 1px solid var(--line);
+    border-radius: 5pt;
+    padding: 14pt 16pt;
+    margin-bottom: 9pt;
+  }
+  .src-card .cap {
+    font-size: 7pt; letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange); font-weight: 700;
+  }
+  .src-card h3 {
+    font-size: 13.5pt; font-weight: 700; color: var(--ink); margin: 3pt 0 6pt;
+    letter-spacing: -0.01em;
+  }
+  .src-card .desc { font-size: 8.6pt; color: var(--muted); line-height: 1.6; }
+  .src-card .closes {
+    margin-top: 9pt; padding-top: 8pt; border-top: 1px dashed var(--line);
+    font-size: 8pt; color: var(--ink-2);
+  }
+  .src-card .closes .l {
+    font-size: 7pt; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted-2); font-weight: 700; margin-right: 6pt;
+  }
+  .src-card .closes b { color: var(--orange-2); font-weight: 700; }
+
+  /* ── Architecture (page 7) ───────────────────── */
+  .arch {
+    border: 1px solid var(--line);
+    border-radius: 6pt;
+    padding: 14pt;
+    background: var(--bg-soft);
+  }
+  .arch .row {
+    display: flex;
+    align-items: center;
+    gap: 12pt;
+    padding: 11pt 12pt;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 4pt;
+  }
+  .arch .row .badge { flex: 0 0 22pt; }
+  .arch .row .t { flex: 1; min-width: 0; }
+  .arch .row .tag { flex: 0 0 60pt; text-align: right; }
+  .arch .row.head { border: 2pt solid var(--orange); background: #fff; }
+  .arch .row .badge {
+    width: 22pt; height: 22pt; border-radius: 999px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--orange); color: #fff; font-weight: 700; font-size: 8pt;
+  }
+  .arch .row.head .badge { background: var(--ink); color: #fff; }
+  .arch .row .t .name { font-size: 11pt; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+  .arch .row .t .meta { font-size: 8pt; color: var(--muted); margin-top: 2pt; }
+  .arch .row .tag {
+    text-align: right;
+    font-size: 6.8pt; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--orange); font-weight: 700;
+  }
+  .arch .row.head .tag { color: var(--orange); }
+
+  .arch .connector {
+    text-align: center; padding: 3pt 0;
+    color: var(--soft); font-size: 10pt; line-height: 1;
+  }
+  .arch .connector svg { display: inline-block; }
+
+  .net-note {
+    margin-top: 12pt;
+    border-left: 3pt solid var(--orange);
+    padding: 4pt 0 4pt 12pt;
+    font-size: 8.6pt; line-height: 1.55; color: var(--ink-2);
+  }
+  .net-note b { color: var(--orange-2); }
+
+  .arch-cta {
+    margin-top: 10pt; padding: 10pt 14pt;
+    border: 1px solid var(--line); border-radius: 4pt;
+    display: flex; justify-content: space-between; align-items: center; gap: 10pt;
+    background: #fff;
+  }
+  .arch-cta .l { font-size: 9pt; color: var(--ink-2); }
+  .arch-cta .r { text-align: right; }
+  .arch-cta .r .link { color: var(--orange); font-weight: 700; font-size: 9.6pt; }
+  .arch-cta .r .meta { color: var(--muted-2); font-size: 7.8pt; margin-top: 2pt; }
+
+  /* ── Product / phone (page 8) ────────────────── */
+  .product-grid {
+    display: flex; gap: 14mm;
+    margin-top: 6mm;
+  }
+  .product-grid > div:first-child { flex: 1.1; min-width: 0; }
+  .product-grid > div:last-child  { flex: 0.9; min-width: 0; }
+  .product-grid h3 {
+    font-size: 12pt; color: var(--ink); margin: 0 0 4pt;
+  }
+  .product-grid p { font-size: 8.8pt; color: var(--muted); line-height: 1.6; margin-bottom: 10pt; max-width: 78mm; }
+  .features {
+    margin-top: 4pt; border-top: 1px solid var(--line);
+  }
+  .features .f {
+    display: flex; gap: 10pt;
+    padding: 7pt 0; border-bottom: 1px solid var(--line-2);
+    font-size: 8.4pt; color: var(--muted);
+  }
+  .features .f .lbl { flex: 0 0 78pt; }
+  .features .f > div:last-child { flex: 1; min-width: 0; }
+  .features .f .lbl { color: var(--ink); font-weight: 600; }
+  .features .f .lbl small { display: block; color: var(--muted-2); font-weight: 400; font-size: 7.2pt; margin-top: 1pt; }
+
+  /* Phone mockup */
+  .phone {
+    width: 78mm;
+    border: 1.5pt solid var(--ink);
+    border-radius: 18pt;
+    padding: 5pt;
+    background: #fff;
+    margin: 0 auto;
+  }
+  .phone .screen {
+    border-radius: 14pt;
+    background: var(--bg-soft);
+    padding: 8pt 9pt;
+    min-height: 132mm;
+  }
+  .phone .pheader {
+    display: flex; align-items: center; gap: 8pt; padding-bottom: 8pt;
+    border-bottom: 1px solid var(--line);
+  }
+  .phone .avatar {
+    width: 22pt; height: 22pt; border-radius: 999px;
+    background: var(--orange); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8pt; font-weight: 700;
+  }
+  .phone .name { font-size: 8.8pt; font-weight: 700; color: var(--ink); }
+  .phone .status { font-size: 7pt; color: #16a34a; }
+  .phone .time {
+    margin-left: auto; font-size: 7pt; color: var(--muted-2);
+  }
+  .phone .msg {
+    margin-top: 8pt;
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 8pt;
+    padding: 7pt 8pt;
+    font-size: 7.6pt; line-height: 1.45; color: var(--ink-2);
+  }
+  .phone .msg.bot { background: #fff; }
+  .phone .msg.user {
+    background: var(--orange-50); border-color: var(--orange-100);
+    margin-left: 18pt;
+  }
+  .phone .msg .ttl {
+    font-size: 7pt; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--orange); font-weight: 700; margin-bottom: 4pt;
+  }
+  .phone .kv {
+    display: flex; justify-content: space-between; gap: 4pt; padding: 1pt 0;
+  }
+  .phone .kv .k { color: var(--muted); }
+  .phone .kv .v { color: var(--ink); font-weight: 600; }
+  .phone .kv .v.pos { color: #16a34a; }
+  .phone .kv .v.neg { color: #dc2626; }
+  .phone .alert {
+    margin-top: 4pt; padding: 5pt 6pt; background: #FFF7ED; border-radius: 4pt;
+    color: var(--ink-2); font-size: 7.2pt; line-height: 1.4;
+  }
+  .phone .alert b { color: var(--orange-2); }
+  .phone .link { color: var(--orange); font-weight: 600; }
+  .phone .sig {
+    margin-top: 6pt; font-size: 6.6pt; color: var(--muted-2); text-align: right;
+  }
+
+  /* ── Stories (page 9) ────────────────────────── */
+  .story {
+    border: 1px solid var(--line);
+    border-radius: 5pt;
+    margin-bottom: 9pt;
+    overflow: hidden;
+  }
+  .story .head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 9pt 14pt; background: var(--bg-soft); border-bottom: 1px solid var(--line);
+  }
+  .story .head .who { font-size: 10pt; font-weight: 700; color: var(--ink); }
+  .story .head .who .ico {
+    display: inline-block; width: 14pt; height: 14pt; border-radius: 3pt;
+    background: var(--orange); color: #fff; text-align: center; line-height: 14pt;
+    font-size: 8pt; font-weight: 700; margin-right: 6pt; vertical-align: -1pt;
+  }
+  .story .head .meta { font-size: 7.8pt; color: var(--muted-2); }
+  .story .body { display: flex; }
+  .story .body .col {
+    flex: 1; min-width: 0;
+    padding: 11pt 14pt;
+    border-right: 1px solid var(--line-2);
+  }
+  .story .body .col:last-child { border-right: 0; }
+  .story .body .col .l {
+    font-size: 7pt; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted-2); font-weight: 700; margin-bottom: 5pt;
+  }
+  .story .body .col .t {
+    font-size: 8.4pt; color: var(--ink-2); line-height: 1.55;
+  }
+  .story .body .col .t b { color: var(--orange-2); }
+  .story .body .col.result .l { color: var(--orange); }
+
+  /* ── Next step (page 10) ─────────────────────── */
+  .next-grid {
+    display: flex; gap: 8pt;
+    margin: 6mm 0 0;
+  }
+  .next-grid .next-card { flex: 1; min-width: 0; }
+  .next-card {
+    border: 1px solid var(--line);
+    border-radius: 5pt;
+    padding: 14pt 14pt 16pt;
+    background: #fff;
+  }
+  .next-card.feat { border-color: var(--orange); background: var(--orange-50); }
+  .next-card .cap {
+    font-size: 7pt; letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange); font-weight: 700;
+  }
+  .next-card h3 {
+    font-size: 13pt; color: var(--ink); margin: 4pt 0 4pt;
+  }
+  .next-card .price {
+    font-size: 9pt; color: var(--ink); font-weight: 600; margin-bottom: 8pt;
+  }
+  .next-card .desc { font-size: 8.2pt; color: var(--muted); line-height: 1.55; }
+  .next-card .foot {
+    margin-top: 10pt; padding-top: 8pt; border-top: 1px solid var(--line-2);
+    font-size: 8.2pt; color: var(--ink-2);
+  }
+  .next-card .foot .arrow { color: var(--orange); font-weight: 700; }
+
+  .contact-row {
+    margin-top: 12mm;
+    display: flex; gap: 14pt;
+    border-top: 1px solid var(--line);
+    padding-top: 10pt;
+  }
+  .contact-row .c { flex: 1; }
+  .contact-row .c .cap {
+    font-size: 7pt; letter-spacing: 0.18em; text-transform: uppercase; color: var(--soft); font-weight: 700;
+  }
+  .contact-row .c .v { font-size: 10pt; font-weight: 700; color: var(--ink); margin-top: 4pt; }
+
+  /* ── Sources (page 11) ───────────────────────── */
+  .sources-grid {
+    columns: 2;
+    column-gap: 14mm;
+    margin-top: 8mm;
+  }
+  .sources-grid .group {
+    break-inside: avoid;
+    margin-bottom: 7mm;
+    display: block;
+  }
+  .sources-grid .group.wide {
+    column-span: all;
+    margin-top: 4mm;
+  }
+  .sources-grid .group .cap {
+    font-size: 7pt; letter-spacing: 0.18em; text-transform: uppercase; color: var(--orange); font-weight: 700;
+    margin-bottom: 6pt; padding-bottom: 5pt; border-bottom: 1px solid var(--line);
+  }
+  .sources-grid .group .item { padding: 5pt 0; border-bottom: 1px solid var(--line-2); }
+  .sources-grid .group .item:last-child { border-bottom: 0; }
+  .sources-grid .group .item .t {
+    font-size: 9pt; color: var(--ink); font-weight: 600;
+  }
+  .sources-grid .group .item .d {
+    font-size: 7.8pt; color: var(--muted-2); margin-top: 2pt;
+  }
+
+  .license-strip {
+    margin-top: 12mm; padding: 8pt 12pt;
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 7.4pt; color: var(--muted-2);
+  }
+  .license-strip b { color: var(--ink); }
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 1 · COVER
+     ═══════════════════════════════════════════════════════════ -->
+<section class="page pg-cover">
+  <div class="sec-title" style="display:none">00 · Обложка</div>
+
+  <div class="cover">
+    <div class="cover-left">
+      <div class="logo-row">
+        <span>◉ EDL OS</span>
+        <span class="sep">·</span>
+        <span>v3.1 · Май 2026</span>
+      </div>
+      <h1>Founder<br>OS</h1>
+      <div class="sub">Методология управления малым бизнесом 10–50 человек</div>
+      <div class="body">Синтез операционной дисциплины Big Tech, академической методологии CRAFT и работы с ИИ. Специально для российского рынка 2026.</div>
+
+      <div class="guarantee">
+        <div>
+          <div class="label">Гарантия Чекапа</div>
+          <div class="big">14 дней / 100% возврат</div>
+        </div>
+        <div class="right">Не получилось применить — возвращаем всё. Один клик в боте.</div>
+      </div>
+    </div>
+
+    <div class="cover-right">
+      <div class="stats-panel">
+        <div class="cap">Рынок МСП России</div>
+        <div class="stat">
+          <div class="num">6,8 млн</div>
+          <div class="sub-1">субъектов МСП</div>
+          <div class="sub-2">Минэкономразвития РФ, 2025</div>
+        </div>
+        <div class="stat">
+          <div class="num">30 млн</div>
+          <div class="sub-1">занятых в секторе</div>
+          <div class="sub-2">41,4% рабочей силы страны</div>
+        </div>
+        <div class="stat">
+          <div class="num">140 трлн ₽</div>
+          <div class="sub-1">годовая выручка сектора</div>
+          <div class="sub-2">Рост +74,8% к 2019</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="meta-row">
+    <div class="cell"><div class="cap">Версия</div><div class="val">v3.1</div></div>
+    <div class="cell"><div class="cap">Объём</div><div class="val">11 страниц</div></div>
+    <div class="cell"><div class="cap">Чтение</div><div class="val">15 минут</div></div>
+    <div class="cell"><div class="cap">Дата</div><div class="val">Май 2026</div></div>
+  </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 2 · TOC
+     ═══════════════════════════════════════════════════════════ -->
+<section class="page pg-toc">
+  <div class="sec-title" style="display:none">00 · Краткое содержание</div>
+
+  <div class="toc-grid">
+    <div class="left">
+      <div class="intro">Этот документ для фаундера малого бизнеса, который чувствует: текущие инструменты не справляются со сложностью растущей операционки.</div>
+
+      <div class="toc-list-block">
+        <div class="item">
+          <div class="label">01 · Кому это</div>
+          <div class="title">Фаундеры компаний 10–50 человек</div>
+          <div class="desc">Особенно тем, кто впервые ведёт НДС-учёт в 2026 году по новым правилам.</div>
+        </div>
+        <div class="item">
+          <div class="label">02 · Что внутри</div>
+          <div class="title">Три источника. Четыре слоя. Три истории.</div>
+          <div class="desc">Анализ структурных болей малого бизнеса и синтез методологии из Big Tech, CRAFT и работы с ИИ.</div>
+        </div>
+        <div class="item">
+          <div class="label">03 · Что унесёте</div>
+          <div class="title">Понимание структурного gap</div>
+          <div class="desc">Почему классические решения закрывают только часть проблем — и какой подход закрывает их в комплексе.</div>
+        </div>
+        <div class="item">
+          <div class="label">04 · Что делать дальше</div>
+          <div class="title">Попробовать за 15 минут. Бесплатно.</div>
+          <div class="desc">Mini-Чекап на elephantdreams.ru — методология Founder OS на своём бизнесе. Без регистрации.</div>
+        </div>
+
+        <div class="quote">
+          «Сокращение разрыва в производительности малого бизнеса способно создать ценность, эквивалентную 5–10% ВВП в развитых и развивающихся экономиках.»
+          <div class="src">McKinsey Global Institute, «A Microscope on Small Businesses», 2024</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="cap">Содержание</div>
+      <div class="row"><div class="n">01</div><div class="t">Рынок<small>Малый бизнес в России</small></div><div class="p">3</div></div>
+      <div class="row"><div class="n">02</div><div class="t">Боли<small>Три слепых пятна фаундера</small></div><div class="p">4</div></div>
+      <div class="row"><div class="n">03</div><div class="t">Состояние решений<small>Почему классика не работает</small></div><div class="p">5</div></div>
+      <div class="row"><div class="n">04</div><div class="t">Методология<small>Синтез трёх подходов</small></div><div class="p">6</div></div>
+      <div class="row"><div class="n">05</div><div class="t">Архитектура<small>Четыре слоя зрелого бизнеса</small></div><div class="p">7</div></div>
+      <div class="row"><div class="n">06</div><div class="t">Продукт<small>Бортовой компьютер</small></div><div class="p">8</div></div>
+      <div class="row"><div class="n">07</div><div class="t">Применение<small>Три истории</small></div><div class="p">9</div></div>
+      <div class="row"><div class="n">08</div><div class="t">Следующий шаг<small>Попробовать бесплатно</small></div><div class="p">10</div></div>
+      <div class="row"><div class="n">—</div><div class="t">Источники<small>Академические и регуляторные</small></div><div class="p">11</div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 3 · MARKET
+     ═══════════════════════════════════════════════════════════ -->
+<section class="page pg-market">
+  <div class="sec-title" style="display:none">01 · Рынок</div>
+
+  <div class="eyebrow"><span class="num">01 · РЫНОК</span>МАЛЫЙ БИЗНЕС В РОССИЙСКОЙ ФЕДЕРАЦИИ</div>
+  <h2 class="h-page" style="margin-top:10pt;">6,8 миллиона субъектов.<br>Исторический максимум.</h2>
+  <p class="lead" style="margin-top:10pt;">К апрелю 2025 года в России зарегистрировано 6,8 миллиона субъектов МСП. Сектор обеспечивает работой 30 миллионов человек и формирует 140,5 трлн ₽ совокупного дохода — рост на 74,8% к 2019 году.</p>
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="num">6,8 млн</div>
+      <div class="lab">субъектов МСП</div>
+      <div class="src">Минэкономразвития РФ, апрель 2025</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">30 млн</div>
+      <div class="lab">занятых в секторе</div>
+      <div class="src">41,4% всей рабочей силы</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">140 трлн ₽</div>
+      <div class="lab">совокупная выручка</div>
+      <div class="src">Рост +74,8% к 2019 году</div>
+    </div>
+  </div>
+
+  <div class="chart-block">
+    <div class="cap">Динамика количества субъектов МСП, млн · 2019–2025</div>
+    <!-- inline SVG line chart -->
+    <svg viewBox="0 0 520 160" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- grid -->
+      <g stroke="#EFEFEF" stroke-width="1">
+        <line x1="40" y1="20"  x2="510" y2="20"/>
+        <line x1="40" y1="55"  x2="510" y2="55"/>
+        <line x1="40" y1="90"  x2="510" y2="90"/>
+        <line x1="40" y1="125" x2="510" y2="125"/>
+      </g>
+      <!-- y labels -->
+      <g font-family="Inter, sans-serif" font-size="9" fill="#A3A3A3">
+        <text x="34" y="23" text-anchor="end">6,8</text>
+        <text x="34" y="58" text-anchor="end">6,3</text>
+        <text x="34" y="93" text-anchor="end">5,8</text>
+        <text x="34" y="128" text-anchor="end">5,5</text>
+      </g>
+      <!-- area under line -->
+      <path d="M 70,93 L 145,121 L 220,86 L 295,65 L 370,51 L 445,37 L 510,20 L 510,140 L 70,140 Z"
+            fill="#FFE2D1" opacity="0.45"/>
+      <!-- line -->
+      <path d="M 70,93 L 145,121 L 220,86 L 295,65 L 370,51 L 445,37 L 510,20"
+            fill="none" stroke="#FF6B1A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <!-- points -->
+      <g fill="#FF6B1A">
+        <circle cx="70"  cy="93"  r="3.5"/>
+        <circle cx="145" cy="121" r="3.5"/>
+        <circle cx="220" cy="86"  r="3.5"/>
+        <circle cx="295" cy="65"  r="3.5"/>
+        <circle cx="370" cy="51"  r="3.5"/>
+        <circle cx="445" cy="37"  r="3.5"/>
+        <circle cx="510" cy="20"  r="5" stroke="#fff" stroke-width="2"/>
+      </g>
+      <!-- value labels for first and last -->
+      <g font-family="Inter, sans-serif" font-size="9" font-weight="700" fill="#0A0A0A">
+        <text x="70" y="83" text-anchor="middle">5,8</text>
+        <text x="510" y="13" text-anchor="end">6,8</text>
+      </g>
+      <!-- "historical max" label -->
+      <text x="510" y="13" text-anchor="end" font-family="Inter, sans-serif" font-size="8.5"
+            fill="#FF6B1A" font-weight="700" transform="translate(-30,-8)">Исторический максимум</text>
+      <!-- x labels -->
+      <g font-family="Inter, sans-serif" font-size="9" fill="#737373">
+        <text x="70"  y="153" text-anchor="middle">2019</text>
+        <text x="145" y="153" text-anchor="middle">2020</text>
+        <text x="220" y="153" text-anchor="middle">2021</text>
+        <text x="295" y="153" text-anchor="middle">2022</text>
+        <text x="370" y="153" text-anchor="middle">2023</text>
+        <text x="445" y="153" text-anchor="middle">2024</text>
+        <text x="510" y="153" text-anchor="end" font-weight="700" fill="#0A0A0A">2025</text>
+      </g>
+    </svg>
+    <div class="chart-source">Источник: Единый реестр субъектов МСП, Минэкономразвития РФ</div>
+  </div>
+
+  <p style="margin-top:10pt; font-size:9pt; color:var(--muted); line-height:1.6;">
+    <b style="color:var(--ink);">96,2% всех МСП — микропредприятия (до 15 человек).</b> Именно в переходе из микро в малое — на отметке 10–50 сотрудников — фаундер сталкивается с зоной структурного разрыва: выручка ещё не позволяет нанять полноценный C-уровень, а сложность операционки уже требует систем.
+  </p>
+
+  <div class="callout">
+    <b>НДС 2026.</b> Федеральный закон №425-ФЗ снизил порог освобождения от НДС с 60 до 20 млн ₽. Сотни тысяч компаний 10–50 человек впервые ведут НДС-учёт. В первом квартале многие обнаруживают фактическое падение маржи на 5–10 п.п. <span class="src">(Контур.Экстерн, декабрь 2025)</span>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 4 · PAINS
+     ═══════════════════════════════════════════════════════════ -->
+<section class="page pg-pains">
+  <div class="sec-title" style="display:none">02 · Боли</div>
+
+  <div class="eyebrow"><span class="num">02 · БОЛИ</span>ТРИ СЛЕПЫХ ПЯТНА ФАУНДЕРА</div>
+  <h2 class="h-page" style="margin-top:10pt;">Проблемы не от плохого менеджмента.<br>От природы операционной сложности.</h2>
+
+  <div style="margin-top:14pt;">
+    <div class="pain-card">
+      <div class="badge-wrap"><div class="badge">01</div></div>
+      <div class="body">
+        <div class="quote">«Не вижу, куда уплывает маржа»</div>
+        <div class="text">McKinsey Global Institute сравнил производительность в 16 странах. В США малые компании достигают только 47% от производительности крупных. Причина — нет систем мониторинга юнит-экономики: общая маржа известна, но не видно, какой клиент или проект реально прибылен.</div>
+      </div>
+      <div class="stat-side-wrap"><div class="stat-side">
+        <div class="big">47%</div>
+        <div class="lbl">производительности крупных достигает малый бизнес</div>
+        <div class="src">McKinsey GI, 2024</div>
+      </div></div>
+    </div>
+
+    <div class="pain-card">
+      <div class="badge-wrap"><div class="badge">02</div></div>
+      <div class="body">
+        <div class="quote">«Нет времени думать стратегически»</div>
+        <div class="text">Молли Грам (бывший COO Quip): фаундер обязан стать архитектором систем, а не двигателем работы. По оценкам Index Ventures, около 70% стартапов терпят неудачу на стадии 10–50 человек — не из-за продукта, а из-за нелинейного роста сложности операционки.</div>
+      </div>
+      <div class="stat-side-wrap"><div class="stat-side">
+        <div class="big">70%</div>
+        <div class="lbl">стартапов терпит неудачу на стадии 10–50 человек</div>
+        <div class="src">Index Ventures · Molly Graham, 2023</div>
+      </div></div>
+    </div>
+
+    <div class="pain-card">
+      <div class="badge-wrap"><div class="badge">03</div></div>
+      <div class="body">
+        <div class="quote">«Не понимаю, где провести границу с ИИ»</div>
+        <div class="text">ОЭСР в документе для G7 (декабрь 2025): только 11,9% малых компаний 10–49 человек используют ИИ — против 40% крупных. Барьер не технологический, а методологический: что отдать как Automation, что оставить как Augmentation, где ИИ должен запрашивать подтверждение.</div>
+      </div>
+      <div class="stat-side-wrap"><div class="stat-side">
+        <div class="big">11,9%</div>
+        <div class="lbl">малых компаний используют ИИ против 40% крупных</div>
+        <div class="src">ОЭСР, G7 paper, декабрь 2025</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 5 · STATE OF SOLUTIONS
+     ═══════════════════════════════════════════════════════════ -->
+<section class="page pg-sol">
+  <div class="sec-title" style="display:none">03 · Состояние решений</div>
+
+  <div class="eyebrow"><span class="num">03 · СОСТОЯНИЕ РЕШЕНИЙ</span>ПОЧЕМУ КЛАССИКА НЕ РАБОТАЕТ</div>
+  <h2 class="h-page" style="margin-top:10pt;">Каждое решение закрывает одну боль.</h2>
+  <p class="lead" style="margin-top:8pt;">Это не значит, что существующие инструменты плохи. Но ни один из них не собирает управление растущим бизнесом в единую систему.</p>
+
+  <table class="cmp">
+    <thead>
+      <tr>
+        <th style="width:32%;">Класс решений</th>
+        <th style="text-align:center; width:22%;">Маржа<small>«Вижу юнит-экономику»</small></th>
+        <th style="text-align:center; width:22%;">Стратегия<small>«Думаю как архитектор»</small></th>
+        <th style="text-align:center; width:24%;">ИИ-граница<small>«Граница ясна»</small></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="name">Системы управления<small>Notion, Bitrix24, amoCRM</small></td>
+        <td class="cell"><span class="ico ico-no">✕</span></td>
+        <td class="cell"><svg class="ico" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="5.2" fill="none" stroke="#FF6B1A" stroke-width="1.3"/><path d="M6 0.8 A5.2 5.2 0 0 1 6 11.2 Z" fill="#FF6B1A"/></svg></td>
+        <td class="cell"><span class="ico ico-no">✕</span></td>
+      </tr>
+      <tr>
+        <td class="name">Бухгалтерский учёт<small>1С, НДС-калькуляторы</small></td>
+        <td class="cell"><svg class="ico" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="5.2" fill="none" stroke="#FF6B1A" stroke-width="1.3"/><path d="M6 0.8 A5.2 5.2 0 0 1 6 11.2 Z" fill="#FF6B1A"/></svg></td>
+        <td class="cell"><span class="ico ico-no">✕</span></td>
+        <td class="cell"><span class="ico ico-no">✕</span></td>
+      </tr>
+      <tr>
+        <td class="name">Консалтинг крупных компаний<small>McKinsey, BCG → 3–5 млн ₽/мес</small></td>
+        <td class="cell"><span class="ico ico-yes">✓</span></td>
+        <td class="cell"><span class="ico ico-yes">✓</span></td>
+        <td class="cell"><svg class="ico" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="5.2" fill="none" stroke="#FF6B1A" stroke-width="1.3"/><path d="M6 0.8 A5.2 5.2 0 0 1 6 11.2 Z" fill="#FF6B1A"/></svg></td>
+      </tr>
+      <tr>
+        <td class="name">Бизнес-курсы и MBA<small>Знание без инструмента</small></td>
+        <td class="cell"><span class="ico ico-no">✕</span></td>
+        <td class="cell"><svg class="ico" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="5.2" fill="none" stroke="#FF6B1A" stroke-width="1.3"/><path d="M6 0.8 A5.2 5.2 0 0 1 6 11.2 Z" fill="#FF6B1A"/></svg></td>
+        <td class="cell"><span class="ico ico-no">✕</span></td>
+      </tr>
+      <tr>
+        <td class="name">Стратегические сессии<small>Разовый эффект, не остаётся в операционке</small></td>
+        <td class="cell"><span class="ico ico-no">✕</span></td>
+        <td class="cell"><svg class="ico" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="5.2" fill="none" stroke="#FF6B1A" stroke-width="1.3"/><path d="M6 0.8 A5.2 5.2 0 0 1 6 11.2 Z" fill="#FF6B1A"/></svg></td>
+        <td class="cell"><span class="ico ico-no">✕</span></td>
+      </tr>
+      <tr>
+        <td class="name">Универсальные ИИ-ассистенты<small>ChatGPT, Claude без контекста</small></td>
+        <td class="cell"><span class="ico ico-no">✕</span></td>
+        <td class="cell"><svg class="ico" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="5.2" fill="none" stroke="#FF6B1A" stroke-width="1.3"/><path d="M6 0.8 A5.2 5.2 0 0 1 6 11.2 Z" fill="#FF6B1A"/></svg></td>
+        <td class="cell"><svg class="ico" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="5.2" fill="none" stroke="#FF6B1A" stroke-width="1.3"/><path d="M6 0.8 A5.2 5.2 0 0 1 6 11.2 Z" fill="#FF6B1A"/></svg></td>
+      </tr>
+      <tr class="own">
+        <td class="name">Founder OS · EDL OS<small>Синтез трёх методологий</small></td>
+        <td class="cell"><span class="ico ico-yes">✓</span></td>
+        <td class="cell"><span class="ico ico-yes">✓</span></td>
+        <td class="cell"><span class="ico ico-yes">✓</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="legend">
+    <span><svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 6.3 L5 8.8 L9.6 3.4" fill="none" stroke="#16a34a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg> Закрывает полностью</span>
+    <span><svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="5.2" fill="none" stroke="#FF6B1A" stroke-width="1.3"/><path d="M6 0.8 A5.2 5.2 0 0 1 6 11.2 Z" fill="#FF6B1A"/></svg> Частично</span>
+    <span><svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><path d="M3 3 L9 9 M9 3 L3 9" stroke="#A3A3A3" stroke-width="1.4" stroke-linecap="round"/></svg> Не закрывает</span>
+  </div>
+
+  <div class="pull-quote">
+    «Нужна методология, которая <b>(1) адаптирует операционную дисциплину крупных компаний под масштаб 10–50</b>, <b>(2) видит бизнес как сеть связей</b>, а не набор изолированных отделов, и <b>(3) чётко определяет, что делает ИИ</b>, а что — команда. Этого пока нет в каталогах. Мы назвали её Founder OS.»
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 6 · METHODOLOGY
+     ═══════════════════════════════════════════════════════════ -->
+<section class="page pg-method">
+  <div class="sec-title" style="display:none">04 · Методология</div>
+
+  <div class="eyebrow"><span class="num">04 · МЕТОДОЛОГИЯ</span>FOUNDER OS</div>
+  <h2 class="h-page" style="margin-top:10pt;">Синтез трёх проверенных подходов</h2>
+  <p class="lead" style="margin-top:8pt;">Founder OS — не курс, не консалтинг, не отдельный продукт. Это операционная методология, синтезирующая три источника для малого бизнеса в России.</p>
+
+  <div style="margin-top:12pt;">
+    <div class="src-card">
+      <div class="cap">01 · Источник первый</div>
+      <h3>Операционная дисциплина Big Tech</h3>
+      <div class="desc">OKR (Objectives &amp; Key Results), методология Working Backwards, продуктовые фреймворки — подходы, на которых работают Google, Amazon, Intel. McKinsey, Harvard Business Review и The Economist регулярно публикуют их в контексте корпоративных систем управления. Мы адаптировали под масштаб 10–50.</div>
+      <div class="closes"><span class="l">Закрывает</span><b>«Не вижу маржу»</b> — через метрики юнит-экономики на каждом уровне</div>
+    </div>
+
+    <div class="src-card">
+      <div class="cap">02 · Источник второй</div>
+      <h3>Методология CRAFT</h3>
+      <div class="desc">Академический подход к управлению инновациями, развиваемый Центром CRAFT (школа инноваций ИКРА, с 2009 года). Опирается на акторно-сетевую теорию Бруно Латура, символический интеракционизм (Гофман, Мид) и концептуальные структуры Щедровицкого. Главная идея — смотреть на бизнес как на сеть отношений, а не набор изолированных отделов.</div>
+      <div class="closes"><span class="l">Закрывает</span><b>«Нет времени стратегически»</b> — через систему вместо ручного управления</div>
+    </div>
+
+    <div class="src-card">
+      <div class="cap">03 · Источник третий</div>
+      <h3>Работа с ИИ — три режима</h3>
+      <div class="desc">Академическая основа работы с ИИ, разработанная Anthropic совместно с UCC и Ringling College. Распространяется по лицензии CC BY-NC-SA 4.0. Систематизирует работу через три режима: Автоматизация (ИИ делает сам), Помощь (ИИ с человеком), Агентность (ИИ действует от имени).</div>
+      <div class="closes"><span class="l">Закрывает</span><b>«Не понимаю границу с ИИ»</b> — через критерии для каждой задачи</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 7 · ARCHITECTURE
+     ═══════════════════════════════════════════════════════════ -->
+<section class="page pg-arch">
+  <div class="sec-title" style="display:none">05 · Архитектура</div>
+
+  <div class="eyebrow"><span class="num">05 · АРХИТЕКТУРА</span>FOUNDER OS</div>
+  <h2 class="h-page" style="margin-top:10pt;">Четыре слоя зрелого бизнеса</h2>
+  <p class="lead" style="margin-top:8pt;">Founder OS раскладывает бизнес 10–50 человек на четыре связанных слоя. У каждого — свои метрики, свои практики и свои интерфейсы с остальными.</p>
+
+  <div class="arch" style="margin-top:12pt;">
+    <div class="row head">
+      <div class="badge">Ф</div>
+      <div class="t">
+        <div class="name">Фаундер</div>
+        <div class="meta">Решения · Приоритеты · Видение продукта · Всё остальное — на ИИ и команде</div>
+      </div>
+      <div class="tag">Видение</div>
+    </div>
+    <div class="connector"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M7 1 V13 M3 9 L7 13 L11 9" stroke="#A3A3A3" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+    <div class="row">
+      <div class="badge">01</div>
+      <div class="t">
+        <div class="name">Стратегия</div>
+        <div class="meta">OKR · Working Backwards · Цели на 1–3 года · Рыночная позиция</div>
+      </div>
+      <div class="tag">Направление</div>
+    </div>
+    <div class="connector"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M7 1 V13 M3 9 L7 13 L11 9" stroke="#A3A3A3" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+    <div class="row">
+      <div class="badge">02</div>
+      <div class="t">
+        <div class="name">Воронка</div>
+        <div class="meta">CAC · LTV · Retention · Когорты клиентов · Каналы привлечения</div>
+      </div>
+      <div class="tag">Клиенты</div>
+    </div>
+    <div class="connector"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M7 1 V13 M3 9 L7 13 L11 9" stroke="#A3A3A3" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+    <div class="row">
+      <div class="badge">03</div>
+      <div class="t">
+        <div class="name">Операционка</div>
+        <div class="meta">Команда · Узкие места · Автоматизация · Ритм бизнеса</div>
+      </div>
+      <div class="tag">Процессы</div>
+    </div>
+    <div class="connector"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M7 1 V13 M3 9 L7 13 L11 9" stroke="#A3A3A3" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+    <div class="row">
+      <div class="badge">04</div>
+      <div class="t">
+        <div class="name">Деньги</div>
+        <div class="meta">Маржа · Юнит-экономика · НДС-флажок 2026 · Runway</div>
+      </div>
+      <div class="tag">Финансы</div>
+    </div>
+  </div>
+
+  <div class="net-note">
+    <b>Главное — не сами слои, а связи между ними.</b> Оптимизируя один слой без учёта остальных, вы создаёте новые проблемы в других. Это и есть сетевое мышление из акторно-сетевой теории CRAFT.
+  </div>
+
+  <div class="arch-cta">
+    <div class="l">Хотите проверить эту методологию на своём бизнесе прямо сейчас?</div>
+    <div class="r">
+      <div class="link">→ elephantdreams.ru</div>
+      <div class="meta">Mini-Чекап · 15 минут · бесплатно</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 8 · PRODUCT
+     ═══════════════════════════════════════════════════════════ -->
+<section class="page pg-product">
+  <div class="sec-title" style="display:none">06 · Продукт</div>
+
+  <div class="eyebrow"><span class="num">06 · ПРОДУКТ</span>EDL OS</div>
+  <h2 class="h-page" style="margin-top:10pt;">Бортовой компьютер,<br>а не дашборд</h2>
+
+  <div class="product-grid">
+    <div>
+      <h3 style="margin-top:8pt;">Без дашбордов. Без новых паролей.</h3>
+      <p>Большинство бизнес-инструментов сделаны как дашборды: места, куда вы вручную загружаете данные. EDL OS работает наоборот — сам пишет в Telegram: что важно сегодня, кто в риск-зоне, где узкое место.</p>
+
+      <h3>Данные остаются у вас</h3>
+      <p>Ваша 1С, ваша CRM, ваш банк — остаются у вас. ИИ-консультант запрашивает только результаты вычислений. 152-ФЗ соблюдается архитектурно, не декларативно. Отзыв доступа в один клик.</p>
+
+      <div class="features">
+        <div class="f">
+          <div class="lbl">Telegram<small>привычный канал</small></div>
+          <div>Без новых интерфейсов и паролей</div>
+        </div>
+        <div class="f">
+          <div class="lbl">152-ФЗ<small>архитектурно</small></div>
+          <div>Соответствие закону как следствие архитектуры</div>
+        </div>
+        <div class="f">
+          <div class="lbl">Ответ за 5 сек<small>с источниками</small></div>
+          <div>«Где маржа просела?» — по вашим данным</div>
+        </div>
+        <div class="f">
+          <div class="lbl">MCP-сервер<small>с 23 мая 2026</small></div>
+          <div>Claude Desktop · Cursor · ChatGPT</div>
+        </div>
+        <div class="f">
+          <div class="lbl">Оплата картой РФ<small>YooKassa</small></div>
+          <div>Без иностранных карт и аккаунтов</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="phone">
+        <div class="screen">
+          <div class="pheader">
+            <div class="avatar">◉</div>
+            <div>
+              <div class="name">Бортовой компьютер EDL</div>
+              <div class="status">@edl_os_bot · online</div>
+            </div>
+            <div class="time">08:30</div>
+          </div>
+
+          <div class="msg bot">
+            <div class="ttl">◐ Утренняя сводка · 17 мая</div>
+            <div class="kv"><span class="k">Выручка вчера</span><span class="v">267 000 ₽</span></div>
+            <div class="kv"><span class="k">К норме</span><span class="v pos">+12%</span></div>
+            <div class="kv"><span class="k">HOT-сделки</span><span class="v">3 в работе</span></div>
+            <div class="alert"><b>⚠ Аномалия:</b> 25 ₽ безкассовки. Сверьтесь до обеда.</div>
+          </div>
+
+          <div class="msg user">
+            <div style="color:var(--ink-2);">Где у нас просела маржа?</div>
+          </div>
+
+          <div class="msg bot">
+            <div class="ttl">ИИ-ответ</div>
+            <div style="margin-bottom:3pt;"><b>Маржа −12% к марту.</b> Причины:</div>
+            <div class="kv"><span class="k">YD-реклама при том же CAC</span><span class="v neg">+18%</span></div>
+            <div class="kv"><span class="k">ФОТ продукта</span><span class="v neg">+6%</span></div>
+            <div class="kv"><span class="k">Refund (Avito)</span><span class="v neg">+4%</span></div>
+            <div style="margin-top:4pt; color:var(--muted);">Рекомендую пересобрать YD-креативы.</div>
+          </div>
+
+          <div class="sig">elephantdreams.ru</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 9 · STORIES
+     ═══════════════════════════════════════════════════════════ -->
+<section class="page pg-stories">
+  <div class="sec-title" style="display:none">07 · Применение</div>
+
+  <div class="eyebrow"><span class="num">07 · ПРИМЕНЕНИЕ</span>ТРИ ИСТОРИИ</div>
+  <h2 class="h-page" style="margin-top:10pt;">Реалистичные ролевые примеры</h2>
+  <p class="lead" style="margin-top:8pt;">Основаны на паттернах работы с фаундерами 10–50 человек. Реальные кейсы с именами публикуются с разрешения клиентов.</p>
+
+  <div style="margin-top:14pt;">
+    <div class="story">
+      <div class="head">
+        <div class="who"><span class="ico">Д</span>Дмитрий · Маркетплейс-бухгалтерия</div>
+        <div class="meta">20 человек · ~80 клиентов</div>
+      </div>
+      <div class="body">
+        <div class="col"><div class="l">Проблема</div><div class="t">Не успевал отслеживать клиентов в риск-зоне. Нет системы раннего предупреждения — обнаруживал потери уже после.</div></div>
+        <div class="col"><div class="l">Что сделали</div><div class="t">Через Чекап выявилось: ~8% клиентов в риск-зоне — нормально для сегмента. Раньше эта цифра не была метрикой. Внедрили еженедельный алертинг.</div></div>
+        <div class="col result"><div class="l">Результат</div><div class="t">Удержание клиентов: <b>+12–18 п.п./кв.</b> Фаундер освободил 5+ часов/нед на стратегию.</div></div>
+      </div>
+    </div>
+
+    <div class="story">
+      <div class="head">
+        <div class="who"><span class="ico">А</span>Артём · IT-агентство</div>
+        <div class="meta">15 разработчиков · ~12 проектов</div>
+      </div>
+      <div class="body">
+        <div class="col"><div class="l">Проблема</div><div class="t">Чувствовал, что часть проектов «тянет», но не мог назвать какие. Маржинальность не считалась по проектам.</div></div>
+        <div class="col"><div class="l">Что сделали</div><div class="t">Один проект работал с минусовой маржой 4 месяца — недооценили объём изменений. Пересмотрели условия, перераспределили команду.</div></div>
+        <div class="col result"><div class="l">Результат</div><div class="t">Обнаружение убыточного проекта: <b>с 4 мес → до 3 дней.</b> Маржа по портфелю выросла.</div></div>
+      </div>
+    </div>
+
+    <div class="story">
+      <div class="head">
+        <div class="who"><span class="ico">А</span>Анна · Школа премиум-курсов</div>
+        <div class="meta">12 человек · 3 курса</div>
+      </div>
+      <div class="body">
+        <div class="col"><div class="l">Проблема</div><div class="t">Нестабильная выручка перед запусками. Не понимали, почему студенты уходят — retention считался общим.</div></div>
+        <div class="col"><div class="l">Что сделали</div><div class="t">На одном курсе студенты уходили на конкретном уроке — три потока подряд. Общий retention этого не показывал. Переписали урок.</div></div>
+        <div class="col result"><div class="l">Результат</div><div class="t">Дроп на ключевом уроке: <b>−15 п.п.</b> Completion rate курса значительно вырос.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 10 · NEXT STEP
+     ═══════════════════════════════════════════════════════════ -->
+<section class="page pg-next">
+  <div class="sec-title" style="display:none">08 · Следующий шаг</div>
+
+  <div class="eyebrow"><span class="num">08 · СЛЕДУЮЩИЙ ШАГ</span></div>
+  <h2 class="h-page" style="margin-top:10pt;">Попробуйте Founder OS<br>на своём бизнесе</h2>
+  <p class="lead" style="margin-top:8pt;">Не нужно регистрироваться, скачивать или платить. ИИ-консультант EDL OS задаст 12 вопросов по четырём слоям Founder OS Score и покажет 2–3 точки роста прямо сейчас.</p>
+
+  <div class="next-grid">
+    <div class="next-card feat">
+      <div class="cap">01 · Старт · бесплатно</div>
+      <h3>Mini-Чекап</h3>
+      <div class="price">Бесплатно · 15 минут</div>
+      <div class="desc">12 вопросов Founder OS Score на сайте или в Claude Desktop. ИИ разбирает четыре слоя. Результат сразу.</div>
+      <div class="foot"><span class="arrow">→</span> elephantdreams.ru</div>
+    </div>
+
+    <div class="next-card">
+      <div class="cap">02 · С гарантией</div>
+      <h3>Бизнес-чекап</h3>
+      <div class="price">9 000 ₽ · 1–2 часа</div>
+      <div class="desc">20 вопросов в @edl_os_bot. PDF 10 страниц, 5 рекомендаций. Раздел «НДС-флажок 2026».</div>
+      <div class="foot">Гарантия 14 дней / 100% <span class="arrow">→</span> @edl_os_bot</div>
+    </div>
+
+    <div class="next-card">
+      <div class="cap">03+ · С видео</div>
+      <h3>Чекап Plus</h3>
+      <div class="price">14 000 ₽ · PDF 15 стр.</div>
+      <div class="desc">То же плюс 15-минутное видео от команды EDL OS. Приходит автоматически через 24 часа.</div>
+      <div class="foot">7 рекомендаций <span class="arrow">→</span> @edl_os_bot</div>
+    </div>
+  </div>
+
+  <div class="contact-row">
+    <div class="c"><div class="cap">Сайт</div><div class="v">elephantdreams.ru</div></div>
+    <div class="c"><div class="cap">Telegram</div><div class="v">@edl_os_bot</div></div>
+    <div class="c"><div class="cap">Почта</div><div class="v">hello@edl-os.ru</div></div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 11 · SOURCES
+     ═══════════════════════════════════════════════════════════ -->
+<section class="page pg-sources">
+  <div class="sec-title" style="display:none">Приложение · Источники</div>
+
+  <div class="eyebrow"><span class="num">—</span>ПРИЛОЖЕНИЕ · ИСТОЧНИКИ</div>
+  <h2 class="h-page" style="margin-top:10pt;">Доказательная база</h2>
+  <p class="lead" style="margin-top:8pt;">Академические, отраслевые и регуляторные источники, на которых основана методология Founder OS.</p>
+
+  <div class="sources-grid">
+    <div class="group">
+      <div class="cap">Отраслевые исследования</div>
+      <div class="item"><div class="t">McKinsey Global Institute</div><div class="d">«A Microscope on Small Businesses» · 2024</div></div>
+      <div class="item"><div class="t">Index Ventures · Molly Graham</div><div class="d">«The 30-Person Inflection Point» · 2023</div></div>
+      <div class="item"><div class="t">OECD discussion paper for G7</div><div class="d">«AI Adoption Among Small Businesses» · декабрь 2025</div></div>
+      <div class="item"><div class="t">Harvard Business Review</div><div class="d">Серии по operational excellence · 2020–2024</div></div>
+    </div>
+
+    <div class="group">
+      <div class="cap">Big Tech operations</div>
+      <div class="item"><div class="t">John Doerr</div><div class="d">«Measure What Matters» — практика OKR · 2018</div></div>
+      <div class="item"><div class="t">Colin Bryar, Bill Carr</div><div class="d">«Working Backwards — Amazon leadership» · 2021</div></div>
+      <div class="item"><div class="t">Amazon</div><div class="d">Working Backwards — Press Release methodology</div></div>
+    </div>
+
+    <div class="group">
+      <div class="cap">Государственные источники РФ</div>
+      <div class="item"><div class="t">Минэкономразвития РФ</div><div class="d">Единый реестр МСП · апрель 2025</div></div>
+      <div class="item"><div class="t">Федеральный закон №425-ФЗ</div><div class="d">Изменения НК РФ по НДС на УСН · 28 ноября 2025</div></div>
+      <div class="item"><div class="t">Контур.Экстерн</div><div class="d">Анализ изменений НДС-законодательства 2026 · декабрь 2025</div></div>
+    </div>
+
+    <div class="group">
+      <div class="cap">Методологическая база</div>
+      <div class="item"><div class="t">Центр CRAFT, школа инноваций ИКРА</div><div class="d">Методология управления инновациями · с 2009</div></div>
+      <div class="item"><div class="t">Bruno Latour</div><div class="d">«Reassembling the Social» — акторно-сетевая теория · 2005</div></div>
+      <div class="item"><div class="t">Г. П. Щедровицкий</div><div class="d">Системо-мыследеятельностная методология · 1960-е–1990-е</div></div>
+    </div>
+
+    <div class="group wide">
+      <div class="cap">Работа с ИИ</div>
+      <div class="item"><div class="t">Anthropic · UCC · Ringling College</div><div class="d">AI Fluency Framework · CC BY-NC-SA 4.0 · 2024</div></div>
+      <div class="item"><div class="t">Anthropic Cookbook</div><div class="d">Best practices для агентных паттернов · 2025</div></div>
+    </div>
+  </div>
+
+  <div class="license-strip">
+    <div><b>EDL OS · Founder OS Whitepaper v3.1</b> · Май 2026 · Лицензия CC BY-SA 4.0</div>
+    <div>hello@edl-os.ru · elephantdreams.ru</div>
+  </div>
+</section>
+
+</body>
+</html>
