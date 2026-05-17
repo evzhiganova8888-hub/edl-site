@@ -76,11 +76,13 @@ async def lifespan(_app: FastAPI):
     try:
         yield
     finally:
-        if settings.use_webhook:
-            try:
-                await _ptb_app.bot.delete_webhook()
-            except Exception:
-                logger.exception("delete_webhook failed")
+        # Не вызываем delete_webhook(): на Railway rolling deploy старый
+        # контейнер получает SIGTERM ПОСЛЕ того как новый уже сделал
+        # set_webhook → старый стирает URL → Telegram перестаёт слать
+        # апдейты → бот молчит до следующего set_webhook. set_webhook
+        # идемпотентен; новый контейнер сам перезапишет URL при старте.
+        # Если бот выводится из эксплуатации навсегда — webhook удалит
+        # @BotFather / setWebhook вручную, а не lifecycle.
         await _ptb_app.stop()
         await _ptb_app.shutdown()
 
