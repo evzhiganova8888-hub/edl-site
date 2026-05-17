@@ -10,10 +10,11 @@ def test_offer_hash_stable():
 def test_offer_summary_mentions_guarantee():
     s = offer_summary()
     assert "100%" in s
-    assert "14 дней" in s
-    assert "Robokassa" in s
+    assert "14 календарных дней" in s   # Точная фраза из offer_summary()
     assert "ИП Жиганова" in s
     assert "027507994838" in s
+    # В stub/manual режиме — ручная оплата, не Robokassa
+    assert "Robokassa" not in s
 
 
 def test_offer_version_is_dated():

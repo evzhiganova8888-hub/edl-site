@@ -37,8 +37,8 @@ def test_allowed_trigger_only():
 
 def test_allowed_with_random_seed_passes():
     ctx = StickerContext(segment="other", stage="cold", trigger="first_response")
-    # rng.random() = 0.0 при seed=0 → < 0.6 → True
-    rng = random.Random(0)
+    # seed=1 → random() ≈ 0.134 < 0.6 → True (верно для Python 3.12)
+    rng = random.Random(1)
     assert should_send_sticker(ctx, rng=rng) is True
 
 
