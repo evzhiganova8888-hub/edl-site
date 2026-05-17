@@ -14,11 +14,16 @@ config = context.config
 if config.config_file_name:
     fileConfig(config.config_file_name)
 
-# Override sqlalchemy.url with env if provided
+# Override sqlalchemy.url with env if provided.
+# Production Dockerfile installs only psycopg3 (`psycopg[binary]`), not psycopg2.
+# SQLAlchemy treats bare `postgresql://` as psycopg2 → ImportError on alembic upgrade.
+# Force psycopg3 dialect (`postgresql+psycopg://`) for both async and bare URLs.
 sync_url = os.getenv("SYNC_DATABASE_URL") or os.getenv("DATABASE_URL")
 if sync_url:
     if sync_url.startswith("postgresql+asyncpg://"):
-        sync_url = sync_url.replace("postgresql+asyncpg://", "postgresql://", 1)
+        sync_url = sync_url.replace("postgresql+asyncpg://", "postgresql+psycopg://", 1)
+    elif sync_url.startswith("postgresql://"):
+        sync_url = sync_url.replace("postgresql://", "postgresql+psycopg://", 1)
     config.set_main_option("sqlalchemy.url", sync_url)
 
 target_metadata = Base.metadata
