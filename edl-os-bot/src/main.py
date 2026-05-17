@@ -30,6 +30,16 @@ logging.basicConfig(
     level=settings.log_level,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
 )
+# httpx и httpcore логируют каждый исходящий HTTP запрос с полным URL на INFO
+# уровне. Для Telegram Bot API это значит, что в логах оказывается строка вида
+# `POST https://api.telegram.org/bot<TOKEN>/sendMessage` — BOT_TOKEN утекает в
+# Railway logs. Любой, кто получит доступ к логам (или скриншот логов в чате),
+# получит токен и может подделать сообщения от имени бота.
+# Поднимаем уровень до WARNING — нам всё равно нужны только проблемы, не каждый
+# 200 OK от Telegram.
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
+
 logger = logging.getLogger(__name__)
 
 
