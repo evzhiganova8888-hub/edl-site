@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="css/main-v2.css">
   <link rel="stylesheet" href="css/mobile-fixes.css">
   <link rel="stylesheet" href="css/mini-checkup.css">
+  <link rel="stylesheet" href="css/bot-widget.css">
   <script>
     (function(){
       const ENDPOINT = window.EDL_ANALYTICS_ENDPOINT || null;
@@ -74,8 +75,8 @@
         <div class="hero__badge">Безусловный возврат 14 дней — один клик в боте</div>
         <h1 class="audit-hero__title" style="font-size:clamp(2.5rem, 5vw, 4rem); line-height:1.1;">Бизнес-чекап за 9 000 ₽.</h1>
         <h2 class="audit-hero__subtitle">Карта вашего бизнеса за 1-2 часа в боте + 24ч обработки.</h2>
-        <p class="audit-hero__desc">20 вопросов в Telegram-боте → ИИ-разбор по 4 слоям EDL OS (Стратегия · Воронка · Операционка · Деньги) → PDF + майнд-карта в FigJam. Видео-разбор от Кати — в тарифе Plus.<br>3 быстрые победы на эту неделю и план действий на 90 дней.</p>
-        <p style="text-align:center; color: var(--color-gray-500); font-size: 0.875rem; margin-bottom: 24px;">Не уверены, что готовы платить? <button type="button" data-mc-open="audit_hero" style="background:none; border:none; color: var(--color-tangerine); font-weight:600; cursor:pointer; text-decoration:underline; font: inherit; padding:0;">Пройдите Mini-Чекап за 15 минут бесплатно →</button></p>
+        <p class="audit-hero__desc">20 вопросов в Telegram-боте @edl_os_bot (можно прерваться) → 24ч на ИИ-обработку → PDF с НДС-картой + 5–7 конкретных рекомендаций. Видео-разбор от Кати — в тарифе Plus (приходит автоматически через 24ч).<br>Оплата картой прямо в боте. Безусловный возврат 14 дней.</p>
+        <p style="text-align:center; color: var(--color-gray-500); font-size: 0.875rem; margin-bottom: 24px;">Не уверены, что готовы платить? <button type="button" data-mc-open="audit_hero" style="background:none; border:none; color: var(--color-tangerine); font-weight:600; cursor:pointer; text-decoration:underline; font: inherit; padding:0;">Пройдите Founder OS Score бесплатно →</button></p>
         <div style="margin-bottom:48px;">
           <div class="video-placeholder" id="audit-video-container">
             <div class="video-placeholder__icon">🎥</div>
@@ -159,15 +160,69 @@
               <li>✓ Всё из Базового, плюс:</li>
               <li>✓ PDF-отчёт 15 страниц (глубже разбор)</li>
               <li>✓ 7 рекомендаций (вместо 5)</li>
-              <li>🎥 <strong>15-минутное видео-разбор от Екатерины Жигановой</strong> на ваши узкие места</li>
+              <li>✓ Видео-разбор 10–15 мин от Екатерины — <strong>за 24 часа</strong></li>
+              <li>✓ Структура: ниша → стратегия → воронка → деньги → ТОП-1 приоритет</li>
+              <li>✓ Видео приходит прямо в Telegram-бот</li>
               <li>✓ Глубже разбор слоя «Деньги» (НДС-22, антидробление)</li>
             </ul>
             <button class="btn btn--primary open-checkout" data-cta-type="audit_checkout" data-cta-location="tariffs_plus" style="width:100%;">Выбрать Plus</button>
           </div>
         </div>
-        <p style="text-align:center; color:#71717a; margin-top:24px; font-size:0.875rem;">Безусловный возврат 14 дней для обоих тарифов · оплата по счёту от ИП Жигановой Е.В. (СБП / банк)</p>
+        <p style="text-align:center; color:#71717a; margin-top:24px; font-size:0.875rem;">Безусловный возврат 14 дней для обоих тарифов · оплата картой через YooKassa в боте</p>
       </div>
     </section>
+
+    <!-- Как работает бот: 5 шагов -->
+    <section style="padding: 64px 0; background: var(--color-gray-50);">
+      <div class="container" style="max-width: 800px;">
+        <h2 class="section__title" style="text-align:center; margin-bottom:8px;">Как работает Telegram-бот</h2>
+        <p style="text-align:center; color:var(--color-gray-500); margin-bottom:48px;">Всё происходит прямо в чате. Без личных кабинетов и форм.</p>
+        <div style="display:flex; flex-direction:column; gap:24px;">
+          <div style="display:flex; gap:20px; align-items:flex-start;">
+            <div style="flex-shrink:0; width:40px; height:40px; background:var(--color-tangerine); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.125rem;">1</div>
+            <div>
+              <div style="font-weight:600; margin-bottom:4px;">Оплата картой прямо в боте</div>
+              <div style="color:var(--color-gray-600); font-size:0.9375rem; line-height:1.5;">Выбираете тариф (Base 9 000 ₽ или Plus 14 000 ₽) — бот формирует ссылку YooKassa — оплачиваете картой. Никакого ожидания менеджера и счётов на почту.</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:20px; align-items:flex-start;">
+            <div style="flex-shrink:0; width:40px; height:40px; background:var(--color-tangerine); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.125rem;">2</div>
+            <div>
+              <div style="font-weight:600; margin-bottom:4px;">20 вопросов в своём темпе</div>
+              <div style="color:var(--color-gray-600); font-size:0.9375rem; line-height:1.5;">Можно прерваться и вернуться — бот сохраняет прогресс. Через 30 минут паузы напомнит и предложит продолжить с того вопроса, на котором остановились.</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:20px; align-items:flex-start;">
+            <div style="flex-shrink:0; width:40px; height:40px; background:var(--color-tangerine); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.125rem;">3</div>
+            <div>
+              <div style="font-weight:600; margin-bottom:4px;">PDF с НДС-картой вашего бизнеса</div>
+              <div style="color:var(--color-gray-600); font-size:0.9375rem; line-height:1.5;">Ответы обрабатываются 24 часа. В PDF — разбор по 4 слоям EDL OS + <strong>НДС-зона вашей выручки</strong>: бот определяет риск перехода на НДС и что делать прямо сейчас.</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:20px; align-items:flex-start;">
+            <div style="flex-shrink:0; width:40px; height:40px; background:var(--color-tangerine); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.125rem;">4</div>
+            <div>
+              <div style="font-weight:600; margin-bottom:4px;">Видео-разбор за 24 часа <span style="background:rgba(255,107,26,0.1); color:var(--color-tangerine); font-size:0.8125rem; padding:2px 8px; border-radius:20px; font-weight:600; margin-left:6px;">Plus</span></div>
+              <div style="color:var(--color-gray-600); font-size:0.9375rem; line-height:1.5;">После получения PDF Екатерина записывает персональный видео-разбор 10–15 минут: ниша → стратегия → воронка → деньги → ТОП-1 приоритет на 90 дней. Бот пришлёт видео напрямую в чат.</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:20px; align-items:flex-start;">
+            <div style="flex-shrink:0; width:40px; height:40px; background:var(--color-tangerine); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.125rem;">5</div>
+            <div>
+              <div style="font-weight:600; margin-bottom:4px;">Возврат одной командой</div>
+              <div style="color:var(--color-gray-600); font-size:0.9375rem; line-height:1.5;">14 дней безусловного возврата. Пишете <code style="background:#f4f4f5; padding:2px 6px; border-radius:4px;">/refund</code> в боте — без объяснений, без форм, без звонков.</div>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; margin-top:48px;">
+          <a href="https://t.me/edl_os_bot?start=audit" target="_blank" rel="noopener"
+             class="btn btn--primary" data-cta-type="audit" data-cta-location="how_it_works">
+            Начать в боте → @edl_os_bot
+          </a>
+        </div>
+      </div>
+    </section>
+
     <section class="section">
       <div class="container" style="max-width:800px; margin:0 auto;">
         <div class="guarantee-block">
@@ -185,10 +240,24 @@
           <details class="faq-item" data-faq-id="3"><summary class="faq-summary">Что если я не founder, а CFO/COO?</summary><div class="faq-content"><p>Методология подходит для C-level, если вы принимаете стратегические решения. Мы адаптируем фокус отчёта.</p></div></details>
           <details class="faq-item" data-faq-id="4"><summary class="faq-summary">Что если у меня несколько юр.лиц в разных юрисдикциях?</summary><div class="faq-content"><p>Анализируем бизнес как консолидированную сущность, вне зависимости от юридической структуры.</p></div></details>
           <details class="faq-item" data-faq-id="5"><summary class="faq-summary">Куда деваются мои данные после Audit?</summary><div class="faq-content"><p>Мы не запрашиваем доступы к вашим системам на этапе Audit — всё со слов в боте. Любая фактура удаляется по первому требованию. NDA. Полная юридическая формулировка — в <a href="legal/offer.html" style="color:var(--color-tangerine);">оферте</a>.</p></div></details>
-          <details class="faq-item" data-faq-id="6"><summary class="faq-summary">А если я не хочу платить — есть что попробовать бесплатно?</summary><div class="faq-content"><p>Да. <button type="button" data-mc-open="audit_faq" style="background:none; border:none; color:var(--color-tangerine); font-weight:600; cursor:pointer; text-decoration:underline; font:inherit; padding:0;">Mini-Чекап на сайте</button> — 5 вопросов, 15 минут, ИИ-консультант даёт короткий разбор по тем же 4 слоям. Без регистрации.</p></div></details>
+          <details class="faq-item" data-faq-id="6"><summary class="faq-summary">А если я не хочу платить — есть что попробовать бесплатно?</summary><div class="faq-content"><p>Да. <button type="button" data-mc-open="audit_faq" style="background:none; border:none; color:var(--color-tangerine); font-weight:600; cursor:pointer; text-decoration:underline; font:inherit; padding:0;">Founder OS Score</button> — 12 вопросов, 15 минут, персональный Score 0-100 и 2-3 точки роста. Без регистрации.</p></div></details>
+          <details class="faq-item" data-faq-id="7"><summary class="faq-summary">Под капотом — методология Founder OS</summary><div class="faq-content"><p>Чекап работает по нашей методологии Founder OS, синтезирующей операционную дисциплину Big Tech, методологию CRAFT (Центр CRAFT, школа инноваций ИКРА) и AI Fluency Framework (Anthropic).</p><a href="/assets/pdf/edl-founder-os-v1.pdf" download class="pdf-link">📄 Whitepaper «Founder OS» · 10 страниц · PDF</a></div></details>
         </div>
       </div>
     </section>
+    <section class="section">
+      <div class="container" style="max-width:800px; margin:0 auto;">
+        <div class="audit-sidebar-pdf">
+          <h4>Сравнить все 5 продуктов</h4>
+          <p>Mini · Чекап · Диагностика · Спринт · План Роста</p>
+          <p class="audit-sidebar-pdf-desc">4 страницы, сравнительная таблица, дерево решения «с чего начать».</p>
+          <a href="/assets/pdf/edl-product-ladder-v1.pdf" download
+             onclick="if(typeof gtag!=='undefined'){gtag('event','pdf_download',{'pdf_name':'product_ladder_v1','source':'audit_page','has_email':false});}"
+             class="btn-pdf-secondary">Скачать PDF →</a>
+        </div>
+      </div>
+    </section>
+
     <section class="section section--dark">
       <div class="container" style="text-align:center;">
         <h2 class="section__title" style="color:#fff; margin-bottom:24px;">Готовы увидеть карту своего бизнеса?</h2>
@@ -204,19 +273,19 @@
     <div class="checkout-modal__content">
       <button class="checkout-modal__close" id="close-modal">×</button>
       <h3 class="checkout-modal__title">Бизнес-чекап · 2 тарифа на выбор</h3>
-      <p class="checkout-modal__text">Откроется Telegram-бот @edl_os_bot. В боте выберите тариф, оставьте контакты и примите оферту — Иван свяжется в течение 1 рабочего часа в окно 10:00–19:00 МСК Пн–Пт и пришлёт счёт от ИП на e-mail.</p>
+      <p class="checkout-modal__text">Откроется Telegram-бот @edl_os_bot. Выберите тариф, примите оферту и оплатите картой прямо в чате — через YooKassa. Доступ к чекапу откроется автоматически после оплаты.</p>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
-        <div style="border:1px solid #e4e4e7; border-radius:12px; padding:16px;"><div style="font-weight:700; font-size:1rem;">📋 Базовый</div><div style="color:var(--color-tangerine); font-weight:700; font-size:1.25rem; margin:4px 0;">9 000 ₽</div><div style="color:#71717a; font-size:0.875rem;">48 часов с момента интервью. Отчёт + FigJam + 3 действия + 90-дн. план.</div></div>
-        <div style="border:1px solid var(--color-tangerine); border-radius:12px; padding:16px; background:#fff8f1;"><div style="font-weight:700; font-size:1rem;">🎥 Plus</div><div style="color:var(--color-tangerine); font-weight:700; font-size:1.25rem; margin:4px 0;">14 000 ₽</div><div style="color:#71717a; font-size:0.875rem;">7 рабочих дней. Всё из Базового + персональный видео-разбор от Екатерины.</div></div>
+        <div style="border:1px solid #e4e4e7; border-radius:12px; padding:16px;"><div style="font-weight:700; font-size:1rem;">📋 Базовый</div><div style="color:var(--color-tangerine); font-weight:700; font-size:1.25rem; margin:4px 0;">9 000 ₽</div><div style="color:#71717a; font-size:0.875rem;">PDF 10 стр + 5 рекомендаций + НДС-карта. Готово за 24ч.</div></div>
+        <div style="border:1px solid var(--color-tangerine); border-radius:12px; padding:16px; background:#fff8f1;"><div style="font-weight:700; font-size:1rem;">🎥 Plus</div><div style="color:var(--color-tangerine); font-weight:700; font-size:1.25rem; margin:4px 0;">14 000 ₽</div><div style="color:#71717a; font-size:0.875rem;">PDF 15 стр + 7 рекомендаций + видео-разбор от Екатерины за 24ч.</div></div>
       </div>
       <a href="https://t.me/edl_os_bot?start=audit" target="_blank" class="btn btn--primary" id="telegram-checkout" data-cta-type="telegram_pay" style="width:100%; margin-bottom:16px;">Выбрать тариф в боте → @edl_os_bot</a>
       <div style="font-weight:600; color:var(--color-tangerine); margin-bottom:8px;">Безусловный возврат 14 дней — один клик /refund.</div>
-      <div class="checkout-modal__details">• Май 2026: оплата по счёту от ИП Жигановой Е.В. (СБП / банковский перевод)<br>• Фискальный чек закрывает наша бухгалтерия — придёт на e-mail<br>• Звонок-интервью, отчёт и видео — после подтверждения оплаты</div>
+      <div class="checkout-modal__details">• Оплата картой через YooKassa прямо в Telegram-боте<br>• Фискальный чек придёт на e-mail автоматически<br>• Доступ к 20 вопросам открывается сразу после оплаты</div>
     </div>
   </div>
   <footer class="footer" style="background:#fff; border-top:1px solid #e4e4e7; padding:48px 0;">
     <div class="container" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:32px;">
-      <div><h4 style="font-weight:600; margin-bottom:16px;">Контакты</h4><ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;"><li><a href="https://t.me/edl_os" target="_blank" style="color:#404040; text-decoration:none;">Наш Telegram-канал</a></li><li><a href="https://t.me/edl_os_bot" target="_blank" rel="noopener" style="color:#404040; text-decoration:none;">Чат-бот EDL&nbsp;OS · ответы 24/7</a></li><li><a href="mailto:evzhiganova8888@gmail.com" style="color:#404040; text-decoration:none;">Написать на почту</a></li></ul></div>
+      <div><h4 style="font-weight:600; margin-bottom:16px;">Контакты</h4><ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;"><li><a href="https://t.me/edl_os" target="_blank" style="color:#404040; text-decoration:none;">Наш Telegram-канал</a></li><li><a href="https://t.me/edl_os_bot" target="_blank" rel="noopener" style="color:#404040; text-decoration:none;">Чат-бот EDL&nbsp;OS · ответы 24/7</a></li><li><a href="mailto:hello@edl-os.ru" style="color:#404040; text-decoration:none;">Написать на почту</a></li></ul></div>
       <div><h4 style="font-weight:600; margin-bottom:16px;">Услуги</h4><ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;"><li><a href="https://t.me/edl_os_bot?start=demo" target="_blank" style="color:#404040; text-decoration:none;">Бесплатное демо в Telegram</a></li><li><a href="audit.html" style="color:#404040; text-decoration:none;">Бизнес-чекап (Audit)</a></li><li><a href="diagnostic.html" style="color:#404040; text-decoration:none;">Диагностика</a></li><li><a href="sprint.html" style="color:#404040; text-decoration:none;">Спринт</a></li><li><a href="pricing.html" style="color:#404040; text-decoration:none;">Growth Plan</a></li></ul></div>
       <div><h4 style="font-weight:600; margin-bottom:16px;">Компания</h4><ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;"><li><a href="methodology.html" style="color:#404040; text-decoration:none;">Методология</a></li><li><a href="cases.html" style="color:#404040; text-decoration:none;">Кейсы</a></li><li><a href="faq.html" style="color:#404040; text-decoration:none;">FAQ</a></li><li><a href="about.html" style="color:#404040; text-decoration:none;">Команда</a></li><li><a href="pricing.html" style="color:#404040; text-decoration:none;">Продукты и цены</a></li><li><a href="legal/offer.html" style="color:#404040; text-decoration:none;">Оферта</a></li><li><a href="legal/privacy.html" style="color:#404040; text-decoration:none;">Приватность</a></li></ul></div>
     </div>
@@ -273,5 +342,6 @@
     </div>
   </div>
   <script src="js/mini-checkup.js" defer></script>
+  <script src="js/bot-widget.js" defer></script>
 </body>
 </html>
