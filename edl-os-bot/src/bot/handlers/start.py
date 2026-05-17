@@ -7,7 +7,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from src.bot import keyboards, texts
-from src.bot.handlers import audit, consent as consent_handler, faq, lead_capture, privacy, quiz
+from src.bot.handlers import audit, checkup, consent as consent_handler, faq, lead_capture, privacy, quiz
 from src.core.segment import detect_from_deep_link
 from src.db.repos import get_or_create_user, log_event
 from src.db.session import async_session_factory
@@ -123,8 +123,10 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         "/privacy — ваши данные и согласия (152-ФЗ)\n"
         "/delete_my_data — удалить все мои данные\n"
         "/export_my_data — выгрузить мои данные в JSON\n"
+        "/checkup — продолжить Бизнес-чекап (после оплаты)\n"
         "/reset — сбросить контекст диалога\n"
-        "_Только для команды EDL:_ /admin · /bugs · /feedback\n\n"
+        "_Только для команды EDL:_ /admin · /bugs · /feedback\n"
+        "_Администраторы:_ /admin_login · /admin_logout · /mark_paid · /applications · /emails_dump · /beta_summary\n\n"
         "Бета 12–19 мая: на каждом экране кнопка «💬 ОС по этому шагу». "
         "Под ответами AI — 👍 Полезно / 🤔 Неточно / 💬 К Ивану.\n\n"
         "Кнопка «💬 Написать Ивану напрямую» доступна на любом экране."
@@ -173,6 +175,9 @@ async def handle_menu_button(update: Update, context: ContextTypes.DEFAULT_TYPE)
         return
     if action == "quiz":
         await quiz.quiz_command(update, context)
+        return
+    if action == "checkup":
+        await checkup.checkup_command(update, context)
         return
 
     logger.warning("Unknown menu action: %s", action)

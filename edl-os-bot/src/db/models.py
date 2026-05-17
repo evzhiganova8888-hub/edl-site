@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 
 from sqlalchemy import (
@@ -87,6 +87,9 @@ class Application(Base):
     payment_succeeded_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     delivered_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     refund_eligible_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    checkup_started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    checkup_completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    checkup_pdf_url: Mapped[str | None] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
@@ -266,4 +269,39 @@ class Feedback(Base):
             postgresql_where=sql_text("reviewed_at IS NULL"),
         ),
         Index("idx_feedback_step_category", "step", "category"),
+    )
+
+
+class AdminSession(Base):
+    """Сессия in-bot admin доступа через access key (Task 3 v3.2)."""
+
+    __tablename__ = "admin_sessions"
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    telegram_id: Mapped[int] = mapped_column(BigInteger, index=True)
+    granted_by: Mapped[str] = mapped_column(Text)  # "static_env" | "access_key" | "{admin_tg_id}"
+    granted_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class CheckupAnswer(Base):
+    """Ответы пользователя на 20 вопросов Чекапа (Task 5 v3.2)."""
+
+    __tablename__ = "checkup_answers"
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    application_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("applications.id"))
+    user_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("users.id"))
+    question_key: Mapped[str] = mapped_column(Text)
+    layer: Mapped[str] = mapped_column(Text)
+    text: Mapped[str] = mapped_column(Text)
+    word_count: Mapped[int] = mapped_column(Integer)
+    quality_passed: Mapped[bool] = mapped_column(Boolean, default=False)
+    quality_notes: Mapped[str | None] = mapped_column(Text)
+    answered_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    __table_args__ = (
+        Index("idx_checkup_answers_app", "application_id"),
+        Index("uq_checkup_answers_app_q", "application_id", "question_key", unique=True),
     )

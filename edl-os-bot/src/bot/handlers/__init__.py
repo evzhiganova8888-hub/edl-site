@@ -16,9 +16,11 @@ from telegram.ext import (
 
 from src.bot.handlers import (
     admin,
+    admin_login,
     audit,
     bug_report,
     bugs,
+    checkup,
     consent,
     dialog,
     faq,
@@ -96,6 +98,13 @@ def register(app: Application) -> None:
     app.add_handler(CommandHandler("refund", refund.refund_command))
     app.add_handler(CommandHandler("quiz", quiz.quiz_command))
     app.add_handler(CommandHandler("admin", admin.admin_command))
+    app.add_handler(CommandHandler("admin_login", admin_login.admin_login_command))
+    app.add_handler(CommandHandler("admin_logout", admin_login.admin_logout_command))
+    app.add_handler(CommandHandler("mark_paid", admin.mark_paid_command))
+    app.add_handler(CommandHandler("applications", admin.applications_command))
+    app.add_handler(CommandHandler("emails_dump", admin.emails_dump_command))
+    app.add_handler(CommandHandler("beta_summary", admin.beta_summary_command))
+    app.add_handler(CommandHandler("checkup", checkup.checkup_command))
     app.add_handler(CommandHandler("bugs", bugs.bugs_command))
     app.add_handler(CommandHandler("feedback", feedback_handler.feedback_command))
     app.add_handler(CommandHandler("reset", start.reset_command))
@@ -106,6 +115,7 @@ def register(app: Application) -> None:
     app.add_handler(CallbackQueryHandler(start.handle_segment_button, pattern=r"^segment:"))
     app.add_handler(CallbackQueryHandler(audit.start_purchase, pattern=r"^audit:start_purchase(?::(?:base|plus))?$"))
     app.add_handler(CallbackQueryHandler(audit.cancel_collection, pattern=r"^audit:cancel_collection$"))
+    app.add_handler(CallbackQueryHandler(audit.notify_waiting, pattern=r"^audit:notify_waiting$"))
     app.add_handler(CallbackQueryHandler(audit.handle_offer, pattern=r"^offer:"))
     app.add_handler(CallbackQueryHandler(refund.handle_refund_callback, pattern=r"^refund:request:"))
     app.add_handler(CallbackQueryHandler(privacy.handle_privacy_action, pattern=r"^privacy:"))
@@ -113,6 +123,8 @@ def register(app: Application) -> None:
     app.add_handler(CallbackQueryHandler(quiz.handle_cancel, pattern=r"^quiz:cancel$"))
     app.add_handler(CallbackQueryHandler(faq.handle_show, pattern=r"^faq:show:"))
     app.add_handler(CallbackQueryHandler(admin.handle_admin_callback, pattern=r"^admin:"))
+    app.add_handler(CallbackQueryHandler(admin_login.admin_login_hint, pattern=r"^admin_login:hint$"))
+    app.add_handler(CallbackQueryHandler(checkup.handle_checkup_callback, pattern=r"^checkup:"))
     app.add_handler(CallbackQueryHandler(bug_report.handle_callback, pattern=r"^bugreport:"))
     app.add_handler(CallbackQueryHandler(bugs.handle_bug_callback, pattern=r"^bug:"))
     app.add_handler(CallbackQueryHandler(feedback_handler.handle_callback, pattern=r"^feedback:"))

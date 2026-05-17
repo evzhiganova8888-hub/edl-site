@@ -20,6 +20,9 @@ def main_menu() -> InlineKeyboardMarkup:
             InlineKeyboardButton("📄 Пример отчёта", callback_data="menu:audit_sample"),
         ],
         [
+            InlineKeyboardButton("🚀 Я уже оплатил — продолжить Чекап", callback_data="menu:checkup"),
+        ],
+        [
             InlineKeyboardButton("🏗 Лист ожидания Спринта", callback_data="menu:sprint_waitlist"),
         ],
         [
@@ -30,6 +33,9 @@ def main_menu() -> InlineKeyboardMarkup:
         [
             InlineKeyboardButton("❓ FAQ", callback_data="menu:faq"),
             InlineKeyboardButton("🔒 Мои данные", callback_data="menu:privacy"),
+        ],
+        [
+            InlineKeyboardButton("🔐 Войти как админ", callback_data="admin_login:hint"),
         ],
         # Beta 12.05-19.05: ОС по любому шагу.
         feedback_row("welcome"),
@@ -159,12 +165,29 @@ def back_to_menu() -> InlineKeyboardMarkup:
 
 
 def payment_submitted_keyboard() -> InlineKeyboardMarkup:
-    """После MANUAL_PAYMENT_SUBMITTED — меню + ОС по шагу оплаты."""
+    """После MANUAL_PAYMENT_SUBMITTED — ожидание активации + Иван + меню."""
     return InlineKeyboardMarkup(
         [
-            [InlineKeyboardButton("← В главное меню", callback_data="menu:main")],
+            [
+                InlineKeyboardButton(
+                    "🔔 Уведомить, когда Иван активирует доступ",
+                    callback_data="audit:notify_waiting",
+                )
+            ],
             _ivan_row(),
+            [InlineKeyboardButton("← В главное меню", callback_data="menu:main")],
             feedback_row("payment"),
+        ]
+    )
+
+
+def scope_guard_keyboard() -> InlineKeyboardMarkup:
+    """Клавиатура после off-topic canned-ответа."""
+    return InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("🎯 Пройти Quiz", callback_data="menu:quiz")],
+            [InlineKeyboardButton("📋 Чекап от 9 000 ₽", callback_data="menu:audit")],
+            _ivan_row(),
         ]
     )
 

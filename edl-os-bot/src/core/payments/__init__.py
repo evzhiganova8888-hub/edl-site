@@ -1,4 +1,4 @@
-"""Платежи: Robokassa (основной) + ЮKassa (резерв)."""
-from src.core.payments.robokassa import RobokassaClient, RobokassaCallback
+"""Платежи: stub / yookassa. Robokassa выпилен 12.05.2026."""
+from src.core.payments.stub import StubPaymentClient
 
-__all__ = ["RobokassaClient", "RobokassaCallback"]
+__all__ = ["StubPaymentClient"]

@@ -1,7 +1,14 @@
 """Robokassa: подпись invoice + верификация ResultURL callback."""
 import hashlib
 
-from src.core.payments.robokassa import RobokassaClient, RobokassaInvoice
+import pytest
+
+_robokassa = pytest.importorskip(
+    "src.core.payments.robokassa",
+    reason="Robokassa module removed in PR #18 (replaced by stub/manual). Tests skipped.",
+)
+RobokassaClient = _robokassa.RobokassaClient
+RobokassaInvoice = _robokassa.RobokassaInvoice
 
 
 def _md5(s: str) -> str:

@@ -24,13 +24,15 @@ def offer_summary() -> str:
     Должна соответствовать boilerplate в legal/offer.html (Май 2026).
     Полный текст — на сайте, ссылка ниже.
     """
-    # В manual-режиме (Май 2026) оплата идёт через счёт от Ивана, не Robokassa.
-    payment_line = (
-        "Оплата по счёту от ИП через расчётный счёт (СБП / банк. перевод). "
-        "Иван оформит счёт после принятия оферты."
-        if settings.payment_mode == "manual"
-        else "Оплата через Robokassa (СБП / карта)."
-    )
+    # В stub/manual-режиме (Май 2026) оплата идёт через счёт от Ивана.
+    # YooKassa-режим активируется позже через PAYMENT_MODE=yookassa.
+    if settings.payment_mode in ("stub", "manual"):
+        payment_line = (
+            "Оплата по счёту от ИП через расчётный счёт (СБП / банк. перевод). "
+            "Иван оформит счёт после принятия оферты."
+        )
+    else:  # yookassa
+        payment_line = "Оплата через ЮKassa (СБП / карта)."
     return (
         "Договор-оферта (выжимка). Полный текст: "
         f"{settings.offer_url}\n\n"

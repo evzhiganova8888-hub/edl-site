@@ -3,8 +3,10 @@ from __future__ import annotations
 
 from functools import lru_cache
 
-from pydantic import Field
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+_VALID_PAYMENT_MODES = {"stub", "manual", "yookassa"}
 
 
 class Settings(BaseSettings):
@@ -40,33 +42,31 @@ class Settings(BaseSettings):
     # Anthropic
     anthropic_api_key: str = ""
     anthropic_model: str = "claude-haiku-4-5-20251001"
-    # 600 — потолок ответа. Реальные ответы 200-400 токенов, 1024 был расхлябан
-    # (модель иногда выдавала «простыни»). 600 дисциплинирует и экономит
-    # ~10-15% output-токенов. Поднять через env при жалобах на обрезку.
     anthropic_max_tokens: int = 600
-    # ANTHROPIC_BASE_URL: опц. URL прокси для оплаты рублями (Май 2026):
-    # - пусто = оригинальный Anthropic (https://api.anthropic.com)
-    # - "https://api.proxyapi.ru/anthropic" = proxyapi.ru (нативный Anthropic API,
-    #   prompt caching работает, оплата СБП/ЮКасса)
-    # Когда появится зарубежная карта — убрать переменную, бот пойдёт напрямую.
     anthropic_base_url: str = ""
 
-    # Robokassa
-    robokassa_merchant_login: str = ""
-    robokassa_password_1: str = ""
-    robokassa_password_2: str = ""
-    robokassa_is_test: int = 1
-    # PAYMENT_MODE: "manual" | "robokassa".
-    # - manual: бот собирает контакты + оферту, шлёт детальный бриф Ивану в
-    #   Sales-чат, Иван оформляет счёт через бухгалтерию, после прихода денег
-    #   помечает оплату через POST /admin/applications/{id}/mark-paid.
-    # - yookassa: создаётся invoice URL, пользователь оплачивает картой,
-    #   ResultURL callback автоматом ставит status=paid.
-    payment_mode: str = "yookassa"
+    # PAYMENT_MODE: "stub" | "manual" | "yookassa".
+    # - stub: Application создаётся, status=awaiting_manual_payment,
+    #   Иван/Катя помечают /mark_paid вручную. Никаких invoice не генерируется.
+    # - manual: устаревший синоним stub (для обратной совместимости).
+    # - yookassa: создаётся invoice URL через ЮKassa API.
+    # Май-июнь 2026: работаем в stub, ЮKassa на модерации.
+    payment_mode: str = "stub"
+
+    @field_validator("payment_mode")
+    @classmethod
+    def _validate_payment_mode(cls, v: str) -> str:
+        if v not in _VALID_PAYMENT_MODES:
+            raise ValueError(f"PAYMENT_MODE must be one of {_VALID_PAYMENT_MODES}, got {v!r}")
+        return v
 
     # ЮKassa
     yookassa_shop_id: str = ""
     yookassa_secret_key: str = ""
+
+    # Admin session (in-bot access key)
+    bot_admin_access_key: str = ""  # пустой — фича выключена
+    admin_session_hours: int = 8
 
     # Branding / links
     channel_url: str = "https://t.me/edl_os"
@@ -75,6 +75,7 @@ class Settings(BaseSettings):
     site_url: str = "https://elephantdreams.ru"
     privacy_policy_url: str = "https://elephantdreams.ru/legal/privacy.html"
     offer_url: str = "https://elephantdreams.ru/legal/offer.html"
+    offer_checkup_url: str = "https://elephantdreams.ru/legal/offer-checkup-2026-05.html"
     privacy_policy_version: str = "2026-05-11"
 
     # Toggle (§10)
@@ -93,6 +94,14 @@ class Settings(BaseSettings):
     @property
     def use_webhook(self) -> bool:
         return bool(self.webhook_base_url)
+
+    @property
+    def normalized_database_url(self) -> str:
+        """Railway даёт postgresql://, SQLAlchemy asyncpg требует postgresql+asyncpg://."""
+        url = self.database_url
+        if url.startswith("postgresql://") and "+asyncpg" not in url:
+            url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+        return url
 
 
 @lru_cache(maxsize=1)
