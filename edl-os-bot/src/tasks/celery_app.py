@@ -10,7 +10,11 @@ celery_app = Celery(
     "edl-os-bot",
     broker=settings.redis_url,
     backend=settings.redis_url,
-    include=["src.tasks.refund_check", "src.tasks.weekly_voc"],
+    include=[
+        "src.tasks.refund_check",
+        "src.tasks.weekly_voc",
+        "src.tasks.notify_plus_video",  # F8
+    ],
 )
 celery_app.conf.update(
     timezone=settings.timezone,

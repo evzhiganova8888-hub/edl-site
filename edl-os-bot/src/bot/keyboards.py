@@ -320,3 +320,10 @@ def waitlist_keyboard(slot: str) -> InlineKeyboardMarkup:
             feedback_row("other"),
         ]
     )
+
+
+def resume_checkup_keyboard() -> InlineKeyboardMarkup:
+    """F7: Клавиатура для предложения продолжить паузу чекапа."""
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton("▶️ Продолжить Чекап", url="https://t.me/edl_os_bot?start=checkup")],
+    ])

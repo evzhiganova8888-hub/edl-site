@@ -297,6 +297,101 @@ CHECKUP_QUESTIONS: tuple[CheckupQuestion, ...] = (
 )
 
 
+# --------------- F2: VAT zone detection ---------------
+
+VAT_ZONE_BELOW = "below_threshold"
+VAT_ZONE_APPROACHING = "approaching"
+VAT_ZONE_FIRST_TIME = "first_time"
+VAT_ZONE_ESTABLISHED = "established"
+
+_VAT_DESCRIPTIONS = {
+    VAT_ZONE_BELOW: (
+        "Вне зоны НДС-реформы 2026 — пока на УСН без НДС. "
+        "Следите за динамикой выручки: порог снижается до 15 млн в 2027 году."
+    ),
+    VAT_ZONE_APPROACHING: (
+        "В зоне риска на горизонте 2–3 лет. "
+        "С 2027 порог снижается до 15 млн ₽, с 2028 — до 10 млн ₽. "
+        "Подготовьте учётную систему и проконсультируйтесь с бухгалтером заранее."
+    ),
+    VAT_ZONE_FIRST_TIME: (
+        "Впервые в 2026 году попадаете в НДС-учёт. "
+        "Это центральный риск-фактор для вашего бизнеса. "
+        "Необходимо выбрать ставку (5% без вычетов или 20% с вычетами), "
+        "обновить договоры и настроить фискальный учёт до 01.01.2026."
+    ),
+    VAT_ZONE_ESTABLISHED: (
+        "Уже работаете с НДС. Реформа 2026 для вас процедурная, не структурная. "
+        "Проверьте договоры с контрагентами на УСН — им теперь нужны СФ."
+    ),
+}
+
+_VAT_ADVICE = {
+    VAT_ZONE_BELOW: "Продолжайте отслеживать выручку. Если приближаетесь к 15 млн — начните подготовку за 6 месяцев.",
+    VAT_ZONE_APPROACHING: "Рекомендуем: встреча с бухгалтером в Q3 2026, выбор учётной системы с поддержкой НДС, обновление шаблонов договоров.",
+    VAT_ZONE_FIRST_TIME: (
+        "🔴 Срочно: (1) определите ставку НДС, (2) обновите договоры, "
+        "(3) подключите онлайн-кассу с НДС, (4) уведомите топ-клиентов."
+    ),
+    VAT_ZONE_ESTABLISHED: "Проверьте контрагентов на УСН — проведите аудит договорной базы на предмет НДС-корректности.",
+}
+
+
+def determine_vat_zone(answer_text: str) -> dict:
+    """Определяет зону риска по НДС-реформе 2026 на основе текста ответа.
+
+    Работает с ответом на вопрос m2_ebitda (выручка) или m3_tax (налоговый режим).
+    Возвращает dict с ключами: zone, description, advice.
+    """
+    t = answer_text.lower()
+
+    # Числовые паттерны: ищем упоминание миллионов рублей
+    def _extract_millions(text: str) -> float | None:
+        import re
+        # Ищем паттерн "NNN млн" или "NNN M" или "NNNM руб"
+        patterns = [
+            r"(\d[\d\s]*)\s*млн",
+            r"(\d[\d\s]*)\s*m\b",
+            r"(\d+)\s*000\s*000",  # 60 000 000
+        ]
+        for pat in patterns:
+            m = re.search(pat, text, re.IGNORECASE)
+            if m:
+                raw = m.group(1).replace(" ", "")
+                try:
+                    return float(raw)
+                except ValueError:
+                    pass
+        return None
+
+    rev = _extract_millions(t)
+
+    if rev is not None:
+        if rev < 10:
+            zone = VAT_ZONE_BELOW
+        elif rev < 20:
+            zone = VAT_ZONE_APPROACHING
+        elif rev < 60:
+            zone = VAT_ZONE_FIRST_TIME
+        else:
+            zone = VAT_ZONE_ESTABLISHED
+        return {"zone": zone, "description": _VAT_DESCRIPTIONS[zone], "advice": _VAT_ADVICE[zone]}
+
+    # Текстовые маркеры (если цифры не нашли)
+    if any(k in t for k in ("усн с ндс", "осно", "ндс 20%", "ндс 5%", "плательщик ндс", "с ндс")):
+        zone = VAT_ZONE_ESTABLISHED
+    elif any(k in t for k in ("60", "80", "100", "150", "200", "свыше 60", "больше 60", "> 60")):
+        zone = VAT_ZONE_ESTABLISHED
+    elif any(k in t for k in ("20", "30", "40", "50", "20-60", "20–60", "30–60")):
+        zone = VAT_ZONE_FIRST_TIME
+    elif any(k in t for k in ("10", "15", "10-20", "10–20")):
+        zone = VAT_ZONE_APPROACHING
+    else:
+        zone = VAT_ZONE_BELOW
+
+    return {"zone": zone, "description": _VAT_DESCRIPTIONS[zone], "advice": _VAT_ADVICE[zone]}
+
+
 def by_layer() -> dict[str, list[CheckupQuestion]]:
     out: dict[str, list[CheckupQuestion]] = {
         "strategy": [], "sales": [], "operations": [], "finance": []

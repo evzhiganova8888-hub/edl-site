@@ -36,8 +36,11 @@ async def quiz_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         await session.commit()
 
     await update.effective_message.reply_text(
-        "Quiz Founder OS Score — 12 вопросов на 3 минуты. "
-        "В конце получите балл 0–100 и рекомендацию: с чего вам начинать."
+        "🎯 *Founder OS Score* (Mini-Чекап)\n\n"
+        "12 вопросов по 4 слоям. Это карта-моментальный-снимок вашего бизнеса.\n"
+        "Узнаете свой Score и получите 2–3 точки роста.\n\n"
+        "Поехали?",
+        parse_mode="Markdown",
     )
     await _send_question(update, context, index=0)
 

@@ -20,6 +20,7 @@ from src.core import llm, rate_limit
 from src.core.config import settings
 from src.core.flags import FLAG_VITACONSULT_PUBLIC, get_flag
 from src.core.input_validation import InputValidationError, validate_user_text
+from src.core.lead_stage import update_lead_stage  # F6
 from src.core.memory import build_user_recap, recap_to_prompt_snippet
 from src.core.pd_sanitize import contains_pd
 from src.core.segment import detect_from_text, detect_sub_profile
@@ -119,6 +120,22 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         await msg.reply_text(texts.OFF_TOPIC_RESPONSE, reply_markup=keyboards.scope_guard_keyboard())
         return
 
+    # 1.5 F7: Reactive resume — предлагаем продолжить паузу чекапа
+    if not checkup_handler.is_in_checkup_fsm(context.user_data):
+        try:
+            paused = await checkup_handler.get_paused_checkup(tg_id)
+            if paused is not None:
+                from src.bot import keyboards as _kb
+                q_idx = getattr(paused, "checkup_current_question_index", 0)
+                if q_idx > 0:
+                    await msg.reply_text(
+                        f"У вас есть незавершённый Чекап (вопрос {q_idx} из 20).\n\n"
+                        "Хотите продолжить? Введите /checkup",
+                        reply_markup=_kb.resume_checkup_keyboard(),
+                    )
+        except Exception:
+            logger.debug("pause check failed", exc_info=True)
+
     # 2. Свободный диалог
     user_text = msg.text.strip()
 
@@ -157,9 +174,16 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             recap_snippet = recap_to_prompt_snippet(recap) if recap else ""
             context.user_data[_RECAP_KEY] = recap_snippet
 
+        # F6: пересчитать lead_stage перед LLM-ответом
+        try:
+            new_stage = await update_lead_stage(user, session)
+        except Exception:
+            logger.debug("update_lead_stage failed", exc_info=True)
+            new_stage = user.stage or "cold"
+
         await session.commit()
         segment = user.segment or "other"
-        stage = user.stage or "cold"
+        stage = new_stage or "cold"
         user_id_for_log = user.id
 
     answer: str

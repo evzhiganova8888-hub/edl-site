@@ -12,6 +12,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 from src.core.config import settings
 from src.core.pd_sanitize import sanitize
 from src.core.prompts import build_system_prompt
+from src.core.rate_limit import check_global_llm_budget, track_global_llm_cost
 
 logger = logging.getLogger(__name__)
 
@@ -67,6 +68,15 @@ async def reply(
     messages: list[dict[str, str]] = list(history or [])
     messages.append({"role": "user", "content": safe_text})
 
+    budget = await check_global_llm_budget()
+    if not budget.allowed:
+        logger.warning("Global LLM hourly budget exhausted — returning canned response")
+        return (
+            "Сейчас бот временно работает в ограниченном режиме. "
+            "Пожалуйста, попробуйте через 10–15 минут или напишите напрямую: @edl_os.",
+            0,
+        )
+
     kwargs: dict = dict(
         model=settings.anthropic_model,
         max_tokens=settings.anthropic_max_tokens,
@@ -98,4 +108,6 @@ async def reply(
             "LLM tokens: in=%d (cache_read=%d, cache_write=%d, hit=%.0f%%), out=%d, segment=%s",
             input_uncached, cache_read, cache_creation, hit_rate, output_tokens, segment,
         )
+
+    await track_global_llm_cost(total_input, output_tokens)
     return answer, total_tokens

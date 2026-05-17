@@ -464,3 +464,130 @@ async def beta_summary_command(update: Update, context: ContextTypes.DEFAULT_TYP
         "Подробный CSV: /emails_dump"
     )
     await msg.reply_text(text, parse_mode="Markdown")
+
+
+# ─── F8: /upload_plus_video ───────────────────────────────────────────────────
+
+_PLUS_VIDEO_UPLOAD_KEY = "plus_video_upload_app_id"
+
+
+async def upload_plus_video_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """/upload_plus_video <application_id> — Катя загружает видео для клиента Plus."""
+    user_id = update.effective_user.id
+    if not is_admin(user_id):
+        await update.effective_message.reply_text("Только для команды EDL.")
+        return
+
+    args = context.args or []
+    if len(args) != 1:
+        await update.effective_message.reply_text(
+            "Использование: /upload_plus_video <application_id>"
+        )
+        return
+
+    application_id = args[0]
+    factory = async_session_factory()
+    async with factory() as session:
+        try:
+            app_uuid = UUID(application_id)
+        except ValueError:
+            await update.effective_message.reply_text("Неверный формат application_id.")
+            return
+        app = await session.get(Application, app_uuid)
+        if app is None:
+            await update.effective_message.reply_text(f"Заявка {application_id} не найдена.")
+            return
+        if app.status != "paid":
+            await update.effective_message.reply_text(
+                f"Заявка {application_id} не оплачена (status={app.status})."
+            )
+            return
+
+    context.user_data[_PLUS_VIDEO_UPLOAD_KEY] = application_id
+    await update.effective_message.reply_text(
+        f"Ожидаю файл видео для заявки {application_id}.\n"
+        "Прикрепите видео следующим сообщением.",
+    )
+
+
+async def handle_admin_video_upload(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Обработчик файла/видео в режиме загрузки Plus-видео."""
+    application_id = context.user_data.get(_PLUS_VIDEO_UPLOAD_KEY)
+    if not application_id:
+        return  # не в режиме загрузки
+
+    user_id = update.effective_user.id
+    if not is_admin(user_id):
+        return
+
+    msg = update.effective_message
+    video = msg.video or msg.document
+    if not video:
+        await msg.reply_text("Нужен файл видео или документ.")
+        return
+
+    file_id = video.file_id
+
+    factory = async_session_factory()
+    async with factory() as session:
+        try:
+            app_uuid = UUID(application_id)
+        except ValueError:
+            return
+        app = await session.get(Application, app_uuid)
+        if app is None:
+            await msg.reply_text("Заявка не найдена.")
+            context.user_data.pop(_PLUS_VIDEO_UPLOAD_KEY, None)
+            return
+
+        user_obj = (await session.execute(
+            select(User).where(User.id == app.user_id)
+        )).scalar_one_or_none()
+        if user_obj is None:
+            await msg.reply_text("Пользователь заявки не найден.")
+            return
+
+        now = datetime.now(timezone.utc)
+        # Сохраняем метаданные видео (F8 migration 0011 поля если есть)
+        if hasattr(app, "plus_video_uploaded_at"):
+            app.plus_video_uploaded_at = now
+        if hasattr(app, "plus_video_url"):
+            app.plus_video_url = file_id  # храним Telegram file_id
+
+        await log_event(session, user_id=app.user_id, event="plus_video_uploaded",
+                        payload={"application_id": application_id})
+        await session.commit()
+
+    # Отправляем видео клиенту
+    try:
+        await context.bot.send_video(
+            chat_id=user_obj.telegram_id,
+            video=file_id,
+            caption=(
+                "🎬 Ваше персональное видео-разбор от Кати Жигановой.\n\n"
+                "Смотрите, конспектируйте и внедряйте. "
+                "Если появятся вопросы — пишите прямо сюда."
+            ),
+        )
+        logger.info("Plus video sent to user %s for application %s", user_obj.telegram_id, application_id)
+    except Exception:
+        logger.exception("Failed to send plus video to user %s", user_obj.telegram_id)
+        await msg.reply_text(
+            f"Ошибка при отправке видео клиенту {user_obj.telegram_id}. "
+            "Проверьте что бот не заблокирован."
+        )
+        return
+
+    # Фиксируем время отправки
+    factory2 = async_session_factory()
+    async with factory2() as session2:
+        app2 = await session2.get(Application, app_uuid)
+        if app2 and hasattr(app2, "plus_video_sent_to_client_at"):
+            app2.plus_video_sent_to_client_at = datetime.now(timezone.utc)
+        await session2.commit()
+
+    context.user_data.pop(_PLUS_VIDEO_UPLOAD_KEY, None)
+    await msg.reply_text(
+        f"✅ Видео отправлено клиенту (tg_id={user_obj.telegram_id}).\n"
+        f"Email: {user_obj.email or '—'}"
+    )

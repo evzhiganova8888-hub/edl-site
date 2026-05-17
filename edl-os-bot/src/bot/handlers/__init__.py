@@ -30,6 +30,7 @@ from src.bot.handlers import (
     refund,
     start,
 )
+from src.bot.handlers.admin import upload_plus_video_command, handle_admin_video_upload
 from src.core.config import settings
 from src.db.repos import log_event
 from src.db.session import async_session_factory
@@ -97,6 +98,7 @@ def register(app: Application) -> None:
     app.add_handler(CommandHandler("audit_sample", audit.audit_sample_command))
     app.add_handler(CommandHandler("refund", refund.refund_command))
     app.add_handler(CommandHandler("quiz", quiz.quiz_command))
+    app.add_handler(CommandHandler("score", quiz.quiz_command))  # F3: alias
     app.add_handler(CommandHandler("admin", admin.admin_command))
     app.add_handler(CommandHandler("admin_login", admin_login.admin_login_command))
     app.add_handler(CommandHandler("admin_logout", admin_login.admin_logout_command))
@@ -108,6 +110,7 @@ def register(app: Application) -> None:
     app.add_handler(CommandHandler("bugs", bugs.bugs_command))
     app.add_handler(CommandHandler("feedback", feedback_handler.feedback_command))
     app.add_handler(CommandHandler("reset", start.reset_command))
+    app.add_handler(CommandHandler("upload_plus_video", upload_plus_video_command))  # F8
 
     # Callback queries (inline buttons)
     app.add_handler(CallbackQueryHandler(consent.handle_consent, pattern=r"^consent:"))
@@ -132,6 +135,11 @@ def register(app: Application) -> None:
 
     # Free-form text — FSM-маршрутизатор (audit / refund / lead / faq / dialog)
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, dialog.handle_text))
+    # F8: admin video upload (document/video message)
+    app.add_handler(MessageHandler(
+        (filters.VIDEO | filters.Document.ALL) & ~filters.COMMAND,
+        handle_admin_video_upload,
+    ))
 
     # Глобальный error_handler: ловим всё неперехваченное, чтобы юзер не
     # видел «ничего не происходит» при exception (см. P0 bug inv_id NULL).
