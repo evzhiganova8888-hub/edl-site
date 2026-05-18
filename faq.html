@@ -13,35 +13,154 @@
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/main-v2.css">
   <link rel="stylesheet" href="css/mobile-fixes.css">
-  <script>
-    (function(){
-      const ENDPOINT = window.EDL_ANALYTICS_ENDPOINT || null;
-      const buffer = JSON.parse(localStorage.getItem('edl_events') || '[]');
-      let lastClickTime = 0;
-      function track(event, payload) {
-        if (event.includes('click') || event.includes('opened') || event.includes('switched')) {
-          const now = Date.now();
-          if (now - lastClickTime < 1000) return;
-          lastClickTime = now;
-        }
-        const segment = document.body.dataset.segmentActive || sessionStorage.getItem('edl_icp') || 'services';
-        const data = {event, timestamp: new Date().toISOString(), page: document.body.dataset.page || 'faq', segment, referrer: document.referrer, ...payload};
-        buffer.push(data);
-        if (ENDPOINT) flush(); else localStorage.setItem('edl_events', JSON.stringify(buffer));
-      }
-      function flush() {
-        if (!ENDPOINT || !buffer.length) return;
-        fetch(ENDPOINT, {method:'POST', body:JSON.stringify(buffer), keepalive:true}).catch(console.error);
-        buffer.length = 0; localStorage.removeItem('edl_events');
-      }
-      window.EDLTrack = track;
-      window.addEventListener('beforeunload', flush);
-      window.addEventListener('DOMContentLoaded', () => track('page_view', {}));
-    })();
-  </script>
+  <script src="js/edl-track.js" defer></script>
   <link rel="icon" href="/assets/favicon.ico" sizes="any">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
   <meta name="theme-color" content="#0A0A0A">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Чем Бизнес-чекап отличается от Mini-Чекапа (Founder OS Score)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Mini-Чекап (Founder OS Score) — бесплатный 15-минутный self-service: 12 вопросов, Score 0-100 и 2-3 точки роста. Без регистрации.Бизнес-чекап — глубокий аудит: 20 вопросов в боте (1-2 часа, можно прерываться), 24ч обработки. Base 9 000 ₽: PDF 10 стр + 5 рекомендаций + НДС-флажок. Plus 14 000 ₽: PDF 15 стр + 7 рекомендаций + видео-разбор от Кати за 24ч. Оплата картой в боте. Безусловный возврат 14 дней — /refund."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Идут ли 9 000 ₽ в зачёт Диагностики?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Нет, разные продукты. Чекап — взгляд снаружи. Диагностика — погружение внутрь."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Сколько это стоит на самом деле?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Mini-Чекап — бесплатно. Бизнес-чекап 9 000–14 000 ₽. Диагностика 25 000 ₽. Спринт 135 000–260 000 ₽. План Роста 50 000–110 000 ₽/мес."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Какие гарантии?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Бизнес-чекап: безусловный возврат 100 % в течение 14 календарных дней, /refund в боте.Спринт: защиты каждые 7–10 дней. Оплата поэтапная."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Можно ли остановить Спринт на середине?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Да, защиты каждые 7-10 дней. Оплата поэтапная."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Какие документы перед Sprint?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Договор, NDA, спецификация задач."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Юридические условия возврата?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Гарантия применимости: 100% возврат в течение 10 рабочих дней при доказательстве попыток. Безусловный возврат: 14 календарных дней без причины, /refund в боте. Полная формулировка — /legal/offer.html."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Что вы понимаете про антидробление и НДС 2026?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "EDL OS показывает экономику «как есть» по каждому юр.лицу и консолидированно. Не даёт советов по уклонению, не передаёт данные третьим сторонам. Подсвечивает риски вокруг лимита УСН."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Это безопасно?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Данные на вашей инфраструктуре. NDA стандартно. Если хотите остановить работу — всё остаётся у вас, система работает автономно."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Что если ваша компания закроется?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Все данные, интеграции и код у вас. После Sprint — полный доступ. Система продолжит работать автономно."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Где хранятся мои данные и как их отозвать?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Сырые данные бизнеса (ИНН, 1С, переписки) — физически у вас. У нас: Telegram ID, email (если купили чекап), история диалогов в @edl_os_bot, audit-log. 152-ФЗ — каждое поле маскируется перед ИИ. Команды в боте: /delete_my_data и /export_my_data — удаление и выгрузка за 24 часа."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Вы работаете с моей нишей?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Да. Система горизонтальная. Сейчас в бете — маркетплейс-сервисы. Услуги и производство — пилоты июнь-июль 2026. Интеграции через API за 2-5 дней."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "У нас всё в Google Sheets и TG-ботах. Подключитесь?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Да, это наш стандартный стек. Интегрируемся через API за 2-5 дней."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Можно попробовать EDL OS в Claude / ChatGPT / Cursor?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Запуск 23 мая 2026. MCP-сервер подключается за 3 шага к Claude Desktop, Cursor, ChatGPT Desktop, Gemini CLI. Тот же Mini-Чекап (Founder OS Score) внутри вашего AI-инструмента. Инструкция: /mcp. Open source MIT."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Кто работает над моим Бизнес-чекапом?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Сетка ИИ-агентов EDL OS обрабатывает ваши ответы в боте. Екатерина Жиганова лично контролирует старт анализа, интерпретирует результат и записывает видео-разбор."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "На какой методологии вы работаете?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "EDL OS — синтез трёх управленческих традиций: Big Tech operations (McKinsey, Google, Amazon), CRAFT (Центр CRAFT, школа инноваций ИКРА, идеи Бруно Латура) и AI Fluency Framework (Anthropic, UCC, Ringling).Подробно: /methodology."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Какие команды есть в Telegram-боте?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Основные команды @edl_os_bot:/score или /quiz — Founder OS Score: 12 вопросов по 4 слоям, бесплатно, результат за 2 минуты/audit — купить Бизнес-чекап (Base 9 000 ₽ / Plus 14 000 ₽), оплата картой прямо в чате/checkup — начать или продолжить 20 вопросов (прогресс сохраняется)/refund — возврат в течение 14 дней, без объяснений/faq — ответы на частые вопросы прямо в чате/menu — вернуться в главное менюБот работает 24/7. Любой свободный вопрос о бизнесе — отвечает ИИ-консультант на базе Claude Haiku."
+      }
+    }
+  ]
+}
+  </script>
 </head>
 <body data-page="faq">
   <a href="#main" class="skip-link">Перейти к содержанию</a>

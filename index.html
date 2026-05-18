@@ -23,39 +23,47 @@
   <link rel="stylesheet" href="css/mini-checkup.css">
   <link rel="stylesheet" href="css/bot-widget.css">
   <link rel="stylesheet" href="css/exit-intent.css">
-  <!-- Analytics tracking script (Inline buffer as per TZ) -->
-  <script>
-    (function(){
-      const ENDPOINT = window.EDL_ANALYTICS_ENDPOINT || null;
-      const buffer = JSON.parse(localStorage.getItem('edl_events') || '[]');
-      let lastClickTime = 0;
-      function track(event, payload) {
-        if (event.includes('click') || event.includes('opened') || event.includes('switched')) {
-          const now = Date.now();
-          if (now - lastClickTime < 1000) return; // throttle 1s
-          lastClickTime = now;
-        }
-        const data = {
-          event: event,
-          timestamp: new Date().toISOString(),
-          page: document.body.dataset.page || 'home',
-          segment: document.body.dataset.segmentActive || sessionStorage.getItem('edl_icp') || 'services',
-          referrer: document.referrer,
-          ...payload
-        };
-        buffer.push(data);
-        if (ENDPOINT) flush(); else localStorage.setItem('edl_events', JSON.stringify(buffer));
+  <link rel="stylesheet" href="css/home-premium.css">
+
+  <!-- DataLayer · loaded with defer (no TTI block) — see js/edl-track.js -->
+  <script src="js/edl-track.js" defer></script>
+
+  <!-- Structured data: Organization + WebSite + SoftwareApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://elephantdreams.ru/#org",
+        "name": "EDL OS",
+        "alternateName": "Elephant Dreams Lab",
+        "url": "https://elephantdreams.ru/",
+        "logo": "https://elephantdreams.ru/assets/logo-192.png",
+        "sameAs": ["https://t.me/edl_os", "https://github.com/edl-os"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://elephantdreams.ru/#site",
+        "url": "https://elephantdreams.ru/",
+        "name": "EDL OS",
+        "publisher": { "@id": "https://elephantdreams.ru/#org" },
+        "inLanguage": "ru-RU"
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "EDL OS",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Telegram, macOS, Windows, Linux",
+        "description": "Founder OS — операционная система для собственника бизнеса 10-50 человек. Утренняя сводка по 4 слоям (Стратегия, Воронка, Операционка, Деньги), ИИ-консультант, интеграции с 1С/CRM, MCP-сервер для Claude/Cursor.",
+        "offers": [
+          { "@type": "Offer", "name": "Mini-Чекап (Founder OS Score)", "price": "0", "priceCurrency": "RUB" },
+          { "@type": "Offer", "name": "Бизнес-чекап", "price": "9000", "priceCurrency": "RUB" },
+          { "@type": "Offer", "name": "Спринт ОС", "price": "135000", "priceCurrency": "RUB" }
+        ]
       }
-      function flush() {
-        if (!ENDPOINT || !buffer.length) return;
-        fetch(ENDPOINT, {method:'POST', body:JSON.stringify(buffer), keepalive:true}).catch(console.error);
-        buffer.length = 0;
-        localStorage.removeItem('edl_events');
-      }
-      window.EDLTrack = track;
-      window.addEventListener('beforeunload', flush);
-      window.addEventListener('DOMContentLoaded', () => track('page_view', {}));
-    })();
+    ]
+  }
   </script>
   <link rel="icon" href="/assets/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
@@ -95,73 +103,282 @@
   </div>
 
   <main id="main">
-    <!-- Hero -->
-    <section class="hero section" id="hero" style="padding-top:100px;">
-      <div class="container hero__grid">
-        <div class="hero__content">
-          <h1 class="hero__title" style="font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 20px;">
-            Бортовой компьютер для бизнеса 10–50 человек
-          </h1>
-          <p class="hero__subtitle" style="font-size: 1.25rem; color: var(--color-gray-800); margin-bottom: 24px; line-height: 1.5;">
-            Утренняя сводка в Telegram + ИИ-консультант под рукой.<br>Без дашбордов, без новых паролей, без IT-отдела.
-          </p>
+    <!-- ============== PREMIUM HERO ============== -->
+    <section class="home-hero" id="hero">
+      <div class="home-hero__grid-bg" aria-hidden="true"></div>
+      <div class="container">
+        <div class="home-hero__inner">
 
-          <ul class="hero__bullets" style="list-style:none; padding:0; margin:0 0 32px; display:flex; flex-direction:column; gap:10px;">
-            <li style="display:flex; gap:10px; align-items:flex-start; font-size:1.0625rem; color: var(--color-gray-800); line-height:1.45;">
-              <span style="color: var(--color-tangerine); font-weight:700; flex-shrink:0;">▸</span>
-              <span>Работает в Telegram · PDF за 24 часа · Все данные остаются у вас</span>
-            </li>
-          </ul>
+          <!-- LEFT: content -->
+          <div class="home-hero__content">
+            <div class="home-hero__pill">
+              <span class="home-hero__pill-dot" aria-hidden="true"></span>
+              Founder OS · версия 2026.05
+            </div>
+            <h1 class="home-hero__title">
+              Не дашборд. Не CRM. Не AI-ассистент.<br>
+              <em>Бортовой компьютер</em> для собственника.
+            </h1>
+            <p class="home-hero__lede">
+              EDL OS — это <strong>операционная система</strong> для бизнеса 10–50 человек.
+              Четыре слоя — Стратегия, Воронка, Операционка, Деньги — сведены в одну
+              утреннюю сводку и одного ИИ-консультанта. <strong>В Telegram, в Claude, где угодно</strong>.
+            </p>
 
-          <div style="display:flex; gap:16px; margin-top:24px; flex-wrap:wrap; align-items:center;">
-            <a href="audit.html" class="btn btn--primary" style="font-size:1.0625rem; padding:14px 28px;" data-cta-type="audit" data-cta-location="hero">
-              Бизнес-чекап 9 000 ₽ →
-            </a>
-            <button type="button" class="hero__secondary-cta" data-mc-open="hero" style="background:none; border:none; color:var(--color-tangerine); font-weight:600; cursor:pointer; text-decoration:underline; font-size:0.9375rem;">
-              Mini-Чекап за 15 минут бесплатно
-            </button>
-          </div>
+            <ul class="home-hero__bullets">
+              <li>Утренняя сводка в 09:00 — что важно, что горит, что решать</li>
+              <li>ИИ знает ваш контекст — данные не уходят в модель</li>
+              <li>Open source MCP-сервер — подключите Claude или Cursor</li>
+            </ul>
 
-          <div class="trust-strip" role="list" style="display:flex; gap:20px; align-items:center; flex-wrap:wrap; margin-top:24px; opacity:0.75;">
-            <span style="font-size:0.8125rem; color:var(--color-gray-600); font-weight:500;">Интеграции:</span>
-            <img src="/assets/logos/1c.svg"         alt="1С"         style="height:22px; filter:grayscale(1);">
-            <img src="/assets/logos/amocrm.svg"     alt="amoCRM"     style="height:22px; filter:grayscale(1);">
-            <img src="/assets/logos/bitrix.svg"     alt="Битрикс24"  style="height:22px; filter:grayscale(1);">
-            <img src="/assets/logos/tinkoff.svg"    alt="Тинькофф"   style="height:22px; filter:grayscale(1);">
-            <img src="/assets/logos/getcourse.svg"  alt="GetCourse"  style="height:22px; filter:grayscale(1);">
-          </div>
-          <div style="margin-top:10px; font-size:0.8125rem; color:var(--color-gray-500);">
-            <strong>Доступны на этапе Диагностики и далее.</strong> 152-ФЗ: все данные на вашей инфраструктуре · Возврат 14 дней без причины · Open source MCP-сервер
-          </div>
-        </div>
+            <div class="home-hero__cta-row">
+              <a href="audit.html" class="home-hero__btn home-hero__btn--primary"
+                 data-cta-type="audit" data-cta-location="hero">
+                <span aria-hidden="true">⚡</span> Бизнес-чекап · 9 000 ₽
+              </a>
+              <button type="button" class="home-hero__btn home-hero__btn--ghost"
+                      data-mc-open="hero" data-cta-type="mini_checkup" data-cta-location="hero">
+                <span aria-hidden="true">💬</span> Mini-Чекап · 15 мин · бесплатно
+              </button>
+            </div>
 
-        <!-- Right Side: Hero demo video (постер до готовности MP4-демо) -->
-        <div class="hero__demo">
-          <div class="hero-demo-frame" style="position:relative; max-width:380px; margin:0 auto;">
-            <video
-              class="hero-demo-video"
-              autoplay
-              muted
-              loop
-              playsinline
-              poster="/assets/hero-demo-poster.svg"
-              aria-label="EDL OS — пример утренней сводки в Telegram и PDF-чекапа"
-              style="width:100%; height:auto; border-radius:24px; box-shadow:0 20px 50px rgba(0,0,0,0.15); display:block;"
-            >
-              <source src="/assets/hero-demo.mp4" type="video/mp4">
-              <source src="/assets/hero-demo.webm" type="video/webm">
-              <img src="/assets/hero-demo-poster.svg" alt="EDL OS — утренняя сводка в Telegram" style="width:100%; border-radius:24px;">
-            </video>
-            <div class="hero-demo-caption" style="text-align:center; margin-top:14px; font-size:0.875rem; color:var(--color-gray-700);">
-              Так выглядит работа собственника <strong>через 14 дней</strong> после Бизнес-чекапа
+            <div class="home-hero__trust" role="list" aria-label="Интеграции">
+              <span style="font-weight:500;">Интегрировано с:</span>
+              <img src="/assets/logos/1c.svg"        alt="1С">
+              <img src="/assets/logos/amocrm.svg"    alt="amoCRM">
+              <img src="/assets/logos/bitrix.svg"    alt="Битрикс24">
+              <img src="/assets/logos/tinkoff.svg"   alt="Тинькофф">
+              <img src="/assets/logos/getcourse.svg" alt="GetCourse">
             </div>
           </div>
+
+          <!-- RIGHT: interactive Cockpit -->
+          <div class="cockpit-wrap">
+            <div class="cockpit-wrap__badge">LIVE PREVIEW</div>
+            <div class="cockpit" role="region" aria-label="EDL OS · интерактивный пример">
+
+              <!-- Chrome bar -->
+              <div class="cockpit__chrome">
+                <span class="cockpit__dots" aria-hidden="true">
+                  <span class="cockpit__dot"></span>
+                  <span class="cockpit__dot"></span>
+                  <span class="cockpit__dot"></span>
+                </span>
+                <span class="cockpit__title">edl-os · сводка дня</span>
+                <span class="cockpit__live">
+                  <span class="cockpit__live-dot" aria-hidden="true"></span>
+                  <span data-cockpit-time>09:14 MSK</span>
+                </span>
+              </div>
+
+              <!-- Layer tabs -->
+              <div class="cockpit__tabs" role="tablist" aria-label="Слои Founder OS">
+                <button class="cockpit__tab" type="button" data-tab="strategy" aria-selected="true">
+                  <span class="cockpit__tab-icon" aria-hidden="true">🎯</span>
+                  Стратегия
+                </button>
+                <button class="cockpit__tab" type="button" data-tab="funnel" aria-selected="false">
+                  <span class="cockpit__tab-icon" aria-hidden="true">🚀</span>
+                  Воронка
+                </button>
+                <button class="cockpit__tab" type="button" data-tab="ops" aria-selected="false">
+                  <span class="cockpit__tab-icon" aria-hidden="true">⚙️</span>
+                  Операц.
+                </button>
+                <button class="cockpit__tab" type="button" data-tab="money" aria-selected="false">
+                  <span class="cockpit__tab-icon" aria-hidden="true">💰</span>
+                  Деньги
+                </button>
+                <button class="cockpit__tab" type="button" data-tab="ai" aria-selected="false">
+                  <span class="cockpit__tab-icon" aria-hidden="true">🤖</span>
+                  ИИ
+                </button>
+              </div>
+
+              <!-- SVG gradient defs (shared) -->
+              <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+                <defs>
+                  <linearGradient id="cockpit-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FF6B1A"/>
+                    <stop offset="100%" stop-color="#FF8C4A"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+
+              <!-- Panels -->
+              <div class="cockpit__body">
+
+                <!-- Strategy -->
+                <div class="cockpit__panel is-active" data-panel="strategy">
+                  <div class="cockpit__panel-head">
+                    <h3 class="cockpit__panel-title">Стратегия · недельные ставки</h3>
+                    <span class="cockpit__panel-meta">CRAFT · неделя 19</span>
+                  </div>
+                  <div class="cockpit__score">
+                    <div class="cockpit__score-circle">
+                      <svg class="cockpit__score-svg" viewBox="0 0 96 96">
+                        <circle class="cockpit__score-track" cx="48" cy="48" r="40"/>
+                        <circle class="cockpit__score-arc"   cx="48" cy="48" r="40" data-score="76"/>
+                      </svg>
+                      <div class="cockpit__score-num">76</div>
+                    </div>
+                    <div class="cockpit__score-legend">
+                      <p><strong>3 из 4 ставок</strong> в графике</p>
+                      <p>Ставка #2 (новый канал) — <strong>отстаёт 4 дня</strong></p>
+                      <p style="color:var(--color-tangerine); font-weight:600;">→ что делать на этой неделе?</p>
+                    </div>
+                  </div>
+                  <ul class="cockpit__items">
+                    <li class="cockpit__item">
+                      <span class="cockpit__item-icon">✓</span>
+                      <span class="cockpit__item-text"><strong>Запуск B2B-сегмента</strong> · 80% выполнено</span>
+                      <span class="cockpit__item-tag cockpit__item-tag--ok">в графике</span>
+                    </li>
+                    <li class="cockpit__item">
+                      <span class="cockpit__item-icon">⏳</span>
+                      <span class="cockpit__item-text"><strong>Партнёрский канал</strong> · 35% · отстаёт</span>
+                      <span class="cockpit__item-tag cockpit__item-tag--hot">риск</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Funnel -->
+                <div class="cockpit__panel" data-panel="funnel">
+                  <div class="cockpit__panel-head">
+                    <h3 class="cockpit__panel-title">Воронка · live статус</h3>
+                    <span class="cockpit__panel-meta">из amoCRM</span>
+                  </div>
+                  <div class="cockpit__metric">
+                    <span class="cockpit__metric-num" data-countup="12" data-decimals="0">0</span>
+                    <span class="cockpit__metric-delta cockpit__metric-delta--up">+3 за неделю</span>
+                  </div>
+                  <div class="cockpit__metric-label">активных сделок · 4 на грани оттока</div>
+                  <div class="cockpit__chart" aria-hidden="true">
+                    <span class="cockpit__bar" data-height="40"></span>
+                    <span class="cockpit__bar" data-height="55"></span>
+                    <span class="cockpit__bar" data-height="48"></span>
+                    <span class="cockpit__bar" data-height="72"></span>
+                    <span class="cockpit__bar" data-height="60"></span>
+                    <span class="cockpit__bar cockpit__bar--highlight" data-height="85"></span>
+                    <span class="cockpit__bar" data-height="78"></span>
+                  </div>
+                  <ul class="cockpit__items">
+                    <li class="cockpit__item">
+                      <span class="cockpit__item-icon">🔥</span>
+                      <span class="cockpit__item-text"><strong>Петров</strong> · 1.2М · 28ч без касания</span>
+                      <span class="cockpit__item-tag cockpit__item-tag--hot">hot</span>
+                    </li>
+                    <li class="cockpit__item">
+                      <span class="cockpit__item-icon">⚡</span>
+                      <span class="cockpit__item-text"><strong>Иванова</strong> · 480К · вернулась после паузы</span>
+                      <span class="cockpit__item-tag cockpit__item-tag--ok">возврат</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Ops -->
+                <div class="cockpit__panel" data-panel="ops">
+                  <div class="cockpit__panel-head">
+                    <h3 class="cockpit__panel-title">Операционка · SLA по командам</h3>
+                    <span class="cockpit__panel-meta">обновлено 2 мин назад</span>
+                  </div>
+                  <div class="cockpit__metric">
+                    <span class="cockpit__metric-num" data-countup="87" data-suffix="%" data-decimals="0">0</span>
+                    <span class="cockpit__metric-delta cockpit__metric-delta--down">-3% к норме</span>
+                  </div>
+                  <div class="cockpit__metric-label">задач в SLA · 3 просрочены</div>
+                  <ul class="cockpit__items">
+                    <li class="cockpit__item">
+                      <span class="cockpit__item-icon">⚠️</span>
+                      <span class="cockpit__item-text"><strong>Доставка</strong> · 12 заявок · 3 опаздывают &gt;4ч</span>
+                      <span class="cockpit__item-tag cockpit__item-tag--hot">алёрт</span>
+                    </li>
+                    <li class="cockpit__item">
+                      <span class="cockpit__item-icon">✓</span>
+                      <span class="cockpit__item-text"><strong>Производство</strong> · 24/24 в графике</span>
+                      <span class="cockpit__item-tag cockpit__item-tag--ok">норма</span>
+                    </li>
+                    <li class="cockpit__item">
+                      <span class="cockpit__item-icon">📞</span>
+                      <span class="cockpit__item-text"><strong>Поддержка</strong> · 5 тикетов · средн. ответ 14 мин</span>
+                      <span class="cockpit__item-tag cockpit__item-tag--ok">норма</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Money -->
+                <div class="cockpit__panel" data-panel="money">
+                  <div class="cockpit__panel-head">
+                    <h3 class="cockpit__panel-title">Деньги · маржа по клиентам</h3>
+                    <span class="cockpit__panel-meta">из 1С · апрель</span>
+                  </div>
+                  <div class="cockpit__metric">
+                    <span class="cockpit__metric-num">+<span data-countup="2.1" data-decimals="1">0</span> М ₽</span>
+                    <span class="cockpit__metric-delta cockpit__metric-delta--down">маржа -2.1 п.п.</span>
+                  </div>
+                  <div class="cockpit__metric-label">выручка месяца · убыточных контрактов: 3 из 24</div>
+                  <ul class="cockpit__items">
+                    <li class="cockpit__item">
+                      <span class="cockpit__item-icon">📉</span>
+                      <span class="cockpit__item-text"><strong>Клиент Z</strong> · маржа -4 п.п. · 4й месяц подряд</span>
+                      <span class="cockpit__item-tag cockpit__item-tag--hot">убыток</span>
+                    </li>
+                    <li class="cockpit__item">
+                      <span class="cockpit__item-icon">⚖️</span>
+                      <span class="cockpit__item-text"><strong>УСН-лимит 2026</strong> · 78% · хватит до октября</span>
+                      <span class="cockpit__item-tag">прогноз</span>
+                    </li>
+                    <li class="cockpit__item">
+                      <span class="cockpit__item-icon">💵</span>
+                      <span class="cockpit__item-text"><strong>Кассовый разрыв</strong> · нет рисков в горизонте 30 дн</span>
+                      <span class="cockpit__item-tag cockpit__item-tag--ok">ок</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- AI -->
+                <div class="cockpit__panel" data-panel="ai">
+                  <div class="cockpit__panel-head">
+                    <h3 class="cockpit__panel-title">ИИ-консультант · знает ваш контекст</h3>
+                    <span class="cockpit__panel-meta">Claude Haiku · MCP</span>
+                  </div>
+                  <div class="cockpit__ai">
+                    <div class="cockpit__msg cockpit__msg--user">
+                      Что сегодня важно?
+                    </div>
+                    <div class="cockpit__msg cockpit__msg--ai">
+                      <strong>3 точки внимания:</strong><br>
+                      1. Маржа клиента Z падает 4й месяц — открыть разбор?<br>
+                      2. Петров (1.2М) <em>28 часов</em> без касания.<br>
+                      3. Ставка «партнёрский канал» отстаёт на 4 дня.
+                    </div>
+                    <div class="cockpit__msg cockpit__msg--user">
+                      Что делать с клиентом Z?
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Footer: channels -->
+              <div class="cockpit__foot">
+                <span>Каналы доставки:</span>
+                <span class="cockpit__channels">
+                  <span class="cockpit__channel cockpit__channel--active">Telegram</span>
+                  <span class="cockpit__channel">Claude</span>
+                  <span class="cockpit__channel">Cursor</span>
+                  <span class="cockpit__channel">Email</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
 
     <!-- Section: «У вас так?» — резонанс боли (§5) -->
-    <section class="section section--gray" id="pain-section" style="padding: 80px 0;">
+    <section class="section section--gray reveal-on-scroll" id="pain-section" style="padding: 80px 0;">
       <div class="container" style="max-width:920px;">
         <h2 class="section__title" style="text-align:center; margin-bottom:48px;">У вас так?</h2>
         <div class="pain-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:24px;">
@@ -194,7 +411,7 @@
     </section>
 
     <!-- Three Blind Spots — synthesis intro for /methodology -->
-    <section class="section" id="blindspots" aria-labelledby="bs-title">
+    <section class="section reveal-on-scroll" id="blindspots" aria-labelledby="bs-title">
       <div class="container">
         <div class="section__header">
           <h2 class="section__title" id="bs-title">Три слепых пятна основателя 10–50</h2>
@@ -1091,6 +1308,7 @@
       </div>
     </div>
   </div>
+  <script src="js/home-cockpit.js" defer></script>
   <script src="js/mini-checkup.js" defer></script>
   <script src="js/bot-widget.js" defer></script>
   <script src="js/exit-intent.js" defer></script>
