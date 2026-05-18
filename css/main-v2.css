@@ -1392,8 +1392,52 @@ body[data-segment-active="wholesale"] .icp-btn[data-segment-switch="wholesale"] 
   cursor: pointer; white-space: nowrap;
 }
 .email-gate-form button:hover { background: #E55A0E; }
-.email-gate-fallback { font-size: 14px; color: #888; margin: 0; }
-.email-gate-fallback a { color: #FF6B1A; text-decoration: underline; }
+.email-gate-note { font-size: 13px; color: #737373; margin: 0; line-height: 1.5; }
+.email-gate-note a { color: #FF6B1A; text-decoration: underline; }
+
+/* meta strip above the whitepaper headline */
+.wh-cta-meta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px;
+  margin-bottom: 14px; font-size: 12px;
+  color: #737373; letter-spacing: 0.06em; text-transform: uppercase;
+  font-weight: 500;
+}
+.wh-cta-badge {
+  background: #FFF1E8; color: #E55A0E;
+  padding: 4px 10px; border-radius: 999px;
+  font-weight: 700; letter-spacing: 0.08em;
+}
+.wh-cta-meta-item { position: relative; }
+.wh-cta-meta-item + .wh-cta-meta-item::before {
+  content: "·"; margin-right: 10px; color: #D4D4D4;
+}
+
+/* email-gate success state */
+.email-gate-success {
+  display: flex; gap: 16px; align-items: flex-start;
+  background: #ECFDF5; border-left: 4px solid #10B981;
+  padding: 20px 24px; border-radius: 4px;
+  margin-bottom: 0;
+}
+.email-gate-success__icon {
+  flex-shrink: 0;
+  width: 32px; height: 32px; border-radius: 999px;
+  background: #10B981; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 18px; line-height: 1;
+}
+.email-gate-success__title {
+  font-size: 16px; font-weight: 700; color: #064E3B; margin-bottom: 4px;
+}
+.email-gate-success__title #whitepaper-success-email { color: #047857; }
+.email-gate-success__text { font-size: 14px; color: #065F46; line-height: 1.5; margin: 0; }
+.email-gate-success__text a { color: #047857; text-decoration: underline; }
+
+/* screen-reader-only utility */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
 
 /* audit sidebar PDF */
 .audit-sidebar-pdf {
@@ -1424,4 +1468,10 @@ body[data-segment-active="wholesale"] .icp-btn[data-segment-switch="wholesale"] 
 @media (max-width: 768px) {
   .pdf-cta-card { flex-direction: column; text-align: center; }
   .email-gate-form { flex-direction: column; }
+  .email-gate-form input[type="email"],
+  .email-gate-form button { width: 100%; }
+  .email-gate-form input[type="email"] { padding: 14px 16px; min-height: 48px; }
+  .email-gate-form button { min-height: 48px; }
+  .wh-cta-card { padding: 28px 24px; }
+  .email-gate-success { padding: 16px 18px; gap: 12px; }
 }
