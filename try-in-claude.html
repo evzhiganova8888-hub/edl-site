@@ -80,9 +80,38 @@
       background: #0a0a0a; color: #fafafa; padding: 14px 16px;
       border-radius: 10px; font-family: var(--font-mono); font-size: 0.875rem;
       display: flex; justify-content: space-between; align-items: center;
-      gap: 12px; overflow-x: auto;
+      gap: 12px; overflow-x: auto; position: relative;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.25) transparent;
+      /* Right-edge fade hint that more content scrolls off-screen */
+      mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent);
+      -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent);
     }
-    .mcp-code code { color: var(--color-tangerine); word-break: break-all; }
+    .mcp-code:not(.is-scrolled-end) {
+      /* hint that horizontal scroll is available */
+    }
+    .mcp-code code {
+      color: var(--color-tangerine);
+      white-space: nowrap;
+      font-feature-settings: "tnum";
+    }
+    @media (min-width: 640px) {
+      .mcp-code { mask-image: none; -webkit-mask-image: none; }
+      .mcp-code code { white-space: normal; word-break: break-all; }
+    }
+    .mcp-code::-webkit-scrollbar { height: 6px; }
+    .mcp-code::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 3px; }
+    /* Scroll-hint chip — visible on mobile when code overflows */
+    .mcp-code-hint {
+      display: none;
+      font-size: 0.6875rem;
+      color: var(--color-gray-500);
+      margin-top: 6px;
+      padding-left: 4px;
+    }
+    @media (max-width: 640px) {
+      .mcp-code-hint { display: inline-flex; align-items: center; gap: 6px; }
+    }
     .mcp-copy {
       background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.2);
       padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 600;
@@ -188,6 +217,7 @@
                 <span aria-hidden="true">⎘</span> Скопировать URL
               </button>
             </div>
+            <div class="mcp-code-hint" aria-hidden="true"><span>←</span> Сдвиньте, чтобы увидеть полный URL <span>→</span></div>
             <dl class="mcp-kv">
               <dt>Имя:</dt><dd>EDL OS</dd>
               <dt>Тип:</dt><dd>SSE / HTTP</dd>

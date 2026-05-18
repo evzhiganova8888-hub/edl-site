@@ -43,12 +43,86 @@
               <div class="beforeafter__caption">Фактические данные пилотного клиента, март–май 2026, NDA.</div>
             </div>
           </div>
-          <div style="background:var(--color-gray-50); border-radius:16px; border:1px dashed var(--color-gray-300); padding:40px; text-align:center; color:var(--color-gray-500);"><div style="font-size:2rem; margin-bottom:16px;">🏢</div><h2 style="font-size:1.25rem; font-weight:600; margin-bottom:8px;">Бухгалтерия для маркетплейсов</h2><p>12 человек, 65 М ₽ выручки. Спринт стартовал в мае 2026 — разбор в июне-июле.</p></div>
-          <div style="background:var(--color-gray-50); border-radius:16px; border:1px dashed var(--color-gray-300); padding:40px; text-align:center; color:var(--color-gray-500);"><div style="font-size:2rem; margin-bottom:16px;">🎓</div><h2 style="font-size:1.25rem; font-weight:600; margin-bottom:8px;">karpov.courses</h2><p>Анонс результатов Спринта — июнь-июль 2026</p></div>
+          <article class="case-soon">
+            <div class="case-soon__top">
+              <div class="case-soon__icon" aria-hidden="true">🏢</div>
+              <div class="case-soon__meta">
+                <div class="case-soon__pill">В работе · разбор июнь–июль 2026</div>
+                <h2 class="case-soon__title">Бухгалтерия для маркетплейсов</h2>
+                <p class="case-soon__sub">12 человек · ~65 М ₽ выручки · Спринт стартовал в мае 2026</p>
+              </div>
+            </div>
+            <p class="case-soon__body">Подключаем 1С, банк и личный кабинет маркетплейса в read-only режиме. Цель — найти, какая часть клиентов в риск-зоне до того, как они отвалятся, и упорядочить нагрузку по бухгалтерам.</p>
+            <form class="case-soon__form" data-case="marketplaces_bookkeeping" novalidate>
+              <label class="sr-only" for="notify-marketplaces">Email для уведомления о результатах</label>
+              <input type="email" id="notify-marketplaces" name="email" placeholder="ваш@email.ru" autocomplete="email" required>
+              <button type="submit">Уведомить о выходе кейса →</button>
+              <p class="case-soon__note" data-state="idle">Один письмо когда выложим разбор. Без рассылок без вашего согласия.</p>
+            </form>
+          </article>
+
+          <article class="case-soon">
+            <div class="case-soon__top">
+              <div class="case-soon__icon" aria-hidden="true">🎓</div>
+              <div class="case-soon__meta">
+                <div class="case-soon__pill">Анонс · июнь–июль 2026</div>
+                <h2 class="case-soon__title">karpov.courses</h2>
+                <p class="case-soon__sub">EdTech · 100+ человек · pre-Спринт интервью</p>
+              </div>
+            </div>
+            <p class="case-soon__body">Готовим публичный разбор Спринта с командой karpov.courses. Покажем, как мы собирали 4 слоя EDL OS под крупный edtech-операционный контур, и какие метрики переехали из таблиц в утреннюю сводку.</p>
+            <form class="case-soon__form" data-case="karpov_courses" novalidate>
+              <label class="sr-only" for="notify-karpov">Email для уведомления о результатах</label>
+              <input type="email" id="notify-karpov" name="email" placeholder="ваш@email.ru" autocomplete="email" required>
+              <button type="submit">Уведомить о выходе кейса →</button>
+              <p class="case-soon__note" data-state="idle">Один письмо когда выложим разбор. Без рассылок без вашего согласия.</p>
+            </form>
+          </article>
         </div>
       </div>
     </section>
   </main>
   <footer class="footer" style="background:#fff; border-top:1px solid #e4e4e7; padding:48px 0;"><div class="container" style="text-align:center; color:#6b7280; font-size:0.875rem;">© 2026 EDL OS · Elephant Dreams Lab</div></footer>
   <script>(function(){const b=document.getElementById('burger');const n=document.getElementById('site-nav');if(b&&n){b.addEventListener('click',()=>{const o=n.classList.toggle('is-open');b.setAttribute('aria-expanded',String(o));});n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{n.classList.remove('is-open');b.setAttribute('aria-expanded','false');}));}})();</script>
+  <script>
+    (function(){
+      document.querySelectorAll('.case-soon__form').forEach(form => {
+        const note = form.querySelector('.case-soon__note');
+        const input = form.querySelector('input[type="email"]');
+        const btn = form.querySelector('button[type="submit"]');
+        form.addEventListener('submit', async function(e){
+          e.preventDefault();
+          const email = (input.value || '').trim();
+          if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            input.setCustomValidity('Введите корректный email');
+            input.reportValidity();
+            return;
+          }
+          input.setCustomValidity('');
+          const origText = btn.textContent;
+          btn.disabled = true;
+          btn.textContent = 'Отправляем…';
+          try {
+            const res = await fetch('https://api.elephantdreams.ru/leads/case-notify', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({email, case: form.dataset.case, source: 'cases_page'})
+            });
+            if (!res.ok) throw new Error('http_' + res.status);
+            input.hidden = true;
+            btn.hidden = true;
+            note.dataset.state = 'done';
+            note.innerHTML = '<span aria-hidden="true">✓</span> Подписали — пришлём ссылку на разбор на <strong>' + email.replace(/[<>&]/g, '') + '</strong> как только опубликуем.';
+            if (typeof window.EDLTrack === 'function') window.EDLTrack('case_notify_signup', {case: form.dataset.case});
+          } catch(_) {
+            btn.disabled = false;
+            btn.textContent = origText;
+            input.setCustomValidity('Не удалось отправить. Попробуйте ещё раз или напишите hello@edl-os.ru');
+            input.reportValidity();
+            setTimeout(() => input.setCustomValidity(''), 4000);
+          }
+        });
+      });
+    })();
+  </script>
 </body></html>
