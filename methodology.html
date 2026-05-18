@@ -244,15 +244,28 @@
   <!-- PDF Whitepaper CTA (Block C.1) -->
   <section class="whitepaper-cta">
     <div class="container">
-      <div class="wh-cta-card">
-        <h2>Хотите изучить методологию глубже?</h2>
-        <p>Whitepaper «Founder OS» — академическое описание методологии. 10 страниц. Источники: McKinsey, OECD, McKinsey Global Institute «A Microscope on Small Businesses» (май 2024), Минэкономразвития РФ, ФЗ 425 о НДС-реформе 2026.</p>
-        <form id="whitepaper-form" class="email-gate-form">
-          <input type="email" name="email" placeholder="ваш@email.ru" required>
-          <button type="submit">Скачать PDF →</button>
+      <div class="wh-cta-card" id="whitepaper-cta">
+        <div class="wh-cta-meta">
+          <span class="wh-cta-badge">PDF · v3.1 · Май 2026</span>
+          <span class="wh-cta-meta-item">11 страниц</span>
+          <span class="wh-cta-meta-item">15 минут чтения</span>
+          <span class="wh-cta-meta-item">CC BY-SA</span>
+        </div>
+        <h2>Whitepaper «Founder OS»</h2>
+        <p>Академическое описание методологии: рынок МСП 2025–2026, три слепых пятна фаундера на стадии 10–50 человек, синтез Big Tech ops + CRAFT + AI Fluency Framework, четыре слоя зрелого бизнеса, три ролевых истории. Источники: McKinsey Global Institute (2024), Index Ventures · Molly Graham (2023), OECD G7 paper (декабрь 2025), Минэкономразвития РФ, ФЗ 425-ФЗ о НДС 2026, Anthropic + UCC + Ringling College — AI Fluency Framework (CC BY-NC-SA 4.0).</p>
+        <form id="whitepaper-form" class="email-gate-form" novalidate>
+          <label class="sr-only" for="whitepaper-email">Email для отправки PDF</label>
+          <input type="email" name="email" id="whitepaper-email" placeholder="ваш@email.ru" autocomplete="email" required>
+          <button type="submit">Получить PDF на почту →</button>
         </form>
-        <p class="email-gate-fallback">Или <a href="/assets/pdf/edl-founder-os-v1.pdf" download
-           onclick="if(typeof gtag!=='undefined'){gtag('event','pdf_download',{'pdf_name':'founder_os_v1','source':'methodology_page','has_email':false});}">скачайте без email</a></p>
+        <p class="email-gate-note">Один email → один PDF. Без рассылок без вашего согласия. <a href="legal/privacy.html">Политика приватности</a>.</p>
+        <div class="email-gate-success" id="whitepaper-success" hidden>
+          <div class="email-gate-success__icon" aria-hidden="true">✓</div>
+          <div>
+            <div class="email-gate-success__title">PDF отправлен на <span id="whitepaper-success-email"></span></div>
+            <p class="email-gate-success__text">Проверьте почту в течение 1–2 минут (вкладку «Промоакции» / спам тоже). Если не пришло — напишите <a href="mailto:hello@edl-os.ru">hello@edl-os.ru</a>.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -309,29 +322,42 @@
     (function(){
       const form = document.getElementById('whitepaper-form');
       if (!form) return;
+      const success = document.getElementById('whitepaper-success');
+      const successEmail = document.getElementById('whitepaper-success-email');
+      const note = form.parentElement.querySelector('.email-gate-note');
+
       form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        const email = form.email.value;
+        const email = form.email.value.trim();
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          form.email.setCustomValidity('Введите корректный email');
+          form.email.reportValidity();
+          return;
+        }
+        form.email.setCustomValidity('');
         const btn = form.querySelector('button[type="submit"]');
         const orig = btn.textContent;
         btn.disabled = true;
-        btn.textContent = 'Отправляем...';
+        btn.textContent = 'Отправляем…';
         try {
           const res = await fetch('https://api.elephantdreams.ru/leads/whitepaper', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({email, source: 'methodology_page_pdf', pdf: 'founder_os_v1'})
+            body: JSON.stringify({email, source: 'methodology_page_pdf', pdf: 'founder_os_whitepaper'})
           });
-          if (res.ok) {
-            btn.textContent = 'Проверьте почту ✓';
-            btn.style.background = '#10B981';
-            window.open('/assets/pdf/edl-founder-os-v1.pdf', '_blank');
-            if (typeof gtag !== 'undefined') gtag('event', 'pdf_download', {pdf_name: 'founder_os_v1', source: 'methodology_page', has_email: true});
-          } else { throw new Error('err'); }
+          if (!res.ok) throw new Error('http_' + res.status);
+          // success: hide form, show confirmation block
+          form.hidden = true;
+          if (note) note.hidden = true;
+          if (successEmail) successEmail.textContent = email;
+          if (success) success.hidden = false;
+          if (typeof gtag !== 'undefined') gtag('event', 'whitepaper_request', {pdf_name: 'founder_os_whitepaper', source: 'methodology_page'});
         } catch(_) {
-          btn.textContent = 'Ошибка, попробуйте ещё';
-          btn.style.background = '#EF4444';
-          setTimeout(function(){ btn.disabled = false; btn.textContent = orig; btn.style.background = ''; }, 3000);
+          btn.disabled = false;
+          btn.textContent = orig;
+          form.email.setCustomValidity('Не удалось отправить. Попробуйте ещё раз или напишите hello@edl-os.ru');
+          form.email.reportValidity();
+          setTimeout(function(){ form.email.setCustomValidity(''); }, 4000);
         }
       });
     })();
