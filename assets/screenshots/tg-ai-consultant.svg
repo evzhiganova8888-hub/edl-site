@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="560" viewBox="0 0 400 560" role="img" aria-label="ИИ-консультант EDL OS отвечает на вопрос о марже">
+  <defs>
+    <filter id="tg2-shadow"><feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0000001a"/></filter>
+  </defs>
+  <rect x="8" y="8" width="384" height="544" rx="22" fill="#f0f2f5" filter="url(#tg2-shadow)"/>
+
+  <!-- Header -->
+  <rect x="8" y="8" width="384" height="60" rx="22" fill="#ffffff"/>
+  <rect x="8" y="36" width="384" height="32" fill="#ffffff"/>
+  <circle cx="50" cy="38" r="18" fill="#FF6B1A"/>
+  <text x="50" y="43" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="700" fill="#fff">E</text>
+  <text x="78" y="34" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="700" fill="#1f2937">EDL OS Bot</text>
+  <text x="78" y="51" font-family="Inter,Arial,sans-serif" font-size="11" fill="#6b7280">ИИ-консультант · Claude Haiku 4.5</text>
+  <line x1="8" y1="68" x2="392" y2="68" stroke="#e4e4e7"/>
+
+  <!-- Date pill -->
+  <rect x="156" y="82" width="88" height="22" rx="11" fill="#e4e4e7"/>
+  <text x="200" y="97" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="11" fill="#6b7280">сегодня</text>
+
+  <!-- User message (right) -->
+  <rect x="120" y="118" width="256" height="44" rx="12" fill="#FF6B1A"/>
+  <text x="248" y="138" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="12" fill="#fff">А почему просела маржа</text>
+  <text x="248" y="154" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="12" fill="#fff">в апреле?</text>
+
+  <!-- Bot typing meta -->
+  <text x="24" y="180" font-family="Inter,Arial,sans-serif" font-size="10" fill="#9ca3af">EDL OS Bot печатает…</text>
+
+  <!-- Bot response bubble -->
+  <rect x="24" y="190" width="352" height="240" rx="12" fill="#ffffff" stroke="#e4e4e7"/>
+  <text x="36" y="212" font-family="Inter,Arial,sans-serif" font-size="12" fill="#1f2937">Анализирую по 4 слоям Founder OS:</text>
+
+  <!-- highlighted finding -->
+  <rect x="36" y="222" width="328" height="42" rx="6" fill="#fef2f2" stroke="#fecaca"/>
+  <text x="48" y="240" font-family="Inter,Arial,sans-serif" font-size="11" fill="#7f1d1d">🎯 Главный вклад — <tspan font-weight="700">клиент Z</tspan>:</text>
+  <text x="48" y="256" font-family="Inter,Arial,sans-serif" font-size="11" fill="#7f1d1d">маржа <tspan font-weight="700">−8%</tspan> при среднем по портфелю <tspan font-weight="700">+18%</tspan></text>
+
+  <text x="36" y="284" font-family="Inter,Arial,sans-serif" font-size="11" fill="#1f2937"><tspan font-weight="600">Причина:</tspan> 2 правки в работе + аванс с задержкой</text>
+  <text x="36" y="302" font-family="Inter,Arial,sans-serif" font-size="11" fill="#1f2937">на 30 дней. Это съело весь плановый бонус.</text>
+
+  <text x="36" y="328" font-family="Inter,Arial,sans-serif" font-size="11" fill="#1f2937"><tspan font-weight="600">Рекомендация:</tspan></text>
+  <text x="36" y="346" font-family="Inter,Arial,sans-serif" font-size="11" fill="#374151">• пересмотр условий (правки сверх лимита — за деньги)</text>
+  <text x="36" y="362" font-family="Inter,Arial,sans-serif" font-size="11" fill="#374151">• аванс 50% жёстко в договор</text>
+  <text x="36" y="378" font-family="Inter,Arial,sans-serif" font-size="11" fill="#374151">• либо off-boarding до конца квартала</text>
+
+  <text x="36" y="404" font-family="Inter,Arial,sans-serif" font-size="11" fill="#6b7280">Полный разбор по клиенту Z — в вашем PDF,</text>
+  <text x="36" y="418" font-family="Inter,Arial,sans-serif" font-size="11" fill="#6b7280">стр. 6 («Деньги · детализация по клиентам»).</text>
+
+  <!-- inline CTA -->
+  <rect x="24" y="446" width="180" height="36" rx="10" fill="#fff" stroke="#FF6B1A"/>
+  <text x="114" y="469" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="600" fill="#FF6B1A">📎 Открыть PDF, стр. 6</text>
+
+  <!-- secondary bug-report mini-cta -->
+  <text x="24" y="498" font-family="Inter,Arial,sans-serif" font-size="11" fill="#9ca3af">🤔 Неточно? — отправить в команду</text>
+
+  <!-- Input bar -->
+  <rect x="24" y="510" width="352" height="32" rx="16" fill="#fff" stroke="#e4e4e7"/>
+  <text x="40" y="530" font-family="Inter,Arial,sans-serif" font-size="11" fill="#9ca3af">Уточните вопрос…</text>
+</svg>

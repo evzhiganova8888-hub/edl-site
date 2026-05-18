@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="560" viewBox="0 0 400 560" role="img" aria-label="Карта НДС 2026 по 5 контрактам">
+  <defs>
+    <filter id="vat-shadow"><feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#0000001a"/></filter>
+  </defs>
+  <rect x="8" y="8" width="384" height="544" rx="8" fill="#ffffff" stroke="#e5e7eb" filter="url(#vat-shadow)"/>
+
+  <!-- Header -->
+  <rect x="8" y="8" width="384" height="68" rx="8" fill="#FFF5EE"/>
+  <rect x="8" y="46" width="384" height="30" fill="#FFF5EE"/>
+  <text x="24" y="36" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="700" fill="#9a3412" letter-spacing="1">НДС 2026 · КАРТА КОНТРАКТОВ</text>
+  <text x="24" y="60" font-family="Inter,Arial,sans-serif" font-size="13" fill="#7c2d12">Лимит УСН 60 М ₽ · НДС 22% · антидробление</text>
+
+  <line x1="8" y1="76" x2="392" y2="76" stroke="#FF6B1A" stroke-width="1.5"/>
+
+  <!-- Table header -->
+  <rect x="8" y="86" width="384" height="28" fill="#f9fafb"/>
+  <text x="24" y="104" font-family="Inter,Arial,sans-serif" font-size="10" font-weight="700" fill="#6b7280" letter-spacing="0.5">КОНТРАКТ</text>
+  <text x="200" y="104" font-family="Inter,Arial,sans-serif" font-size="10" font-weight="700" fill="#6b7280" letter-spacing="0.5">ВЫРУЧКА</text>
+  <text x="290" y="104" font-family="Inter,Arial,sans-serif" font-size="10" font-weight="700" fill="#6b7280" letter-spacing="0.5">СТАТУС</text>
+  <line x1="8" y1="114" x2="392" y2="114" stroke="#e5e7eb"/>
+
+  <!-- Row 1: ООО Альфа -->
+  <text x="24" y="138" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="600" fill="#111827">ООО Альфа</text>
+  <text x="24" y="154" font-family="Inter,Arial,sans-serif" font-size="10" fill="#9ca3af">долгосрочный · IT-услуги</text>
+  <text x="200" y="138" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700" fill="#111827">12 М ₽</text>
+  <rect x="288" y="124" width="92" height="24" rx="12" fill="#dcfce7"/>
+  <text x="334" y="140" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="600" fill="#166534">✓ под УСН</text>
+  <line x1="8" y1="166" x2="392" y2="166" stroke="#f3f4f6"/>
+
+  <!-- Row 2: ИП Петров -->
+  <text x="24" y="190" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="600" fill="#111827">ИП Петров</text>
+  <text x="24" y="206" font-family="Inter,Arial,sans-serif" font-size="10" fill="#9ca3af">в работе · поддержка</text>
+  <text x="200" y="190" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700" fill="#111827">25 М ₽</text>
+  <rect x="288" y="176" width="92" height="24" rx="12" fill="#fef3c7"/>
+  <text x="334" y="192" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="600" fill="#92400e">⚠ зона риска</text>
+  <line x1="8" y1="218" x2="392" y2="218" stroke="#f3f4f6"/>
+
+  <!-- Row 3: ООО Бета -->
+  <text x="24" y="242" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="600" fill="#111827">ООО Бета</text>
+  <text x="24" y="258" font-family="Inter,Arial,sans-serif" font-size="10" fill="#9ca3af">проектный · разработка</text>
+  <text x="200" y="242" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700" fill="#111827">48 М ₽</text>
+  <rect x="288" y="228" width="92" height="24" rx="12" fill="#dcfce7"/>
+  <text x="334" y="244" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="600" fill="#166534">✓ под УСН</text>
+  <line x1="8" y1="270" x2="392" y2="270" stroke="#f3f4f6"/>
+
+  <!-- Row 4: ООО Гамма (CRITICAL) -->
+  <rect x="8" y="270" width="384" height="60" fill="#fef2f2"/>
+  <text x="24" y="294" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="600" fill="#7f1d1d">ООО Гамма</text>
+  <text x="24" y="310" font-family="Inter,Arial,sans-serif" font-size="10" fill="#b91c1c">долгосрочный · комплекс</text>
+  <text x="200" y="294" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700" fill="#7f1d1d">65 М ₽</text>
+  <rect x="288" y="280" width="92" height="24" rx="12" fill="#fecaca"/>
+  <text x="334" y="296" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="600" fill="#991b1b">🔴 НДС с 1.07</text>
+  <line x1="8" y1="330" x2="392" y2="330" stroke="#f3f4f6"/>
+
+  <!-- Row 5: ИП Сидоров -->
+  <text x="24" y="354" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="600" fill="#111827">ИП Сидоров</text>
+  <text x="24" y="370" font-family="Inter,Arial,sans-serif" font-size="10" fill="#9ca3af">разовый · консалтинг</text>
+  <text x="200" y="354" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700" fill="#111827">18 М ₽</text>
+  <rect x="288" y="340" width="92" height="24" rx="12" fill="#dcfce7"/>
+  <text x="334" y="356" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="600" fill="#166534">✓ под УСН</text>
+  <line x1="8" y1="382" x2="392" y2="382" stroke="#e5e7eb"/>
+
+  <!-- Summary -->
+  <text x="24" y="408" font-family="Inter,Arial,sans-serif" font-size="11" fill="#6b7280" letter-spacing="0.5">ИТОГО ПО ПОРТФЕЛЮ</text>
+  <text x="24" y="436" font-family="Inter,Arial,sans-serif" font-size="22" font-weight="700" fill="#FF6B1A">+180 000 ₽</text>
+  <text x="160" y="436" font-family="Inter,Arial,sans-serif" font-size="12" fill="#6b7280">к плану налогов на 2026</text>
+
+  <text x="24" y="462" font-family="Inter,Arial,sans-serif" font-size="11" fill="#374151"><tspan font-weight="600">2 контракта</tspan> требуют решения до 1 июля:</text>
+  <text x="24" y="480" font-family="Inter,Arial,sans-serif" font-size="11" fill="#374151">• пересмотр цены с НДС</text>
+  <text x="24" y="498" font-family="Inter,Arial,sans-serif" font-size="11" fill="#374151">• или дробление по реальному функционалу</text>
+
+  <!-- Source line -->
+  <line x1="24" y1="516" x2="376" y2="516" stroke="#f3f4f6"/>
+  <text x="24" y="534" font-family="Inter,Arial,sans-serif" font-size="10" fill="#9ca3af">Источник: ваши данные из 1С (read-only) · обновлено сегодня в 08:00</text>
+</svg>
