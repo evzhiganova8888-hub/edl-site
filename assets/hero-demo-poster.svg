@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="380" height="570" viewBox="0 0 380 570" role="img" aria-label="EDL OS — пример утренней сводки в Telegram">
+  <defs>
+    <clipPath id="phone-clip">
+      <rect x="10" y="10" width="360" height="550" rx="24" ry="24"/>
+    </clipPath>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#00000022"/>
+    </filter>
+  </defs>
+
+  <!-- Phone frame -->
+  <rect x="10" y="10" width="360" height="550" rx="24" ry="24" fill="#f0f2f5" filter="url(#shadow)"/>
+
+  <!-- Chat header -->
+  <rect x="10" y="10" width="360" height="64" rx="0" ry="0" fill="#ffffff" clip-path="url(#phone-clip)"/>
+  <rect x="10" y="10" width="360" height="64" rx="24" ry="24" fill="#ffffff"/>
+  <rect x="10" y="34" width="360" height="40" fill="#ffffff"/>
+
+  <!-- Avatar circle -->
+  <circle cx="50" cy="42" r="18" fill="#FF6B1A"/>
+  <text x="50" y="47" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="700" fill="#ffffff">E</text>
+
+  <!-- Bot name -->
+  <text x="76" y="38" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="700" fill="#1f2937">EDL OS Bot</text>
+  <circle cx="76" cy="50" r="4" fill="#10b981"/>
+  <text x="84" y="53" font-family="Inter,Arial,sans-serif" font-size="11" fill="#10b981">онлайн</text>
+
+  <!-- Separator -->
+  <line x1="10" y1="74" x2="370" y2="74" stroke="#e4e4e7" stroke-width="1"/>
+
+  <!-- Date label -->
+  <rect x="140" y="86" width="100" height="22" rx="11" fill="#e4e4e7"/>
+  <text x="190" y="101" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="11" fill="#6b7280">19 мая, утро</text>
+
+  <!-- Message 1 -->
+  <rect x="24" y="118" width="296" height="88" rx="12" ry="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="38" y="140" font-family="Inter,Arial,sans-serif" font-size="12" fill="#1f2937">📊 Маржа по проектам мая:</text>
+  <text x="38" y="158" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700" fill="#ef4444">−2.1 п.п.</text>
+  <text x="94" y="158" font-family="Inter,Arial,sans-serif" font-size="12" fill="#1f2937"> к плану</text>
+  <text x="38" y="176" font-family="Inter,Arial,sans-serif" font-size="12" fill="#6b7280">Убыточные клиенты: </text>
+  <text x="160" y="176" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="700" fill="#1f2937">3 из 24</text>
+  <text x="38" y="194" font-family="Inter,Arial,sans-serif" font-size="11" fill="#9ca3af">08:01</text>
+
+  <!-- Message 2 -->
+  <rect x="24" y="218" width="296" height="72" rx="12" ry="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="38" y="240" font-family="Inter,Arial,sans-serif" font-size="12" fill="#1f2937">🔥 HOT-сделки без касания &gt;24ч:</text>
+  <text x="38" y="258" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="600" fill="#1f2937">Петров (1.2М), ООО Стройбаза (800к)</text>
+  <text x="38" y="278" font-family="Inter,Arial,sans-serif" font-size="11" fill="#9ca3af">08:01</text>
+
+  <!-- Message 3 -->
+  <rect x="24" y="302" width="296" height="88" rx="12" ry="12" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <text x="38" y="324" font-family="Inter,Arial,sans-serif" font-size="12" fill="#1f2937">💰 НДС 2026 по последним 5 контрактам:</text>
+  <text x="38" y="344" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700" fill="#10b981">+180 000 ₽</text>
+  <text x="128" y="344" font-family="Inter,Arial,sans-serif" font-size="12" fill="#1f2937"> к плану</text>
+  <text x="38" y="362" font-family="Inter,Arial,sans-serif" font-size="12" fill="#6b7280">Карта в PDF →</text>
+  <text x="38" y="378" font-family="Inter,Arial,sans-serif" font-size="11" fill="#9ca3af">08:01</text>
+
+  <!-- User message (right side) -->
+  <rect x="120" y="404" width="230" height="40" rx="12" ry="12" fill="#FF6B1A"/>
+  <text x="235" y="420" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="12" fill="#ffffff">А какой самый убыточный</text>
+  <text x="235" y="436" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="12" fill="#ffffff">клиент?</text>
+
+  <!-- Bot typing indicator -->
+  <rect x="24" y="456" width="72" height="32" rx="16" fill="#ffffff" stroke="#e4e4e7" stroke-width="1"/>
+  <circle cx="44" cy="472" r="4" fill="#9ca3af"/>
+  <circle cx="56" cy="472" r="4" fill="#9ca3af"/>
+  <circle cx="68" cy="472" r="4" fill="#9ca3af"/>
+
+  <!-- Bottom caption bar -->
+  <rect x="10" y="516" width="360" height="44" rx="0" ry="0" fill="#ffffff" clip-path="url(#phone-clip)"/>
+  <rect x="10" y="530" width="360" height="30" fill="#ffffff"/>
+  <text x="190" y="520" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="11" fill="#6b7280">EDL OS · 24 часа на полную картину</text>
+
+  <!-- Bottom rounded corners overlay -->
+  <rect x="10" y="534" width="360" height="26" rx="0" ry="0" fill="#ffffff"/>
+  <rect x="10" y="534" width="360" height="26" rx="24" ry="24" fill="#f0f2f5"/>
+</svg>

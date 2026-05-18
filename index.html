@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/main-v2.css">
+  <link rel="stylesheet" href="css/main-v2.css?v=20260519">
   <link rel="stylesheet" href="css/mobile-fixes.css">
   <link rel="stylesheet" href="css/mini-checkup.css">
   <link rel="stylesheet" href="css/bot-widget.css">
@@ -91,87 +91,107 @@
     <section class="hero section" id="hero" style="padding-top:100px;">
       <div class="container hero__grid">
         <div class="hero__content">
-          <h1 class="hero__title" style="font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 24px;">Бортовой компьютер для бизнеса <span style="color:var(--color-tangerine); white-space:nowrap;">10–50 человек.</span><br>Операционная система собственника нового поколения.</h1>
-          <p class="hero__subtitle" style="font-size: 1.25rem; color: var(--color-gray-700); margin-bottom: 32px; line-height: 1.5;">Все цифры, риски и решения вашего бизнеса — в одном месте. Утренняя сводка в Telegram + ИИ-консультант под рукой. Без дашбордов, без новых паролей, без IT-отдела.</p>
-          <div class="hero__badge">Работает в Telegram · Бизнес-чекап за 24 часа · Все данные остаются у вас</div>
+          <h1 class="hero__title" style="font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 20px;">
+            Видеть, где утекает маржа вашего бизнеса —
+            <span style="color: var(--color-tangerine);">ежедневно, а не раз в квартал.</span>
+          </h1>
+
+          <ul class="hero__bullets" style="list-style:none; padding:0; margin:0 0 32px; display:flex; flex-direction:column; gap:10px;">
+            <li style="display:flex; gap:10px; align-items:flex-start; font-size:1.0625rem; color: var(--color-gray-800); line-height:1.45;">
+              <span style="color: var(--color-tangerine); font-weight:700; flex-shrink:0;">▸</span>
+              <span>Каждый клиент в плюсе или в минусе — <strong>видно сразу</strong></span>
+            </li>
+            <li style="display:flex; gap:10px; align-items:flex-start; font-size:1.0625rem; color: var(--color-gray-800); line-height:1.45;">
+              <span style="color: var(--color-tangerine); font-weight:700; flex-shrink:0;">▸</span>
+              <span>НДС 2026 посчитан и подсвечен в PDF — <strong>через 24 часа</strong></span>
+            </li>
+            <li style="display:flex; gap:10px; align-items:flex-start; font-size:1.0625rem; color: var(--color-gray-800); line-height:1.45;">
+              <span style="color: var(--color-tangerine); font-weight:700; flex-shrink:0;">▸</span>
+              <span>Сводка по бизнесу в Telegram — <strong>каждое утро</strong></span>
+            </li>
+          </ul>
+
           <div style="display:flex; gap:16px; margin-top:24px; flex-wrap:wrap; align-items:center;">
-            <button type="button" class="mc-trigger" data-mc-open="hero">
-              <span class="mc-trigger__icon" aria-hidden="true">💬</span>
-              <span>Founder OS Score · 12 вопросов
-                <span class="mc-trigger__meta">бесплатно · без регистрации</span>
-              </span>
+            <a href="audit.html" class="btn btn--primary" style="font-size:1.0625rem; padding:14px 28px;" data-cta-type="audit" data-cta-location="hero">
+              Получить чекап за 9 000 ₽ →
+            </a>
+            <button type="button" class="hero__secondary-cta" data-mc-open="hero" style="background:none; border:none; color:var(--color-tangerine); font-weight:600; cursor:pointer; text-decoration:underline; font-size:0.9375rem;">
+              Или попробуйте Founder OS Score бесплатно (15 мин)
             </button>
-            <a href="audit.html" class="btn btn--outline" data-cta-type="audit" data-cta-location="hero">Бизнес-чекап 9 000 ₽ →</a>
           </div>
-          <div class="trust-strip" role="list">
-            <span class="trust-strip__badge" role="listitem"><span aria-hidden="true">🛡</span> Open source MCP</span>
-            <span class="trust-strip__sep" aria-hidden="true">·</span>
-            <span class="trust-strip__badge" role="listitem"><span aria-hidden="true">🔌</span> 1С · amoCRM · Битрикс</span>
-            <span class="trust-strip__sep" aria-hidden="true">·</span>
-            <span class="trust-strip__badge" role="listitem"><span aria-hidden="true">🇷🇺</span> Геткурс · Тинькофф · (доступны на этапе Диагностики)</span>
+
+          <div class="trust-strip" role="list" style="display:flex; gap:20px; align-items:center; flex-wrap:wrap; margin-top:24px; opacity:0.75;">
+            <span style="font-size:0.8125rem; color:var(--color-gray-600); font-weight:500;">Интеграции:</span>
+            <img src="/assets/logos/1c.svg"         alt="1С"         style="height:22px; filter:grayscale(1);">
+            <img src="/assets/logos/amocrm.svg"     alt="amoCRM"     style="height:22px; filter:grayscale(1);">
+            <img src="/assets/logos/bitrix.svg"     alt="Битрикс24"  style="height:22px; filter:grayscale(1);">
+            <img src="/assets/logos/tinkoff.svg"    alt="Тинькофф"   style="height:22px; filter:grayscale(1);">
+            <img src="/assets/logos/getcourse.svg"  alt="GetCourse"  style="height:22px; filter:grayscale(1);">
+          </div>
+          <div style="margin-top:10px; font-size:0.8125rem; color:var(--color-gray-500);">
+            152-ФЗ: <strong>все данные на вашей инфраструктуре</strong> · Возврат 14 дней без причины · Open source MCP-сервер
           </div>
           <div class="hero__cta-note">20 вопросов в боте в своём темпе → PDF + НДС-карта за 24ч. Plus 14 000 ₽ — видео-разбор от Екатерины за 24 часа. Оплата картой прямо в боте. <strong>Безусловный возврат 14 дней — /refund.</strong></div>
         </div>
 
-        <!-- Right Side: ICP Switcher & TG Widget (2-step interactive) -->
+        <!-- Right Side: Hero demo video (постер до готовности MP4-демо) -->
         <div class="hero__demo">
-          <div style="background:var(--color-gray-50); padding:24px; border-radius:16px; border:1px solid var(--color-gray-200);">
-            <div class="icp-switcher">
-              <span class="icp-switcher__label">Покажите для моей ниши:</span>
-              <button class="icp-btn" data-segment-switch="services" aria-pressed="false">Услуги</button>
-              <button class="icp-btn" data-segment-switch="manufacturing" aria-pressed="false">Производство</button>
-              <button class="icp-btn" data-segment-switch="marketplace" aria-pressed="false">Маркетплейс-сервис</button>
-              <button class="icp-btn" data-segment-switch="wholesale" aria-pressed="false">Опт / Торговля</button>
-            </div>
-            <div class="tg-window tg-window--manual" id="tg-window" style="background:#f0f2f5; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.05); overflow:hidden;">
-              <div class="tg-window__header" style="background:#fff; padding:12px; border-bottom:1px solid #e4e4e7; display:flex; align-items:center; gap:12px;">
-                <img src="assets/logo-192.png" alt="" style="width:36px; height:36px; border-radius:50%;" aria-hidden="true">
-                <div><div style="font-weight:600; font-size:14px; color:#1f2937;">EDL OS Bot</div><div style="font-size:12px; color:#10b981;">онлайн</div></div>
-              </div>
-              <!-- State A: Idle -->
-              <div class="tg-window__idle" id="tg-state-idle">
-                <div class="tg-window__idle-icon" aria-hidden="true">📡</div>
-                <p class="tg-window__idle-text">Выберите нишу выше — и я покажу, как EDL общается с владельцем по утрам.</p>
-                <div class="tg-window__idle-arrow" aria-hidden="true">↑</div>
-              </div>
-              <!-- State B: Ready -->
-              <div class="tg-window__ready" id="tg-state-ready" hidden>
-                <p class="tg-window__ready-hint">Нажмите, чтобы получить утреннюю сводку — как её получает собственник в этой нише.</p>
-                <button class="tg-trigger-btn" id="tg-trigger" data-cta-type="hero_summary" data-cta-location="tg_widget">
-                  <span aria-hidden="true">📩</span> Получить утреннюю сводку
-                </button>
-              </div>
-              <!-- State C: Chat -->
-              <div class="tg-window__body" id="tg-state-chat" style="padding:16px;" hidden>
-                <div id="tg-messages"></div>
-                <a href="audit.html" class="micro-cta tg-msg" id="tg-cta-final" data-cta-type="audit" data-cta-location="tg_widget" style="color:#1f2937; display:none;">Хочу такую сводку → Бизнес-чекап 9 000 ₽</a>
-                <button class="tg-restart" id="tg-restart" hidden><span aria-hidden="true">↺</span> Выбрать другую нишу</button>
-              </div>
-              <template id="tpl-services">
-                <p>Маржа по проектам апреля: <strong>-2.1 п.п.</strong> к плану. Убыточные: 3 из 24. Главный — клиент Z.</p>
-                <p>🔥 HOT-сделки: Петров (1.2М) без касания 28 ч — открыть?</p>
-                <p>Сегодня: 2 защиты, 1 КП на согласовании.</p>
-              </template>
-              <template id="tpl-manufacturing">
-                <p>Контракт ООО «Стройбаза» 1.2М — отгрузка завтра, аванс не пришёл (6 дней).</p>
-                <p>Прибыль по контрактам: <strong>3 из 17</strong> ниже порога после НДС.</p>
-                <p>Рекомендация: пересмотр цен на 3 контрактах.</p>
-              </template>
-              <template id="tpl-marketplace">
-                <p>Новых заявок сегодня: <strong>47</strong> (+25 % к норме пятницы).</p>
-                <p>🔥 HOT: 4 продавца &gt; 5М/мес — ответить сегодня.</p>
-                <p>Бот отфильтровал 89 мусорных. Команда: Алина перегружена ×1.4.</p>
-              </template>
-              <template id="tpl-wholesale">
-                <p>НДС 22 % съел <strong>4 % маржи</strong> по оптовикам за месяц.</p>
-                <p>Дебиторка: Завод X торчит 1.5М уже 40 дней.</p>
-                <p>Сборка счетов за вчера: 14 оплат на 3.2М.</p>
-              </template>
+          <div class="hero-demo-frame" style="position:relative; max-width:380px; margin:0 auto;">
+            <video
+              class="hero-demo-video"
+              autoplay
+              muted
+              loop
+              playsinline
+              poster="/assets/hero-demo-poster.svg"
+              aria-label="EDL OS — пример утренней сводки в Telegram и PDF-чекапа"
+              style="width:100%; height:auto; border-radius:24px; box-shadow:0 20px 50px rgba(0,0,0,0.15); display:block;"
+            >
+              <source src="/assets/hero-demo.mp4" type="video/mp4">
+              <source src="/assets/hero-demo.webm" type="video/webm">
+              <img src="/assets/hero-demo-poster.svg" alt="EDL OS — утренняя сводка в Telegram" style="width:100%; border-radius:24px;">
+            </video>
+            <div class="hero-demo-caption" style="text-align:center; margin-top:14px; font-size:0.875rem; color:var(--color-gray-700);">
+              Так выглядит работа собственника <strong>через 14 дней</strong> после Бизнес-чекапа
             </div>
           </div>
         </div>
       </div>
     </section>
+
+    <!-- Section: «У вас так?» — резонанс боли (§5) -->
+    <section class="section section--gray" id="pain-section" style="padding: 80px 0;">
+      <div class="container" style="max-width:920px;">
+        <h2 class="section__title" style="text-align:center; margin-bottom:48px;">У вас так?</h2>
+        <div class="pain-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:24px;">
+          <div class="pain-card" style="background:#fff; padding:28px 24px; border-radius:16px; border:1px solid var(--color-gray-200);">
+            <div style="font-size:2rem; margin-bottom:12px;" aria-hidden="true">📊</div>
+            <h3 style="font-weight:600; margin-bottom:8px; font-size:1.125rem;">Бухгалтерия раз в месяц, факты раз в квартал</h3>
+            <p style="color:var(--color-gray-700); font-size:0.9375rem; line-height:1.5;">К моменту, когда видно убыточный контракт, он уже съел маржу полугодия.</p>
+          </div>
+          <div class="pain-card" style="background:#fff; padding:28px 24px; border-radius:16px; border:1px solid var(--color-gray-200);">
+            <div style="font-size:2rem; margin-bottom:12px;" aria-hidden="true">🌪️</div>
+            <h3 style="font-weight:600; margin-bottom:8px; font-size:1.125rem;">Стратегия живёт в голове основателя</h3>
+            <p style="color:var(--color-gray-700); font-size:0.9375rem; line-height:1.5;">Команда выросла, но непонятно — куда. Решения принимаются интуитивно.</p>
+          </div>
+          <div class="pain-card" style="background:#fff; padding:28px 24px; border-radius:16px; border:1px solid var(--color-gray-200);">
+            <div style="font-size:2rem; margin-bottom:12px;" aria-hidden="true">⚖️</div>
+            <h3 style="font-weight:600; margin-bottom:8px; font-size:1.125rem;">НДС 2026: знаете формулу, но не последствия</h3>
+            <p style="color:var(--color-gray-700); font-size:0.9375rem; line-height:1.5;">Не понятно, какие из ваших контрактов окажутся под лимитом УСН.</p>
+          </div>
+          <div class="pain-card" style="background:#fff; padding:28px 24px; border-radius:16px; border:1px solid var(--color-gray-200);">
+            <div style="font-size:2rem; margin-bottom:12px;" aria-hidden="true">🤖</div>
+            <h3 style="font-weight:600; margin-bottom:8px; font-size:1.125rem;">ИИ хочется, но непонятно куда</h3>
+            <p style="color:var(--color-gray-700); font-size:0.9375rem; line-height:1.5;">Где он реально даст пользу, а где будет имитировать работу — без рамки выбора непонятно.</p>
+          </div>
+        </div>
+        <div style="text-align:center; margin-top:40px;">
+          <p style="color:var(--color-gray-700); margin-bottom:16px; font-size:1.125rem;">EDL OS закрывает все четыре пункта за один Бизнес-чекап.</p>
+          <a href="audit.html" class="btn btn--primary" data-cta-type="audit" data-cta-location="pain_section">Заказать чекап за 9 000 ₽ →</a>
+        </div>
+      </div>
+    </section>
+
     <!-- Three Blind Spots — synthesis intro for /methodology -->
     <section class="section" id="blindspots" aria-labelledby="bs-title">
       <div class="container">
@@ -202,6 +222,68 @@
         <div class="blindspots-synth">
           <p class="blindspots-synth__text"><strong>Founder OS = синтез</strong> этих трёх подходов. Четыре слоя — Стратегия, Воронка, Операционка, Деньги — собраны в одну сводку и одного ИИ-консультанта.</p>
           <a href="methodology.html" class="blindspots-synth__link" data-cta-type="methodology" data-cta-location="blindspots">Подробно про методологию Founder OS →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: ICP-демо — интерактивная сводка по нише (§7, перенесено из hero) -->
+    <section class="section" id="icp-demo" style="padding: 80px 0;">
+      <div class="container" style="max-width:880px;">
+        <h2 class="section__title" style="text-align:center;">Покажите, как EDL OS работает в моей нише</h2>
+        <p style="text-align:center; color:var(--color-gray-700); margin-bottom:40px;">Выберите ваш сегмент бизнеса — увидите реальный пример утренней сводки.</p>
+        <div style="background:var(--color-gray-50); padding:24px; border-radius:16px; border:1px solid var(--color-gray-200); max-width:560px; margin:0 auto;">
+          <div class="icp-switcher">
+            <span class="icp-switcher__label">Покажите для моей ниши:</span>
+            <button class="icp-btn is-active" data-segment-switch="services" aria-pressed="true">Услуги</button>
+            <button class="icp-btn" data-segment-switch="manufacturing" aria-pressed="false">Производство</button>
+            <button class="icp-btn" data-segment-switch="marketplace" aria-pressed="false">Маркетплейс-сервис</button>
+            <button class="icp-btn" data-segment-switch="wholesale" aria-pressed="false">Опт / Торговля</button>
+          </div>
+          <div class="tg-window tg-window--manual" id="tg-window" style="background:#f0f2f5; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.05); overflow:hidden;">
+            <div class="tg-window__header" style="background:#fff; padding:12px; border-bottom:1px solid #e4e4e7; display:flex; align-items:center; gap:12px;">
+              <img src="assets/logo-192.png" alt="" style="width:36px; height:36px; border-radius:50%;" aria-hidden="true">
+              <div><div style="font-weight:600; font-size:14px; color:#1f2937;">EDL OS Bot</div><div style="font-size:12px; color:#10b981;">онлайн</div></div>
+            </div>
+            <!-- State A: Idle (hidden by default — сразу показываем chat) -->
+            <div class="tg-window__idle" id="tg-state-idle" hidden>
+              <div class="tg-window__idle-icon" aria-hidden="true">📡</div>
+              <p class="tg-window__idle-text">Выберите нишу выше — и я покажу, как EDL общается с владельцем по утрам.</p>
+              <div class="tg-window__idle-arrow" aria-hidden="true">↑</div>
+            </div>
+            <!-- State B: Ready -->
+            <div class="tg-window__ready" id="tg-state-ready" hidden>
+              <p class="tg-window__ready-hint">Нажмите, чтобы получить утреннюю сводку — как её получает собственник в этой нише.</p>
+              <button class="tg-trigger-btn" id="tg-trigger" data-cta-type="hero_summary" data-cta-location="tg_widget">
+                <span aria-hidden="true">📩</span> Получить утреннюю сводку
+              </button>
+            </div>
+            <!-- State C: Chat (активен по умолчанию — ниша «Услуги») -->
+            <div class="tg-window__body" id="tg-state-chat" style="padding:16px;">
+              <div id="tg-messages"></div>
+              <a href="audit.html" class="micro-cta tg-msg" id="tg-cta-final" data-cta-type="audit" data-cta-location="tg_widget" style="color:#1f2937; display:none;">Хочу такую сводку → Бизнес-чекап 9 000 ₽</a>
+              <button class="tg-restart" id="tg-restart" hidden><span aria-hidden="true">↺</span> Выбрать другую нишу</button>
+            </div>
+            <template id="tpl-services">
+              <p>Маржа по проектам апреля: <strong>-2.1 п.п.</strong> к плану. Убыточные: 3 из 24. Главный — клиент Z.</p>
+              <p>🔥 HOT-сделки: Петров (1.2М) без касания 28 ч — открыть?</p>
+              <p>Сегодня: 2 защиты, 1 КП на согласовании.</p>
+            </template>
+            <template id="tpl-manufacturing">
+              <p>Контракт ООО «Стройбаза» 1.2М — отгрузка завтра, аванс не пришёл (6 дней).</p>
+              <p>Прибыль по контрактам: <strong>3 из 17</strong> ниже порога после НДС.</p>
+              <p>Рекомендация: пересмотр цен на 3 контрактах.</p>
+            </template>
+            <template id="tpl-marketplace">
+              <p>Новых заявок сегодня: <strong>47</strong> (+25 % к норме пятницы).</p>
+              <p>🔥 HOT: 4 продавца &gt; 5М/мес — ответить сегодня.</p>
+              <p>Бот отфильтровал 89 мусорных. Команда: Алина перегружена ×1.4.</p>
+            </template>
+            <template id="tpl-wholesale">
+              <p>НДС 22 % съел <strong>4 % маржи</strong> по оптовикам за месяц.</p>
+              <p>Дебиторка: Завод X торчит 1.5М уже 40 дней.</p>
+              <p>Сборка счетов за вчера: 14 оплат на 3.2М.</p>
+            </template>
+          </div>
         </div>
       </div>
     </section>
@@ -868,6 +950,11 @@
         body.removeAttribute('data-segment-active');
         activeSegment = null;
       });
+
+      // Авто-инициализация ICP-демо: сразу показываем сводку для «Услуги»
+      activeSegment = 'services';
+      body.setAttribute('data-segment-active', 'services');
+      runChat();
 
       const aiButtons = document.querySelectorAll('.ai-qa__question');
       const aiChat = document.getElementById('ai-qa-chat');
