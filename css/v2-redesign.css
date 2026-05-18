@@ -1072,14 +1072,31 @@ body[data-page="home"] .hero.section {
   flex: 1;
 }
 .audience-card__cta {
-  margin-top: 6px;
-  color: #FF6B1A;
-  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding: 10px 16px;
+  background: #FF6B1A;
+  color: #FFFFFF !important;
+  border-radius: 999px;
   font-size: 0.9375rem;
+  font-weight: 600;
   text-decoration: none;
   align-self: flex-start;
+  white-space: nowrap;
+  transition: background 0.15s ease-out, transform 0.15s ease-out;
+  box-shadow: 0 2px 8px rgba(255,107,26,0.18);
 }
-.audience-card__cta:hover { text-decoration: underline; }
+.audience-card__cta:hover {
+  background: #E85A0F;
+  transform: translateX(2px);
+  text-decoration: none;
+}
+.audience-card__cta:focus-visible {
+  outline: 2px solid #FF6B1A;
+  outline-offset: 3px;
+}
 .audience-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -1296,6 +1313,233 @@ html, body {
 @media (max-width: 720px) {
   .killer-card__media { padding: 1.25rem; min-height: 180px; }
   .killers__list { gap: 2.25rem; }
+}
+
+/* ===================================================================
+   INTERACTIVE PHONE WIDGET — «Один день фаундера»
+   Auto-cycling 3 сцены: Сводка → Q&A → Голос. Pause on hover.
+   =================================================================== */
+.phone-mockup { position: relative; max-width: 320px; }
+.phone-scenes {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  min-height: 360px;
+  padding: 12px;
+}
+.phone-scene {
+  position: absolute;
+  inset: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.45s ease-out, transform 0.45s ease-out;
+  pointer-events: none;
+}
+.phone-scene.is-active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Message bubbles */
+.bot-msg {
+  background: #FFFFFF;
+  border-radius: 14px;
+  padding: 10px 12px;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: #1F2937;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  max-width: 88%;
+  word-wrap: break-word;
+}
+.bot-msg p { margin: 0 0 4px; }
+.bot-msg p:last-child { margin: 0; }
+.bot-msg__head {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #6B7280;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+.bot-msg strong { color: #1A1A1A; font-weight: 600; }
+.bot-msg--in {
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+.bot-msg--out {
+  align-self: flex-end;
+  background: #FF6B1A;
+  color: #FFFFFF;
+  border-bottom-right-radius: 4px;
+}
+.bot-msg--out p, .bot-msg--out strong { color: #FFFFFF; }
+.bot-msg--voice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+}
+.bot-msg--typing {
+  align-self: flex-start;
+  display: inline-flex;
+  gap: 4px;
+  padding: 10px 14px;
+  background: #FFFFFF;
+}
+.bot-msg--typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #C0C4CB;
+  animation: typing-bounce 1.2s ease-in-out infinite;
+}
+.bot-msg--typing span:nth-child(2) { animation-delay: 0.15s; }
+.bot-msg--typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes typing-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bot-msg--typing span { animation: none; }
+}
+
+/* Voice waveform */
+.voice-wave {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 14px;
+}
+.voice-wave span {
+  width: 2px;
+  background: #FFFFFF;
+  border-radius: 2px;
+  animation: voice-bar 1s ease-in-out infinite;
+}
+.voice-wave span:nth-child(1) { height: 5px; animation-delay: 0s; }
+.voice-wave span:nth-child(2) { height: 9px; animation-delay: 0.1s; }
+.voice-wave span:nth-child(3) { height: 12px; animation-delay: 0.2s; }
+.voice-wave span:nth-child(4) { height: 8px; animation-delay: 0.3s; }
+.voice-wave span:nth-child(5) { height: 4px; animation-delay: 0.4s; }
+@keyframes voice-bar {
+  0%, 100% { transform: scaleY(0.5); }
+  50% { transform: scaleY(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .voice-wave span { animation: none; }
+}
+.voice-text {
+  font-size: 0.8125rem;
+  line-height: 1.3;
+}
+
+/* Quick-reply chips */
+.bot-quickreply {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+.bot-chip {
+  background: #FFFFFF;
+  border: 1px solid #E4E7EB;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #FF6B1A;
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+  font-family: inherit;
+}
+.bot-chip:hover {
+  background: rgba(255,107,26,0.06);
+  border-color: rgba(255,107,26,0.3);
+}
+
+.phone-meta {
+  align-self: center;
+  font-size: 0.6875rem;
+  color: #9CA3AF;
+  margin-top: 4px;
+  text-align: center;
+}
+
+/* Footer: time + scene dots */
+.phone-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: #FFFFFF;
+  border-top: 1px solid #E4E4E7;
+}
+.phone-scene-dots {
+  display: inline-flex;
+  gap: 6px;
+}
+.phone-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 0;
+  background: #D1D5DB;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+}
+.phone-dot.is-active {
+  background: #FF6B1A;
+  width: 20px;
+  border-radius: 3px;
+}
+.phone-dot:hover { background: #9CA3AF; }
+.phone-dot.is-active:hover { background: #FF6B1A; }
+
+/* Floating caption beside phone */
+.phone-caption {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translate(20px, -50%);
+  max-width: 240px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-out 0.1s;
+}
+@media (min-width: 1100px) {
+  .phone-caption { opacity: 1; }
+}
+.phone-caption__kicker {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #FF6B1A;
+  margin-bottom: 8px;
+}
+.phone-caption__text {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary, #5A5A5A);
+  transition: opacity 0.3s ease-out;
+}
+
+/* Mobile: caption goes below phone, simpler */
+@media (max-width: 1099px) {
+  .phone-caption {
+    position: static;
+    transform: none;
+    max-width: 320px;
+    margin: 16px auto 0;
+    text-align: center;
+    opacity: 1;
+  }
 }
 
 /* — Buttons never overflow viewport */

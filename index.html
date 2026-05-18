@@ -72,14 +72,6 @@
   <header class="header" id="header">
     <div class="container header__inner site-header">
       <a href="/" class="header__logo site-logo" aria-label="EDL OS — на главную"><img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true"><span>EDL&nbsp;OS</span></a>
-      <!-- LIVE-индикатор §2.4 -->
-      <div class="live-indicator" aria-live="polite" aria-label="Статус запусков">
-        <span class="live-indicator__dot" aria-hidden="true"></span>
-        <span class="live-indicator__text">
-          LIVE: 12 активных внедрений в Азии прямо сейчас
-          <span class="live-indicator__note">пример для демонстрации</span>
-        </span>
-      </div>
       <nav class="site-nav" id="site-nav" aria-label="Главное меню">
         <a href="method.html">Метод</a>
         <a href="mcp.html">Claude&nbsp;/&nbsp;MCP</a>
@@ -149,9 +141,9 @@
           </div>
         </div>
 
-        <!-- Right Side: Phone mockup -->
+        <!-- Right Side: Phone mockup with animated scene cycle (Day of a Founder) -->
         <div class="hero__demo">
-          <div class="phone-mockup">
+          <div class="phone-mockup" id="phone-mockup">
             <div class="phone-frame">
               <div class="phone-notch"></div>
               <div class="phone-screen">
@@ -163,21 +155,68 @@
                   <div class="bot-header">
                     <div class="live-indicator"></div>
                     <span class="bot-name">@edl_os_bot</span>
-                    <span class="bot-status">LIVE PREVIEW</span>
+                    <span class="bot-status" id="phone-scene-label">Сводка · 8:30</span>
                   </div>
-                  <div class="bot-messages">
-                    <div class="bot-msg">
-                      <p>Утренняя сводка EDL OS</p>
-                      <p>Маржа по проектам апреля: <strong>-2.1 п.п.</strong> к плану. Убыточные: 3 из 24.</p>
-                      <p>🔥 HOT-сделки: Петров (1.2М) без касания 28 ч — открыть?</p>
-                      <p>Прогноз runway: 4.2 мес.</p>
+
+                  <!-- Scene stack: cycles automatically; user can pause by hovering -->
+                  <div class="phone-scenes" id="phone-scenes">
+                    <!-- Scene 1: Morning brief -->
+                    <div class="phone-scene is-active" data-scene="morning">
+                      <div class="bot-msg bot-msg--in">
+                        <div class="bot-msg__head">📊 Утренняя сводка · вторник</div>
+                        <p>Выручка вчера: <strong>+12%</strong> к плану.</p>
+                        <p>🔥 HOT-сделка: Петров (1.2М) без касания <strong>28 ч</strong>.</p>
+                        <p>⚠️ Маржа апреля: <strong>−2.1 п.п.</strong> Убыточные: 3 из 24.</p>
+                        <p>Runway: <strong>4.2 мес</strong>.</p>
+                      </div>
+                      <div class="bot-quickreply">
+                        <button class="bot-chip">Открыть Петрова</button>
+                        <button class="bot-chip">Разбор маржи</button>
+                      </div>
+                    </div>
+
+                    <!-- Scene 2: Q&A -->
+                    <div class="phone-scene" data-scene="qa">
+                      <div class="bot-msg bot-msg--out">Где у меня просела маржа в апреле?</div>
+                      <div class="bot-msg bot-msg--typing"><span></span><span></span><span></span></div>
+                      <div class="bot-msg bot-msg--in">
+                        <p><strong>−2.1 п.п.</strong> к плану. По 3 причинам:</p>
+                        <p>1. ФОТ вырос на <strong>+8%</strong> (новый IT-найм)</p>
+                        <p>2. Скидки в B2B: <strong>−4%</strong> по 7 контрактам</p>
+                        <p>3. Курс юаня: <strong>−2%</strong> на закупках</p>
+                        <p>Главный риск — повторение в мае. Сделать разбор по сделкам?</p>
+                      </div>
+                    </div>
+
+                    <!-- Scene 3: Voice command -->
+                    <div class="phone-scene" data-scene="voice">
+                      <div class="bot-msg bot-msg--out bot-msg--voice">
+                        <span class="voice-wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span>
+                        <span class="voice-text">«согласовать выплату подрядчику 240к»</span>
+                      </div>
+                      <div class="bot-msg bot-msg--in">
+                        <p>✅ Готово. Подтверждение отправлено CFO.</p>
+                        <p>Платёж 240 000 ₽ — ООО «Эвентум», подрядчик</p>
+                        <p>В работу: <strong>сегодня 16:00 МСК</strong></p>
+                      </div>
+                      <div class="phone-meta">через 30 секунд после голосового</div>
                     </div>
                   </div>
                 </div>
                 <div class="phone-footer">
                   <span class="phone-tz">сегодня · UTC</span>
+                  <span class="phone-scene-dots" role="tablist" aria-label="Сцены демо">
+                    <button class="phone-dot is-active" data-go="0" aria-label="Сводка"></button>
+                    <button class="phone-dot" data-go="1" aria-label="Вопрос к ИИ"></button>
+                    <button class="phone-dot" data-go="2" aria-label="Голос"></button>
+                  </span>
                 </div>
               </div>
+            </div>
+            <!-- Floating caption that changes per scene -->
+            <div class="phone-caption" id="phone-caption">
+              <div class="phone-caption__kicker">Один день фаундера</div>
+              <div class="phone-caption__text" id="phone-caption-text">Утренняя сводка в кармане. Главные риски — за 3 минуты до первого совещания.</div>
             </div>
           </div>
         </div>
@@ -230,43 +269,44 @@
     <!-- Outcome block -->
     <section class="section section--gray" id="outcome">
       <div class="container">
-        <div class="section__header" style="text-align: center; max-width: 800px; margin: 0 auto 3rem;">
-          <h2 class="section__title">Что меняется в вашей работе</h2>
-          <p class="section__subtitle">Через 4 недели операционка собрана. Дальше — встроенный ритм бизнеса.</p>
+        <div class="section__header" style="text-align: center; max-width: 760px; margin: 0 auto 3rem;">
+          <h2 class="section__title">Что уходит из вашей недели</h2>
+          <p class="section__subtitle">Через 1, 3 и 6 месяцев — что перестаёт съедать ваше время, нервы и маржу.</p>
         </div>
         <div class="outcome-grid">
           <div class="outcome-card">
             <div class="outcome-card__eyebrow">1 месяц</div>
-            <h3 class="outcome-card__title">Спринт завершён</h3>
+            <h3 class="outcome-card__title">Перестали тушить пожары</h3>
             <div class="outcome-card__body">
               <ul>
-                <li>Подключены 1С + amoCRM + банк</li>
-                <li>Утренняя сводка в Telegram в 8:30</li>
-                <li>Команда обучена</li>
-                <li>Founder OS Score измерен</li>
+                <li>Утренняя сводка в 8:30 — вы в курсе бизнеса за 3 минуты до первого совещания</li>
+                <li>Решения на день приняты ещё в такси, не на ходу между встречами</li>
+                <li>НДС 22% разнесён по проектам: видно где маржа уйдёт в минус</li>
+                <li>Команда работает по операционке без ваших ежедневных пингов</li>
               </ul>
             </div>
           </div>
           <div class="outcome-card">
             <div class="outcome-card__eyebrow">3 месяца</div>
-            <h3 class="outcome-card__title">Ритм бизнеса встроен</h3>
+            <h3 class="outcome-card__title">Прибыль теперь объяснима</h3>
             <div class="outcome-card__body">
               <ul>
-                <li>Гипотезы спринта проверены на деле</li>
-                <li>Маржа объяснена цифрами, а не интуицией</li>
-                <li>У каждого руководителя свой ИИ-помощник</li>
-                <li>Недельные синки: 1 час вместо 5</li>
+                <li>CAC и LTV считаются еженедельно по каждому каналу — не «по ощущениям»</li>
+                <li>Убыточные контракты видны до того, как съели полугодовую маржу</li>
+                <li>5-часовые планёрки сжались в 1-часовой ритуал</li>
+                <li>У каждого руководителя свой ИИ-помощник — вы больше не точка отказа</li>
               </ul>
             </div>
           </div>
           <div class="outcome-card">
             <div class="outcome-card__eyebrow">6 месяцев</div>
-            <h3 class="outcome-card__title">Вы — вижнар, а не операционка</h3>
+            <h3 class="outcome-card__title">Бизнес работает без вас. Вы — стратег</h3>
             <div class="outcome-card__body">
               <ul>
                 <li>Операционка: 4–6 часов в неделю вместо 20–25</li>
-                <li>Решения — по цифрам</li>
-                <li>Отчётность для инвестора — за день</li>
+                <li>Runway, маржа и риск кассового разрыва — в кармане, спите спокойно</li>
+                <li>Отчёт для инвестора — за день, не за две недели</li>
+                <li>Решения принимаются по цифрам, а не по «кажется»</li>
               </ul>
             </div>
           </div>
@@ -338,11 +378,11 @@
               </div>
             </div>
             <div class="killer-card__content">
-              <div class="killer-card__eyebrow">Killer feature №1</div>
+              <div class="killer-card__eyebrow">01 · Pocket Management</div>
               <h3 class="killer-card__title">Управление бизнесом из кармана</h3>
               <p class="killer-card__body">Понедельник 8:30. Вы в такси. Telegram пингует: «Выручка вчера +12%, HOT-сделка Иванова без касания 28 часов, главный риск дня — выплата подрядчику». Голосом отвечаете «согласовать». Через 30 секунд — это в работе.</p>
               <div class="killer-card__diff">
-                <strong>В чём разница:</strong> Notion работает через Slack. ChatGPT — в браузере. Только мы — в Telegram, на телефоне, голосом.
+                <strong>В чём разница:</strong> Корпоративные мессенджеры (Пачка, VK Teams) — переписка с командой. ChatGPT — в браузере с прокси. Только мы — в Telegram, на телефоне, голосом, со связкой к 1С и amoCRM.
               </div>
             </div>
           </article>
@@ -362,11 +402,11 @@
               </div>
             </div>
             <div class="killer-card__content">
-              <div class="killer-card__eyebrow">Killer feature №2</div>
+              <div class="killer-card__eyebrow">02 · ИИ, который знает ваши цифры</div>
               <h3 class="killer-card__title">ИИ знает ваш бизнес</h3>
               <p class="killer-card__body">«Где у меня просела маржа в апреле?» — отвечает цифрами с разбором по 3 причинам. «Какой канал лидов окупается?» — таблица CPL × LTV × payback по 5 каналам. «Прогноз runway?» — расчёт по burn rate с учётом ожидаемых поступлений.</p>
               <div class="killer-card__diff">
-                <strong>В чём разница:</strong> ChatGPT не знает ваш 1С и amoCRM. Notion AI не подключён к Тинькоффу. Мы — да.
+                <strong>В чём разница:</strong> ChatGPT не видит ваш 1С. Корпоративные wiki (Яндекс 360, Yonote) — только хранят документы. Мы читаем ваш 1С / amoCRM / банк и отвечаем цифрами.
               </div>
             </div>
           </article>
@@ -388,7 +428,7 @@
               </div>
             </div>
             <div class="killer-card__content">
-              <div class="killer-card__eyebrow">Killer feature №3</div>
+              <div class="killer-card__eyebrow">03 · Спринт = онбординг под ваш бизнес</div>
               <h3 class="killer-card__title">4 недели — операционка собрана</h3>
               <p class="killer-card__body">30% времени — инфраструктура (шаблоны, скрипты, AI-промпты). 70% — настройка под ваш бизнес и обучение команды. Плюс 30 дней пост-Спринт поддержки. Все артефакты остаются у вас при отзыве доступа.</p>
               <div class="killer-card__diff">
@@ -416,7 +456,7 @@
               </div>
             </div>
             <div class="killer-card__content">
-              <div class="killer-card__eyebrow">Killer feature №4</div>
+              <div class="killer-card__eyebrow">04 · Методология внутри продукта</div>
               <h3 class="killer-card__title">Не книга, не курс — работающая система</h3>
               <p class="killer-card__body">Cameron Herold's Founder OS — книга. Like Centre — курс. EDL OS — методология, воплощённая в продукт. Основано на CRAFT (Центр CRAFT, ИКРА) + методология работы с ИИ от Anthropic + опыт команды в Big Tech ops.</p>
               <div class="killer-card__diff">
@@ -439,7 +479,7 @@
 
         <div class="battle-tabs" role="tablist">
           <button class="battle-tab battle-tab--active" data-panel="bitrix" role="tab" aria-selected="true">Битрикс24 / amoCRM</button>
-          <button class="battle-tab" data-panel="notion" role="tab" aria-selected="false">Notion + AI</button>
+          <button class="battle-tab" data-panel="notion" role="tab" aria-selected="false">Корп. wiki (Яндекс, Yonote)</button>
           <button class="battle-tab" data-panel="chatgpt" role="tab" aria-selected="false">ChatGPT / Excel</button>
         </div>
 
@@ -463,22 +503,22 @@
               </div>
             </div>
           </div>
-          <!-- Panel: Notion -->
+          <!-- Panel: Корпоративные wiki -->
           <div class="battle-panel" id="panel-notion" role="tabpanel" hidden>
             <div class="battle-grid">
               <div class="battle-col battle-col--bad">
-                <div class="battle-col__eyebrow">Notion + Notion AI</div>
-                <div class="battle-col__row">Настройку делаете сами</div>
-                <div class="battle-col__row">Сотрудники забивают на ведение таблиц</div>
-                <div class="battle-col__row">$10–20/мес, но данные руками</div>
-                <div class="battle-col__row">Нет автоматической актуализации</div>
+                <div class="battle-col__eyebrow">Яндекс 360 / Yonote / Пачка</div>
+                <div class="battle-col__row">Хранят документы, но не считают маржу</div>
+                <div class="battle-col__row">Не подключаются к 1С / amoCRM / банку</div>
+                <div class="battle-col__row">Сотрудники забивают на ведение страниц</div>
+                <div class="battle-col__row">Настройку и шаблоны делаете сами</div>
               </div>
               <div class="battle-col battle-col--good">
                 <div class="battle-col__eyebrow">Подход EDL OS</div>
-                <div class="battle-col__row">ИИ сам забирает данные из диалогов</div>
-                <div class="battle-col__row">База знаний обновляется автоматически</div>
-                <div class="battle-col__row">Утренняя сводка в Telegram — без ввода</div>
-                <div class="battle-col__row">Ваши данные остаются у вас</div>
+                <div class="battle-col__row">ИИ читает 1С / amoCRM / банк автоматически</div>
+                <div class="battle-col__row">Утренняя сводка в Telegram — без ручного ввода</div>
+                <div class="battle-col__row">Шаблоны Founder OS встроены — настройка не нужна</div>
+                <div class="battle-col__row">Ваши данные остаются у вас (152-ФЗ)</div>
               </div>
             </div>
           </div>
