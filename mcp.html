@@ -43,25 +43,7 @@
   }
   </script>
 
-  <script>
-    (function(){
-      const buffer = JSON.parse(localStorage.getItem('edl_events') || '[]');
-      let lastClickTime = 0;
-      function track(event, payload) {
-        if (event.includes('click') || event.includes('opened') || event.includes('switched') || event.includes('copied')) {
-          const now = Date.now();
-          if (now - lastClickTime < 500) return;
-          lastClickTime = now;
-        }
-        const segment = document.body.dataset.segmentActive || sessionStorage.getItem('edl_icp') || 'mcp';
-        const data = {event, timestamp: new Date().toISOString(), page: 'mcp', segment, referrer: document.referrer, ...payload};
-        buffer.push(data);
-        localStorage.setItem('edl_events', JSON.stringify(buffer));
-      }
-      window.EDLTrack = track;
-      window.addEventListener('DOMContentLoaded', () => track('page_view', {}));
-    })();
-  </script>
+  <script src="js/edl-track.js" defer></script>
 </head>
 <body class="mcp-page" data-page="mcp">
   <a href="#main" class="skip-link">Перейти к содержанию</a>
