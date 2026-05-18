@@ -31,6 +31,11 @@ _KEY_Q_IDX = "checkup_q_idx"   # 0-based index текущего вопроса
 _STATE_AWAIT_START = "await_start"
 _STATE_AWAIT_READY = "await_ready"
 _STATE_AWAIT_ANSWER = "await_answer"
+# 21-й уточняющий вопрос — 3 ключевые метрики бизнеса.
+# Не нумеруем как «21/21» — методологически Founder OS = 20 вопросов,
+# приоритеты — финальный штрих для персонализации сценариев в PDF.
+_STATE_AWAIT_PRIORITIES = "await_priorities"
+_STATE_AWAIT_PRIORITIES_RETRY = "await_priorities_retry"
 
 _LAYERS_ORDER = ["strategy", "sales", "operations", "finance"]
 _MAX_ANSWER_CHARS = 4000
@@ -393,7 +398,6 @@ async def _finalize_checkup(
     async with factory() as session:
         answers = await _get_answers(session, app_uuid)
         passed = sum(1 for a in answers if a.quality_passed)
-        user, _ = await get_or_create_user(session, telegram_id=update.effective_user.id)
 
         if passed < _QUALITY_PASS_THRESHOLD:
             # Показываем предупреждение
@@ -414,7 +418,8 @@ async def _finalize_checkup(
                 )
                 return  # Не завершаем сразу — ждём нажатия кнопки
 
-        await _do_complete(session, app_uuid, user, passed, msg, app_id_str, context)
+        # 21-й уточняющий вопрос (priority_metrics) перед _do_complete.
+        await _ask_priorities(update, context, app_id_str)
 
 
 async def _submit_checkup(update: Update, context: ContextTypes.DEFAULT_TYPE, app_id_str: str | None) -> None:
@@ -424,13 +429,104 @@ async def _submit_checkup(update: Update, context: ContextTypes.DEFAULT_TYPE, ap
     app_uuid = _safe_uuid(app_id_str)
     if app_uuid is None:
         return
+    await _ask_priorities(update, context, app_id_str)
+
+
+# ─── 21-й уточняющий вопрос: priority_metrics ─────────────────────────────────
+
+
+async def _ask_priorities(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, app_id_str: str
+) -> None:
+    """Спрашиваем 3 ключевые метрики бизнеса перед формированием PDF."""
+    from src.core.priority_metrics import PROMPT_TEXT
+
+    msg = update.effective_message or (update.callback_query.message if update.callback_query else None)
+    if msg is None:
+        return
+    context.user_data[_KEY_APP_ID] = app_id_str
+    context.user_data[_KEY_STATE] = _STATE_AWAIT_PRIORITIES
+    await msg.reply_text(PROMPT_TEXT, parse_mode="Markdown")
+
+
+async def _handle_priorities_text(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, raw: str
+) -> bool:
+    """Обрабатывает ответ на 21-й вопрос. Возвращает True если шаг закрыт.
+
+    Логика:
+    - parse → validate
+    - too_few → переспросить один раз
+    - too_many → попросить выбрать топ-3
+    - not_metrics на первом проходе → retry (мягко)
+    - not_metrics на retry → принять как есть с пометкой soft_match=false
+    - ok → сохранить и перейти к _do_complete
+    """
+    from src.core.priority_metrics import parse_metrics, validate_metrics
+
+    app_id_str = context.user_data.get(_KEY_APP_ID)
+    if not app_id_str:
+        return False
+    app_uuid = _safe_uuid(app_id_str)
+    if app_uuid is None:
+        return False
+
+    state = context.user_data.get(_KEY_STATE)
+    is_retry = state == _STATE_AWAIT_PRIORITIES_RETRY
+
+    metrics = parse_metrics(raw)
+    status, normalized = validate_metrics(metrics)
+
+    msg = update.effective_message
+
+    if status == "too_few":
+        await msg.reply_text(
+            "Нужно минимум 2 метрики. Назовите хотя бы 2 — третью можете "
+            "пропустить, если затрудняетесь."
+        )
+        return True
+
+    if status == "too_many":
+        await msg.reply_text(
+            f"Я насчитала {len(metrics)} метрик — для сценариев важна "
+            "приоритизация. Выберите топ-3 в порядке приоритета."
+        )
+        return True
+
+    if status == "not_metrics" and not is_retry:
+        from src.core.priority_metrics import RETRY_TEXT
+        context.user_data[_KEY_STATE] = _STATE_AWAIT_PRIORITIES_RETRY
+        await msg.reply_text(RETRY_TEXT)
+        return True
+
+    # ok ИЛИ not_metrics на retry — сохраняем и завершаем
+    soft_match = status == "ok"
+
     factory = async_session_factory()
     async with factory() as session:
+        app = await session.get(Application, app_uuid)
+        if app is None:
+            return False
+        payload = dict(app.payload or {})
+        payload["priority_metrics"] = normalized
+        payload["priority_metrics_soft_match"] = soft_match
+        app.payload = payload
         answers = await _get_answers(session, app_uuid)
         passed = sum(1 for a in answers if a.quality_passed)
         user, _ = await get_or_create_user(session, telegram_id=update.effective_user.id)
-        msg = update.callback_query.message
+        await log_event(
+            session,
+            user_id=user.id,
+            event="checkup_priority_metrics_captured",
+            payload={
+                "application_id": app_id_str,
+                "metrics": normalized,
+                "soft_match": soft_match,
+            },
+        )
+        await session.commit()
         await _do_complete(session, app_uuid, user, passed, msg, app_id_str, context)
+    return True
 
 
 async def _do_complete(session, app_uuid, user, passed, msg, app_id_str, context) -> None:
@@ -443,10 +539,25 @@ async def _do_complete(session, app_uuid, user, passed, msg, app_id_str, context
     )
     await session.commit()
 
+    plan = "base"
+    is_self_demo = False
+    if app:
+        payload = app.payload or {}
+        plan = payload.get("plan", "base")
+        is_self_demo = bool(payload.get("is_self_demo"))
+
     if msg:
+        plus_video_line = (
+            "\nВидео-разбор от Кати придёт в этот чат в течение 24 часов "
+            "после завершения Чекапа."
+            if plan == "plus" and not is_self_demo
+            else ""
+        )
         await msg.reply_text(
             f"🎉 Чекап завершён! {passed}/20 ответов прошли рубрику.\n\n"
-            "Генерирую PDF-черновик. Пришлю его в этот чат — займёт несколько минут.\n\n"
+            "Готовлю PDF с разбором по 4 слоям, 5 рекомендациями и сценариями. "
+            "Пришлю в этот чат в течение нескольких минут.\n"
+            f"{plus_video_line}\n"
             f"Условия услуги: {settings.offer_checkup_url}"
         )
 
@@ -456,14 +567,26 @@ async def _do_complete(session, app_uuid, user, passed, msg, app_id_str, context
     except Exception:
         logger.exception("Failed to trigger generate_checkup_pdf for %s", app_uuid)
 
+    # Plus-видео бриф Кате — триггерим от ЗАВЕРШЕНИЯ Чекапа, не от оплаты
+    # (SoT v1.5 patch §2.3 шаг 2). Self-demo не триггерят бриф — иначе
+    # бесконечный цикл для самотеста Кати.
+    if plan == "plus" and not is_self_demo:
+        try:
+            from src.tasks.notify_plus_video import schedule_plus_video_brief
+            schedule_plus_video_brief.delay(str(app_uuid))
+        except Exception:
+            logger.exception("Failed to schedule plus video brief for %s", app_uuid)
+
     # Бриф в admin_chat
     try:
+        demo_tag = " · self-demo" if is_self_demo else ""
         brief = (
-            f"✅ Чекап завершён\n"
+            f"✅ Чекап завершён{demo_tag}\n"
             f"Application: {app_uuid}\n"
             f"User: @{user.telegram_username or user.telegram_id}\n"
+            f"Plan: {plan}\n"
             f"Качество: {passed}/20 ответов прошли рубрику\n"
-            f"PDF-черновик генерируется — ждёт ревью Кати."
+            f"PDF генерируется автоматически и отправляется клиенту."
         )
         if context and hasattr(context, "bot"):
             await send_to_admin_chat(context.bot, brief)
@@ -481,6 +604,16 @@ async def _do_complete(session, app_uuid, user, passed, msg, app_id_str, context
 async def handle_text_step(update: Update, context: ContextTypes.DEFAULT_TYPE) -> bool:
     """Обрабатывает ответ на текущий вопрос Чекапа. Возвращает True если обработал."""
     state = context.user_data.get(_KEY_STATE)
+
+    # 21-й вопрос (priority_metrics) — отдельный state, обрабатываем рано.
+    if state in (_STATE_AWAIT_PRIORITIES, _STATE_AWAIT_PRIORITIES_RETRY):
+        try:
+            raw = validate_user_text((update.effective_message.text or "").strip())
+        except InputValidationError as e:
+            await update.effective_message.reply_text(str(e))
+            return True
+        return await _handle_priorities_text(update, context, raw)
+
     if state != _STATE_AWAIT_ANSWER:
         return False
 
