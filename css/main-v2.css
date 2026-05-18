@@ -1957,3 +1957,82 @@ body[data-segment-active="wholesale"] .icp-btn[data-segment-switch="wholesale"] 
   .case-soon__form input[type="email"],
   .case-soon__form button[type="submit"] { width: 100%; flex-basis: 100%; }
 }
+
+/* ── Hero demo video (§4.3) ── */
+.hero-demo-frame {
+  position: relative;
+  max-width: 380px;
+  margin: 0 auto;
+}
+.hero-demo-video {
+  width: 100%;
+  height: auto;
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  display: block;
+}
+.hero-demo-caption {
+  text-align: center;
+  margin-top: 14px;
+  font-size: 0.875rem;
+  color: var(--color-gray-700);
+}
+
+/* Fallback когда видео не загрузилось — показываем постер через CSS */
+.hero-demo-frame:not(:has(video[src])) .hero-demo-video,
+.hero-demo-frame video:not([src]) {
+  min-height: 420px;
+  background: url('/assets/hero-demo-poster.svg') center/cover no-repeat;
+  border-radius: 24px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-demo-video { display: none; }
+  .hero-demo-frame::before {
+    content: '';
+    display: block;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    background: url('/assets/hero-demo-poster.svg') center/cover no-repeat;
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Переопределяем старый стиль буллетов — теперь ▸ через inline span */
+.hero__bullets li {
+  padding-left: 0;
+  position: static;
+}
+.hero__bullets li::before { display: none; }
+
+/* ── Hero secondary CTA ── */
+.hero__secondary-cta {
+  background: none;
+  border: none;
+  color: var(--color-tangerine);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.9375rem;
+  padding: 0;
+  line-height: 1.5;
+}
+.hero__secondary-cta:hover { opacity: 0.8; }
+
+/* ── Pain section cards (§5) ── */
+.pain-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+.pain-card {
+  background: #fff;
+  padding: 28px 24px;
+  border-radius: 16px;
+  border: 1px solid var(--color-gray-200);
+  transition: box-shadow 0.2s ease;
+}
+.pain-card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
