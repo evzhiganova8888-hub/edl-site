@@ -16,21 +16,63 @@
       <nav class="site-nav" id="site-nav" aria-label="Главное меню">
         <a href="/methodology.html">Методология</a><a href="/try-in-claude.html">Claude&nbsp;/&nbsp;MCP</a><a href="/index.html#cases">Кейсы</a><a href="/pricing.html">Цены</a><a href="/about.html">Команда</a><a href="/faq.html">FAQ</a>
       </nav>
-      <div class="site-header__cta"><a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--outline site-header__channel"><span aria-hidden="true">✈️</span> Канал</a><button class="header__burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav" id="burger">☰</button></div>
+      <div class="site-header__cta"><button type="button" class="site-header__score" data-mc-open="header" aria-label="Пройти Founder OS Score за 15 минут — бесплатно"><span aria-hidden="true">💬</span> Score · 15 мин · бесплатно</button>
+        <a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--outline site-header__channel"><span aria-hidden="true">✈️</span> Канал</a><button class="header__burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav" id="burger">☰</button></div>
     </div>
   </header>
   <main id="main">
     <section class="section" style="padding-top:120px;">
       <div class="container">
         <h1 class="section__title" style="text-align:center; margin-bottom:64px;">Полный pricing EDL OS</h1>
-        <div class="ladder">
-          <div class="ladder__step" data-step="0" style="border-left:4px solid var(--color-tangerine);"><div style="flex:1;"><h2 class="ladder__name">Mini-Чекап (Founder OS Score)</h2><div class="ladder__price">0 ₽ · 15 минут</div><p class="ladder__desc">12 вопросов по 4 слоям Founder OS — персональный Score 0-100 и 2–3 точки роста. В браузере или через <code>/score</code> в боте @edl_os_bot. Без регистрации.</p><a href="/index.html#hero" class="btn btn--outline" style="margin-top:16px;">Начать Founder OS Score →</a></div></div>
-          <div class="ladder__step" data-step="1"><div style="flex:1;"><h2 class="ladder__name">Бесплатное демо</h2><div class="ladder__price">0 ₽ · 30 минут</div><p class="ladder__desc">Знакомство с системой, демо на примерах.</p><a href="https://t.me/edl_os_bot?start=demo" target="_blank" class="btn btn--outline" style="margin-top:16px;" data-cta-type="demo" data-cta-location="pricing">Записаться на демо</a></div></div>
-          <div class="ladder__step ladder__step--highlight" data-step="2"><div style="flex:1;"><h2 class="ladder__name">Бизнес-чекап (Audit)</h2><div class="ladder__price">9 000–14 000 ₽ · 1-2 часа в боте + 24ч</div><p class="ladder__desc">20 вопросов в боте в своём темпе (прогресс сохраняется, можно прерываться) → 24ч AI-обработки → PDF с НДС-картой, 3 действия, 90-дневный план. Оплата картой прямо в боте. <strong>Base 9 000 ₽</strong> · <strong>Plus 14 000 ₽</strong> + видео-разбор от Екатерины за 24ч. Безусловный возврат 14 дней — <code>/refund</code> в боте.</p><a href="audit.html" class="btn btn--primary" style="margin-top:16px;" data-cta-type="audit" data-cta-location="pricing">Подробнее про Чекап</a></div></div>
-          <div class="ladder__step" data-step="3"><div style="flex:1;"><h2 class="ladder__name">Диагностика</h2><div class="ladder__price">25 000 ₽ · 2 недели</div><p class="ladder__desc">Погружение в ваш бизнес и данные. Детальная спецификация для Спринта.</p><a href="diagnostic.html" class="btn btn--outline" style="margin-top:16px;" data-cta-type="diagnostic" data-cta-location="pricing">Подробнее про Диагностику</a></div></div>
-          <div class="ladder__step" data-step="4"><div style="flex:1;"><h2 class="ladder__name">Спринт (флагман)</h2><div class="ladder__price">от 135 000 ₽ · 4 недели</div><p class="ladder__desc">Собираем работающую систему: базы, Telegram-бот, ИИ-помощник. Защиты каждые 7-10 дней. 30 дней пост-Sprint поддержки.</p><a href="sprint.html" class="btn btn--outline" style="margin-top:16px;" data-cta-type="sprint" data-cta-location="pricing">Подробнее про Спринт</a></div></div>
-          <div class="ladder__step" data-step="5" style="border-left-color:transparent;"><div style="flex:1;"><h2 class="ladder__name">Growth Plan</h2><div class="ladder__price">от 50 000 ₽/мес · от 3 мес</div><p class="ladder__desc">Развиваем и масштабируем внедрённую систему. Выделенный аналитик и продуктолог.</p></div></div>
-        </div>
+        <ol class="ladder" aria-label="Лестница продуктов EDL OS">
+          <li class="ladder__step ladder__step--free" data-step="1">
+            <div style="flex:1;">
+              <div class="ladder__tag">Бесплатно · вход</div>
+              <h2 class="ladder__name">Mini-Чекап <small style="color:var(--color-gray-500); font-weight:500;">(Founder OS Score)</small></h2>
+              <div class="ladder__price">0 ₽ · 15 минут</div>
+              <p class="ladder__desc">12 вопросов по 4 слоям Founder OS — персональный Score 0-100 и 2–3 точки роста. В браузере или через <code>/score</code> в боте @edl_os_bot. Без регистрации.</p>
+              <a href="/index.html#hero" class="btn btn--outline" style="margin-top:16px;" data-cta-type="score" data-cta-location="pricing">Начать Founder OS Score →</a>
+            </div>
+          </li>
+          <li class="ladder__step ladder__step--highlight" data-step="2">
+            <div class="ladder__popular" aria-label="Самый популярный шаг">★ Самый популярный</div>
+            <div style="flex:1;">
+              <div class="ladder__tag">Главный шаг</div>
+              <h2 class="ladder__name">Бизнес-чекап</h2>
+              <div class="ladder__price">9 000–14 000 ₽ · 1-2 часа в боте + 24ч обработки</div>
+              <p class="ladder__desc">20 вопросов в боте в своём темпе (прогресс сохраняется, можно прерываться) → 24ч AI-обработки → PDF с НДС-картой, конкретные рекомендации, майнд-карта оцифровки. Оплата картой прямо в боте.</p>
+              <ul class="ladder__variants">
+                <li><strong>Base · 9 000 ₽</strong> — PDF 10 страниц · 5 рекомендаций · НДС-флажок 2026</li>
+                <li><strong>Plus · 14 000 ₽</strong> — то же + PDF 15 страниц · 7 рекомендаций · персональное 15-мин видео от Екатерины (автоматически через 24ч)</li>
+              </ul>
+              <p class="ladder__guarantee">Гарантия применимости 14 дней — один клик <code>/refund</code> в боте.</p>
+              <a href="audit.html" class="btn btn--primary" style="margin-top:16px;" data-cta-type="audit" data-cta-location="pricing">Подробнее про Чекап →</a>
+            </div>
+          </li>
+          <li class="ladder__step" data-step="3">
+            <div style="flex:1;">
+              <h2 class="ladder__name">Диагностика</h2>
+              <div class="ladder__price">25 000 ₽ · 2 недели <span class="ladder__price-note">· по предзаказу через @edl_os_bot</span></div>
+              <p class="ladder__desc">Подключение реальных источников данных (1С, amoCRM, банк) только на чтение, 2–3 встречи. На выходе — реальные цифры бизнеса в одном дашборде и план на 90 дней. Решение «брать Спринт или нет».</p>
+              <a href="diagnostic.html" class="btn btn--outline" style="margin-top:16px;" data-cta-type="diagnostic" data-cta-location="pricing">Подробнее про Диагностику →</a>
+            </div>
+          </li>
+          <li class="ladder__step" data-step="4">
+            <div style="flex:1;">
+              <h2 class="ladder__name">Спринт <small style="color:var(--color-gray-500); font-weight:500;">(флагман)</small></h2>
+              <div class="ladder__price">135 000–260 000 ₽ · 4 недели</div>
+              <p class="ladder__desc">Подключение коннекторов через нашу инфраструктуру, настройка 4 слоёв EDL OS под конкретный бизнес. 2–3 защиты с возможностью остановки. 30 дней пост-Спринт поддержки.</p>
+              <a href="sprint.html" class="btn btn--outline" style="margin-top:16px;" data-cta-type="sprint" data-cta-location="pricing">Подробнее про Спринт →</a>
+            </div>
+          </li>
+          <li class="ladder__step ladder__step--last" data-step="5">
+            <div style="flex:1;">
+              <h2 class="ladder__name">План Роста</h2>
+              <div class="ladder__price">50 000–110 000 ₽/мес · минимум 3 месяца</div>
+              <p class="ladder__desc">Регулярное использование + обновления методологии в облаке. Утренние Telegram-сводки, ИИ-коллега работает каждый день. Расторжение в любой месяц без штрафов.</p>
+            </div>
+          </li>
+        </ol>
         <div style="max-width:700px; margin:48px auto 0; padding:24px; background:var(--color-gray-50); border-radius:12px; text-align:center;"><p style="font-size:0.875rem; color:var(--color-gray-700); margin:0;"><strong>Не обязательно идти по порядку.</strong> После Бизнес-чекапа станет ясно, какой шаг нужен именно вам.</p></div>
       </div>
     </section>

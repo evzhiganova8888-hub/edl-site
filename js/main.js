@@ -234,18 +234,14 @@
     }, { passive: true });
   }
 
-  /* ── Header scroll effect ── */
-  let lastScroll = 0;
-  window.addEventListener('scroll', () => {
-    const header = document.getElementById('header');
-    if (!header) return;
-    const currentScroll = window.scrollY;
-    if (currentScroll > 100) {
-      header.style.boxShadow = '0 1px 8px rgba(0,0,0,0.08)';
-    } else {
-      header.style.boxShadow = 'none';
-    }
-    lastScroll = currentScroll;
-  }, { passive: true });
+  /* ── Header scroll effect (sticky shadow) ── */
+  const _header = document.getElementById('header');
+  if (_header) {
+    const onScroll = () => {
+      _header.classList.toggle('is-scrolled', window.scrollY > 8);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
 
 })();
