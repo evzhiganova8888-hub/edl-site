@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Запуск MCP-сервера локально · EDL OS Docs</title>
+  <meta name="description" content="Как поднять mcp-server-core EDL OS локально через Docker. Переменные окружения, OAuth, подключение к Claude Desktop.">
+  <link rel="canonical" href="https://elephantdreams.ru/developer/getting-started.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/main-v2.css">
+  <link rel="stylesheet" href="/css/dev-portal.css">
+
+  <link rel="icon" href="/assets/favicon.ico" sizes="any">
+  <meta name="theme-color" content="#0A0A0F">
+</head>
+<body class="dev-page" data-page="dev-getting-started">
+  <a href="#main" class="skip-link">Перейти к содержанию</a>
+  <div class="dev-banner">
+    <strong>Beta · v0.1</strong> · API может измениться до 1.0. <a href="https://github.com/edl-os/mcp-server-core/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a>
+  </div>
+
+  <header class="header" id="header">
+    <div class="container header__inner site-header">
+      <a href="/" class="header__logo site-logo">
+        <img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true">
+        <span>EDL&nbsp;OS</span>
+      </a>
+      <nav class="site-nav" id="site-nav" aria-label="Главное меню">
+        <a href="/methodology.html">Методология</a>
+        <a href="/mcp.html">Claude / MCP</a>
+        <a href="/integrations.html">Интеграции</a>
+        <a href="/developer/" aria-current="page">Docs</a>
+        <a href="/pricing.html">Цены</a>
+      </nav>
+      <div class="site-header__cta">
+        <a href="https://github.com/edl-os/mcp-server-core" target="_blank" rel="noopener" class="btn btn--outline site-header__channel"><span aria-hidden="true">⌥</span> GitHub</a>
+        <button class="header__burger" aria-label="Меню" id="burger">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="dev-shell">
+      <aside class="dev-sidebar">
+        <h4>Старт</h4>
+        <ul>
+          <li><a href="/developer/">Введение</a></li>
+          <li><a href="/developer/getting-started.html" aria-current="page">Запуск локально</a></li>
+        </ul>
+        <h4>Разработка</h4>
+        <ul>
+          <li><a href="/developer/write-connector.html">Свой коннектор</a></li>
+          <li><a href="/developer/schema.html">JSON-RPC схема</a></li>
+        </ul>
+        <h4>Внешние</h4>
+        <ul>
+          <li><a href="https://github.com/edl-os/mcp-server-core" target="_blank" rel="noopener">GitHub repo ↗</a></li>
+          <li><a href="https://modelcontextprotocol.io" target="_blank" rel="noopener">MCP spec ↗</a></li>
+        </ul>
+      </aside>
+
+      <article class="dev-content">
+        <div class="dev-crumbs"><a href="/developer/">developer</a> › getting-started</div>
+        <h1>Запуск MCP-сервера локально</h1>
+        <p class="dev-lede">
+          Поднимаем <code>mcp-server-core</code> через Docker за 5 минут и подключаем
+          его к Claude Desktop как локальный MCP-сервер.
+        </p>
+
+        <h2>Что вам понадобится</h2>
+        <ul>
+          <li><strong>Docker</strong> 24+ и <code>docker compose</code> v2</li>
+          <li><strong>Node.js</strong> 20+ — опционально, для разработки коннекторов</li>
+          <li>Свободный порт <code>8080</code> (или измените в <code>.env</code>)</li>
+          <li><strong>Claude Desktop</strong> — для проверки подключения</li>
+        </ul>
+
+        <h2>Шаг 1 · Клон репозитория</h2>
+        <pre><code>git clone https://github.com/edl-os/mcp-server-core.git
+cd mcp-server-core</code></pre>
+
+        <h2>Шаг 2 · Настройте окружение</h2>
+        <p>Скопируйте example-файл и при желании поправьте параметры:</p>
+        <pre><code>cp .env.example .env</code></pre>
+
+        <p>Минимальный набор переменных:</p>
+        <table>
+          <thead><tr><th>Переменная</th><th>По умолчанию</th><th>Что делает</th></tr></thead>
+          <tbody>
+            <tr><td><code>MCP_PORT</code></td><td><code>8080</code></td><td>HTTP-порт сервера</td></tr>
+            <tr><td><code>MCP_TRANSPORT</code></td><td><code>sse</code></td><td><code>sse</code> или <code>http</code></td></tr>
+            <tr><td><code>MCP_AUTH_MODE</code></td><td><code>none</code></td><td><code>none</code> / <code>oauth</code> / <code>apikey</code></td></tr>
+            <tr><td><code>MCP_DATA_DIR</code></td><td><code>./data</code></td><td>Где хранятся локальные данные</td></tr>
+            <tr><td><code>LOG_LEVEL</code></td><td><code>info</code></td><td><code>trace</code> / <code>debug</code> / <code>info</code></td></tr>
+          </tbody>
+        </table>
+
+        <div class="dev-callout dev-callout--tip">
+          <span class="dev-callout__icon" aria-hidden="true">💡</span>
+          <div>
+            Для локальной разработки оставьте <code>MCP_AUTH_MODE=none</code>. Это отключит OAuth — сервер
+            будет доступен без авторизации (только для <code>localhost</code>).
+          </div>
+        </div>
+
+        <h2>Шаг 3 · Запустите сервер</h2>
+        <pre><code>docker compose up -d
+
+<span class="c"># Логи</span>
+docker compose logs -f mcp</code></pre>
+
+        <p>Проверьте, что сервер отвечает:</p>
+        <pre><code>curl http://localhost:8080/mcp/v1/health</code></pre>
+        <p>Ожидаемый ответ:</p>
+        <pre><code>{
+  <span class="k">"status"</span>: <span class="s">"ok"</span>,
+  <span class="k">"version"</span>: <span class="s">"0.1.0"</span>,
+  <span class="k">"tools"</span>: <span class="n">6</span>,
+  <span class="k">"transport"</span>: <span class="s">"sse"</span>
+}</code></pre>
+
+        <h2>Шаг 4 · Подключите к Claude Desktop</h2>
+        <p>Откройте <strong>Settings → Developer → Edit Config</strong> и добавьте в <code>claude_desktop_config.json</code>:</p>
+        <pre><code>{
+  <span class="k">"mcpServers"</span>: {
+    <span class="k">"edl-os-local"</span>: {
+      <span class="k">"url"</span>: <span class="s">"http://localhost:8080/mcp/v1"</span>,
+      <span class="k">"transport"</span>: <span class="s">"sse"</span>
+    }
+  }
+}</code></pre>
+
+        <p>
+          Перезапустите Claude Desktop. В выпадушке инструментов появится <code>edl-os-local</code> с
+          доступными tools.
+        </p>
+
+        <h2>Шаг 5 · Вызов tool из Claude</h2>
+        <p>В чате Claude спросите:</p>
+        <blockquote>
+          Используй tool <code>list_tools</code> из edl-os-local и покажи все доступные инструменты.
+        </blockquote>
+        <p>Claude вызовет <code>tools/list</code> через MCP и покажет в ответе список — типа этого:</p>
+        <pre><code>[
+  { <span class="k">"name"</span>: <span class="s">"founder_score"</span>,    <span class="k">"description"</span>: <span class="s">"Расчёт Founder OS Score"</span> },
+  { <span class="k">"name"</span>: <span class="s">"get_revenue"</span>,      <span class="k">"description"</span>: <span class="s">"Выручка по периодам"</span> },
+  { <span class="k">"name"</span>: <span class="s">"list_customers"</span>,   <span class="k">"description"</span>: <span class="s">"Список клиентов"</span> }
+  <span class="c">// ...ещё 3</span>
+]</code></pre>
+
+        <h2>Дальше</h2>
+        <ul>
+          <li>Хотите подключить свой источник данных? → <a href="/developer/write-connector.html">Свой коннектор</a></li>
+          <li>Нужно понять формат запросов? → <a href="/developer/schema.html">JSON-RPC схема</a></li>
+          <li>Готовы выкатить в прод? Используйте <a href="/mcp.html">managed-хостинг</a> с готовым OAuth + audit log.</li>
+        </ul>
+
+        <div class="dev-prevnext">
+          <a class="dev-prev" href="/developer/">
+            <div class="dev-prevnext__label">← назад</div>
+            <div class="dev-prevnext__title">Введение</div>
+          </a>
+          <a class="dev-next" href="/developer/write-connector.html">
+            <div class="dev-prevnext__label">далее →</div>
+            <div class="dev-prevnext__title">Свой коннектор</div>
+          </a>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="footer" style="padding: 32px 0; text-align: center;">
+    <div class="container" style="font-size: 0.8125rem;">
+      © 2026 EDL OS · Elephant Dreams Lab
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const b = document.getElementById('burger');
+      const n = document.getElementById('site-nav');
+      if (!b || !n) return;
+      b.addEventListener('click', () => {
+        const open = n.classList.toggle('is-open');
+        b.setAttribute('aria-expanded', String(open));
+      });
+    })();
+  </script>
+</body>
+</html>
