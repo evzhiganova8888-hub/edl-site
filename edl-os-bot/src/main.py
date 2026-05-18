@@ -245,14 +245,11 @@ async def yookassa_webhook(request: Request) -> dict:
             await session.commit()
 
         if not result.get("already_paid"):
-            # F8: если план Plus — планируем Celery-задачу видео-брифа
-            plan = (app.payload or {}).get("plan", "base")
-            if plan == "plus":
-                try:
-                    from src.tasks.notify_plus_video import schedule_plus_video_brief
-                    schedule_plus_video_brief.delay(str(app.id))
-                except Exception:
-                    logger.exception("YooKassa webhook: failed to schedule plus video brief")
+            # SoT v1.5 patch §2.3 шаг 2: видео-бриф Кате триггерится от
+            # ЗАВЕРШЕНИЯ Чекапа (checkup_handlers._do_complete), не от оплаты.
+            # Это решает кейс «клиент оплатил, но не прошёл Чекап неделю» —
+            # раньше Катя получала бесполезный бриф через 24ч.
+            pass
 
             # Уведомить пользователя через бот
             if _ptb_app and user.telegram_id:

@@ -73,6 +73,10 @@ async def admin_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     markup = InlineKeyboardMarkup(
         [
             [InlineKeyboardButton(toggle_label, callback_data="admin:toggle_vitaconsult")],
+            [
+                InlineKeyboardButton("🎁 Demo себе · Plus", callback_data="admin:self_demo:plus"),
+                InlineKeyboardButton("🎁 Demo себе · Base", callback_data="admin:self_demo:base"),
+            ],
             [InlineKeyboardButton("← В меню", callback_data="menu:main")],
         ]
     )
@@ -86,7 +90,8 @@ async def handle_admin_callback(update: Update, context: ContextTypes.DEFAULT_TY
     if not is_admin(user_id):
         return
 
-    action = (query.data or "").split(":", 1)[1] if ":" in (query.data or "") else ""
+    raw = query.data or ""
+    action = raw.split(":", 1)[1] if ":" in raw else ""
     if action == "toggle_vitaconsult":
         factory = async_session_factory()
         async with factory() as session:
@@ -106,6 +111,16 @@ async def handle_admin_callback(update: Update, context: ContextTypes.DEFAULT_TY
             "Чтобы отменить — /reset.",
             parse_mode="Markdown",
         )
+        return
+
+    if action.startswith("self_demo:"):
+        plan = action.split(":", 1)[1] if ":" in action else "plus"
+        if plan not in ("base", "plus"):
+            plan = "plus"
+        # Эмулируем /grant_demo <self> <plan> — переиспользуем команду.
+        context.args = [str(user_id), plan]
+        await grant_demo_command(update, context)
+        return
 
 
 async def handle_text_step(update: Update, context: ContextTypes.DEFAULT_TYPE) -> bool:
@@ -547,6 +562,10 @@ async def grant_demo_command(update: Update, context: ContextTypes.DEFAULT_TYPE)
             )
             return
 
+        # is_self_demo=True если админ выдаёт демо самому себе.
+        # Self-demo не триггерит видео-бриф Кате (бесконечный цикл при самотесте)
+        # и исключается из воронки метрик (exclude_from_funnel=True).
+        is_self_demo = target_user.telegram_id == admin_tg_id
         app = await create_application(
             session,
             user=target_user,
@@ -556,6 +575,8 @@ async def grant_demo_command(update: Update, context: ContextTypes.DEFAULT_TYPE)
                 "plan": plan,
                 "source": "demo_grant",
                 "granted_by_telegram_id": admin_tg_id,
+                "is_self_demo": is_self_demo,
+                "exclude_from_funnel": is_self_demo,
             },
         )
         result = await mark_application_paid(
@@ -608,8 +629,10 @@ async def grant_demo_command(update: Update, context: ContextTypes.DEFAULT_TYPE)
         logger.exception("grant_demo: failed to notify user %s", target_telegram_id)
         delivered = False
 
+    self_demo_tag = " · self-demo (не в воронке, без видео-брифа Кате)" if is_self_demo else ""
     summary = (
-        f"✅ Demo-доступ выдан: {target_name} (tg_id={target_telegram_id}, plan={plan}).\n"
+        f"✅ Demo-доступ выдан{self_demo_tag}: {target_name} "
+        f"(tg_id={target_telegram_id}, plan={plan}).\n"
         f"Application: {result['application_id']}\n"
         f"Refund window до: {result.get('refund_eligible_until', '—')}"
     )

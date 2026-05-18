@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Бизнес-чекап EDL OS — {{ company }}</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 24mm 20mm 22mm 20mm;
+      @bottom-left {
+        content: "EDL OS · Бизнес-чекап · {{ company }}";
+        font-size: 9pt;
+        color: #6b7280;
+      }
+      @bottom-right {
+        content: counter(page) " / " counter(pages);
+        font-size: 9pt;
+        color: #6b7280;
+      }
+    }
+    @page :first { margin: 0; }
+    @page cover { margin: 0; }
+
+    * { box-sizing: border-box; }
+    html, body {
+      font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+      color: #0a0a0a;
+      font-size: 11pt;
+      line-height: 1.55;
+      margin: 0;
+      padding: 0;
+    }
+    h1 { font-size: 26pt; margin: 0 0 16pt; line-height: 1.1; }
+    h2 { font-size: 16pt; margin: 24pt 0 10pt; color: #0a0a0a; }
+    h3 { font-size: 12pt; margin: 14pt 0 6pt; color: #0a0a0a; }
+    p { margin: 0 0 8pt; }
+    strong { color: #0a0a0a; }
+    em { color: #404040; font-style: italic; }
+    .accent { color: #FF6B1A; }
+    .muted { color: #6b7280; font-size: 9.5pt; }
+
+    /* COVER */
+    .cover {
+      page: cover;
+      page-break-after: always;
+      background: #0a0a0a;
+      color: #fff;
+      min-height: 297mm;
+      padding: 32mm 24mm;
+      display: block;
+    }
+    .cover__brand {
+      display: inline-block;
+      font-size: 10pt;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #FF6B1A;
+      border: 1px solid #FF6B1A;
+      padding: 4pt 10pt;
+      margin-bottom: 28pt;
+    }
+    .cover__title {
+      font-size: 38pt;
+      line-height: 1.05;
+      margin: 0 0 12pt;
+      color: #fff;
+      font-weight: 700;
+    }
+    .cover__subtitle {
+      color: #d4d4d8;
+      font-size: 13pt;
+      max-width: 130mm;
+      margin: 0 0 56pt;
+    }
+    .cover__meta {
+      border-top: 1px solid #27272a;
+      padding-top: 14pt;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18pt 32pt;
+    }
+    .cover__meta div { font-size: 10pt; }
+    .cover__meta dt { color: #71717a; text-transform: uppercase; letter-spacing: 0.1em; font-size: 8.5pt; margin-bottom: 3pt; }
+    .cover__meta dd { color: #fafafa; margin: 0; font-size: 11pt; font-weight: 500; }
+    .cover__footer {
+      position: fixed;
+      bottom: 16mm;
+      left: 24mm;
+      right: 24mm;
+      color: #71717a;
+      font-size: 9pt;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* SECTIONS */
+    section { page-break-inside: avoid; }
+    .section--summary { page-break-after: always; }
+    .section--diagnosis { page-break-after: always; }
+    .section--recs { page-break-before: always; }
+    .section--scenarios { page-break-before: always; }
+    .section--vat { page-break-before: always; }
+    .section--upsell { page-break-before: always; }
+
+    .lead {
+      background: #fafafa;
+      border-left: 3px solid #FF6B1A;
+      padding: 14pt 16pt;
+      margin: 0 0 16pt;
+      font-size: 11.5pt;
+      line-height: 1.55;
+      white-space: pre-line;
+    }
+
+    /* DIAGNOSIS */
+    .layer {
+      border: 1px solid #e5e7eb;
+      border-radius: 8pt;
+      padding: 12pt 14pt;
+      margin-bottom: 10pt;
+      page-break-inside: avoid;
+    }
+    .layer__head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6pt;
+    }
+    .layer__head h3 { margin: 0; }
+    .layer__quality { color: #6b7280; font-size: 9.5pt; }
+    .layer__row { margin-bottom: 4pt; }
+    .layer__row b { display: inline-block; min-width: 110pt; color: #6b7280; font-weight: 500; }
+
+    /* RECOMMENDATION CARDS */
+    .rec {
+      border: 1px solid #e5e7eb;
+      border-radius: 8pt;
+      padding: 12pt 14pt 10pt;
+      margin-bottom: 10pt;
+      page-break-inside: avoid;
+    }
+    .rec__head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid #f3f4f6;
+      padding-bottom: 6pt;
+      margin-bottom: 8pt;
+    }
+    .rec__title { font-size: 12pt; font-weight: 600; margin: 0; flex: 1; }
+    .rec__layer {
+      font-size: 8.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #FF6B1A;
+      margin-left: 12pt;
+    }
+    .rec__field { margin-bottom: 4pt; font-size: 10.5pt; }
+    .rec__field b { display: inline-block; min-width: 110pt; color: #6b7280; font-weight: 500; }
+
+    /* SCENARIOS */
+    .scen {
+      border: 1px solid #e5e7eb;
+      border-radius: 8pt;
+      padding: 14pt 16pt;
+      margin-bottom: 12pt;
+      page-break-inside: avoid;
+    }
+    .scen--sniper { border-left: 4px solid #FF6B1A; }
+    .scen--combo { border-left: 4px solid #f59e0b; }
+    .scen--full { border-left: 4px solid #0a0a0a; }
+    .scen__title { font-weight: 600; font-size: 13pt; margin: 0 0 4pt; }
+    .scen__meta { color: #6b7280; font-size: 10pt; margin-bottom: 8pt; }
+    .scen ul { margin: 4pt 0 4pt 18pt; padding: 0; }
+    .scen ul li { margin-bottom: 3pt; }
+
+    /* VAT */
+    .vat {
+      border-left: 4px solid {{ vat_section.color if vat_section else '#6b7280' }};
+      background: #fafafa;
+      padding: 12pt 14pt;
+      page-break-inside: avoid;
+    }
+
+    /* UPSELL */
+    .upsell {
+      border: 1px solid #0a0a0a;
+      border-radius: 8pt;
+      padding: 18pt 18pt;
+      background: #fafafa;
+    }
+    .upsell table { width: 100%; border-collapse: collapse; margin-top: 8pt; font-size: 10pt; }
+    .upsell th, .upsell td { padding: 7pt 8pt; text-align: left; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+    .upsell th { color: #6b7280; font-weight: 600; text-transform: uppercase; font-size: 9pt; letter-spacing: 0.05em; }
+    .upsell tr:last-child td { border-bottom: none; }
+    .upsell__cta { margin-top: 14pt; font-size: 10.5pt; color: #0a0a0a; }
+    .upsell__cta b { color: #FF6B1A; }
+
+    /* RAW ANSWERS */
+    .raw {
+      page-break-before: always;
+    }
+    .raw__q {
+      border-bottom: 1px solid #f3f4f6;
+      padding: 8pt 0;
+      page-break-inside: avoid;
+    }
+    .raw__q b { font-size: 10pt; color: #6b7280; }
+    .raw__q p { font-size: 10pt; margin: 2pt 0 0; color: #404040; }
+
+    .disclaimer {
+      border: 1px solid #f3f4f6;
+      background: #fafafa;
+      border-radius: 8pt;
+      padding: 12pt 14pt;
+      font-size: 10pt;
+      color: #404040;
+      margin-top: 14pt;
+    }
+  </style>
+</head>
+<body>
+
+  {# ─── COVER ────────────────────────────────────────────────────────── #}
+  <div class="cover">
+    <span class="cover__brand">EDL OS · Бизнес-чекап</span>
+    <h1 class="cover__title">Карта вашего бизнеса<br>по 4 слоям</h1>
+    <p class="cover__subtitle">
+      Методологический разбор на основе ваших ответов. 4 слоя · 5–7 рекомендаций ·
+      3 сценария действий под ваши приоритетные метрики.
+    </p>
+    <dl class="cover__meta">
+      <div>
+        <dt>Компания</dt>
+        <dd>{{ company }}</dd>
+      </div>
+      <div>
+        <dt>Получатель</dt>
+        <dd>{{ full_name }}</dd>
+      </div>
+      <div>
+        <dt>Тариф</dt>
+        <dd>{{ plan_label }}{% if is_self_demo %} · self-demo{% endif %}</dd>
+      </div>
+      <div>
+        <dt>Дата</dt>
+        <dd>{{ generated_at }}</dd>
+      </div>
+    </dl>
+    <div class="cover__footer">
+      <span>{{ version }} · подготовлено @edl_os_bot</span>
+      <span>review by Катерина Жиганова</span>
+    </div>
+  </div>
+
+  {# ─── EXECUTIVE SUMMARY ─────────────────────────────────────────────── #}
+  <section class="section--summary">
+    <h2>Главное за минуту</h2>
+    <div class="lead">{{ summary }}</div>
+    <p class="muted">
+      Отчёт построен по методологии EDL OS — синтез Big Tech operations (Google,
+      Amazon, McKinsey), CRAFT (Центр CRAFT, школа инноваций ИКРА) и
+      AI Fluency Framework (Anthropic, UCC, Ringling). Подробнее о методе —
+      на elephantdreams.ru/method.
+    </p>
+  </section>
+
+  {# ─── DIAGNOSIS BY 4 LAYERS ─────────────────────────────────────────── #}
+  <section class="section--diagnosis">
+    <h2>Диагноз по 4 слоям</h2>
+    {% for layer in layer_diagnosis %}
+    <div class="layer">
+      <div class="layer__head">
+        <h3>{{ layer.label }}</h3>
+        <span class="layer__quality">Качество ответов: {{ layer.quality_passed }}/{{ layer.quality_total }}</span>
+      </div>
+      <div class="layer__row"><b>Что сильно:</b> {{ layer.strong }}</div>
+      <div class="layer__row"><b>Где разрыв:</b> {{ layer.gap }}</div>
+      <div class="layer__row"><b>Риск в 90 дней:</b> {{ layer.risk_90d }}</div>
+    </div>
+    {% endfor %}
+  </section>
+
+  {# ─── RECOMMENDATIONS ───────────────────────────────────────────────── #}
+  <section class="section--recs">
+    <h2>{{ recommendations|length }} рекомендаций — что делать на ближайший квартал</h2>
+    <p class="muted">
+      Каждая — с конкретным инструментом, ответственной ролью, первым шагом
+      на этой неделе и формулировкой ожидаемого эффекта. Без обещаний цифр —
+      реальный эффект зависит от того, как вы это внедрите.
+    </p>
+    {% for rec in recommendations %}
+    <div class="rec">
+      <div class="rec__head">
+        <p class="rec__title">{{ loop.index }}. {{ rec.title }}</p>
+        <span class="rec__layer">{{ rec.layer_label }}</span>
+      </div>
+      <div class="rec__field"><b>Что делать:</b> {{ rec.what }}</div>
+      <div class="rec__field"><b>Инструмент:</b> {{ rec.tool }}</div>
+      <div class="rec__field"><b>Ответственный:</b> {{ rec.role }}</div>
+      <div class="rec__field"><b>Первый шаг:</b> {{ rec.first_step }}</div>
+      <div class="rec__field"><b>Что закрывает:</b> {{ rec.impact }}</div>
+    </div>
+    {% endfor %}
+  </section>
+
+  {# ─── 3 SCENARIOS ───────────────────────────────────────────────────── #}
+  <section class="section--scenarios">
+    <h2>3 сценария — под ваши приоритетные метрики</h2>
+    <p class="muted">
+      {% if priority_metrics %}
+      Ваши метрики приоритета: <strong>{{ priority_metrics|join(' → ') }}</strong>.
+      Сценарии — это уровень глубины внедрения: один точный удар, комбо или
+      полная пересборка.
+      {% else %}
+      Метрики приоритета вы не уточнили — используем категориальные сценарии.
+      В Plus-видео Катя пересоберёт их под ваши конкретные цифры.
+      {% endif %}
+    </p>
+
+    <div class="scen scen--sniper">
+      <p class="scen__title">🎯 Sniper — одно действие, метрика «{{ scenarios.sniper.metric }}»</p>
+      <p class="scen__meta">Горизонт {{ scenarios.sniper.horizon_weeks }} недели</p>
+      <p><strong>Действие:</strong> {{ scenarios.sniper.action }}</p>
+      <p><strong>Первый шаг на этой неделе:</strong> {{ scenarios.sniper.first_step }}</p>
+      <p><strong>Что закрывает:</strong> {{ scenarios.sniper.impact }}</p>
+    </div>
+
+    <div class="scen scen--combo">
+      <p class="scen__title">🎯🎯 Combo — 3 действия, метрики «{{ scenarios.combo.metrics|join('» + «') }}»</p>
+      <p class="scen__meta">Горизонт {{ scenarios.combo.horizon_weeks }} недель</p>
+      <ul>
+        {% for action in scenarios.combo.actions %}<li>{{ action }}</li>{% endfor %}
+      </ul>
+    </div>
+
+    <div class="scen scen--full">
+      <p class="scen__title">🎯🎯🎯 Full Stack — {{ scenarios.full_stack.total_actions }} действий по 4 слоям, метрики «{{ scenarios.full_stack.metrics|join('» + «') }}»</p>
+      <p class="scen__meta">Горизонт {{ scenarios.full_stack.horizon_weeks }} недель</p>
+      {% for layer_name, actions in scenarios.full_stack.actions_by_layer.items() %}
+      {% if actions %}
+      <p style="margin-top:8pt;"><strong>{{ layer_name }}:</strong></p>
+      <ul>{% for action in actions %}<li>{{ action }}</li>{% endfor %}</ul>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+
+  {# ─── VAT FLAG ──────────────────────────────────────────────────────── #}
+  {% if vat_section %}
+  <section class="section--vat">
+    <h2>НДС-флажок 2026</h2>
+    <div class="vat">
+      <p><strong>Ваша зона:</strong> {{ vat_section.description }}</p>
+      <p><strong>Что делать:</strong> {{ vat_section.advice }}</p>
+    </div>
+    <p class="muted" style="margin-top:8pt;">
+      Это методологический ориентир. Финальное решение принимается с
+      бухгалтером по фактическим расходам.
+    </p>
+  </section>
+  {% endif %}
+
+  {# ─── DISCLAIMER (Plus only) ──────────────────────────────────────── #}
+  {% if is_plus %}
+  <section>
+    <h2>Что вы получаете и чего не получаете в Plus</h2>
+    <div class="disclaimer">
+      <p><strong>Чекап Plus</strong> — это методологические гипотезы на основе
+      ваших развёрнутых ответов и 15-минутный персональный видео-разбор от Кати,
+      где она пройдёт по вашим конкретным узким местам.</p>
+      <p>Это <strong>не диагностика</strong> в классическом смысле: мы не
+      подключаемся к вашим системам (1С, CRM, банк) и не сверяем цифры с
+      первичкой. Все рекомендации сформулированы из того, что вы сами сказали.
+      Реальные цифры из ваших систем — на этапе Диагностики (25 000 ₽).</p>
+    </div>
+  </section>
+  {% endif %}
+
+  {# ─── UPSELL: что входит в Диагностику ──────────────────────────────── #}
+  <section class="section--upsell">
+    <h2>Следующий шаг — Диагностика, {{ diagnostic_price_rub }} ₽</h2>
+    <div class="upsell">
+      <p>Если Чекап показал «где болит» по методологии, Диагностика покажет
+      <strong>«насколько болит»</strong> — в конкретных цифрах из ваших систем,
+      а не в формулировках клиента.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Бизнес-чекап</th>
+            <th>Диагностика</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Цифры</b></td>
+            <td>Из ваших ответов</td>
+            <td>Из ваших 1С / CRM / банка (read-only)</td>
+          </tr>
+          <tr>
+            <td><b>Глубина</b></td>
+            <td>Гипотезы по методологии</td>
+            <td>Подтверждённые проблемы + причины</td>
+          </tr>
+          <tr>
+            <td><b>Формат</b></td>
+            <td>PDF + (Plus) видео</td>
+            <td>PDF + дашборд + 2–3 встречи 1 час</td>
+          </tr>
+          <tr>
+            <td><b>План на квартал</b></td>
+            <td>3 категориальных сценария</td>
+            <td>90-дневный план с конкретными цифрами</td>
+          </tr>
+          <tr>
+            <td><b>Срок</b></td>
+            <td>24 часа</td>
+            <td>2 недели</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="upsell__cta">
+        Готовы — напишите Ивану @edl_os_bot командой <b>/start diagnostic</b>
+        или ответьте «диагностика» в этот чат.
+      </p>
+    </div>
+  </section>
+
+  {# ─── RAW ANSWERS APPENDIX ──────────────────────────────────────────── #}
+  <section class="raw">
+    <h2>Приложение · ваши ответы целиком</h2>
+    <p class="muted">
+      Чтобы вы могли проверить, что я ничего не упустила. Если хотите дополнить
+      какой-то ответ — напишите в чат и я перегенерирую отчёт.
+    </p>
+    {% for a in raw_answers %}
+    <div class="raw__q">
+      <b>{{ a.order }}. [{{ a.layer }}] {{ a.question }}</b>
+      <p>
+        {% if a.skipped %}<em>— пропущено</em>
+        {% else %}{{ a.answer }}
+        {% endif %}
+      </p>
+    </div>
+    {% endfor %}
+  </section>
+
+</body>
+</html>
