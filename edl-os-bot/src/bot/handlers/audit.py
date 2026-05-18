@@ -64,6 +64,11 @@ FLOW_AWAIT_FULL_NAME = "await_full_name"
 FLOW_AWAIT_EMAIL = "await_email"
 FLOW_AWAIT_COMPANY = "await_company"
 
+# Ключ для отложенного действия после accept consent.
+# См. consent.handle_consent — если юзер кликнул «Купить» без согласия,
+# мы запоминаем intent, показываем consent-форму; после accept resume.
+PENDING_POST_CONSENT_KEY = "pending_post_consent"
+
 
 def _plan_amount(plan: str) -> float:
     return AUDIT_PLUS_AMOUNT_RUB if plan == PLAN_PLUS else AUDIT_AMOUNT_RUB
@@ -134,7 +139,14 @@ async def audit_sample_command(update: Update, context: ContextTypes.DEFAULT_TYP
 
 
 async def start_purchase(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Колбэк `audit:start_purchase:<plan>` — старт сбора контактов."""
+    """Колбэк `audit:start_purchase:<plan>` — старт сбора контактов.
+
+    plan ∈ {base, plus}. base — Чекап 9 000 ₽, plus — 14 000 ₽ с видео.
+
+    Если согласия нет — _start_purchase_flow сохраняет intent и показывает
+    consent-форму; после accept consent.handle_consent возобновляет покупку
+    (см. _begin_purchase + PENDING_POST_CONSENT_KEY).
+    """
     query = update.callback_query
     await query.answer()
 
@@ -156,13 +168,33 @@ async def _start_purchase_flow(update: Update, context: ContextTypes.DEFAULT_TYP
     async with factory() as session:
         user, _ = await get_or_create_user(session, telegram_id=update.effective_user.id)
 
-        # Шаг 1 — проверка согласия
         if not consent_core.has_consent(user):
             await session.commit()
+            # Запоминаем intent, чтобы после accept consent продолжить покупку
+            # автоматически — иначе юзер видит «Согласие зафиксировано» и
+            # тишину (P0 bug 19.05.2026).
+            context.user_data[PENDING_POST_CONSENT_KEY] = {
+                "action": "audit_start_purchase",
+                "plan": plan,
+            }
             await consent_handler.request_consent(update)
             return
 
-        # Создаём заявку (paid=false пока)
+    await _begin_purchase(update, context, plan=plan)
+
+
+async def _begin_purchase(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, *, plan: str
+) -> None:
+    """Создаёт Application, выставляет FSM, спрашивает ФИО.
+
+    Вызывается:
+    1. напрямую из start_purchase, если consent уже есть;
+    2. из consent.handle_consent после accept (resume bug fix).
+    """
+    factory = async_session_factory()
+    async with factory() as session:
+        user, _ = await get_or_create_user(session, telegram_id=update.effective_user.id)
         application = await create_application(
             session,
             user=user,
@@ -182,14 +214,15 @@ async def _start_purchase_flow(update: Update, context: ContextTypes.DEFAULT_TYP
     context.user_data[KEY_APP_ID] = application_id
     context.user_data[KEY_PLAN] = plan
     context.user_data[KEY_FLOW] = FLOW_AWAIT_FULL_NAME
+    context.user_data.pop(PENDING_POST_CONSENT_KEY, None)
 
     plan_label = "Plus · 14 000 ₽" if plan == PLAN_PLUS else "Базовый · 9 000 ₽"
-    await message.reply_text(
+    await update.effective_message.reply_text(
         f"Хорошо, оформляем Бизнес-чекап {plan_label}.\n\n"
         "Соберу минимум — ФИО, email для чека и название компании. "
         "Это нужно для договора и фискального чека (54-ФЗ)."
     )
-    await message.reply_text(
+    await update.effective_message.reply_text(
         texts.ASK_FULL_NAME, reply_markup=keyboards.cancel_collection_keyboard()
     )
 
