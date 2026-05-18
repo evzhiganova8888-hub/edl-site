@@ -1,0 +1,69 @@
+.exit-intent-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.exit-intent-overlay.is-visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.exit-intent-modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  transform: translateY(20px) scale(0.95);
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.exit-intent-overlay.is-visible .exit-intent-modal {
+  transform: translateY(0) scale(1);
+}
+
+.exit-intent-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  background: none; border: none;
+  font-size: 24px; color: #999;
+  cursor: pointer; transition: color 0.2s;
+}
+
+.exit-intent-close:hover { color: #333; }
+
+.exit-intent-icon {
+  font-size: 48px; margin-bottom: 16px;
+}
+
+.exit-intent-title {
+  font-size: 1.5rem; font-weight: 700; margin-bottom: 12px;
+}
+
+.exit-intent-text {
+  color: #666; font-size: 1.0625rem; line-height: 1.5; margin-bottom: 24px;
+}
+
+.exit-intent-btn {
+  display: inline-block;
+  background: #FF6B1A; color: #fff;
+  padding: 14px 28px; border-radius: 8px;
+  font-weight: 600; text-decoration: none;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.exit-intent-btn:hover {
+  background: #E55A12; transform: translateY(-2px);
+}

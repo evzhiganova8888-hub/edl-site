@@ -134,16 +134,23 @@ async def audit_sample_command(update: Update, context: ContextTypes.DEFAULT_TYP
 
 
 async def start_purchase(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Колбэк `audit:start_purchase:<plan>` — старт сбора контактов.
-
-    plan ∈ {base, plus}. base — Чекап 9 000 ₽, plus — 14 000 ₽ с видео.
-    """
+    """Колбэк `audit:start_purchase:<plan>` — старт сбора контактов."""
     query = update.callback_query
     await query.answer()
 
     data = query.data or ""
     parts = data.split(":")
     plan = parts[2] if len(parts) >= 3 and parts[2] in (PLAN_BASE, PLAN_PLUS) else PLAN_BASE
+    await _start_purchase_flow(update, context, plan)
+
+async def start_purchase_deeplink(update: Update, context: ContextTypes.DEFAULT_TYPE, plan: str) -> None:
+    """Entry point from /start deep-link."""
+    await _start_purchase_flow(update, context, plan)
+
+async def _start_purchase_flow(update: Update, context: ContextTypes.DEFAULT_TYPE, plan: str) -> None:
+    message = update.effective_message
+    if not message:
+        return
 
     factory = async_session_factory()
     async with factory() as session:
@@ -177,12 +184,12 @@ async def start_purchase(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     context.user_data[KEY_FLOW] = FLOW_AWAIT_FULL_NAME
 
     plan_label = "Plus · 14 000 ₽" if plan == PLAN_PLUS else "Базовый · 9 000 ₽"
-    await query.message.reply_text(
+    await message.reply_text(
         f"Хорошо, оформляем Бизнес-чекап {plan_label}.\n\n"
         "Соберу минимум — ФИО, email для чека и название компании. "
         "Это нужно для договора и фискального чека (54-ФЗ)."
     )
-    await query.message.reply_text(
+    await message.reply_text(
         texts.ASK_FULL_NAME, reply_markup=keyboards.cancel_collection_keyboard()
     )
 

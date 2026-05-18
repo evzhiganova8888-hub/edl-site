@@ -22,17 +22,24 @@
   <link rel="stylesheet" href="css/mobile-fixes.css">
   <link rel="stylesheet" href="css/mini-checkup.css">
   <link rel="stylesheet" href="css/bot-widget.css">
+  <link rel="stylesheet" href="css/exit-intent.css">
   <!-- Analytics tracking script (Inline buffer as per TZ) -->
   <script>
     (function(){
       const ENDPOINT = window.EDL_ANALYTICS_ENDPOINT || null;
       const buffer = JSON.parse(localStorage.getItem('edl_events') || '[]');
+      let lastClickTime = 0;
       function track(event, payload) {
+        if (event.includes('click') || event.includes('opened') || event.includes('switched')) {
+          const now = Date.now();
+          if (now - lastClickTime < 1000) return; // throttle 1s
+          lastClickTime = now;
+        }
         const data = {
           event: event,
           timestamp: new Date().toISOString(),
           page: document.body.dataset.page || 'home',
-          segment: document.body.dataset.segmentActive || 'services',
+          segment: document.body.dataset.segmentActive || sessionStorage.getItem('edl_icp') || 'services',
           referrer: document.referrer,
           ...payload
         };
@@ -92,31 +99,25 @@
       <div class="container hero__grid">
         <div class="hero__content">
           <h1 class="hero__title" style="font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 20px;">
-            Видеть, где утекает маржа вашего бизнеса —
-            <span style="color: var(--color-tangerine);">ежедневно, а не раз в квартал.</span>
+            Бортовой компьютер для бизнеса 10–50 человек
           </h1>
+          <p class="hero__subtitle" style="font-size: 1.25rem; color: var(--color-gray-800); margin-bottom: 24px; line-height: 1.5;">
+            Утренняя сводка в Telegram + ИИ-консультант под рукой.<br>Без дашбордов, без новых паролей, без IT-отдела.
+          </p>
 
           <ul class="hero__bullets" style="list-style:none; padding:0; margin:0 0 32px; display:flex; flex-direction:column; gap:10px;">
             <li style="display:flex; gap:10px; align-items:flex-start; font-size:1.0625rem; color: var(--color-gray-800); line-height:1.45;">
               <span style="color: var(--color-tangerine); font-weight:700; flex-shrink:0;">▸</span>
-              <span>Каждый клиент в плюсе или в минусе — <strong>видно сразу</strong></span>
-            </li>
-            <li style="display:flex; gap:10px; align-items:flex-start; font-size:1.0625rem; color: var(--color-gray-800); line-height:1.45;">
-              <span style="color: var(--color-tangerine); font-weight:700; flex-shrink:0;">▸</span>
-              <span>НДС 2026 посчитан и подсвечен в PDF — <strong>через 24 часа</strong></span>
-            </li>
-            <li style="display:flex; gap:10px; align-items:flex-start; font-size:1.0625rem; color: var(--color-gray-800); line-height:1.45;">
-              <span style="color: var(--color-tangerine); font-weight:700; flex-shrink:0;">▸</span>
-              <span>Сводка по бизнесу в Telegram — <strong>каждое утро</strong></span>
+              <span>Работает в Telegram · PDF за 24 часа · Все данные остаются у вас</span>
             </li>
           </ul>
 
           <div style="display:flex; gap:16px; margin-top:24px; flex-wrap:wrap; align-items:center;">
             <a href="audit.html" class="btn btn--primary" style="font-size:1.0625rem; padding:14px 28px;" data-cta-type="audit" data-cta-location="hero">
-              Получить чекап за 9 000 ₽ →
+              Бизнес-чекап 9 000 ₽ →
             </a>
             <button type="button" class="hero__secondary-cta" data-mc-open="hero" style="background:none; border:none; color:var(--color-tangerine); font-weight:600; cursor:pointer; text-decoration:underline; font-size:0.9375rem;">
-              Или попробуйте Founder OS Score бесплатно (15 мин)
+              Mini-Чекап за 15 минут бесплатно
             </button>
           </div>
 
@@ -129,9 +130,8 @@
             <img src="/assets/logos/getcourse.svg"  alt="GetCourse"  style="height:22px; filter:grayscale(1);">
           </div>
           <div style="margin-top:10px; font-size:0.8125rem; color:var(--color-gray-500);">
-            152-ФЗ: <strong>все данные на вашей инфраструктуре</strong> · Возврат 14 дней без причины · Open source MCP-сервер
+            <strong>Доступны на этапе Диагностики и далее.</strong> 152-ФЗ: все данные на вашей инфраструктуре · Возврат 14 дней без причины · Open source MCP-сервер
           </div>
-          <div class="hero__cta-note">20 вопросов в боте в своём темпе → PDF + НДС-карта за 24ч. Plus 14 000 ₽ — видео-разбор от Екатерины за 24 часа. Оплата картой прямо в боте. <strong>Безусловный возврат 14 дней — /refund.</strong></div>
         </div>
 
         <!-- Right Side: Hero demo video (постер до готовности MP4-демо) -->
@@ -164,25 +164,25 @@
       <div class="container" style="max-width:920px;">
         <h2 class="section__title" style="text-align:center; margin-bottom:48px;">У вас так?</h2>
         <div class="pain-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:24px;">
-          <div class="pain-card" style="background:#fff; padding:28px 24px; border-radius:16px; border:1px solid var(--color-gray-200);">
+          <div class="pain-card" style="background:rgba(255, 255, 255, 0.7); backdrop-filter:blur(10px); padding:28px 24px; border-radius:16px; border:1px solid rgba(255, 255, 255, 0.4); box-shadow:0 8px 32px rgba(0,0,0,0.05); transition:transform 0.2s ease;">
             <div style="font-size:2rem; margin-bottom:12px;" aria-hidden="true">📊</div>
-            <h3 style="font-weight:600; margin-bottom:8px; font-size:1.125rem;">Бухгалтерия раз в месяц, факты раз в квартал</h3>
-            <p style="color:var(--color-gray-700); font-size:0.9375rem; line-height:1.5;">К моменту, когда видно убыточный контракт, он уже съел маржу полугодия.</p>
+            <h3 style="font-weight:600; margin-bottom:8px; font-size:1.125rem;">Факты раз в квартал</h3>
+            <p style="color:var(--color-gray-700); font-size:0.9375rem; line-height:1.5;">Убыточный контракт съедает маржу полугодия до того, как вы это заметите.</p>
           </div>
-          <div class="pain-card" style="background:#fff; padding:28px 24px; border-radius:16px; border:1px solid var(--color-gray-200);">
+          <div class="pain-card" style="background:rgba(255, 255, 255, 0.7); backdrop-filter:blur(10px); padding:28px 24px; border-radius:16px; border:1px solid rgba(255, 255, 255, 0.4); box-shadow:0 8px 32px rgba(0,0,0,0.05); transition:transform 0.2s ease;">
             <div style="font-size:2rem; margin-bottom:12px;" aria-hidden="true">🌪️</div>
-            <h3 style="font-weight:600; margin-bottom:8px; font-size:1.125rem;">Стратегия живёт в голове основателя</h3>
-            <p style="color:var(--color-gray-700); font-size:0.9375rem; line-height:1.5;">Команда выросла, но непонятно — куда. Решения принимаются интуитивно.</p>
+            <h3 style="font-weight:600; margin-bottom:8px; font-size:1.125rem;">Стратегия в голове</h3>
+            <p style="color:var(--color-gray-700); font-size:0.9375rem; line-height:1.5;">Команда растет, а решения всё еще принимаются интуитивно. Фокус теряется.</p>
           </div>
-          <div class="pain-card" style="background:#fff; padding:28px 24px; border-radius:16px; border:1px solid var(--color-gray-200);">
+          <div class="pain-card" style="background:rgba(255, 255, 255, 0.7); backdrop-filter:blur(10px); padding:28px 24px; border-radius:16px; border:1px solid rgba(255, 255, 255, 0.4); box-shadow:0 8px 32px rgba(0,0,0,0.05); transition:transform 0.2s ease;">
             <div style="font-size:2rem; margin-bottom:12px;" aria-hidden="true">⚖️</div>
-            <h3 style="font-weight:600; margin-bottom:8px; font-size:1.125rem;">НДС 2026: знаете формулу, но не последствия</h3>
-            <p style="color:var(--color-gray-700); font-size:0.9375rem; line-height:1.5;">Не понятно, какие из ваших контрактов окажутся под лимитом УСН.</p>
+            <h3 style="font-weight:600; margin-bottom:8px; font-size:1.125rem;">Риски НДС 2026</h3>
+            <p style="color:var(--color-gray-700); font-size:0.9375rem; line-height:1.5;">Формула ясна, но какие именно контракты вылетят под лимит УСН — загадка.</p>
           </div>
-          <div class="pain-card" style="background:#fff; padding:28px 24px; border-radius:16px; border:1px solid var(--color-gray-200);">
+          <div class="pain-card" style="background:rgba(255, 255, 255, 0.7); backdrop-filter:blur(10px); padding:28px 24px; border-radius:16px; border:1px solid rgba(255, 255, 255, 0.4); box-shadow:0 8px 32px rgba(0,0,0,0.05); transition:transform 0.2s ease;">
             <div style="font-size:2rem; margin-bottom:12px;" aria-hidden="true">🤖</div>
-            <h3 style="font-weight:600; margin-bottom:8px; font-size:1.125rem;">ИИ хочется, но непонятно куда</h3>
-            <p style="color:var(--color-gray-700); font-size:0.9375rem; line-height:1.5;">Где он реально даст пользу, а где будет имитировать работу — без рамки выбора непонятно.</p>
+            <h3 style="font-weight:600; margin-bottom:8px; font-size:1.125rem;">ИИ без понимания</h3>
+            <p style="color:var(--color-gray-700); font-size:0.9375rem; line-height:1.5;">Хочется внедрить ИИ, но без чёткой рамки он просто имитирует работу.</p>
           </div>
         </div>
         <div style="text-align:center; margin-top:40px;">
@@ -296,29 +296,29 @@
           <p class="section__subtitle">Не нужно заходить в 10 систем. EDL собирает всё в одну выжимку.</p>
         </div>
         <div class="edl-cards__grid">
-          <div class="edl-card" data-card-id="1">
+          <div class="edl-card" data-card-id="1" style="background:rgba(255, 255, 255, 0.8); backdrop-filter:blur(8px); border:1px solid rgba(255, 255, 255, 0.6); box-shadow:0 10px 40px rgba(0,0,0,0.03);">
             <div class="edl-card__icon">📊</div>
             <h3 class="edl-card__title">НДС и новые налоги</h3>
-            <p class="edl-card__context">С 2026 — НДС 22%, антидробление, новые отчёты. Цены поднял — клиенты ушли. Не поднял — съело прибыль.</p>
-            <p class="edl-card__shows"><strong>EDL показывает</strong> реальную прибыль по каждому контракту после НДС. Видно, где маржа просела и какие 3 контракта пересмотреть первыми.</p>
+            <p class="edl-card__context">С 2026 — НДС 22% и антидробление. Цены поднял — клиенты ушли. Не поднял — убыток.</p>
+            <p class="edl-card__shows" style="margin-top: 12px;"><strong>EDL показывает</strong> реальную прибыль по контрактам после вычета НДС. Видно, что пересмотреть.</p>
           </div>
-          <div class="edl-card" data-card-id="2">
+          <div class="edl-card" data-card-id="2" style="background:rgba(255, 255, 255, 0.8); backdrop-filter:blur(8px); border:1px solid rgba(255, 255, 255, 0.6); box-shadow:0 10px 40px rgba(0,0,0,0.03);">
             <div class="edl-card__icon">🧩</div>
             <h3 class="edl-card__title">10 систем без связи</h3>
-            <p class="edl-card__context">CRM отдельно, таблицы отдельно, 1С отдельно. Цельной картины нет нигде.</p>
-            <p class="edl-card__shows"><strong>EDL собирает</strong> данные из ваших систем в одну сводку. Вместо 10 вкладок — 1 сообщение в Telegram утром.</p>
+            <p class="edl-card__context">CRM отдельно, таблицы отдельно, 1С отдельно. Цельной картины бизнеса нет.</p>
+            <p class="edl-card__shows" style="margin-top: 12px;"><strong>EDL собирает</strong> всё в одну выжимку. Вместо 10 вкладок — 1 утреннее сообщение в Telegram.</p>
           </div>
-          <div class="edl-card" data-card-id="3">
+          <div class="edl-card" data-card-id="3" style="background:rgba(255, 255, 255, 0.8); backdrop-filter:blur(8px); border:1px solid rgba(255, 255, 255, 0.6); box-shadow:0 10px 40px rgba(0,0,0,0.03);">
             <div class="edl-card__icon">📉</div>
             <h3 class="edl-card__title">Прибыль на бумаге</h3>
-            <p class="edl-card__context">В отчёте плюс, на счёте — кассовый разрыв. Понять, где просела прибыль — на ощущениях.</p>
-            <p class="edl-card__shows"><strong>EDL прогнозирует</strong> прогноз остатка денег на 30/60/90 дней. Кассовый разрыв виден за 3 недели до того, как случится.</p>
+            <p class="edl-card__context">В отчёте плюс, на счёте — кассовый разрыв. Экономика держится на интуиции.</p>
+            <p class="edl-card__shows" style="margin-top: 12px;"><strong>EDL прогнозирует</strong> остаток денег на 30/60/90 дней. Разрыв виден за 3 недели до его наступления.</p>
           </div>
-          <div class="edl-card" data-card-id="4" data-segment="all">
+          <div class="edl-card" data-card-id="4" data-segment="all" style="background:rgba(255, 255, 255, 0.8); backdrop-filter:blur(8px); border:1px solid rgba(255, 255, 255, 0.6); box-shadow:0 10px 40px rgba(0,0,0,0.03);">
             <div class="edl-card__icon">🧑‍💼</div>
-            <h3 class="edl-card__title">Команда работает в чёрном ящике</h3>
-            <p class="edl-card__context">Не видно, кто перегружен, а кто простаивает. Джуны уходят за 6 месяцев — найм и адаптация съедают больше, чем экономит автоматизация. Сильные тянут всё на себе и выгорают.</p>
-            <p class="edl-card__shows"><strong>EDL показывает</strong> реальную загрузку каждого, подсвечивает риск текучки за 2–3 недели и автоматизирует 2–3 часа рутины в день на сотрудника.</p>
+            <h3 class="edl-card__title">Команда работает вслепую</h3>
+            <p class="edl-card__context">Не видно кто перегружен, сильные выгорают, джуны уходят за 6 месяцев.</p>
+            <p class="edl-card__shows" style="margin-top: 12px;"><strong>EDL показывает</strong> реальную загрузку, подсвечивает риск ухода и снимает 2-3 часа рутины в день.</p>
           </div>
         </div>
       </div>
@@ -342,36 +342,36 @@
             <div class="tab-panel active" id="tab-1c" data-battle-tab-content="1c">
               <button class="battle-accordion-trigger">1С / Бухгалтерия</button>
               <div class="battle-accordion-content">
-                <div style="background:var(--color-gray-50); padding:32px; border-radius:16px; text-align:center;">
-                  <h3 style="font-size:1.5rem; margin-bottom:16px;">Бухгалтер знает учёт. EDL показывает экономику бизнеса.</h3>
-                  <p style="color:var(--color-gray-700); max-width:600px; margin:0 auto; line-height:1.6;">Все данные остаются у вас. EDL не имеет доступа к налоговой отчётности и не передаёт ничего третьим сторонам. Показывает прибыль, остаток и прогноз в реальном времени.</p>
+                <div style="background:linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.4)); backdrop-filter:blur(10px); padding:40px 32px; border-radius:20px; border:1px solid #fff; box-shadow:0 12px 48px rgba(0,0,0,0.06); text-align:center; transition:transform 0.3s ease;">
+                  <h3 style="font-size:1.5rem; margin-bottom:16px;">Бухгалтер знает учёт. EDL показывает экономику.</h3>
+                  <p style="color:var(--color-gray-700); max-width:600px; margin:0 auto; line-height:1.6; font-size:1.0625rem;">Все данные остаются у вас. Мы не лезем в налоговую отчетность, а выводим прибыль, остатки и прогнозы в реальном времени для собственника.</p>
                 </div>
               </div>
             </div>
             <div class="tab-panel" id="tab-crm" data-battle-tab-content="crm">
               <button class="battle-accordion-trigger">Битрикс-24 / amoCRM</button>
               <div class="battle-accordion-content">
-                <div style="background:var(--color-gray-50); padding:32px; border-radius:16px; text-align:center;">
+                <div style="background:linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.4)); backdrop-filter:blur(10px); padding:40px 32px; border-radius:20px; border:1px solid #fff; box-shadow:0 12px 48px rgba(0,0,0,0.06); text-align:center; transition:transform 0.3s ease;">
                   <h3 style="font-size:1.5rem; margin-bottom:16px;">CRM для менеджера. EDL — для владельца.</h3>
-                  <p style="color:var(--color-gray-700); max-width:600px; margin:0 auto; line-height:1.6;">Не заменяет CRM. Вытаскивает ключевые цифры: конверсия, pipeline, забытые сделки. Интеграция за 2-5 дней.</p>
+                  <p style="color:var(--color-gray-700); max-width:600px; margin:0 auto; line-height:1.6; font-size:1.0625rem;">Мы не заменяем CRM. Мы вытаскиваем ключевые цифры (конверсии, pipeline, зависшие сделки) и показываем их вам. Интеграция за 2-5 дней.</p>
                 </div>
               </div>
             </div>
             <div class="tab-panel" id="tab-notion" data-battle-tab-content="notion">
               <button class="battle-accordion-trigger">Яндекс.Вики / Notion</button>
               <div class="battle-accordion-content">
-                <div style="background:var(--color-gray-50); padding:32px; border-radius:16px; text-align:center;">
+                <div style="background:linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.4)); backdrop-filter:blur(10px); padding:40px 32px; border-radius:20px; border:1px solid #fff; box-shadow:0 12px 48px rgba(0,0,0,0.06); text-align:center; transition:transform 0.3s ease;">
                   <h3 style="font-size:1.5rem; margin-bottom:16px;">Документы для команды. EDL — для управления.</h3>
-                  <p style="color:var(--color-gray-700); max-width:600px; margin:0 auto; line-height:1.6;">Не заменяет базы знаний. Собирает из них метрики и добавляет сводки в Telegram автоматически.</p>
+                  <p style="color:var(--color-gray-700); max-width:600px; margin:0 auto; line-height:1.6; font-size:1.0625rem;">Мы не ломаем ваши базы знаний. EDL читает их, собирает метрики и формирует автоматические Telegram-сводки.</p>
                 </div>
               </div>
             </div>
             <div class="tab-panel" id="tab-chatgpt" data-battle-tab-content="chatgpt">
               <button class="battle-accordion-trigger">ChatGPT / YandexGPT</button>
               <div class="battle-accordion-content">
-                <div style="background:var(--color-gray-50); padding:32px; border-radius:16px; text-align:center;">
+                <div style="background:linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.4)); backdrop-filter:blur(10px); padding:40px 32px; border-radius:20px; border:1px solid #fff; box-shadow:0 12px 48px rgba(0,0,0,0.06); text-align:center; transition:transform 0.3s ease;">
                   <h3 style="font-size:1.5rem; margin-bottom:16px;">ChatGPT отвечает «вообще». EDL — «про ваш бизнес».</h3>
-                  <p style="color:var(--color-gray-700); max-width:600px; margin:0 auto; line-height:1.6;">Подключает ИИ к вашим данным. Не нужно писать промпты и копировать цифры — система уже знает контекст.</p>
+                  <p style="color:var(--color-gray-700); max-width:600px; margin:0 auto; line-height:1.6; font-size:1.0625rem;">ИИ подключен к вашим реальным данным. Никаких бесконечных промптов — система уже знает весь контекст и отвечает цифрами.</p>
                 </div>
               </div>
             </div>
@@ -730,7 +730,7 @@
           <details class="faq-item" data-faq-id="6">
             <summary class="faq-summary">На какой методологии вы работаете?</summary>
             <div class="faq-content">
-              <p>EDL OS — это синтез трёх управленческих традиций: Big Tech operations (McKinsey, Google, Amazon), методология CRAFT (ИКРА, идеи Бруно Латура) и AI Fluency Framework (Anthropic, UCC, Ringling).</p>
+              <p>EDL OS — это синтез трёх управленческих традиций: Big Tech operations (McKinsey, Google, Amazon), методология CRAFT (Центр CRAFT, школа инноваций ИКРА, идеи Бруно Латура) и AI Fluency Framework (Anthropic, UCC, Ringling).</p>
               <p>Подробно с источниками и логикой синтеза — на странице <a href="methodology.html" style="color:var(--color-tangerine);">/methodology</a>.</p>
             </div>
           </details>
@@ -861,6 +861,7 @@
           });
           btn.classList.add('is-active');
           btn.setAttribute('aria-pressed', 'true');
+          sessionStorage.setItem('edl_icp', segment);
           typingAbort = true;
           tgMessages.innerHTML = '';
           tgFinalCta.style.display = 'none';
@@ -1091,5 +1092,6 @@
   </div>
   <script src="js/mini-checkup.js" defer></script>
   <script src="js/bot-widget.js" defer></script>
+  <script src="js/exit-intent.js" defer></script>
 </body>
 </html>

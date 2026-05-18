@@ -17,8 +17,15 @@
     (function(){
       const ENDPOINT = window.EDL_ANALYTICS_ENDPOINT || null;
       const buffer = JSON.parse(localStorage.getItem('edl_events') || '[]');
+      let lastClickTime = 0;
       function track(event, payload) {
-        const data = {event, timestamp: new Date().toISOString(), page: 'faq', referrer: document.referrer, ...payload};
+        if (event.includes('click') || event.includes('opened') || event.includes('switched')) {
+          const now = Date.now();
+          if (now - lastClickTime < 1000) return;
+          lastClickTime = now;
+        }
+        const segment = document.body.dataset.segmentActive || sessionStorage.getItem('edl_icp') || 'services';
+        const data = {event, timestamp: new Date().toISOString(), page: document.body.dataset.page || 'faq', segment, referrer: document.referrer, ...payload};
         buffer.push(data);
         if (ENDPOINT) flush(); else localStorage.setItem('edl_events', JSON.stringify(buffer));
       }

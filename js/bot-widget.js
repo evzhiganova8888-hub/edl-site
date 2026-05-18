@@ -120,7 +120,18 @@
         appendMessage('bot', data.text, data.buttons);
       } catch(e) {}
     };
-    eventSource.onerror = function() { eventSource.close(); };
+    eventSource.onerror = function() { 
+      eventSource.close(); 
+      appendError();
+    };
+  }
+
+  function appendError() {
+    var el = document.createElement('div');
+    el.className = 'bw-msg bw-msg--bot';
+    el.innerHTML = '<span style="color:#dc2626;">⚠️ Бот временно недоступен.</span> Напишите нам напрямую в <a href="https://t.me/edl_os" target="_blank" style="color:#FF6B1A; font-weight:600;">Telegram @edl_os</a>.';
+    msgsEl.appendChild(el);
+    msgsEl.scrollTop = msgsEl.scrollHeight;
   }
 
   /* ── Send ── */
@@ -136,7 +147,11 @@
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({session_id: sessionId, text: text, page_referrer: location.href})
-    }).catch(function(){});
+    }).then(res => {
+      if (!res.ok) throw new Error('Network response was not ok');
+    }).catch(function(){
+      appendError();
+    });
   }
 
   /* ── Open / Close ── */

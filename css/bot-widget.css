@@ -24,6 +24,12 @@
   box-shadow: 0 6px 20px rgba(255,107,26,0.5);
 }
 
+@media (max-width: 768px) {
+  .bw-bubble {
+    bottom: 80px;
+  }
+}
+
 .bw-container {
   position: fixed;
   bottom: 24px;

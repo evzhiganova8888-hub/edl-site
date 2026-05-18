@@ -18,6 +18,8 @@ logger = logging.getLogger(__name__)
 DEEP_LINK_HANDLERS = {
     "demo": "demo",
     "audit": "audit",
+    "audit_base": "audit_base",
+    "audit_plus": "audit_plus",
     "audit_sample": "audit_sample",
     "diagnostic": "diagnostic",
     "sprint_waitlist": "sprint_waitlist",
@@ -75,6 +77,12 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     scenario = DEEP_LINK_HANDLERS.get(payload.split()[0])
     if scenario == "audit":
         await audit.audit_command(update, context)
+        return
+    if scenario == "audit_base":
+        await audit.start_purchase_deeplink(update, context, "base")
+        return
+    if scenario == "audit_plus":
+        await audit.start_purchase_deeplink(update, context, "plus")
         return
     if scenario == "audit_sample":
         await audit.audit_sample_command(update, context)
