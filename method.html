@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Метод · Founder OS = Big Tech ops + CRAFT + AI Fluency — EDL OS</title>
+  <meta name="description" content="Метод EDL OS — синтез трёх управленческих традиций: Big Tech ops (McKinsey, Google, Amazon), CRAFT (Центр CRAFT, школа инноваций ИКРА) и AI Fluency Framework (Anthropic).">
+  <link rel="canonical" href="https://elephantdreams.ru/method.html">
+  <meta property="og:title" content="Метод EDL OS — Founder OS = Big Tech ops + CRAFT + AI Fluency">
+  <meta property="og:description" content="Три слепых пятна основателя 10–50 человек — три проверенных решения, собранные в одну методологию.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://elephantdreams.ru/method.html">
+  <meta property="og:image" content="https://elephantdreams.ru/assets/og-cover.png">
+  <meta property="og:locale" content="ru_RU">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/main-v2.css">
+  <link rel="stylesheet" href="css/mobile-fixes.css">
+  <link rel="stylesheet" href="css/mini-checkup.css">
+  <link rel="stylesheet" href="css/bot-widget.css">
+  <script>
+    (function(){
+      const ENDPOINT = window.EDL_ANALYTICS_ENDPOINT || null;
+      const buffer = JSON.parse(localStorage.getItem('edl_events') || '[]');
+      let lastClickTime = 0;
+      function track(event, payload) {
+        if (event.includes('click') || event.includes('opened') || event.includes('switched')) {
+          const now = Date.now();
+          if (now - lastClickTime < 1000) return;
+          lastClickTime = now;
+        }
+        const segment = document.body.dataset.segmentActive || sessionStorage.getItem('edl_icp') || 'services';
+        const data = {event, timestamp: new Date().toISOString(), page: document.body.dataset.page || 'methodology', segment, referrer: document.referrer, ...payload};
+        buffer.push(data);
+        if (ENDPOINT) flush(); else localStorage.setItem('edl_events', JSON.stringify(buffer));
+      }
+      function flush() {
+        if (!ENDPOINT || !buffer.length) return;
+        fetch(ENDPOINT, {method:'POST', body:JSON.stringify(buffer), keepalive:true}).catch(console.error);
+        buffer.length = 0; localStorage.removeItem('edl_events');
+      }
+      window.EDLTrack = track;
+      window.addEventListener('beforeunload', flush);
+      window.addEventListener('DOMContentLoaded', () => track('page_view', {}));
+    })();
+  </script>
+  <link rel="icon" href="/assets/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+  <meta name="theme-color" content="#0A0A0A">
+  <style>
+    .meth-hero { padding: 96px 0 48px; }
+    .meth-pill {
+      display:inline-block; background: var(--color-tangerine-light); color: var(--color-tangerine);
+      padding:6px 14px; border-radius:999px; font-weight:600; font-size:0.8125rem; margin-bottom:16px;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .meth-block {
+      background: #fff; border: 1px solid var(--color-gray-200); border-radius: 20px;
+      padding: 32px; margin-bottom: 24px;
+    }
+    @media (max-width: 600px) { .meth-block { padding: 24px 20px; } }
+    .meth-block__num {
+      font-family: var(--font-mono); font-size: 0.875rem; color: var(--color-tangerine);
+      font-weight: 700; margin-bottom: 12px; letter-spacing: 0.08em;
+    }
+    .meth-problem {
+      font-size: 1.5rem; font-weight: 700; color: var(--color-gray-900); line-height: 1.3;
+      margin-bottom: 16px;
+    }
+    .meth-arrow {
+      color: var(--color-tangerine); font-size: 1.75rem; font-weight: 700;
+      margin: 16px 0; display: block;
+    }
+    .meth-solution {
+      font-size: 1.125rem; color: var(--color-gray-900); margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .meth-authority {
+      background: var(--color-gray-100); border-left: 3px solid var(--color-tangerine);
+      padding: 14px 18px; border-radius: 0 10px 10px 0; margin-top: 16px;
+      font-size: 0.9375rem; color: var(--color-gray-700); line-height: 1.55;
+    }
+    .meth-authority strong { color: var(--color-gray-900); font-style: italic; }
+    .meth-synth {
+      background: linear-gradient(135deg, #0A0A0A 0%, #2a2a2a 100%);
+      color: #fff; border-radius: 20px; padding: 48px 32px; text-align: center;
+      margin: 48px 0;
+    }
+    @media (max-width: 600px) { .meth-synth { padding: 32px 20px; } }
+    .meth-synth h2 { color: #fff; font-size: clamp(1.5rem, 4vw, 2.25rem); margin-bottom: 16px; }
+    .meth-synth p { color: #d4d4d8; max-width: 640px; margin: 0 auto 24px; line-height: 1.5; }
+    .meth-pillars {
+      display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 24px 0;
+    }
+    .meth-pillar {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; padding: 12px 20px; font-weight: 600; color: #fff; font-size: 0.9375rem;
+    }
+  </style>
+</head>
+<body data-page="method">
+  <a href="#main" class="skip-link">Перейти к содержанию</a>
+
+  <header class="header" id="header" style="background:var(--color-white); border-bottom:1px solid var(--color-gray-200);">
+    <div class="container header__inner site-header">
+      <a href="/" class="header__logo site-logo" aria-label="EDL OS — на главную"><img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true"><span>EDL&nbsp;OS</span></a>
+      <nav class="site-nav" id="site-nav" aria-label="Главное меню">
+        <a href="method.html" aria-current="page">Метод</a>
+        <a href="mcp.html">Claude / MCP</a>
+        <a href="/#cases">Кейсы</a>
+        <a href="pricing.html">Цены</a>
+        <a href="about.html">Команда</a>
+        <a href="faq.html">FAQ</a>
+      </nav>
+      <div class="site-header__cta">
+        <button type="button" class="site-header__score" data-mc-open="header" aria-label="Пройти Founder OS Score за 15 минут — бесплатно"><span aria-hidden="true">💬</span> Score · 15 мин · бесплатно</button>
+        <a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--outline site-header__channel" aria-label="Telegram-канал EDL OS"><span aria-hidden="true">✈️</span> Канал</a>
+        <button class="header__burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav" id="burger">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section meth-hero">
+      <div class="container" style="max-width: 880px; margin: 0 auto;">
+        <div class="meth-pill">Методология</div>
+        <h1 style="font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.1; margin-bottom: 20px;">
+          Founder OS — операционная система собственника бизнеса <span style="color: var(--color-tangerine);">10–50 человек</span>
+        </h1>
+        <p style="font-size: 1.25rem; color: var(--color-gray-700); line-height: 1.5; margin-bottom: 32px;">
+          Три управленческие традиции в одной системе. Для основателя, который управляет бизнесом 10–50 человек, а не читает McKinsey-отчёты.
+        </p>
+        <button type="button" class="mc-trigger" data-mc-open="meth_hero">
+          <span class="mc-trigger__icon" aria-hidden="true">💬</span>
+          <span>Пройти Mini-Чекап за 15 минут
+            <span class="mc-trigger__meta">бесплатно · без регистрации</span>
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container" style="max-width: 880px; margin: 0 auto;">
+        <h2 class="section__title" style="margin-bottom: 8px;">Три слепых пятна основателя 10–50</h2>
+        <p style="color: var(--color-gray-700); margin-bottom: 40px;">Каждое пятно — отдельная дисциплина с десятилетиями практики. У нас она доступна за 4 недели, а не 2 года MBA.</p>
+
+        <article class="meth-block">
+          <div class="meth-block__num">01 / СЛЕПОЕ ПЯТНО</div>
+          <h3 class="meth-problem">«Не вижу, куда уплывает маржа»</h3>
+          <p style="color: var(--color-gray-700); line-height: 1.5;">
+            Отчёт говорит «прибыль», на счёте — кассовый разрыв. По каким клиентам бизнес работает в плюс, а по каким в минус — узнаём раз в квартал. К тому моменту, когда видно убыточный контракт, он уже съел маржу за полгода.
+          </p>
+          <span class="meth-arrow">↓ РЕШЕНИЕ</span>
+          <p class="meth-solution">Operations Excellence — оцифровка маржи на уровне каждой транзакции, каждого клиента, каждого проекта.</p>
+          <div class="meth-authority">
+            <strong>Откуда берём:</strong> Big Tech operations (Google, Amazon, McKinsey 1990–2020). 30 лет практики управления бизнесами 100+ человек, адаптированной под масштаб 10–50. Ключевая идея — «no metric, no management»: то, что не измеряется ежедневно, не управляется.
+          </div>
+        </article>
+
+        <article class="meth-block">
+          <div class="meth-block__num">02 / СЛЕПОЕ ПЯТНО</div>
+          <h3 class="meth-problem">«Нет времени думать стратегически»</h3>
+          <p style="color: var(--color-gray-700); line-height: 1.5;">
+            Основатель тушит пожары и принимает 50 решений в день. Стратегия живёт в голове, а не в системе. Через год обнаруживается, что движение было, а вектор размылся: команда выросла, но непонятно — куда.
+          </p>
+          <span class="meth-arrow">↓ РЕШЕНИЕ</span>
+          <p class="meth-solution">CRAFT — методология осознанного выбора: контекст → ресурсы → действия → фокус → трансформация.</p>
+          <div class="meth-authority">
+            <strong>Откуда берём:</strong> методология CRAFT (Центр CRAFT, школа инноваций ИКРА, с 2009 г.) и идеи Бруно Латура — акторно-сетевая теория. CRAFT превращает стратегию из абстрактного документа в недельные ставки и измеримые метрики. Основа — методология креативного решения управленческих задач, адаптированная для технологического бизнеса.
+          </div>
+        </article>
+
+        <article class="meth-block">
+          <div class="meth-block__num">03 / СЛЕПОЕ ПЯТНО</div>
+          <h3 class="meth-problem">«Не понимаю, где провести границу с ИИ»</h3>
+          <p style="color: var(--color-gray-700); line-height: 1.5;">
+            ИИ умеет всё больше — но где он действительно даёт результат, а где имитирует? Какие задачи отдать модели, а какие оставить человеку? Без рамки выбор делается интуитивно и часто неправильно: либо вся работа на ИИ (и качество падает), либо вся на людях (и скорость падает).
+          </p>
+          <span class="meth-arrow">↓ РЕШЕНИЕ</span>
+          <p class="meth-solution">AI Fluency Framework — рамка для решений «когда автоматизировать, когда оставить человеку, когда смешать».</p>
+          <div class="meth-authority">
+            <strong>Откуда берём:</strong> Anthropic AI Fluency, University College Cork и Ringling College. Это не «использовать ИИ везде», а понимание четырёх компетенций — Delegation, Description, Discernment, Diligence. Границы между ролями человека и модели — осознанные, а не случайные.
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container" style="max-width: 880px; margin: 0 auto;">
+        <div class="meth-synth">
+          <h2>Founder OS = синтез</h2>
+          <p>
+            Мы взяли проверенные элементы из всех трёх традиций, убрали корпоративную тяжесть и собрали в одну систему, которая работает в режиме «утренняя сводка в Telegram» и «ИИ-консультант под рукой».
+          </p>
+          <div class="meth-pillars">
+            <span class="meth-pillar">🎯 Стратегия</span>
+            <span class="meth-pillar">📈 Воронка</span>
+            <span class="meth-pillar">⚙️ Операционка</span>
+            <span class="meth-pillar">💰 Деньги</span>
+          </div>
+          <p style="margin-top: 24px;">
+            Четыре слоя, по которым ИИ-консультант проводит вас за 15 минут в Mini-Чекапе — и за 24 часа в полном Бизнес-чекапе.
+          </p>
+          <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top: 28px;">
+            <button type="button" class="mc-trigger" data-mc-open="meth_synth">
+              <span class="mc-trigger__icon" aria-hidden="true">💬</span>
+              <span>Mini-Чекап · 15 минут · бесплатно</span>
+            </button>
+            <a href="audit.html" class="btn btn--outline" style="background:transparent; color:#fff; border-color:rgba(255,255,255,0.3);" data-cta-type="audit" data-cta-location="meth_synth">Бизнес-чекап 9 000 ₽ →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container" style="max-width: 720px; margin: 0 auto; text-align: center;">
+        <h2 class="section__title">Хотите попробовать ту же логику в Claude или Cursor?</h2>
+        <p style="color: var(--color-gray-700); margin-bottom: 24px; line-height: 1.5;">
+          Подключите EDL OS к Claude или Cursor за 3 шага. Founder OS Score прямо внутри вашего AI-клиента. Open source, MIT.
+        </p>
+        <a href="mcp.html" class="btn btn--primary" data-cta-type="mcp" data-cta-location="meth_bottom">Открыть в Claude / Cursor →</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Mini-Чекап modal -->
+  <div class="mc-modal" id="mc-modal" role="dialog" aria-modal="true" aria-labelledby="mc-title" aria-hidden="true">
+    <div class="mc-dialog">
+      <div class="mc-header">
+        <div class="mc-header__avatar" aria-hidden="true">AI</div>
+        <div class="mc-header__title">
+          <div class="mc-header__name" id="mc-title">EDL OS · Mini-Чекап</div>
+          <div class="mc-header__status">онлайн · ИИ-консультант</div>
+        </div>
+        <button class="mc-header__close" id="mc-close" aria-label="Закрыть Mini-Чекап">×</button>
+      </div>
+      <div class="mc-progress"><div class="mc-progress__bar" id="mc-progress-bar"></div></div>
+      <div class="mc-body" id="mc-body" role="log" aria-live="polite"></div>
+      <div class="mc-composer" id="mc-composer">
+        <div class="mc-composer__row">
+          <textarea class="mc-input" id="mc-input" placeholder="Напишите ответ или выберите вариант выше..." rows="1" aria-label="Ваш ответ"></textarea>
+          <button class="mc-send" id="mc-send" aria-label="Отправить">→</button>
+        </div>
+        <div class="mc-composer__hint"><kbd>Enter</kbd> отправить · <kbd>Shift+Enter</kbd> новая строка</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PDF Whitepaper CTA (Block C.1) -->
+  <section class="whitepaper-cta">
+    <div class="container">
+      <div class="wh-cta-card" id="whitepaper-cta">
+        <div class="wh-cta-meta">
+          <span class="wh-cta-badge">PDF · v3.1 · Май 2026</span>
+          <span class="wh-cta-meta-item">11 страниц</span>
+          <span class="wh-cta-meta-item">15 минут чтения</span>
+          <span class="wh-cta-meta-item">CC BY-SA</span>
+        </div>
+        <h2>Whitepaper «Founder OS»</h2>
+        <p>Академическое описание методологии: рынок МСП 2025–2026, три слепых пятна фаундера на стадии 10–50 человек, синтез Big Tech ops + CRAFT + AI Fluency Framework, четыре слоя зрелого бизнеса, три ролевых истории. Источники: McKinsey Global Institute (2024), Index Ventures · Molly Graham (2023), OECD G7 paper (декабрь 2025), Минэкономразвития РФ, ФЗ 425-ФЗ о НДС 2026, Anthropic + UCC + Ringling College — AI Fluency Framework (CC BY-NC-SA 4.0).</p>
+        <form id="whitepaper-form" class="email-gate-form" novalidate>
+          <label class="sr-only" for="whitepaper-email">Email для отправки PDF</label>
+          <input type="email" name="email" id="whitepaper-email" placeholder="ваш@email.ru" autocomplete="email" required>
+          <button type="submit">Получить PDF на почту →</button>
+        </form>
+        <p class="email-gate-note">Один email → один PDF. Без рассылок без вашего согласия. <a href="legal/privacy.html">Политика приватности</a>.</p>
+        <div class="email-gate-success" id="whitepaper-success" hidden>
+          <div class="email-gate-success__icon" aria-hidden="true">✓</div>
+          <div>
+            <div class="email-gate-success__title">PDF отправлен на <span id="whitepaper-success-email"></span></div>
+            <p class="email-gate-success__text">Проверьте почту в течение 1–2 минут (вкладку «Промоакции» / спам тоже). Если не пришло — напишите <a href="mailto:hello@edl-os.ru">hello@edl-os.ru</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" style="background:#fff; border-top:1px solid #e4e4e7; padding:48px 0;">
+    <div class="container" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:32px;">
+      <div>
+        <h4 style="font-weight:600; margin-bottom:16px;">Контакты</h4>
+        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
+          <li><a href="https://t.me/edl_os" target="_blank" style="color:#404040; text-decoration:none;">Наш Telegram-канал</a></li>
+          <li><a href="https://t.me/edl_os_bot" target="_blank" rel="noopener" style="color:#404040; text-decoration:none;">Чат-бот EDL&nbsp;OS · ответы 24/7</a></li>
+          <li><a href="mailto:hello@edl-os.ru" style="color:#404040; text-decoration:none;">Написать на почту</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-weight:600; margin-bottom:16px;">Метод</h4>
+        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
+          <li><a href="method.html" style="color:#404040; text-decoration:none;">Метод · Founder OS</a></li>
+          <li><a href="try-in-claude.html" style="color:#404040; text-decoration:none;">MCP в Claude / Cursor</a></li>
+          <li><a href="legal/offer.html" style="color:#404040; text-decoration:none;">Оферта и гарантия</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-weight:600; margin-bottom:16px;">Услуги</h4>
+        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
+          <li><a href="audit.html" style="color:#404040; text-decoration:none;">Бизнес-чекап (9-14k)</a></li>
+          <li><a href="diagnostic.html" style="color:#404040; text-decoration:none;">Диагностика</a></li>
+          <li><a href="sprint.html" style="color:#404040; text-decoration:none;">Спринт</a></li>
+          <li><a href="pricing.html" style="color:#404040; text-decoration:none;">Все продукты</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container" style="margin-top:48px; padding-top:24px; border-top:1px solid #e4e4e7; text-align:center; color:#6b7280; font-size:0.875rem;">© 2026 EDL OS · Elephant Dreams Lab</div>
+  </footer>
+
+  <script>
+    (function(){
+      const b = document.getElementById('burger');
+      const n = document.getElementById('site-nav');
+      if (b && n) {
+        b.addEventListener('click', () => {
+          const open = n.classList.toggle('is-open');
+          b.setAttribute('aria-expanded', String(open));
+        });
+        n.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+          n.classList.remove('is-open');
+          b.setAttribute('aria-expanded','false');
+        }));
+      }
+    })();
+  </script>
+  <script src="js/mini-checkup.js" defer></script>
+  <script>
+    (function(){
+      const form = document.getElementById('whitepaper-form');
+      if (!form) return;
+      const success = document.getElementById('whitepaper-success');
+      const successEmail = document.getElementById('whitepaper-success-email');
+      const note = form.parentElement.querySelector('.email-gate-note');
+
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = form.email.value.trim();
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          form.email.setCustomValidity('Введите корректный email');
+          form.email.reportValidity();
+          return;
+        }
+        form.email.setCustomValidity('');
+        const btn = form.querySelector('button[type="submit"]');
+        const orig = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Отправляем…';
+        try {
+          const res = await fetch('https://api.elephantdreams.ru/leads/whitepaper', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({email, source: 'methodology_page_pdf', pdf: 'founder_os_whitepaper'})
+          });
+          if (!res.ok) throw new Error('http_' + res.status);
+          // success: hide form, show confirmation block
+          form.hidden = true;
+          if (note) note.hidden = true;
+          if (successEmail) successEmail.textContent = email;
+          if (success) success.hidden = false;
+          if (typeof gtag !== 'undefined') gtag('event', 'whitepaper_request', {pdf_name: 'founder_os_whitepaper', source: 'methodology_page'});
+        } catch(_) {
+          btn.disabled = false;
+          btn.textContent = orig;
+          form.email.setCustomValidity('Не удалось отправить. Попробуйте ещё раз или напишите hello@edl-os.ru');
+          form.email.reportValidity();
+          setTimeout(function(){ form.email.setCustomValidity(''); }, 4000);
+        }
+      });
+    })();
+  </script>
+  <script src="js/bot-widget.js" defer></script>
+</body>
+</html>

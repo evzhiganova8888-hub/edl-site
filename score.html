@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Founder OS Score — бесплатный скоринг бизнеса · EDL OS</title>
+  <meta name="description" content="12 вопросов, 15 минут. Получите Founder OS Score 0–100 и узнайте 2–3 точки роста прямо сейчас. Бесплатно, без регистрации.">
+  <meta property="og:title" content="Founder OS Score — бесплатно · EDL OS">
+  <meta property="og:description" content="12 вопросов, 15 минут. Ваш Score 0–100 и конкретные точки роста. Без регистрации.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://elephantdreams.ru/score.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/main-v2.css">
+  <link rel="icon" href="/assets/favicon.ico" sizes="any">
+  <meta name="theme-color" content="#FF6B1A">
+  <style>
+    .score-hero {
+      background: linear-gradient(135deg, #0A0A0A 0%, #1a1a2e 50%, #16213e 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .score-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .score-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.125rem;
+    }
+    .score-badge {
+      background: rgba(255, 107, 26, 0.15);
+      color: #FF6B1A;
+      border: 1px solid rgba(255, 107, 26, 0.3);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+    .score-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px;
+    }
+    .score-inner {
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+    }
+    .score-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 107, 26, 0.1);
+      border: 1px solid rgba(255, 107, 26, 0.25);
+      color: #FF6B1A;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 32px;
+    }
+    .score-eyebrow::before {
+      content: "⚡";
+    }
+    .score-title {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+    .score-title em {
+      font-style: normal;
+      color: #FF6B1A;
+    }
+    .score-subtitle {
+      font-size: clamp(1.0625rem, 2vw, 1.25rem);
+      color: rgba(255,255,255,0.65);
+      line-height: 1.6;
+      margin-bottom: 12px;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .score-proof {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 40px;
+    }
+    .score-stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .score-stat {
+      text-align: center;
+    }
+    .score-stat__num {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1;
+    }
+    .score-stat__label {
+      font-size: 0.8125rem;
+      color: rgba(255,255,255,0.45);
+      margin-top: 4px;
+    }
+    .score-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .score-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #FF6B1A;
+      color: #fff;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1.0625rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    .score-btn-primary:hover {
+      background: #E55A0D;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(255, 107, 26, 0.4);
+    }
+    .score-btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.75);
+      padding: 16px 28px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .score-btn-secondary:hover {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+    .score-guarantee {
+      font-size: 0.8125rem;
+      color: rgba(255,255,255,0.35);
+    }
+    /* How it works */
+    .score-how {
+      background: #fff;
+      padding: 80px 24px;
+    }
+    .score-how__inner {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .score-how__title {
+      font-size: 1.875rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .score-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px;
+    }
+    .score-step {
+      text-align: center;
+    }
+    .score-step__num {
+      width: 48px;
+      height: 48px;
+      background: #FF6B1A;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.25rem;
+      margin: 0 auto 16px;
+    }
+    .score-step__title {
+      font-weight: 700;
+      font-size: 1.0625rem;
+      margin-bottom: 8px;
+    }
+    .score-step__text {
+      font-size: 0.9375rem;
+      color: #6b7280;
+      line-height: 1.6;
+    }
+    /* Result preview */
+    .score-preview {
+      background: #f9fafb;
+      padding: 80px 24px;
+    }
+    .score-preview__inner {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .score-preview__title {
+      font-size: 1.875rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .score-preview__subtitle {
+      text-align: center;
+      color: #6b7280;
+      margin-bottom: 48px;
+    }
+    .score-sample {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+    }
+    .score-sample__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .score-sample__label {
+      font-size: 0.875rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+    .score-sample__value {
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: #FF6B1A;
+      line-height: 1;
+    }
+    .score-sample__badge {
+      background: rgba(255, 107, 26, 0.1);
+      color: #FF6B1A;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 700;
+    }
+    .score-bar {
+      background: #f3f4f6;
+      border-radius: 999px;
+      height: 12px;
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+    .score-bar__fill {
+      height: 100%;
+      background: linear-gradient(90deg, #FF6B1A, #ff9f5a);
+      border-radius: 999px;
+      width: 54%;
+      animation: growBar 1.5s ease-out;
+    }
+    @keyframes growBar { from { width: 0; } to { width: 54%; } }
+    .score-insights {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .score-insight {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .score-insight__icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1rem;
+    }
+    .score-insight__icon--warn { background: rgba(239, 68, 68, 0.1); }
+    .score-insight__icon--ok { background: rgba(34, 197, 94, 0.1); }
+    .score-insight__title { font-weight: 600; font-size: 0.9375rem; margin-bottom: 2px; }
+    .score-insight__text { font-size: 0.875rem; color: #6b7280; line-height: 1.5; }
+    /* CTA bottom */
+    .score-cta {
+      background: linear-gradient(135deg, #0A0A0A 0%, #1a1a2e 100%);
+      padding: 80px 24px;
+      text-align: center;
+    }
+    .score-cta__title {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .score-cta__sub {
+      color: rgba(255,255,255,0.55);
+      font-size: 1.0625rem;
+      margin-bottom: 40px;
+    }
+    /* Score footer */
+    .score-footer {
+      background: #0A0A0A;
+      padding: 24px 32px;
+      text-align: center;
+      color: rgba(255,255,255,0.25);
+      font-size: 0.8125rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .score-footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
+    .score-footer a:hover { color: rgba(255,255,255,0.7); }
+    @media (max-width: 640px) {
+      .score-header { padding: 20px; }
+      .score-stat__num { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Перейти к содержанию</a>
+
+  <div class="score-hero">
+    <header class="score-header">
+      <a href="/" class="score-logo">
+        <img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true">
+        EDL&nbsp;OS
+      </a>
+      <span class="score-badge">Бесплатно · Без регистрации</span>
+    </header>
+
+    <main id="main" class="score-content">
+      <div class="score-inner">
+        <div class="score-eyebrow">Founder OS Score</div>
+        <h1 class="score-title">Узнайте здоровье<br>вашего бизнеса за <em>15 минут</em></h1>
+        <p class="score-subtitle">
+          12 вопросов по 4 слоям Founder OS. Балл 0–100 и сравнение с вашей отраслью. Без регистрации.
+        </p>
+        <p class="score-proof">Методология основана на Big Tech operations · CRAFT · AI Fluency Framework (Anthropic)</p>
+
+        <div class="score-stats">
+          <div class="score-stat">
+            <div class="score-stat__num">12</div>
+            <div class="score-stat__label">вопросов</div>
+          </div>
+          <div class="score-stat">
+            <div class="score-stat__num">15</div>
+            <div class="score-stat__label">минут</div>
+          </div>
+          <div class="score-stat">
+            <div class="score-stat__num">0 ₽</div>
+            <div class="score-stat__label">стоимость</div>
+          </div>
+          <div class="score-stat">
+            <div class="score-stat__num">4</div>
+            <div class="score-stat__label">слоя разбора</div>
+          </div>
+        </div>
+
+        <div class="score-actions">
+          <a href="quiz.html" class="score-btn-primary" id="btn-start-score" data-cta-type="score" data-cta-location="score_hero">
+            ⚡ Начать Founder OS Score →
+          </a>
+          <a href="https://t.me/edl_os_bot?start=score" target="_blank" rel="noopener" class="score-btn-secondary" data-cta-type="score_tg" data-cta-location="score_hero">
+            ✈ Пройти в Telegram
+          </a>
+        </div>
+        <p class="score-guarantee">Или в Claude Desktop через MCP-сервер · Запуск 23.05</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- Как работает -->
+  <section class="score-how">
+    <div class="score-how__inner">
+      <h2 class="score-how__title">Как это работает</h2>
+      <div class="score-steps">
+        <div class="score-step">
+          <div class="score-step__num">1</div>
+          <div class="score-step__title">12 вопросов</div>
+          <p class="score-step__text">4 слоя: Стратегия, Воронка, Операционка, Деньги. 12–15 минут в браузере или Telegram.</p>
+        </div>
+        <div class="score-step">
+          <div class="score-step__num">2</div>
+          <div class="score-step__title">Score 0–100</div>
+          <p class="score-step__text">ИИ-агент EDL OS считает балл и сравнивает с вашей отраслью и размером команды. Видно, где вы относительно рынка.</p>
+        </div>
+        <div class="score-step">
+          <div class="score-step__num">3</div>
+          <div class="score-step__title">2–3 точки роста</div>
+          <p class="score-step__text">Конкретные действия на эту неделю. Не советы — узкие места, которые тормозят рост.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Пример результата -->
+  <section class="score-preview">
+    <div class="score-preview__inner">
+      <h2 class="score-preview__title">Пример результата</h2>
+      <p class="score-preview__subtitle">Вот что вы получаете после прохождения Score (иллюстративный пример)</p>
+
+      <div class="score-sample">
+        <div class="score-sample__header">
+          <div>
+            <div class="score-sample__label">Ваш Founder OS Score</div>
+            <div class="score-sample__value">54<span style="font-size:1.5rem; color:#9ca3af;">/100</span></div>
+          </div>
+          <span class="score-sample__badge">Средний уровень</span>
+        </div>
+
+        <div class="score-bar">
+          <div class="score-bar__fill"></div>
+        </div>
+
+        <div class="score-insights">
+          <div class="score-insight">
+            <div class="score-insight__icon score-insight__icon--warn">⚠️</div>
+            <div>
+              <div class="score-insight__title">Слой «Деньги» — 38/100</div>
+              <p class="score-insight__text">Нет единого P&L по продуктам. Прибыль считается раз в квартал, а не ежемесячно. Риск: при НДС 22% маржа на 3 продуктах уйдёт в минус.</p>
+            </div>
+          </div>
+          <div class="score-insight">
+            <div class="score-insight__icon score-insight__icon--warn">🔥</div>
+            <div>
+              <div class="score-insight__title">Слой «Операционка» — 44/100</div>
+              <p class="score-insight__text">Узкое горлышко на этапе передачи в производство — 60% задержек именно здесь. Рекомендуем: автоматический чек-лист в боте при старте проекта.</p>
+            </div>
+          </div>
+          <div class="score-insight">
+            <div class="score-insight__icon score-insight__icon--ok">✅</div>
+            <div>
+              <div class="score-insight__title">Слой «Стратегия» — 72/100</div>
+              <p class="score-insight__text">Годовые цели сформулированы, ICP определён. Точка роста: зафиксировать 3 вещи, которые команда НЕ будет делать в 2026.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA bottom -->
+  <section class="score-cta">
+    <h2 class="score-cta__title">Узнайте свой Score прямо сейчас</h2>
+    <p class="score-cta__sub">Бесплатно, 15 минут, без регистрации. Результат — сразу.</p>
+    <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+      <a href="quiz.html" class="score-btn-primary" data-cta-type="score" data-cta-location="score_bottom">
+        ⚡ Начать Founder OS Score →
+      </a>
+      <a href="chekup.html" class="score-btn-secondary" style="color:rgba(255,255,255,0.7); border-color:rgba(255,255,255,0.15);" data-cta-type="audit" data-cta-location="score_bottom">
+        Нужен полный Чекап · 9 000 ₽ →
+      </a>
+    </div>
+    <p style="margin-top:24px; color:rgba(255,255,255,0.25); font-size:0.8125rem;">
+      Хотите глубже? <a href="chekup.html" style="color:rgba(255,107,26,0.7); text-decoration:none;">Бизнес-чекап за 9 000 ₽</a> — 20 вопросов + ИИ-разбор PDF + гарантия 14 дней
+    </p>
+  </section>
+
+  <footer class="score-footer">
+    <p>© 2026 EDL OS · <a href="/">На главную</a> · <a href="legal/privacy.html">Политика</a> · <a href="mailto:hello@edl-os.ru">hello@edl-os.ru</a></p>
+  </footer>
+
+  <script>
+    // Analytics
+    (function(){
+      document.querySelectorAll('[data-cta-type]').forEach(el => {
+        el.addEventListener('click', () => {
+          if (typeof window.EDLTrack === 'function') {
+            window.EDLTrack('cta_clicked', {
+              cta_type: el.dataset.ctaType,
+              cta_location: el.dataset.ctaLocation,
+              page: 'score'
+            });
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
