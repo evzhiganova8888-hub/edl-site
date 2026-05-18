@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Свой коннектор · EDL OS Docs</title>
+  <meta name="description" content="Туториал: как написать коннектор EDL OS к произвольному API за 30 минут. Структура манифеста, обработчики, регистрация tools.">
+  <link rel="canonical" href="https://elephantdreams.ru/developer/write-connector.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/main-v2.css">
+  <link rel="stylesheet" href="/css/dev-portal.css">
+
+  <link rel="icon" href="/assets/favicon.ico" sizes="any">
+  <meta name="theme-color" content="#0A0A0F">
+</head>
+<body class="dev-page" data-page="dev-write-connector">
+  <a href="#main" class="skip-link">Перейти к содержанию</a>
+  <div class="dev-banner">
+    <strong>Beta · v0.1</strong> · SDK будет упрощён в 0.2 — туториал актуален для core API
+  </div>
+
+  <header class="header" id="header">
+    <div class="container header__inner site-header">
+      <a href="/" class="header__logo site-logo">
+        <img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true">
+        <span>EDL&nbsp;OS</span>
+      </a>
+      <nav class="site-nav" id="site-nav" aria-label="Главное меню">
+        <a href="/methodology.html">Методология</a>
+        <a href="/mcp.html">Claude&nbsp;/&nbsp;MCP</a>
+        <a href="/integrations.html">Интеграции</a>
+        <a href="/developer/" aria-current="page">Docs</a>
+        <a href="/pricing.html">Цены</a>
+        <a href="/about.html">Команда</a>
+        <a href="/faq.html">FAQ</a>
+      </nav>
+      <div class="site-header__cta">
+        <a href="/developer/open-source.html" target="_blank" rel="noopener" class="btn btn--outline site-header__channel"><span aria-hidden="true">⌥</span> GitHub</a>
+        <button class="header__burger" aria-label="Меню" id="burger">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="dev-shell">
+      <aside class="dev-sidebar">
+        <h4>Старт</h4>
+        <ul>
+          <li><a href="/developer/">Введение</a></li>
+          <li><a href="/developer/getting-started.html">Запуск локально</a></li>
+        </ul>
+        <h4>Разработка</h4>
+        <ul>
+          <li><a href="/developer/write-connector.html" aria-current="page">Свой коннектор</a></li>
+          <li><a href="/developer/schema.html">JSON-RPC схема</a></li>
+        </ul>
+        <h4>Внешние</h4>
+        <ul>
+          <li><a href="/developer/open-source.html" target="_blank" rel="noopener">GitHub repo ↗</a></li>
+          <li><a href="https://modelcontextprotocol.io" target="_blank" rel="noopener">MCP spec ↗</a></li>
+        </ul>
+      </aside>
+
+      <article class="dev-content">
+        <div class="dev-crumbs"><a href="/developer/">developer</a> › write-connector</div>
+        <h1>Как написать свой коннектор</h1>
+        <p class="dev-lede">
+          Коннектор EDL OS — это TypeScript-модуль, который описывает источник данных
+          (REST API, базу, файл) и набор tools, которые AI-агент может вызвать.
+          Минимальный коннектор пишется за 30 минут.
+        </p>
+
+        <h2>Анатомия коннектора</h2>
+        <p>Каждый коннектор живёт в отдельной папке <code>connectors/&lt;name&gt;/</code> и содержит:</p>
+        <pre><code>connectors/my-api/
+├── manifest.ts      <span class="c">// метаданные + список tools</span>
+├── auth.ts          <span class="c">// OAuth / API-key handshake</span>
+├── tools/
+│   ├── list_users.ts
+│   └── get_order.ts
+└── README.md</code></pre>
+
+        <h2>Шаг 1 · Создайте манифест</h2>
+        <p>Манифест объявляет имя, версию и список tools:</p>
+        <pre><code><span class="c">// connectors/my-api/manifest.ts</span>
+<span class="b">import</span> { defineConnector } <span class="b">from</span> <span class="s">'@edl-os/sdk'</span>;
+<span class="b">import</span> { listUsers } <span class="b">from</span> <span class="s">'./tools/list_users'</span>;
+<span class="b">import</span> { getOrder } <span class="b">from</span> <span class="s">'./tools/get_order'</span>;
+
+<span class="b">export default</span> defineConnector({
+  <span class="k">name</span>: <span class="s">'my-api'</span>,
+  <span class="k">version</span>: <span class="s">'0.1.0'</span>,
+  <span class="k">displayName</span>: <span class="s">'My API'</span>,
+  <span class="k">auth</span>: { <span class="k">type</span>: <span class="s">'oauth2'</span>, <span class="k">authUrl</span>: <span class="s">'https://my-api.com/oauth'</span> },
+  <span class="k">tools</span>: [listUsers, getOrder],
+});</code></pre>
+
+        <h2>Шаг 2 · Опишите tool</h2>
+        <p>
+          Tool — это функция с JSON-схемой входа/выхода. SDK сам зарегистрирует её
+          в <code>tools/list</code> и передаст MCP-клиенту.
+        </p>
+        <pre><code><span class="c">// connectors/my-api/tools/list_users.ts</span>
+<span class="b">import</span> { defineTool } <span class="b">from</span> <span class="s">'@edl-os/sdk'</span>;
+<span class="b">import</span> { z } <span class="b">from</span> <span class="s">'zod'</span>;
+
+<span class="b">export const</span> listUsers = defineTool({
+  <span class="k">name</span>: <span class="s">'list_users'</span>,
+  <span class="k">description</span>: <span class="s">'Список пользователей за период'</span>,
+  <span class="k">input</span>: z.object({
+    <span class="k">since</span>: z.string().describe(<span class="s">'ISO date, например 2026-01-01'</span>),
+    <span class="k">limit</span>: z.number().min(<span class="n">1</span>).max(<span class="n">200</span>).default(<span class="n">50</span>),
+  }),
+  <span class="k">handler</span>: <span class="b">async</span> ({ input, ctx }) =&gt; {
+    <span class="b">const</span> res = <span class="b">await</span> ctx.http.get(<span class="s">'/users'</span>, {
+      <span class="k">params</span>: { since: input.since, limit: input.limit },
+    });
+    <span class="b">return</span> res.data;
+  },
+});</code></pre>
+
+        <div class="dev-callout dev-callout--tip">
+          <span class="dev-callout__icon" aria-hidden="true">💡</span>
+          <div>
+            <code>ctx.http</code> уже сконфигурирован с OAuth-токеном из манифеста.
+            Не пишите свой HTTP-клиент — используйте контекст, тогда rate-limit, retry и audit-log заработают автоматически.
+          </div>
+        </div>
+
+        <h2>Шаг 3 · Безопасность данных</h2>
+        <p>
+          <strong>Что отдавать модели</strong>: агрегаты, метрики, ID. <strong>Что не отдавать</strong>:
+          PII, полные строки, токены. Если возвращаете список — отрезайте чувствительные поля:
+        </p>
+        <pre><code><span class="b">return</span> res.data.map((u) =&gt; ({
+  <span class="k">id</span>: u.id,
+  <span class="k">name</span>: u.name,
+  <span class="k">created</span>: u.created_at,
+  <span class="c">// НЕ возвращаем: email, phone, address, payment_token</span>
+}));</code></pre>
+
+        <div class="dev-callout dev-callout--warn">
+          <span class="dev-callout__icon" aria-hidden="true">⚠️</span>
+          <div>
+            Audit-log пишет <em>всё</em>, что вернул tool — включая PII, если вы их вернули.
+            Это нужно для compliance, но означает, что лишние поля становятся видны админу через UI логов.
+            Фильтруйте на стороне коннектора.
+          </div>
+        </div>
+
+        <h2>Шаг 4 · Регистрация и тест</h2>
+        <p>Подключите коннектор в корневой <code>config.yaml</code>:</p>
+        <pre><code><span class="k">connectors:</span>
+  - <span class="s">my-api</span></code></pre>
+
+        <p>Перезапустите сервер и проверьте, что tool появился:</p>
+        <pre><code>curl -X POST http://localhost:8080/mcp/v1/rpc \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -d <span class="s">'{"jsonrpc":"2.0","method":"tools/list","id":1}'</span></code></pre>
+
+        <p>Ожидаем в ответе <code>list_users</code> с описанием.</p>
+
+        <h2>Шаг 5 · Опубликовать</h2>
+        <ul>
+          <li>Откройте <strong>PR в <a href="/developer/open-source.html#connectors" target="_blank" rel="noopener">edl-connectors</a></strong> — community-репо.</li>
+          <li>Добавьте README с примером использования и таблицей возвращаемых полей.</li>
+          <li>После мерджа коннектор появится в managed-облаке + в <a href="/integrations.html">каталоге</a>.</li>
+        </ul>
+
+        <h2>Шаблоны для старта</h2>
+        <p>Готовые скелеты на GitHub:</p>
+        <ul>
+          <li><a href="/developer/open-source.html#connectors" target="_blank" rel="noopener"><code>templates/rest</code></a> — REST API + OAuth</li>
+          <li><a href="/developer/open-source.html#connectors" target="_blank" rel="noopener"><code>templates/db</code></a> — PostgreSQL / MySQL</li>
+          <li><a href="/developer/open-source.html#connectors" target="_blank" rel="noopener"><code>templates/file</code></a> — CSV / Excel / JSON</li>
+        </ul>
+
+        <div class="dev-prevnext">
+          <a class="dev-prev" href="/developer/getting-started.html">
+            <div class="dev-prevnext__label">← назад</div>
+            <div class="dev-prevnext__title">Запуск локально</div>
+          </a>
+          <a class="dev-next" href="/developer/schema.html">
+            <div class="dev-prevnext__label">далее →</div>
+            <div class="dev-prevnext__title">JSON-RPC схема</div>
+          </a>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="footer" style="padding: 32px 0; text-align: center;">
+    <div class="container" style="font-size: 0.8125rem;">© 2026 EDL OS · Elephant Dreams Lab</div>
+  </footer>
+
+  <script>
+    (function () {
+      const b = document.getElementById('burger');
+      const n = document.getElementById('site-nav');
+      if (!b || !n) return;
+      b.addEventListener('click', () => {
+        const open = n.classList.toggle('is-open');
+        b.setAttribute('aria-expanded', String(open));
+      });
+    })();
+  </script>
+</body>
+</html>

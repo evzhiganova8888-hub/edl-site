@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDL OS · Developer Portal</title>
+  <meta name="description" content="Документация EDL OS для разработчиков. Запуск MCP-сервера локально, написание коннекторов, JSON-RPC схема.">
+  <meta property="og:title" content="EDL OS · Developer Portal">
+  <meta property="og:description" content="Документация EDL OS для разработчиков.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://elephantdreams.ru/developer/">
+  <meta property="og:image" content="https://elephantdreams.ru/assets/og-cover.png">
+  <link rel="canonical" href="https://elephantdreams.ru/developer/">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/main-v2.css">
+  <link rel="stylesheet" href="/css/dev-portal.css">
+
+  <link rel="icon" href="/assets/favicon.ico" sizes="any">
+  <meta name="theme-color" content="#0A0A0F">
+</head>
+<body class="dev-page" data-page="dev-portal">
+  <a href="#main" class="skip-link">Перейти к содержанию</a>
+  <div class="dev-banner">
+    <strong>Beta · v0.1</strong> · документация в активной разработке. Нашли ошибку? <a href="/developer/open-source.html#waitlist" target="_blank" rel="noopener">Откройте issue</a>.
+  </div>
+
+  <header class="header" id="header">
+    <div class="container header__inner site-header">
+      <a href="/" class="header__logo site-logo" aria-label="EDL OS — на главную">
+        <img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true">
+        <span>EDL&nbsp;OS</span>
+      </a>
+      <nav class="site-nav" id="site-nav" aria-label="Главное меню">
+        <a href="/methodology.html">Методология</a>
+        <a href="/mcp.html">Claude&nbsp;/&nbsp;MCP</a>
+        <a href="/integrations.html">Интеграции</a>
+        <a href="/developer/" aria-current="page">Docs</a>
+        <a href="/pricing.html">Цены</a>
+        <a href="/about.html">Команда</a>
+        <a href="/faq.html">FAQ</a>
+      </nav>
+      <div class="site-header__cta">
+        <a href="/developer/open-source.html" target="_blank" rel="noopener" class="btn btn--outline site-header__channel">
+          <span aria-hidden="true">⌥</span> GitHub
+        </a>
+        <button class="header__burger" aria-label="Меню" aria-expanded="false" aria-controls="site-nav" id="burger">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="dev-shell">
+      <aside class="dev-sidebar" aria-label="Навигация по докам">
+        <h4>Старт</h4>
+        <ul>
+          <li><a href="/developer/" aria-current="page">Введение</a></li>
+          <li><a href="/developer/getting-started.html">Запуск локально</a></li>
+        </ul>
+        <h4>Разработка</h4>
+        <ul>
+          <li><a href="/developer/write-connector.html">Свой коннектор</a></li>
+          <li><a href="/developer/schema.html">JSON-RPC схема</a></li>
+        </ul>
+        <h4>Внешние</h4>
+        <ul>
+          <li><a href="/developer/open-source.html" target="_blank" rel="noopener">GitHub repo ↗</a></li>
+          <li><a href="https://modelcontextprotocol.io" target="_blank" rel="noopener">MCP spec ↗</a></li>
+        </ul>
+      </aside>
+
+      <article class="dev-content">
+        <div class="dev-crumbs">developer › index</div>
+        <h1>EDL OS · Developer Portal</h1>
+        <p class="dev-lede">
+          EDL OS — это open-core MCP-сервер для AI-агентов. Ядро под MIT, на нём вы можете
+          запускать, форкать и расширять. На этой странице — точки входа в документацию.
+        </p>
+
+        <div class="dev-callout dev-callout--note">
+          <span class="dev-callout__icon" aria-hidden="true">ℹ️</span>
+          <div>
+            Полная версия документации с примерами кода, API-reference и интерактивной песочницей
+            переедет на <code>docs.edl-os.ru</code> (Mintlify) после стабилизации API (план — Q3 2026).
+            Здесь — рабочая база v0.1 для ранних адоптеров.
+          </div>
+        </div>
+
+        <h2>Что внутри</h2>
+        <div class="dev-cards">
+          <a class="dev-card" href="/developer/getting-started.html">
+            <div class="dev-card__icon" aria-hidden="true">⚡</div>
+            <h3 class="dev-card__title">Запуск локально</h3>
+            <p class="dev-card__desc">Поднять <code>mcp-server-core</code> через Docker за 5 минут.</p>
+          </a>
+          <a class="dev-card" href="/developer/write-connector.html">
+            <div class="dev-card__icon" aria-hidden="true">🔌</div>
+            <h3 class="dev-card__title">Свой коннектор</h3>
+            <p class="dev-card__desc">Туториал: написать коннектор к любому API за 30 минут.</p>
+          </a>
+          <a class="dev-card" href="/developer/schema.html">
+            <div class="dev-card__icon" aria-hidden="true">📐</div>
+            <h3 class="dev-card__title">JSON-RPC схема</h3>
+            <p class="dev-card__desc">Формат сообщений между AI-клиентом и MCP-сервером.</p>
+          </a>
+          <a class="dev-card" href="/developer/open-source.html" target="_blank" rel="noopener">
+            <div class="dev-card__icon" aria-hidden="true">⌥</div>
+            <h3 class="dev-card__title">GitHub ↗</h3>
+            <p class="dev-card__desc">Исходники <code>mcp-server-core</code> · MIT.</p>
+          </a>
+        </div>
+
+        <h2>Архитектура: Open Core</h2>
+        <p>
+          EDL OS строится по принципу <strong>Open Core</strong>. Транспорт (JSON-RPC поверх SSE/HTTP),
+          схемы tools, OAuth-флоу, коннекторы 1С/amoCRM и аудит-логи — открыты под MIT.
+          Бизнес-логика (промпты Founder OS Score, бенчмарки 100+ компаний, методология 4 слоёв)
+          — наша IP и доступна только в managed-версии.
+        </p>
+
+        <table>
+          <thead><tr><th>Слой</th><th>Лицензия</th><th>Где живёт</th></tr></thead>
+          <tbody>
+            <tr><td>MCP-транспорт (JSON-RPC, SSE)</td><td>MIT</td><td><code>mcp-server-core</code></td></tr>
+            <tr><td>Tool registry & dispatcher</td><td>MIT</td><td><code>mcp-server-core</code></td></tr>
+            <tr><td>OAuth 2.1 + PKCE flow</td><td>MIT</td><td><code>mcp-server-core</code></td></tr>
+            <tr><td>Коннекторы (1С, amoCRM, Bitrix)</td><td>MIT</td><td><code>edl-connectors</code></td></tr>
+            <tr><td>Audit log &amp; rate limits</td><td>MIT</td><td><code>mcp-server-core</code></td></tr>
+            <tr><td>Founder OS Score · промпты</td><td>Closed (подписка)</td><td>managed cloud</td></tr>
+            <tr><td>Бенчмарки 100+ компаний</td><td>Closed (подписка)</td><td>managed cloud</td></tr>
+          </tbody>
+        </table>
+
+        <div class="dev-callout dev-callout--warn">
+          <span class="dev-callout__icon" aria-hidden="true">⚠️</span>
+          <div>
+            В open-source ядре <strong>нет</strong> промптов Anthropic Claude, ключей моделей или
+            методологии Founder OS Score. Это сделано осознанно — чтобы IP не утекал в форки.
+            Запуск ядра без managed-облака даёт пустой <code>founder_score</code>-tool.
+          </div>
+        </div>
+
+        <h2>Быстрый старт за 60 секунд</h2>
+        <pre><code><span class="c"># 1. Клон</span>
+<span class="c"># URL появится после публичного релиза (Q3 2026)</span>
+<span class="c"># Подписаться на релиз: /developer/open-source.html#waitlist</span>
+git clone https://github.com/edl-os/mcp-server-core.git
+cd mcp-server-core
+
+<span class="c"># 2. Запуск через docker-compose</span>
+docker compose up -d
+
+<span class="c"># 3. Проверка</span>
+curl http://localhost:8080/mcp/v1/health
+<span class="c"># → {"status":"ok","version":"0.1.0","tools":6}</span></code></pre>
+
+        <p>
+          Дальше → <a href="/developer/getting-started.html">Запуск локально</a> с подробностями про переменные окружения, OAuth-настройки и подключение из Claude Desktop.
+        </p>
+
+        <div class="dev-prevnext">
+          <span></span>
+          <a class="dev-next" href="/developer/getting-started.html">
+            <div class="dev-prevnext__label">далее →</div>
+            <div class="dev-prevnext__title">Запуск локально</div>
+          </a>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="footer" style="padding: 32px 0; text-align: center;">
+    <div class="container" style="font-size: 0.8125rem;">
+      © 2026 EDL OS · Elephant Dreams Lab · Documentation v0.1 beta
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const b = document.getElementById('burger');
+      const n = document.getElementById('site-nav');
+      if (!b || !n) return;
+      b.addEventListener('click', () => {
+        const open = n.classList.toggle('is-open');
+        b.setAttribute('aria-expanded', String(open));
+      });
+    })();
+  </script>
+</body>
+</html>
