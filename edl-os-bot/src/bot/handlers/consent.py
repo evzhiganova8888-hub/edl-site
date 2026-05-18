@@ -29,13 +29,26 @@ async def handle_consent(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         if decision == "accept":
             await consent_core.give_consent(session, user)
             await session.commit()
-            await query.message.reply_text(
-                "Спасибо, согласие зафиксировано. Можем продолжать.",
-                reply_markup=keyboards.main_menu(),
-            )
         else:
             await query.message.reply_text(
-                "Хорошо. Без согласия я не смогу собрать данные для звонка или "
-                "оплаты, но FAQ и общие материалы доступны.\n\n"
+                "Хорошо. Без согласия я не смогу оформить оплату Чекапа, "
+                "но FAQ и общие материалы доступны.\n\n"
                 f"Команда: {texts.WORKING_HOURS_DISCLAIMER}"
             )
+            return
+
+    # Accept: проверяем отложенный intent (юзер кликнул «Купить» до consent).
+    # Локальный импорт — избегаем циклической зависимости consent ↔ audit.
+    from src.bot.handlers import audit as audit_handler
+
+    pending = context.user_data.pop(audit_handler.PENDING_POST_CONSENT_KEY, None)
+    if pending and pending.get("action") == "audit_start_purchase":
+        plan = pending.get("plan", audit_handler.PLAN_BASE)
+        await query.message.reply_text("Спасибо, согласие зафиксировано. Продолжаем оформление.")
+        await audit_handler._begin_purchase(update, context, plan=plan)
+        return
+
+    await query.message.reply_text(
+        "Спасибо, согласие зафиксировано. Можем продолжать.",
+        reply_markup=keyboards.main_menu(),
+    )

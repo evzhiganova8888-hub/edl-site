@@ -17,7 +17,7 @@ from src.core.flags import FLAG_VITACONSULT_PUBLIC, get_flag, set_flag
 from src.core.notifications import send_to_admin_chat
 from src.core.payment_marking import mark_application_paid
 from src.db.models import Application, BotError, CheckupAnswer, Event, Feedback, Payment, User
-from src.db.repos import get_or_create_user, log_event
+from src.db.repos import create_application, get_or_create_user, log_event
 from src.db.session import async_session_factory
 
 logger = logging.getLogger(__name__)
@@ -464,6 +464,158 @@ async def beta_summary_command(update: Update, context: ContextTypes.DEFAULT_TYP
         "Подробный CSV: /emails_dump"
     )
     await msg.reply_text(text, parse_mode="Markdown")
+
+
+# ─── /grant_demo ──────────────────────────────────────────────────────────────
+
+
+def _resolve_user_ref(arg: str) -> tuple[int | None, str | None]:
+    """Парсит аргумент команды: telegram_id (число) или @username.
+    Возвращает (telegram_id, username) — заполнено ровно одно.
+    """
+    arg = arg.strip()
+    if not arg:
+        return None, None
+    if arg.startswith("@"):
+        return None, arg[1:].strip()
+    try:
+        return int(arg), None
+    except ValueError:
+        return None, arg if arg.isalnum() or "_" in arg else None
+
+
+async def grant_demo_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """/grant_demo <telegram_id|@username> [base|plus]
+
+    Создаёт оплаченную Application для демо-клиента, открывает /checkup доступ
+    без онлайн-оплаты. Используется Катей/Иваном для партнёрских/экспертных
+    обкаток (например, VitaКонсалт).
+
+    Пользователь должен хотя бы раз написать /start боту — иначе мы не
+    знаем его telegram_id и не сможем отправить уведомление.
+    """
+    admin_tg_id = update.effective_user.id
+    msg = update.effective_message
+    if not is_admin(admin_tg_id):
+        await msg.reply_text("Только для команды EDL.")
+        return
+
+    args = context.args or []
+    if not args:
+        await msg.reply_text(
+            "Использование: /grant_demo <telegram_id|@username> [base|plus]\n"
+            "По умолчанию — plus (с видео-разбором).\n\n"
+            "Перед grant пользователь должен хотя бы раз нажать /start у бота "
+            "(чтобы он попал в нашу БД).\n\n"
+            "Пример: /grant_demo 105255440 plus\n"
+            "         /grant_demo @Linamironovich plus"
+        )
+        return
+
+    ref_tg_id, ref_username = _resolve_user_ref(args[0])
+    if ref_tg_id is None and not ref_username:
+        await msg.reply_text(
+            "Не разобрал первый аргумент. Дайте telegram_id (число) или @username."
+        )
+        return
+
+    plan = "plus"
+    if len(args) > 1:
+        plan_arg = args[1].lower()
+        if plan_arg in ("base", "plus"):
+            plan = plan_arg
+        else:
+            await msg.reply_text("Тариф: base | plus (по умолчанию plus).")
+            return
+
+    amount_rub = 14000.0 if plan == "plus" else 9000.0
+
+    factory = async_session_factory()
+    async with factory() as session:
+        from sqlalchemy import select as sa_select
+        if ref_tg_id is not None:
+            stmt = sa_select(User).where(User.telegram_id == ref_tg_id)
+        else:
+            stmt = sa_select(User).where(User.telegram_username == ref_username)
+        target_user = (await session.execute(stmt)).scalar_one_or_none()
+
+        if target_user is None:
+            await msg.reply_text(
+                f"Пользователь {args[0]} не найден в БД.\n\n"
+                "Попросите его нажать /start у @edl_os_bot, потом повторите команду. "
+                "Иначе бот не сможет отправить уведомление об открытии доступа."
+            )
+            return
+
+        app = await create_application(
+            session,
+            user=target_user,
+            type="audit",
+            source="demo_grant",
+            payload={
+                "plan": plan,
+                "source": "demo_grant",
+                "granted_by_telegram_id": admin_tg_id,
+            },
+        )
+        result = await mark_application_paid(
+            session,
+            app=app,
+            user=target_user,
+            amount_rub=amount_rub,
+            payment_provider="demo_grant",
+            provider_payment_id=f"demo:{admin_tg_id}",
+            actor=f"admin:{admin_tg_id}",
+        )
+        session.add(Event(
+            user_id=target_user.id,
+            event="demo_access_granted",
+            payload={
+                "application_id": str(app.id),
+                "plan": plan,
+                "granted_by_telegram_id": admin_tg_id,
+            },
+        ))
+        await session.commit()
+        target_telegram_id = target_user.telegram_id
+        target_name = (
+            " ".join(filter(None, [target_user.last_name, target_user.first_name]))
+            or target_user.telegram_username
+            or str(target_user.telegram_id)
+        )
+
+    # Уведомляем клиента
+    plus_video_line = (
+        texts.CHECKUP_DEMO_ACCESS_GRANTED_PLUS_VIDEO_LINE if plan == "plus" else "\n"
+    )
+    plan_suffix = " (Plus, с видео)" if plan == "plus" else " (Базовый)"
+    text_to_client = texts.CHECKUP_DEMO_ACCESS_GRANTED.format(
+        plan_suffix=plan_suffix,
+        plus_video_line=plus_video_line,
+    )
+
+    delivered = True
+    try:
+        from src.bot import keyboards
+        await context.bot.send_message(
+            chat_id=target_telegram_id,
+            text=text_to_client,
+            reply_markup=InlineKeyboardMarkup(
+                [[InlineKeyboardButton("🚀 Начать Чекап", callback_data="menu:checkup")]]
+            ),
+        )
+    except Exception:
+        logger.exception("grant_demo: failed to notify user %s", target_telegram_id)
+        delivered = False
+
+    summary = (
+        f"✅ Demo-доступ выдан: {target_name} (tg_id={target_telegram_id}, plan={plan}).\n"
+        f"Application: {result['application_id']}\n"
+        f"Refund window до: {result.get('refund_eligible_until', '—')}"
+    )
+    if not delivered:
+        summary += "\n\n⚠️ Не удалось отправить уведомление клиенту (возможно, заблокировал бота)."
+    await msg.reply_text(summary)
 
 
 # ─── F8: /upload_plus_video ───────────────────────────────────────────────────

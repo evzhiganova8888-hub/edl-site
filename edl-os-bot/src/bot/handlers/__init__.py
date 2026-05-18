@@ -30,7 +30,11 @@ from src.bot.handlers import (
     refund,
     start,
 )
-from src.bot.handlers.admin import upload_plus_video_command, handle_admin_video_upload
+from src.bot.handlers.admin import (
+    grant_demo_command,
+    handle_admin_video_upload,
+    upload_plus_video_command,
+)
 from src.core.config import settings
 from src.db.repos import log_event
 from src.db.session import async_session_factory
@@ -111,6 +115,7 @@ def register(app: Application) -> None:
     app.add_handler(CommandHandler("feedback", feedback_handler.feedback_command))
     app.add_handler(CommandHandler("reset", start.reset_command))
     app.add_handler(CommandHandler("upload_plus_video", upload_plus_video_command))  # F8
+    app.add_handler(CommandHandler("grant_demo", grant_demo_command))  # demo-access
 
     # Callback queries (inline buttons)
     app.add_handler(CallbackQueryHandler(consent.handle_consent, pattern=r"^consent:"))
