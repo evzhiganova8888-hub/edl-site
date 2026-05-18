@@ -187,6 +187,7 @@
 .mc-body {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   padding: 20px 16px;
   background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
@@ -235,6 +236,30 @@
   background: linear-gradient(135deg, #fff8f1 0%, #fff 100%);
   border-left: 3px solid var(--color-tangerine);
 }
+
+/* Recap quote — user echo inside summary bubbles */
+.mc-bubble .mc-quote {
+  display: block;
+  font-style: italic;
+  color: var(--color-gray-500);
+  font-size: 0.875rem;
+  margin-bottom: 8px;
+  padding-left: 10px;
+  border-left: 2px solid var(--color-gray-200);
+  line-height: 1.45;
+}
+
+/* Recommendations ordered list inside a chat bubble */
+.mc-bubble .mc-recs {
+  margin: 10px 0 0 0;
+  padding-left: 22px;
+  counter-reset: mc-rec;
+}
+.mc-bubble .mc-recs li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.mc-bubble .mc-recs li:last-child { margin-bottom: 0; }
 .mc-bubble__label {
   font-size: 0.6875rem;
   font-weight: 700;
@@ -376,118 +401,6 @@
   font-size: 0.7rem;
 }
 
-/* ── Final summary screen ── */
-.mc-summary {
-  padding: 24px 20px;
-}
-.mc-summary__intro {
-  font-size: 1rem;
-  color: var(--color-gray-700);
-  margin-bottom: 20px;
-  line-height: 1.5;
-}
-.mc-summary__layers {
-  display: grid;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-.mc-layer-card {
-  background: #fff;
-  border: 1px solid var(--color-gray-200);
-  border-radius: 12px;
-  padding: 16px;
-  border-left: 4px solid var(--color-tangerine);
-  animation: mc-msg-in 380ms var(--ease-default) backwards;
-}
-.mc-layer-card:nth-child(1) { animation-delay: 0.1s; }
-.mc-layer-card:nth-child(2) { animation-delay: 0.25s; }
-.mc-layer-card:nth-child(3) { animation-delay: 0.4s; }
-.mc-layer-card:nth-child(4) { animation-delay: 0.55s; }
-.mc-layer-card__head {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 700;
-  font-size: 0.9375rem;
-  margin-bottom: 8px;
-  color: var(--color-gray-900);
-}
-.mc-layer-card__icon {
-  font-size: 1.25rem;
-}
-.mc-layer-card__body {
-  font-size: 0.875rem;
-  color: var(--color-gray-700);
-  line-height: 1.5;
-}
-.mc-layer-card__obs {
-  margin-top: 8px;
-  padding: 8px 12px;
-  background: #fff8f1;
-  border-radius: 8px;
-  font-size: 0.8125rem;
-  color: var(--color-gray-900);
-}
-.mc-summary__recs {
-  background: var(--color-gray-100);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 20px;
-}
-.mc-summary__recs h4 {
-  font-size: 0.9375rem;
-  margin-bottom: 10px;
-  font-weight: 700;
-}
-.mc-summary__recs ol {
-  margin: 0;
-  padding-left: 20px;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  color: var(--color-gray-700);
-}
-.mc-summary__recs li { margin-bottom: 6px; }
-.mc-summary__cta-block {
-  background: linear-gradient(135deg, #0A0A0A 0%, #2a2a2a 100%);
-  color: #fff;
-  padding: 20px;
-  border-radius: 14px;
-  text-align: center;
-}
-.mc-summary__cta-text {
-  font-size: 0.9375rem;
-  margin-bottom: 14px;
-  color: #d4d4d8;
-  line-height: 1.5;
-}
-.mc-summary__cta-text strong { color: #fff; }
-.mc-summary__cta-btn {
-  display: inline-block;
-  background: var(--color-tangerine);
-  color: #fff;
-  font-weight: 700;
-  padding: 14px 28px;
-  border-radius: 10px;
-  text-decoration: none;
-  font-size: 1rem;
-  width: 100%;
-  text-align: center;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-  transition: background var(--duration-fast), transform var(--duration-fast);
-}
-.mc-summary__cta-btn:hover { background: var(--color-tangerine-hover); transform: translateY(-1px); }
-.mc-summary__secondary {
-  display: block;
-  margin-top: 10px;
-  color: #a1a1aa;
-  font-size: 0.8125rem;
-  text-align: center;
-  text-decoration: none;
-}
-.mc-summary__secondary:hover { color: #fff; text-decoration: underline; }
-
 /* Email lead form */
 .mc-email-form {
   margin-top: 16px;
@@ -543,6 +456,65 @@
 .mc-email-form.is-sent .mc-email-form__row { display: none; }
 .mc-email-form.is-sent .mc-email-form__success { display: block; }
 
+/* ── Final CTA card (sequential chat stream) ──────────
+   Rendered as a chat message at the end of the dialog.
+   Spans full content width of .mc-body, no horizontal overflow. */
+.mc-msg--cta {
+  display: block;
+  margin: 18px 0 8px;
+}
+.mc-cta-card {
+  background: linear-gradient(135deg, #0A0A0A 0%, #2a2a2a 100%);
+  color: #fff;
+  padding: 20px;
+  border-radius: 14px;
+  text-align: center;
+  max-width: 100%;
+  box-sizing: border-box;
+  animation: mc-msg-in 380ms var(--ease-default);
+}
+.mc-cta-card__text {
+  font-size: 0.9375rem;
+  margin-bottom: 14px;
+  color: #d4d4d8;
+  line-height: 1.55;
+}
+.mc-cta-card__text strong { color: #fff; }
+.mc-cta-card__sub {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 0.8125rem;
+  color: #a1a1aa;
+  line-height: 1.45;
+}
+.mc-cta-card__btn {
+  display: block;
+  background: var(--color-tangerine);
+  color: #fff;
+  font-weight: 700;
+  padding: 14px 22px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 1rem;
+  width: 100%;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: background var(--duration-fast), transform var(--duration-fast);
+}
+.mc-cta-card__btn:hover { background: var(--color-tangerine-hover); transform: translateY(-1px); }
+.mc-cta-card__secondary {
+  display: block;
+  margin-top: 10px;
+  color: #a1a1aa;
+  font-size: 0.8125rem;
+  text-align: center;
+  text-decoration: none;
+}
+.mc-cta-card__secondary:hover { color: #fff; text-decoration: underline; }
+
 /* ── Mobile fullscreen ── */
 @media (max-width: 640px) {
   .mc-modal {
@@ -559,7 +531,9 @@
   }
   .mc-bubble { max-width: 88%; font-size: 0.9375rem; }
   .mc-header { padding-top: max(14px, env(safe-area-inset-top)); }
-  .mc-summary { padding: 18px 16px; }
+  .mc-msg--cta { margin: 14px 0 6px; }
+  .mc-cta-card { padding: 16px; border-radius: 12px; }
+  .mc-cta-card__btn { padding: 13px 18px; font-size: 0.9375rem; }
 }
 
 /* Prevent body scroll when modal open */
@@ -569,8 +543,15 @@ body.mc-modal-open {
   width: 100%;
 }
 
+/* Hide the secondary bot-widget bubble while Mini-Чекап is open
+   to avoid overlap with the email form / CTA on mobile. */
+body.mc-modal-open .bw-bubble,
+body.mc-modal-open #bot-widget {
+  display: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .mc-modal, .mc-dialog, .mc-msg, .mc-layer-card { animation: none; }
+  .mc-modal, .mc-dialog, .mc-msg, .mc-cta-card { animation: none; }
   .mc-trigger::before { display: none; }
   .mc-header__status::before { animation: none; }
   .mc-cursor { animation: none; opacity: 1; }
