@@ -91,7 +91,7 @@
     transform: rotate(180deg);
   }
 }
-@media (min-width: 769px) {
+@media (min-width: 768px) {
   .battle-accordion-trigger { display: none !important; }
   .battle-accordion-content { display: block !important; }
 }
@@ -159,7 +159,7 @@ html {
 
 /* Sticky CTA: don't overlap last section content */
 main { padding-bottom: 80px; }
-@media (min-width: 769px) { main { padding-bottom: 0; } }
+@media (min-width: 768px) { main { padding-bottom: 0; } }
 
 /* Better focus rings for accessibility */
 *:focus-visible {
