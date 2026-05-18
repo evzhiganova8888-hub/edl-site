@@ -641,6 +641,65 @@ async def grant_demo_command(update: Update, context: ContextTypes.DEFAULT_TYPE)
     await msg.reply_text(summary)
 
 
+# ─── /regenerate_pdf ──────────────────────────────────────────────────────────
+
+
+async def regenerate_pdf_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """/regenerate_pdf <application_id>
+
+    Принудительный повторный inline-рендер PDF для заявки. Используется
+    Катей, если первая попытка не дошла до клиента (Celery worker не
+    работал, WeasyPrint упал и т.п.).
+
+    Идемпотентно — перезаписывает прежний PDF и переотправляет клиенту.
+    """
+    admin_tg_id = update.effective_user.id
+    msg = update.effective_message
+    if not is_admin(admin_tg_id):
+        await msg.reply_text("Только для команды EDL.")
+        return
+
+    args = context.args or []
+    if not args:
+        await msg.reply_text(
+            "Использование: /regenerate_pdf <application_id>\n\n"
+            "UUID заявки можно посмотреть через /applications paid."
+        )
+        return
+
+    application_id = args[0].strip()
+    try:
+        UUID(application_id)
+    except ValueError:
+        await msg.reply_text("Неверный формат application_id (нужен UUID).")
+        return
+
+    await msg.reply_text(
+        f"🔄 Запускаю повторный рендер PDF для {application_id}.\n"
+        "Inline-генерация, без Celery — займёт 3-7 минут."
+    )
+
+    try:
+        from src.tasks.generate_checkup_pdf import _generate
+        stored_value = await _generate(application_id)
+        if stored_value:
+            await msg.reply_text(
+                f"✅ PDF сгенерирован и отправлен клиенту.\n"
+                f"Сохранён: {stored_value}"
+            )
+        else:
+            await msg.reply_text(
+                f"⚠️ Generation вернул пустой результат — проверьте логи."
+            )
+    except Exception as e:
+        logger.exception("regenerate_pdf failed for %s", application_id)
+        await msg.reply_text(
+            f"❌ Ошибка генерации: {type(e).__name__}: {str(e)[:200]}\n\n"
+            "Скорее всего WeasyPrint не установлен в Docker-образе или "
+            "нет /var/data volume. Проверьте Railway-логи."
+        )
+
+
 # ─── F8: /upload_plus_video ───────────────────────────────────────────────────
 
 _PLUS_VIDEO_UPLOAD_KEY = "plus_video_upload_app_id"

@@ -29,6 +29,7 @@ _KEY_APP_ID = "checkup_app_id"
 _KEY_Q_IDX = "checkup_q_idx"   # 0-based index текущего вопроса
 
 _STATE_AWAIT_START = "await_start"
+_STATE_AWAIT_SCALE = "await_scale"  # HOT-fix 19.05: pre-flight размер компании
 _STATE_AWAIT_READY = "await_ready"
 _STATE_AWAIT_ANSWER = "await_answer"
 # 21-й уточняющий вопрос — 3 ключевые метрики бизнеса.
@@ -36,6 +37,16 @@ _STATE_AWAIT_ANSWER = "await_answer"
 # приоритеты — финальный штрих для персонализации сценариев в PDF.
 _STATE_AWAIT_PRIORITIES = "await_priorities"
 _STATE_AWAIT_PRIORITIES_RETRY = "await_priorities_retry"
+
+# HOT-fix 19.05: размер компании влияет на смягчение порогов и формулировки.
+SCALE_MICRO = "micro"      # 1-5 человек, оборот <10М/год
+SCALE_SMALL = "small"      # 6-20 человек, оборот 10-50М/год
+SCALE_MEDIUM = "medium"    # 21-50 человек, оборот >50М/год
+SCALE_LABELS = {
+    SCALE_MICRO: "Микро · 1-5 чел.",
+    SCALE_SMALL: "Малый · 6-20 чел.",
+    SCALE_MEDIUM: "Средний · 21-50 чел.",
+}
 
 _LAYERS_ORDER = ["strategy", "sales", "operations", "finance"]
 _MAX_ANSWER_CHARS = 4000
@@ -85,15 +96,53 @@ def _question_keyboard(q_key: str) -> InlineKeyboardMarkup:
     ])
 
 
-def _quality_check(text: str, q: CheckupQuestion) -> tuple[bool, list[str]]:
-    """Возвращает (passed, missing_labels)."""
+# «Не применимо для масштаба» — клиент явно сказал, что у него нет таких
+# данных (микро-бизнес, услуги без проектной маржи и т.п.). Засчитываем
+# ответ как corner case — quality_passed=True, чтобы не блокировать
+# завершение Чекапа, в PDF используем формулировку «клиент не считает».
+_NOT_APPLICABLE_MARKERS = (
+    "не считаю", "не считаем", "не применимо",
+    "нет данных", "не релевантно", "не релевантна",
+    "не веду", "не ведём", "не отслеживаю", "не отслеживаем",
+)
+
+
+def _is_not_applicable(text: str) -> bool:
+    t = (text or "").lower()
+    return any(marker in t for marker in _NOT_APPLICABLE_MARKERS)
+
+
+_FINANCE_QUESTIONS = {"m1_cashflow", "m2_ebitda", "m3_vat_2026", "m4_reserves",
+                       "o2_project_margin"}
+
+
+def _scale_multiplier(scale: str | None) -> float:
+    """Микро-бизнес отвечает короче — снижаем порог слов на 40%."""
+    if scale == SCALE_MICRO:
+        return 0.6
+    if scale == SCALE_SMALL:
+        return 0.8
+    return 1.0
+
+
+def _quality_check(text: str, q: CheckupQuestion, scale: str | None = None) -> tuple[bool, list[str]]:
+    """Возвращает (passed, missing_labels). Адаптивно по размеру компании."""
+    # Если клиент явно сказал «не считаю/не применимо» — для финвопросов
+    # засчитываем (микро/малые часто не ведут finmodel) и помечаем флагом.
+    if _is_not_applicable(text) and q.key in _FINANCE_QUESTIONS:
+        return True, ["не применимо для масштаба — учтено"]
+
     words = text.split()
     word_count = len(words)
     has_digit = bool(re.search(r"\d", text))
+
+    effective_min = max(8, int(q.min_words * _scale_multiplier(scale)))
     missing = []
-    if word_count < q.min_words:
-        missing.append(f"нужно ≥{q.min_words} слов (у вас {word_count})")
-    if not has_digit:
+    if word_count < effective_min:
+        missing.append(f"нужно ≥{effective_min} слов (у вас {word_count})")
+    # Для микро не требуем цифру в нефинансовых вопросах
+    finance_q = q.key in _FINANCE_QUESTIONS
+    if not has_digit and (finance_q or scale != SCALE_MICRO):
         missing.append("нужна хотя бы одна цифра")
     return len(missing) == 0, missing
 
@@ -192,6 +241,12 @@ async def handle_checkup_callback(update: Update, context: ContextTypes.DEFAULT_
     if action == "start":
         app_id = parts[2] if len(parts) > 2 else None
         await _start_checkup(update, context, app_id)
+    elif action == "scale":
+        # checkup:scale:<micro|small|medium>:<app_id>
+        scale = parts[2] if len(parts) > 2 else None
+        app_id = parts[3] if len(parts) > 3 else None
+        if scale and app_id:
+            await _handle_scale_choice(update, context, scale, app_id)
     elif action == "resume":
         app_id = parts[2] if len(parts) > 2 else None
         await _resume_checkup(update, context, app_id)
@@ -214,7 +269,61 @@ async def handle_checkup_callback(update: Update, context: ContextTypes.DEFAULT_
 
 
 async def _start_checkup(update: Update, context: ContextTypes.DEFAULT_TYPE, app_id_str: str | None) -> None:
+    """Pre-flight: спрашиваем размер компании, чтобы адаптировать формулировки
+    и пороги качества под микро/малый/средний.
+    """
     if not app_id_str:
+        return
+    app_uuid = _safe_uuid(app_id_str)
+    if app_uuid is None:
+        return
+
+    # Если scale уже выбран (resume сценарий) — пропускаем pre-flight
+    factory = async_session_factory()
+    async with factory() as session:
+        app = await session.get(Application, app_uuid)
+        if app is None:
+            return
+        existing_scale = (app.payload or {}).get("company_scale")
+
+    if existing_scale:
+        # Resume — сразу к первому вопросу
+        async with factory() as session:
+            app = await session.get(Application, app_uuid)
+            if app:
+                app.checkup_started_at = datetime.now(timezone.utc)
+                await session.commit()
+        context.user_data[_KEY_APP_ID] = app_id_str
+        context.user_data[_KEY_Q_IDX] = 0
+        context.user_data[_KEY_STATE] = _STATE_AWAIT_READY
+        await _send_question(update, context, 0)
+        return
+
+    # Pre-flight scale
+    context.user_data[_KEY_APP_ID] = app_id_str
+    context.user_data[_KEY_STATE] = _STATE_AWAIT_SCALE
+    msg = update.effective_message or (update.callback_query.message if update.callback_query else None)
+    if msg is None:
+        return
+    await msg.reply_text(
+        "Перед стартом — *размер вашей команды*?\n\n"
+        "Это поможет мне приземлить вопросы под ваш масштаб. "
+        "Часть вопросов про маржу/EBITDA/cash-flow для микро-команды "
+        "формулируется проще.",
+        parse_mode="Markdown",
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("Микро · 1-5 чел.", callback_data=f"checkup:scale:micro:{app_id_str}")],
+            [InlineKeyboardButton("Малый · 6-20 чел.", callback_data=f"checkup:scale:small:{app_id_str}")],
+            [InlineKeyboardButton("Средний · 21-50 чел.", callback_data=f"checkup:scale:medium:{app_id_str}")],
+        ]),
+    )
+
+
+async def _handle_scale_choice(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, scale: str, app_id_str: str
+) -> None:
+    """Колбэк checkup:scale:<scale>:<app_id> — сохраняем scale и запускаем 20 вопросов."""
+    if scale not in (SCALE_MICRO, SCALE_SMALL, SCALE_MEDIUM):
         return
     app_uuid = _safe_uuid(app_id_str)
     if app_uuid is None:
@@ -224,12 +333,29 @@ async def _start_checkup(update: Update, context: ContextTypes.DEFAULT_TYPE, app
         app = await session.get(Application, app_uuid)
         if app is None:
             return
+        payload = dict(app.payload or {})
+        payload["company_scale"] = scale
+        app.payload = payload
         app.checkup_started_at = datetime.now(timezone.utc)
+        user, _ = await get_or_create_user(session, telegram_id=update.effective_user.id)
+        await log_event(
+            session, user_id=user.id, event="checkup_scale_chosen",
+            payload={"application_id": app_id_str, "scale": scale},
+        )
         await session.commit()
 
     context.user_data[_KEY_APP_ID] = app_id_str
     context.user_data[_KEY_Q_IDX] = 0
     context.user_data[_KEY_STATE] = _STATE_AWAIT_READY
+
+    msg = update.effective_message or update.callback_query.message
+    if msg:
+        await msg.reply_text(
+            f"Принято — {SCALE_LABELS[scale]}. Стартуем 20 вопросов по 4 слоям.\n\n"
+            "На каждый вопрос есть пример хорошего ответа. Если вопрос не "
+            "релевантен для вашего масштаба — напишите «не считаю» и одну "
+            "причину, я это учту в PDF."
+        )
     await _send_question(update, context, 0)
 
 
@@ -547,25 +673,64 @@ async def _do_complete(session, app_uuid, user, passed, msg, app_id_str, context
         is_self_demo = bool(payload.get("is_self_demo"))
 
     if msg:
-        plus_video_line = (
-            "\nВидео-разбор от Кати придёт в этот чат в течение 24 часов "
-            "после завершения Чекапа."
+        rec_count = 7 if plan == "plus" else 5
+        page_count = "12-15" if plan == "plus" else "10-12"
+        plus_block = (
+            (
+                "\n*Plus-тариф*: PDF подробнее (≈12-15 стр., 7 рекомендаций), "
+                "и через 24 часа после завершения Чекапа в этот чат придёт "
+                "ваше персональное видео от Кати."
+            )
             if plan == "plus" and not is_self_demo
             else ""
         )
         await msg.reply_text(
             f"🎉 Чекап завершён! {passed}/20 ответов прошли рубрику.\n\n"
-            "Готовлю PDF с разбором по 4 слоям, 5 рекомендациями и сценариями. "
-            "Пришлю в этот чат в течение нескольких минут.\n"
-            f"{plus_video_line}\n"
-            f"Условия услуги: {settings.offer_checkup_url}"
+            f"Готовлю PDF: диагноз по 4 слоям, {rec_count} конкретных "
+            f"рекомендаций, 3 сценария под ваши приоритетные метрики. "
+            f"Объём — около {page_count} страниц.\n\n"
+            "⏱ *Время на генерацию — 3–7 минут.* Можете заварить чай — "
+            "я пришлю PDF в этот чат, как только всё будет готово.\n"
+            f"{plus_block}\n\n"
+            f"Условия услуги: {settings.offer_checkup_url}",
+            parse_mode="Markdown",
         )
 
-    # Запускаем генерацию PDF в фоне
+    # Запускаем генерацию PDF: сначала inline (без зависимости от Celery
+    # worker'а), параллельно — в очередь Celery как резерв. Inline создаёт
+    # asyncio-таску — не блокирует ответ юзеру.
+    # HOT-fix 19.05: на Railway Celery worker может быть не запущен —
+    # PDF висел бесконечно в Redis-queue. Inline решает корневую причину.
+    import asyncio
+    from src.tasks.generate_checkup_pdf import _generate as _generate_pdf_inline
+
+    async def _inline_pdf_with_fallback() -> None:
+        try:
+            await _generate_pdf_inline(str(app_uuid))
+        except Exception:
+            logger.exception("Inline PDF generation failed for %s", app_uuid)
+            # Алерт Кате — клиент не получил PDF
+            try:
+                from src.core.notifications import send_to_admin_chat
+                if context and hasattr(context, "bot"):
+                    await send_to_admin_chat(
+                        context.bot,
+                        f"⚠️ PDF generation failed для {app_uuid}.\n"
+                        f"User: @{user.telegram_username or user.telegram_id}\n"
+                        f"Plan: {plan}\n"
+                        "Запустить вручную: /regenerate_pdf "
+                        f"{app_uuid}",
+                    )
+            except Exception:
+                logger.exception("Failed to alert admin about PDF failure")
+
+    asyncio.create_task(_inline_pdf_with_fallback())
+
+    # Celery как резерв — если worker запущен, он подхватит и сделает идемпотентно
     try:
         generate_checkup_pdf.delay(str(app_uuid))
     except Exception:
-        logger.exception("Failed to trigger generate_checkup_pdf for %s", app_uuid)
+        logger.debug("Celery enqueue skipped (worker likely not running)")
 
     # Plus-видео бриф Кате — триггерим от ЗАВЕРШЕНИЯ Чекапа, не от оплаты
     # (SoT v1.5 patch §2.3 шаг 2). Self-demo не триггерят бриф — иначе
@@ -636,12 +801,15 @@ async def handle_text_step(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     app_uuid = _safe_uuid(app_id_str)
     if app_uuid is None:
         return
-    passed, missing = _quality_check(raw, q)
     word_count = len(raw.split())
 
     factory = async_session_factory()
     async with factory() as session:
         user, _ = await get_or_create_user(session, telegram_id=update.effective_user.id)
+        # Получаем scale, чтобы quality_check адаптировался под размер
+        app_for_scale = await session.get(Application, app_uuid)
+        scale = (app_for_scale.payload or {}).get("company_scale") if app_for_scale else None
+        passed, missing = _quality_check(raw, q, scale=scale)
 
         # Upsert ответа
         existing = (

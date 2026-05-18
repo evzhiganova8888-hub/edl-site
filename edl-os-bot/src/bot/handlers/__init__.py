@@ -33,6 +33,7 @@ from src.bot.handlers import (
 from src.bot.handlers.admin import (
     grant_demo_command,
     handle_admin_video_upload,
+    regenerate_pdf_command,
     upload_plus_video_command,
 )
 from src.core.config import settings
@@ -116,6 +117,7 @@ def register(app: Application) -> None:
     app.add_handler(CommandHandler("reset", start.reset_command))
     app.add_handler(CommandHandler("upload_plus_video", upload_plus_video_command))  # F8
     app.add_handler(CommandHandler("grant_demo", grant_demo_command))  # demo-access
+    app.add_handler(CommandHandler("regenerate_pdf", regenerate_pdf_command))  # HOT-fix 19.05
 
     # Callback queries (inline buttons)
     app.add_handler(CallbackQueryHandler(consent.handle_consent, pattern=r"^consent:"))
