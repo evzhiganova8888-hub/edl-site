@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Интеграции EDL OS — 1С, amoCRM, Битрикс, GetCourse и MCP</title>
+  <meta name="description" content="Каталог коннекторов EDL OS: 1С, amoCRM, Битрикс24, GetCourse, Excel, Google Sheets. Hub-and-Spoke архитектура: подключите данные один раз — используйте в Claude, Cursor, ChatGPT.">
+  <meta property="og:title" content="Интеграции EDL OS — 10 коннекторов + MCP">
+  <meta property="og:description" content="Подключите ваш CRM/1С один раз — данные доступны во всех ваших AI-агентах через MCP.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://elephantdreams.ru/integrations.html">
+  <meta property="og:image" content="https://elephantdreams.ru/assets/og-cover.png">
+  <meta property="og:locale" content="ru_RU">
+  <link rel="canonical" href="https://elephantdreams.ru/integrations.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/main-v2.css">
+  <link rel="stylesheet" href="css/mobile-fixes.css">
+  <link rel="stylesheet" href="css/mini-checkup.css">
+
+  <link rel="icon" href="/assets/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+  <meta name="theme-color" content="#0A0A0A">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Коннекторы EDL OS",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"1С"},
+      {"@type":"ListItem","position":2,"name":"amoCRM"},
+      {"@type":"ListItem","position":3,"name":"Битрикс24"},
+      {"@type":"ListItem","position":4,"name":"GetCourse"},
+      {"@type":"ListItem","position":5,"name":"Excel / CSV"},
+      {"@type":"ListItem","position":6,"name":"Google Sheets"},
+      {"@type":"ListItem","position":7,"name":"Notion"},
+      {"@type":"ListItem","position":8,"name":"HubSpot"},
+      {"@type":"ListItem","position":9,"name":"Pipedrive"},
+      {"@type":"ListItem","position":10,"name":"Salesforce"}
+    ]
+  }
+  </script>
+
+  <style>
+    /* Integrations page — scoped */
+    .ig-hero {
+      padding: 96px 0 48px;
+      background: linear-gradient(180deg, var(--color-gray-50) 0%, #fff 100%);
+    }
+    .ig-hero__inner { max-width: 820px; margin: 0 auto; text-align: center; }
+    .ig-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 999px;
+      background: var(--color-tangerine-light);
+      color: var(--color-tangerine);
+      font-size: 0.8125rem; font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .ig-pill__dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--color-tangerine);
+      animation: ig-pulse 1.8s infinite;
+    }
+    @keyframes ig-pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(255, 107, 26, 0.4); }
+      70%  { box-shadow: 0 0 0 8px rgba(255, 107, 26, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 107, 26, 0); }
+    }
+    .ig-hero__title {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      line-height: 1.1; letter-spacing: -0.02em;
+      margin: 0 0 16px;
+    }
+    .ig-hero__title em {
+      font-style: normal; color: var(--color-tangerine);
+    }
+    .ig-hero__lede {
+      font-size: 1.125rem; line-height: 1.55;
+      color: var(--color-gray-700); margin: 0 0 24px;
+    }
+    .ig-hero__stats {
+      display: inline-flex; flex-wrap: wrap; gap: 28px;
+      justify-content: center; margin-top: 16px;
+    }
+    .ig-stat__num {
+      display: block; font-size: 1.5rem; font-weight: 700;
+      color: var(--color-gray-900); font-family: var(--font-mono);
+    }
+    .ig-stat__label {
+      font-size: 0.8125rem; color: var(--color-gray-500);
+    }
+
+    /* Filter pills */
+    .ig-filters {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      justify-content: center; margin: 0 0 32px;
+    }
+    .ig-filter {
+      padding: 8px 16px; border-radius: 999px;
+      background: #fff; border: 1px solid var(--color-gray-200);
+      font-size: 0.875rem; font-weight: 600; color: var(--color-gray-700);
+      cursor: pointer; font-family: inherit;
+      transition: all 0.15s;
+    }
+    .ig-filter:hover { border-color: var(--color-gray-400); }
+    .ig-filter[aria-pressed="true"] {
+      background: var(--color-gray-900); color: #fff;
+      border-color: var(--color-gray-900);
+    }
+    .ig-filter__count {
+      display: inline-block; margin-left: 6px;
+      font-size: 0.75rem; opacity: 0.7;
+    }
+
+    /* Connector grid */
+    .ig-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .ig-card {
+      position: relative;
+      background: #fff;
+      border: 1px solid var(--color-gray-200);
+      border-radius: 16px;
+      padding: 24px;
+      transition: transform 0.15s, box-shadow 0.2s, border-color 0.2s;
+      display: flex; flex-direction: column;
+      min-height: 200px;
+    }
+    .ig-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px -16px rgba(0, 0, 0, 0.18);
+      border-color: var(--color-gray-300);
+    }
+    .ig-card__icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      background: var(--color-gray-100);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 14px;
+    }
+    .ig-card__name {
+      font-size: 1.0625rem; font-weight: 700;
+      margin: 0 0 6px; color: var(--color-gray-900);
+    }
+    .ig-card__desc {
+      font-size: 0.875rem; line-height: 1.5;
+      color: var(--color-gray-700); margin: 0 0 16px;
+      flex: 1;
+    }
+    .ig-card__foot {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 8px;
+    }
+    .ig-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 3px 10px; border-radius: 999px;
+      font-size: 0.75rem; font-weight: 600;
+      font-family: var(--font-mono);
+    }
+    .ig-status--ready { background: rgba(16, 185, 129, 0.12); color: #047857; }
+    .ig-status--beta  { background: rgba(255, 107, 26, 0.12); color: #c2410c; }
+    .ig-status--soon  { background: var(--color-gray-100); color: var(--color-gray-500); }
+    .ig-card__link {
+      font-size: 0.8125rem; font-weight: 600;
+      color: var(--color-tangerine); text-decoration: none;
+    }
+    .ig-card__link:hover { text-decoration: underline; }
+
+    /* Hub-and-Spoke architecture */
+    .ig-arch-section {
+      background: #0A0A0F; color: #F5F5F7;
+      padding: 80px 0;
+      position: relative; overflow: hidden;
+    }
+    .ig-arch-section::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 50%, rgba(255, 107, 26, 0.10), transparent 70%),
+        radial-gradient(ellipse 40% 30% at 20% 20%, rgba(124, 124, 255, 0.08), transparent 60%);
+      pointer-events: none;
+    }
+    .ig-arch__head {
+      position: relative; z-index: 1;
+      text-align: center; max-width: 720px;
+      margin: 0 auto 48px;
+    }
+    .ig-arch__kicker {
+      font-family: var(--font-mono); font-size: 0.75rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--color-tangerine);
+      margin-bottom: 12px; display: inline-block;
+    }
+    .ig-arch__title {
+      font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+      line-height: 1.15; letter-spacing: -0.015em;
+      margin: 0 0 16px; color: #F5F5F7;
+    }
+    .ig-arch__lede {
+      color: #9494A5; line-height: 1.55; font-size: 1rem;
+      margin: 0;
+    }
+
+    /* Hub diagram */
+    .ig-hub {
+      position: relative; z-index: 1;
+      max-width: 980px; margin: 0 auto;
+      background: rgba(21, 21, 31, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 40px 32px;
+      backdrop-filter: blur(8px);
+    }
+    @media (max-width: 600px) { .ig-hub { padding: 24px 16px; } }
+
+    .ig-hub__grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+    @media (max-width: 760px) {
+      .ig-hub__grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+
+    .ig-hub__col-label {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 24px;
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #6B6B7B;
+      margin-bottom: 8px;
+    }
+    .ig-hub__col-label span:nth-child(1) { text-align: center; }
+    .ig-hub__col-label span:nth-child(2) { text-align: center; }
+    .ig-hub__col-label span:nth-child(3) { text-align: center; }
+    @media (max-width: 760px) {
+      .ig-hub__col-label { display: none; }
+    }
+
+    .ig-hub__sources, .ig-hub__agents {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .ig-hub__node {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      font-size: 0.875rem; font-weight: 600;
+      color: #F5F5F7;
+    }
+    .ig-hub__node-icon {
+      font-size: 1.125rem; line-height: 1;
+    }
+
+    .ig-hub__center {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 32px 24px;
+      background: linear-gradient(180deg, rgba(255, 107, 26, 0.18), rgba(255, 107, 26, 0.06));
+      border: 1px solid rgba(255, 107, 26, 0.4);
+      border-radius: 20px;
+      min-height: 200px;
+      box-shadow: 0 0 60px -10px rgba(255, 107, 26, 0.3);
+    }
+    .ig-hub__center-icon {
+      font-size: 2.25rem; margin-bottom: 10px;
+    }
+    .ig-hub__center-name {
+      font-weight: 700; font-size: 1.0625rem;
+      color: #FF6B1A;
+      margin-bottom: 6px;
+    }
+    .ig-hub__center-sub {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: #9494A5;
+      text-align: center;
+    }
+
+    /* OAuth flow stepper */
+    .ig-oauth {
+      max-width: 860px; margin: 56px auto 0;
+      position: relative; z-index: 1;
+    }
+    .ig-oauth__title {
+      text-align: center; color: #F5F5F7;
+      font-size: 1.25rem; margin: 0 0 24px;
+    }
+    .ig-oauth__steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      list-style: none; padding: 0; margin: 0;
+      counter-reset: oauth;
+    }
+    .ig-oauth__step {
+      padding: 18px 18px 18px 56px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      position: relative;
+      counter-increment: oauth;
+    }
+    .ig-oauth__step::before {
+      content: counter(oauth);
+      position: absolute; top: 16px; left: 16px;
+      width: 28px; height: 28px; border-radius: 8px;
+      background: rgba(255, 107, 26, 0.18);
+      color: #FF6B1A;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono); font-weight: 700; font-size: 0.875rem;
+    }
+    .ig-oauth__step-title {
+      font-weight: 700; font-size: 0.9375rem;
+      color: #F5F5F7; margin: 0 0 4px;
+    }
+    .ig-oauth__step-desc {
+      font-size: 0.8125rem; color: #9494A5;
+      line-height: 1.5; margin: 0;
+    }
+
+    /* Bottom CTAs */
+    .ig-cta-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      max-width: 860px; margin: 0 auto;
+    }
+    @media (max-width: 600px) { .ig-cta-row { grid-template-columns: 1fr; } }
+    .ig-cta-card {
+      padding: 32px 28px;
+      background: #fff;
+      border: 1px solid var(--color-gray-200);
+      border-radius: 20px;
+    }
+    .ig-cta-card h3 { font-size: 1.25rem; margin: 0 0 8px; }
+    .ig-cta-card p {
+      color: var(--color-gray-700); line-height: 1.5;
+      margin: 0 0 20px;
+    }
+
+    /* Hidden filter state */
+    .ig-card[hidden] { display: none; }
+  </style>
+
+  <script>
+    (function(){
+      const buffer = JSON.parse(localStorage.getItem('edl_events') || '[]');
+      window.EDLTrack = function(event, payload) {
+        buffer.push({event, timestamp: new Date().toISOString(), page: 'integrations', ...payload});
+        localStorage.setItem('edl_events', JSON.stringify(buffer));
+      };
+      window.addEventListener('DOMContentLoaded', () => window.EDLTrack('page_view', {}));
+    })();
+  </script>
+</head>
+<body data-page="integrations">
+  <a href="#main" class="skip-link">Перейти к содержанию</a>
+
+  <header class="header" id="header">
+    <div class="container header__inner site-header">
+      <a href="/" class="header__logo site-logo" aria-label="EDL OS — на главную">
+        <img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true">
+        <span>EDL&nbsp;OS</span>
+      </a>
+      <nav class="site-nav" id="site-nav" aria-label="Главное меню">
+        <a href="/methodology.html">Методология</a>
+        <a href="/mcp.html">Claude&nbsp;/&nbsp;MCP</a>
+        <a href="/integrations.html" aria-current="page">Интеграции</a>
+        <a href="/pricing.html">Цены</a>
+        <a href="/about.html">Команда</a>
+        <a href="/faq.html">FAQ</a>
+      </nav>
+      <div class="site-header__cta">
+        <button type="button" class="site-header__score" data-mc-open="header" aria-label="Пройти Founder OS Score за 15 минут"><span aria-hidden="true">💬</span> Score · 15 мин · бесплатно</button>
+        <a href="https://t.me/edl_os" target="_blank" rel="noopener" class="btn btn--outline site-header__channel" aria-label="Telegram-канал EDL OS"><span aria-hidden="true">✈️</span> Канал</a>
+        <button class="header__burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav" id="burger">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- HERO -->
+    <section class="ig-hero">
+      <div class="container">
+        <div class="ig-hero__inner">
+          <div class="ig-pill">
+            <span class="ig-pill__dot" aria-hidden="true"></span>
+            Интеграции · 10 коннекторов
+          </div>
+          <h1 class="ig-hero__title">
+            Подключите данные <em>один раз</em><br>— используйте во всех AI-агентах
+          </h1>
+          <p class="ig-hero__lede">
+            EDL OS — это Hub-and-Spoke шлюз: ваш CRM, 1С или Excel подключаются один раз к нашему Hub,
+            а доступ к ним есть в Claude, Cursor, ChatGPT и Gemini через MCP.
+          </p>
+          <div class="ig-hero__stats">
+            <div>
+              <span class="ig-stat__num">4</span>
+              <span class="ig-stat__label">в проде</span>
+            </div>
+            <div>
+              <span class="ig-stat__num">2</span>
+              <span class="ig-stat__label">в бете</span>
+            </div>
+            <div>
+              <span class="ig-stat__num">4</span>
+              <span class="ig-stat__label">на подходе</span>
+            </div>
+            <div>
+              <span class="ig-stat__num">∞</span>
+              <span class="ig-stat__label">custom · MIT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONNECTOR GRID -->
+    <section class="section">
+      <div class="container">
+        <div class="ig-filters" role="group" aria-label="Фильтр по статусу">
+          <button class="ig-filter" type="button" data-filter="all" aria-pressed="true">Все<span class="ig-filter__count">10</span></button>
+          <button class="ig-filter" type="button" data-filter="ready" aria-pressed="false">В проде<span class="ig-filter__count">4</span></button>
+          <button class="ig-filter" type="button" data-filter="beta" aria-pressed="false">Бета<span class="ig-filter__count">2</span></button>
+          <button class="ig-filter" type="button" data-filter="soon" aria-pressed="false">Скоро<span class="ig-filter__count">4</span></button>
+        </div>
+
+        <div class="ig-grid" id="ig-grid">
+
+          <!-- Production -->
+          <article class="ig-card" data-status="ready">
+            <div class="ig-card__icon" aria-hidden="true">🏢</div>
+            <h3 class="ig-card__name">1С</h3>
+            <p class="ig-card__desc">УТ, ERP, Бухгалтерия. REST-API через HTTP-сервис или прямое подключение к COM.</p>
+            <div class="ig-card__foot">
+              <span class="ig-status ig-status--ready">● в проде</span>
+              <a href="/developer/connectors/1c.html" class="ig-card__link">Docs →</a>
+            </div>
+          </article>
+
+          <article class="ig-card" data-status="ready">
+            <div class="ig-card__icon" aria-hidden="true">💼</div>
+            <h3 class="ig-card__name">amoCRM</h3>
+            <p class="ig-card__desc">Сделки, контакты, события, пайплайны. OAuth 2.0 + webhook real-time.</p>
+            <div class="ig-card__foot">
+              <span class="ig-status ig-status--ready">● в проде</span>
+              <a href="/developer/connectors/amocrm.html" class="ig-card__link">Docs →</a>
+            </div>
+          </article>
+
+          <article class="ig-card" data-status="ready">
+            <div class="ig-card__icon" aria-hidden="true">🟦</div>
+            <h3 class="ig-card__name">Битрикс24</h3>
+            <p class="ig-card__desc">CRM, задачи, документы. Подключение через приложение Bitrix24 + REST API.</p>
+            <div class="ig-card__foot">
+              <span class="ig-status ig-status--ready">● в проде</span>
+              <a href="/developer/connectors/bitrix24.html" class="ig-card__link">Docs →</a>
+            </div>
+          </article>
+
+          <article class="ig-card" data-status="ready">
+            <div class="ig-card__icon" aria-hidden="true">🎓</div>
+            <h3 class="ig-card__name">GetCourse</h3>
+            <p class="ig-card__desc">Заказы, пользователи, прогресс по курсам. API-токен + webhook на оплату.</p>
+            <div class="ig-card__foot">
+              <span class="ig-status ig-status--ready">● в проде</span>
+              <a href="/developer/connectors/getcourse.html" class="ig-card__link">Docs →</a>
+            </div>
+          </article>
+
+          <!-- Beta -->
+          <article class="ig-card" data-status="beta">
+            <div class="ig-card__icon" aria-hidden="true">📊</div>
+            <h3 class="ig-card__name">Excel · CSV</h3>
+            <p class="ig-card__desc">Загрузка локальных файлов через drag-and-drop. Автоматический парсинг колонок.</p>
+            <div class="ig-card__foot">
+              <span class="ig-status ig-status--beta">● бета</span>
+              <a href="/developer/connectors/excel.html" class="ig-card__link">Docs →</a>
+            </div>
+          </article>
+
+          <article class="ig-card" data-status="beta">
+            <div class="ig-card__icon" aria-hidden="true">📗</div>
+            <h3 class="ig-card__name">Google Sheets</h3>
+            <p class="ig-card__desc">OAuth-доступ к таблицам. Чтение + запись результатов AI-анализа обратно в Sheets.</p>
+            <div class="ig-card__foot">
+              <span class="ig-status ig-status--beta">● бета</span>
+              <a href="/developer/connectors/google-sheets.html" class="ig-card__link">Docs →</a>
+            </div>
+          </article>
+
+          <!-- Coming soon -->
+          <article class="ig-card" data-status="soon">
+            <div class="ig-card__icon" aria-hidden="true">📝</div>
+            <h3 class="ig-card__name">Notion</h3>
+            <p class="ig-card__desc">Базы, страницы, properties. Двусторонняя синхронизация задач и заметок.</p>
+            <div class="ig-card__foot">
+              <span class="ig-status ig-status--soon">скоро</span>
+              <button type="button" class="ig-card__link" data-notify="notion">Сообщить →</button>
+            </div>
+          </article>
+
+          <article class="ig-card" data-status="soon">
+            <div class="ig-card__icon" aria-hidden="true">🟠</div>
+            <h3 class="ig-card__name">HubSpot</h3>
+            <p class="ig-card__desc">Marketing Hub + Sales Hub. Контакты, deals, email-кампании.</p>
+            <div class="ig-card__foot">
+              <span class="ig-status ig-status--soon">скоро</span>
+              <button type="button" class="ig-card__link" data-notify="hubspot">Сообщить →</button>
+            </div>
+          </article>
+
+          <article class="ig-card" data-status="soon">
+            <div class="ig-card__icon" aria-hidden="true">🟢</div>
+            <h3 class="ig-card__name">Pipedrive</h3>
+            <p class="ig-card__desc">Pipeline, deals, activities. Для команд продаж, привыкших к Pipedrive.</p>
+            <div class="ig-card__foot">
+              <span class="ig-status ig-status--soon">скоро</span>
+              <button type="button" class="ig-card__link" data-notify="pipedrive">Сообщить →</button>
+            </div>
+          </article>
+
+          <article class="ig-card" data-status="soon">
+            <div class="ig-card__icon" aria-hidden="true">☁️</div>
+            <h3 class="ig-card__name">Salesforce</h3>
+            <p class="ig-card__desc">Sales Cloud, Service Cloud. OAuth 2.0 + SOQL для гибких запросов.</p>
+            <div class="ig-card__foot">
+              <span class="ig-status ig-status--soon">скоро</span>
+              <button type="button" class="ig-card__link" data-notify="salesforce">Сообщить →</button>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- HUB-AND-SPOKE ARCHITECTURE -->
+    <section class="ig-arch-section">
+      <div class="container">
+        <div class="ig-arch__head">
+          <span class="ig-arch__kicker">Bring Your Own Agent</span>
+          <h2 class="ig-arch__title">Один Hub, любые источники — и любой AI-агент</h2>
+          <p class="ig-arch__lede">
+            EDL OS — не вертикальный коннектор. Это шлюз: подключаете данные через OAuth один раз,
+            используете в любом совместимом AI-клиенте. Учётные данные не уходят за пределы Hub.
+          </p>
+        </div>
+
+        <div class="ig-hub">
+          <div class="ig-hub__col-label" aria-hidden="true">
+            <span>Источники данных</span>
+            <span>EDL OS Hub</span>
+            <span>AI-агенты</span>
+          </div>
+          <div class="ig-hub__grid">
+            <div class="ig-hub__sources">
+              <div class="ig-hub__node"><span class="ig-hub__node-icon" aria-hidden="true">🏢</span> 1С</div>
+              <div class="ig-hub__node"><span class="ig-hub__node-icon" aria-hidden="true">💼</span> amoCRM</div>
+              <div class="ig-hub__node"><span class="ig-hub__node-icon" aria-hidden="true">🟦</span> Битрикс24</div>
+              <div class="ig-hub__node"><span class="ig-hub__node-icon" aria-hidden="true">🎓</span> GetCourse</div>
+              <div class="ig-hub__node"><span class="ig-hub__node-icon" aria-hidden="true">📗</span> Google Sheets</div>
+            </div>
+            <div class="ig-hub__center">
+              <div class="ig-hub__center-icon" aria-hidden="true">🛡️</div>
+              <div class="ig-hub__center-name">EDL OS Hub</div>
+              <div class="ig-hub__center-sub">MCP · OAuth 2.1<br>Audit log · 152-ФЗ</div>
+            </div>
+            <div class="ig-hub__agents">
+              <div class="ig-hub__node"><span class="ig-hub__node-icon" aria-hidden="true">🤖</span> Claude Desktop</div>
+              <div class="ig-hub__node"><span class="ig-hub__node-icon" aria-hidden="true">⌨️</span> Cursor</div>
+              <div class="ig-hub__node"><span class="ig-hub__node-icon" aria-hidden="true">💬</span> ChatGPT</div>
+              <div class="ig-hub__node"><span class="ig-hub__node-icon" aria-hidden="true">✨</span> Gemini CLI</div>
+              <div class="ig-hub__node"><span class="ig-hub__node-icon" aria-hidden="true">✈️</span> Telegram-бот</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- OAuth steps -->
+        <div class="ig-oauth">
+          <h3 class="ig-oauth__title">Как работает OAuth-флоу подключения</h3>
+          <ol class="ig-oauth__steps">
+            <li class="ig-oauth__step">
+              <h4 class="ig-oauth__step-title">Выбор источника</h4>
+              <p class="ig-oauth__step-desc">В кабинете EDL OS жмёте «Подключить amoCRM».</p>
+            </li>
+            <li class="ig-oauth__step">
+              <h4 class="ig-oauth__step-title">Authorize в провайдере</h4>
+              <p class="ig-oauth__step-desc">Открывается окно amoCRM/Google. Подтверждаете доступ.</p>
+            </li>
+            <li class="ig-oauth__step">
+              <h4 class="ig-oauth__step-title">Hub хранит токен</h4>
+              <p class="ig-oauth__step-desc">Refresh-token в зашифрованном Vault. Модель его не видит.</p>
+            </li>
+            <li class="ig-oauth__step">
+              <h4 class="ig-oauth__step-title">Tools доступны в агенте</h4>
+              <p class="ig-oauth__step-desc">Claude/Cursor получают список tools через MCP.</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA ROW -->
+    <section class="section">
+      <div class="container">
+        <div class="ig-cta-row">
+          <div class="ig-cta-card">
+            <h3>Нет вашего источника?</h3>
+            <p>Напишите — мы добавим коннектор в roadmap. Или соберите свой через open-source SDK.</p>
+            <a href="/developer/write-connector.html" class="btn btn--primary" data-cta-type="dev_portal" data-cta-location="ig_cta">
+              Написать свой коннектор →
+            </a>
+          </div>
+          <div class="ig-cta-card">
+            <h3>Готовы подключиться?</h3>
+            <p>Установите EDL OS в Claude Desktop за 1 клик. OAuth-флоу подхватится автоматически.</p>
+            <a href="/mcp.html" class="btn btn--primary" data-cta-type="mcp" data-cta-location="ig_cta">
+              Подключить MCP в Claude →
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Mini-Чекап modal -->
+  <div class="mc-modal" id="mc-modal" role="dialog" aria-modal="true" aria-labelledby="mc-title" aria-hidden="true">
+    <div class="mc-dialog">
+      <div class="mc-header">
+        <div class="mc-header__avatar" aria-hidden="true">AI</div>
+        <div class="mc-header__title">
+          <div class="mc-header__name" id="mc-title">EDL OS · Mini-Чекап</div>
+          <div class="mc-header__status">онлайн · ИИ-консультант</div>
+        </div>
+        <button class="mc-header__close" id="mc-close" aria-label="Закрыть">×</button>
+      </div>
+      <div class="mc-progress"><div class="mc-progress__bar" id="mc-progress-bar"></div></div>
+      <div class="mc-body" id="mc-body" role="log" aria-live="polite"></div>
+      <div class="mc-composer" id="mc-composer">
+        <div class="mc-composer__row">
+          <textarea class="mc-input" id="mc-input" placeholder="Напишите ответ..." rows="1" aria-label="Ваш ответ"></textarea>
+          <button class="mc-send" id="mc-send" aria-label="Отправить">→</button>
+        </div>
+        <div class="mc-composer__hint"><kbd>Enter</kbd> отправить</div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer" style="background:#fff; border-top:1px solid #e4e4e7; padding:48px 0;">
+    <div class="container" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:32px;">
+      <div>
+        <h4 style="font-weight:600; margin-bottom:16px;">Контакты</h4>
+        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
+          <li><a href="https://t.me/edl_os" target="_blank" style="color:#404040; text-decoration:none;">Наш Telegram-канал</a></li>
+          <li><a href="https://t.me/edl_os_bot" target="_blank" rel="noopener" style="color:#404040; text-decoration:none;">Чат-бот EDL&nbsp;OS</a></li>
+          <li><a href="mailto:hello@edl-os.ru" style="color:#404040; text-decoration:none;">Написать на почту</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-weight:600; margin-bottom:16px;">Продукт</h4>
+        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
+          <li><a href="/methodology.html" style="color:#404040; text-decoration:none;">Методология</a></li>
+          <li><a href="/mcp.html" style="color:#404040; text-decoration:none;">MCP в Claude / Cursor</a></li>
+          <li><a href="/integrations.html" style="color:#404040; text-decoration:none;">Интеграции</a></li>
+          <li><a href="/developer/" style="color:#404040; text-decoration:none;">Developer Portal</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-weight:600; margin-bottom:16px;">Услуги</h4>
+        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:12px;">
+          <li><a href="/audit.html" style="color:#404040; text-decoration:none;">Бизнес-чекап</a></li>
+          <li><a href="/pricing.html" style="color:#404040; text-decoration:none;">Все продукты</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container" style="margin-top:48px; padding-top:24px; border-top:1px solid #e4e4e7; text-align:center; color:#6b7280; font-size:0.875rem;">© 2026 EDL OS · Elephant Dreams Lab</div>
+  </footer>
+
+  <script>
+    // Burger
+    (function () {
+      const b = document.getElementById('burger');
+      const n = document.getElementById('site-nav');
+      if (!b || !n) return;
+      b.addEventListener('click', () => {
+        const open = n.classList.toggle('is-open');
+        b.setAttribute('aria-expanded', String(open));
+      });
+      n.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+        n.classList.remove('is-open');
+        b.setAttribute('aria-expanded', 'false');
+      }));
+    })();
+
+    // Filters
+    (function () {
+      const filters = document.querySelectorAll('.ig-filter');
+      const cards = document.querySelectorAll('.ig-card');
+      filters.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filters.forEach(f => f.setAttribute('aria-pressed', 'false'));
+          btn.setAttribute('aria-pressed', 'true');
+          const filter = btn.dataset.filter;
+          cards.forEach(c => {
+            c.hidden = filter !== 'all' && c.dataset.status !== filter;
+          });
+          window.EDLTrack && window.EDLTrack('ig_filter_clicked', { filter });
+        });
+      });
+    })();
+
+    // Notify-me on coming-soon connectors
+    document.querySelectorAll('[data-notify]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const connector = btn.dataset.notify;
+        const email = prompt('Сообщим на email, когда коннектор ' + connector + ' будет готов:');
+        if (email && /^[^@]+@[^@]+\.[^@]+$/.test(email)) {
+          window.EDLTrack && window.EDLTrack('ig_notify_signup', { connector, email });
+          btn.textContent = '✓ Записали';
+          btn.disabled = true;
+        }
+      });
+    });
+  </script>
+  <script src="js/mini-checkup.js" defer></script>
+</body>
+</html>

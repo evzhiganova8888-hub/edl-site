@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON-RPC схема · EDL OS Docs</title>
+  <meta name="description" content="Формат JSON-RPC сообщений между AI-клиентом и EDL OS MCP-сервером. tools/list, tools/call, ошибки.">
+  <link rel="canonical" href="https://elephantdreams.ru/developer/schema.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/main-v2.css">
+  <link rel="stylesheet" href="/css/dev-portal.css">
+
+  <link rel="icon" href="/assets/favicon.ico" sizes="any">
+  <meta name="theme-color" content="#0A0A0F">
+</head>
+<body class="dev-page" data-page="dev-schema">
+  <a href="#main" class="skip-link">Перейти к содержанию</a>
+  <div class="dev-banner">
+    <strong>Beta · v0.1</strong> · следует <a href="https://spec.modelcontextprotocol.io" target="_blank" rel="noopener">MCP spec rev 2025-11-25</a>
+  </div>
+
+  <header class="header" id="header">
+    <div class="container header__inner site-header">
+      <a href="/" class="header__logo site-logo">
+        <img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true">
+        <span>EDL&nbsp;OS</span>
+      </a>
+      <nav class="site-nav" id="site-nav" aria-label="Главное меню">
+        <a href="/methodology.html">Методология</a>
+        <a href="/mcp.html">Claude / MCP</a>
+        <a href="/integrations.html">Интеграции</a>
+        <a href="/developer/" aria-current="page">Docs</a>
+        <a href="/pricing.html">Цены</a>
+      </nav>
+      <div class="site-header__cta">
+        <a href="https://github.com/edl-os/mcp-server-core" target="_blank" rel="noopener" class="btn btn--outline site-header__channel"><span aria-hidden="true">⌥</span> GitHub</a>
+        <button class="header__burger" aria-label="Меню" id="burger">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="dev-shell">
+      <aside class="dev-sidebar">
+        <h4>Старт</h4>
+        <ul>
+          <li><a href="/developer/">Введение</a></li>
+          <li><a href="/developer/getting-started.html">Запуск локально</a></li>
+        </ul>
+        <h4>Разработка</h4>
+        <ul>
+          <li><a href="/developer/write-connector.html">Свой коннектор</a></li>
+          <li><a href="/developer/schema.html" aria-current="page">JSON-RPC схема</a></li>
+        </ul>
+        <h4>Внешние</h4>
+        <ul>
+          <li><a href="https://github.com/edl-os/mcp-server-core" target="_blank" rel="noopener">GitHub repo ↗</a></li>
+          <li><a href="https://modelcontextprotocol.io" target="_blank" rel="noopener">MCP spec ↗</a></li>
+        </ul>
+      </aside>
+
+      <article class="dev-content">
+        <div class="dev-crumbs"><a href="/developer/">developer</a> › schema</div>
+        <h1>JSON-RPC схема</h1>
+        <p class="dev-lede">
+          EDL OS MCP-сервер общается с AI-клиентом по протоколу
+          <strong>JSON-RPC 2.0</strong> поверх <strong>Server-Sent Events</strong>.
+          Спецификация на 95% совпадает с официальным MCP — расхождения помечены 🔸.
+        </p>
+
+        <h2>Endpoint</h2>
+        <table>
+          <thead><tr><th>Метод</th><th>URL</th><th>Назначение</th></tr></thead>
+          <tbody>
+            <tr><td><code>GET</code></td><td><code>/mcp/v1</code></td><td>SSE-стрим (long-lived)</td></tr>
+            <tr><td><code>POST</code></td><td><code>/mcp/v1/rpc</code></td><td>Одиночный RPC-вызов (для отладки)</td></tr>
+            <tr><td><code>GET</code></td><td><code>/mcp/v1/health</code></td><td>Health-check</td></tr>
+            <tr><td><code>GET</code></td><td><code>/.well-known/oauth-authorization-server</code></td><td>OAuth metadata</td></tr>
+          </tbody>
+        </table>
+
+        <h2>Initialize</h2>
+        <p>Первый обмен после открытия соединения. Клиент объявляет capabilities:</p>
+        <pre><code><span class="c">// Request</span>
+{
+  <span class="k">"jsonrpc"</span>: <span class="s">"2.0"</span>,
+  <span class="k">"id"</span>: <span class="n">1</span>,
+  <span class="k">"method"</span>: <span class="s">"initialize"</span>,
+  <span class="k">"params"</span>: {
+    <span class="k">"protocolVersion"</span>: <span class="s">"2025-11-25"</span>,
+    <span class="k">"capabilities"</span>: { <span class="k">"tools"</span>: {}, <span class="k">"sampling"</span>: {} },
+    <span class="k">"clientInfo"</span>: { <span class="k">"name"</span>: <span class="s">"Claude Desktop"</span>, <span class="k">"version"</span>: <span class="s">"0.9.2"</span> }
+  }
+}
+
+<span class="c">// Response</span>
+{
+  <span class="k">"jsonrpc"</span>: <span class="s">"2.0"</span>,
+  <span class="k">"id"</span>: <span class="n">1</span>,
+  <span class="k">"result"</span>: {
+    <span class="k">"protocolVersion"</span>: <span class="s">"2025-11-25"</span>,
+    <span class="k">"capabilities"</span>: { <span class="k">"tools"</span>: { <span class="k">"listChanged"</span>: <span class="b">true</span> } },
+    <span class="k">"serverInfo"</span>: { <span class="k">"name"</span>: <span class="s">"edl-os"</span>, <span class="k">"version"</span>: <span class="s">"0.1.0"</span> }
+  }
+}</code></pre>
+
+        <h2>tools/list</h2>
+        <p>Получить список доступных инструментов. Возвращается JSON-схема входа каждого tool.</p>
+        <pre><code><span class="c">// Request</span>
+{ <span class="k">"jsonrpc"</span>: <span class="s">"2.0"</span>, <span class="k">"id"</span>: <span class="n">2</span>, <span class="k">"method"</span>: <span class="s">"tools/list"</span> }
+
+<span class="c">// Response</span>
+{
+  <span class="k">"jsonrpc"</span>: <span class="s">"2.0"</span>,
+  <span class="k">"id"</span>: <span class="n">2</span>,
+  <span class="k">"result"</span>: {
+    <span class="k">"tools"</span>: [
+      {
+        <span class="k">"name"</span>: <span class="s">"founder_score"</span>,
+        <span class="k">"description"</span>: <span class="s">"Расчёт Founder OS Score по 4 слоям"</span>,
+        <span class="k">"inputSchema"</span>: {
+          <span class="k">"type"</span>: <span class="s">"object"</span>,
+          <span class="k">"properties"</span>: {
+            <span class="k">"layers"</span>: {
+              <span class="k">"type"</span>: <span class="s">"array"</span>,
+              <span class="k">"items"</span>: { <span class="k">"enum"</span>: [<span class="s">"strategy"</span>, <span class="s">"finance"</span>, <span class="s">"team"</span>, <span class="s">"ops"</span>] }
+            }
+          }
+        }
+      }
+    ]
+  }
+}</code></pre>
+
+        <h2>tools/call</h2>
+        <p>Вызвать конкретный tool. <code>arguments</code> валидируются по <code>inputSchema</code>:</p>
+        <pre><code><span class="c">// Request</span>
+{
+  <span class="k">"jsonrpc"</span>: <span class="s">"2.0"</span>,
+  <span class="k">"id"</span>: <span class="n">3</span>,
+  <span class="k">"method"</span>: <span class="s">"tools/call"</span>,
+  <span class="k">"params"</span>: {
+    <span class="k">"name"</span>: <span class="s">"founder_score"</span>,
+    <span class="k">"arguments"</span>: { <span class="k">"layers"</span>: [<span class="s">"strategy"</span>, <span class="s">"finance"</span>] }
+  }
+}
+
+<span class="c">// Response</span>
+{
+  <span class="k">"jsonrpc"</span>: <span class="s">"2.0"</span>,
+  <span class="k">"id"</span>: <span class="n">3</span>,
+  <span class="k">"result"</span>: {
+    <span class="k">"content"</span>: [
+      {
+        <span class="k">"type"</span>: <span class="s">"text"</span>,
+        <span class="k">"text"</span>: <span class="s">"{\"strategy\":72,\"finance\":58,\"total\":65}"</span>
+      }
+    ],
+    <span class="k">"isError"</span>: <span class="b">false</span>
+  }
+}</code></pre>
+
+        <h2>Ошибки</h2>
+        <p>Используются стандартные коды JSON-RPC + расширенные EDL OS:</p>
+        <table>
+          <thead><tr><th>Code</th><th>Message</th><th>Когда</th></tr></thead>
+          <tbody>
+            <tr><td><code>-32700</code></td><td>Parse error</td><td>Невалидный JSON</td></tr>
+            <tr><td><code>-32600</code></td><td>Invalid request</td><td>Не соответствует JSON-RPC 2.0</td></tr>
+            <tr><td><code>-32601</code></td><td>Method not found</td><td>Неизвестный метод (например <code>tools/foo</code>)</td></tr>
+            <tr><td><code>-32602</code></td><td>Invalid params</td><td><code>arguments</code> не прошли валидацию <code>inputSchema</code></td></tr>
+            <tr><td><code>-32603</code></td><td>Internal error</td><td>Падение коннектора, сетевой timeout</td></tr>
+            <tr><td><code>-32001</code> 🔸</td><td>Unauthorized</td><td>OAuth-токен истёк или не задан</td></tr>
+            <tr><td><code>-32002</code> 🔸</td><td>Rate limited</td><td>Превышен per-tool rate-limit</td></tr>
+            <tr><td><code>-32003</code> 🔸</td><td>Subscription required</td><td>Tool из managed-cloud не активен в open-core</td></tr>
+          </tbody>
+        </table>
+
+        <h2>Авторизация (OAuth 2.1 + PKCE)</h2>
+        <p>Если <code>MCP_AUTH_MODE=oauth</code>, сервер требует <code>Bearer</code>-токен. Discovery:</p>
+        <pre><code>curl http://localhost:8080/.well-known/oauth-authorization-server</code></pre>
+
+        <p>Ответ — стандартный RFC 8414 + extension <code>code_challenge_methods_supported: ["S256"]</code>.</p>
+
+        <div class="dev-callout dev-callout--note">
+          <span class="dev-callout__icon" aria-hidden="true">ℹ️</span>
+          <div>
+            Refresh-токены живут <strong>30 дней</strong>. Access-токены — <strong>1 час</strong>.
+            При истечении access-токена клиент должен вернуть <code>-32001</code> и предложить
+            пользователю запустить refresh-flow.
+          </div>
+        </div>
+
+        <h2>Тесты</h2>
+        <p>В корне репо есть <code>fixtures/</code> с примерами всех методов в формате
+        <code>.http</code> — открываются в IntelliJ HTTP Client / VS Code REST Client:</p>
+        <ul>
+          <li><code>fixtures/initialize.http</code></li>
+          <li><code>fixtures/tools_list.http</code></li>
+          <li><code>fixtures/tools_call.http</code></li>
+          <li><code>fixtures/errors.http</code></li>
+        </ul>
+
+        <h2>Что дальше</h2>
+        <p>В 0.2 планируем:</p>
+        <ul>
+          <li><code>resources/list</code> и <code>resources/read</code> — для подкачки документов в контекст</li>
+          <li><code>prompts/list</code> — заранее заготовленные промпт-шаблоны</li>
+          <li>Streaming-tool результаты для долгих запросов (&gt;10 сек)</li>
+        </ul>
+
+        <div class="dev-prevnext">
+          <a class="dev-prev" href="/developer/write-connector.html">
+            <div class="dev-prevnext__label">← назад</div>
+            <div class="dev-prevnext__title">Свой коннектор</div>
+          </a>
+          <span></span>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="footer" style="padding: 32px 0; text-align: center;">
+    <div class="container" style="font-size: 0.8125rem;">© 2026 EDL OS · Elephant Dreams Lab</div>
+  </footer>
+
+  <script>
+    (function () {
+      const b = document.getElementById('burger');
+      const n = document.getElementById('site-nav');
+      if (!b || !n) return;
+      b.addEventListener('click', () => {
+        const open = n.classList.toggle('is-open');
+        b.setAttribute('aria-expanded', String(open));
+      });
+    })();
+  </script>
+</body>
+</html>
