@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDL OS MCP — Подключите своего ИИ-агента к бизнесу</title>
+  <meta name="description" content="Подключите Claude Desktop, Cursor или ChatGPT к EDL OS через Model Context Protocol. Founder OS Score за 3 шага. Open source ядро, данные остаются у вас.">
+  <meta property="og:title" content="EDL OS MCP Server">
+  <meta property="og:description" content="Model Context Protocol для тех-фаундеров. One-click подключение. Zero Trust.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://elephantdreams.ru/mcp.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/mcp-landing.css">
+  <link rel="icon" href="/assets/favicon.ico" sizes="any">
+  <meta name="theme-color" content="#07070E">
+</head>
+<body class="mcp-page">
+
+  <!-- Animated grid -->
+  <div class="mcp-grid-bg" aria-hidden="true"></div>
+
+  <div class="mcp-container">
+
+    <!-- ═══ Header ═══ -->
+    <header class="mcp-header">
+      <a href="/" class="mcp-header__logo">
+        <img src="/assets/logo-192.png" alt="" width="28" height="28">
+        EDL&nbsp;OS
+      </a>
+      <div class="mcp-header__badge">Запуск 23 мая 2026</div>
+      <a href="/" class="mcp-header__back">← На главную</a>
+    </header>
+
+    <!-- ═══ Hero ═══ -->
+    <section class="mcp-hero" id="hero">
+      <div class="mcp-hero__eyebrow">
+        <span>Model Context Protocol</span> · <strong>Open Source · MIT</strong>
+      </div>
+      <h1 class="mcp-hero__title">
+        Ваши данные + <em>Ваш ИИ</em><br>= EDL&nbsp;OS
+      </h1>
+      <p class="mcp-hero__subtitle">
+        Подключите Founder&nbsp;OS к Claude Desktop, Cursor или ChatGPT за&nbsp;3&nbsp;шага.
+        Данные остаются у&nbsp;вас. Ядро&nbsp;— open&nbsp;source.
+      </p>
+      <div class="mcp-hero__actions">
+        <a id="btn-install-claude"
+           href="claude://settings/developer"
+           class="mcp-btn mcp-btn--primary">
+          ⎗&nbsp;Открыть в Claude Desktop
+        </a>
+        <a href="#agents" class="mcp-btn mcp-btn--outline">
+          Инструкция по подключению ↓
+        </a>
+        <a href="https://github.com/edl-os/mcp-server-core"
+           target="_blank" rel="noopener"
+           class="mcp-btn mcp-btn--ghost">
+          ★ GitHub
+        </a>
+      </div>
+    </section>
+
+    <!-- ═══ Stats Bar ═══ -->
+    <div class="mcp-stats mcp-reveal">
+      <div class="mcp-stat">
+        <span class="mcp-stat__num">4</span>
+        <span class="mcp-stat__label">ИИ-агента поддерживаются</span>
+      </div>
+      <div class="mcp-stat">
+        <span class="mcp-stat__num">12</span>
+        <span class="mcp-stat__label">вопросов Founder OS Score</span>
+      </div>
+      <div class="mcp-stat">
+        <span class="mcp-stat__num">0</span>
+        <span class="mcp-stat__label">сырых данных в модели</span>
+      </div>
+      <div class="mcp-stat">
+        <span class="mcp-stat__num">MIT</span>
+        <span class="mcp-stat__label">лицензия ядра</span>
+      </div>
+    </div>
+
+    <!-- ═══ Interactive Terminal ═══ -->
+    <section class="mcp-terminal mcp-reveal" aria-label="Пример работы MCP протокола">
+      <div class="mcp-terminal__bar">
+        <span class="mcp-terminal__dot mcp-terminal__dot--red"></span>
+        <span class="mcp-terminal__dot mcp-terminal__dot--yellow"></span>
+        <span class="mcp-terminal__dot mcp-terminal__dot--green"></span>
+        <span class="mcp-terminal__title">edl-os-mcp · stdio · tools/call</span>
+      </div>
+      <div class="mcp-terminal__body" id="terminal-body">
+        <span class="mcp-terminal__cursor" id="term-cursor"></span>
+      </div>
+    </section>
+
+    <!-- ═══ Agents — Tabs ═══ -->
+    <section class="mcp-section" id="agents">
+      <div class="mcp-section__label">Подключение</div>
+      <h2 class="mcp-section__title">Bring Your Own Agent</h2>
+      <p class="mcp-section__subtitle">Выберите свой ИИ-клиент и следуйте инструкции. Конфиг копируется в один клик.</p>
+
+      <div class="mcp-agents__tabs" role="tablist">
+        <button class="mcp-agents__tab is-active" role="tab" aria-selected="true" data-agent="claude">
+          🤖 Claude Desktop
+        </button>
+        <button class="mcp-agents__tab" role="tab" aria-selected="false" data-agent="cursor">
+          ⬡ Cursor
+        </button>
+        <button class="mcp-agents__tab" role="tab" aria-selected="false" data-agent="chatgpt">
+          ✦ ChatGPT Desktop
+        </button>
+        <button class="mcp-agents__tab" role="tab" aria-selected="false" data-agent="gemini">
+          ◈ Gemini CLI
+        </button>
+      </div>
+
+      <!-- Claude Desktop -->
+      <div class="mcp-agents__panel is-active" data-agent-panel="claude">
+        <div class="mcp-agents__step">
+          <div class="mcp-agents__step-num">1</div>
+          <div class="mcp-agents__step-text">
+            Откройте <strong>Claude Desktop → Settings → Developer → Edit Config</strong>
+          </div>
+        </div>
+        <div class="mcp-agents__step">
+          <div class="mcp-agents__step-num">2</div>
+          <div class="mcp-agents__step-text">
+            Вставьте блок в <code>claude_desktop_config.json</code>:
+            <div class="mcp-code-wrap">
+              <button class="mcp-code-copy" data-copy="claude-cfg">Копировать</button>
+              <pre class="mcp-code" id="claude-cfg">{
+  "mcpServers": {
+    "edl-os": {
+      "command": "uvx",
+      "args": ["mcp-server-core"],
+      "env": {
+        "EDL_OS_API_URL": "https://api.edl-os.ru/mcp/v1"
+      }
+    }
+  }
+}</pre>
+            </div>
+          </div>
+        </div>
+        <div class="mcp-agents__step">
+          <div class="mcp-agents__step-num">3</div>
+          <div class="mcp-agents__step-text">
+            Перезапустите Claude Desktop. Напишите: <strong>«Начни Founder OS Score»</strong>.
+            Claude задаст 12 вопросов и выдаст Score 0–100 с рекомендациями.
+          </div>
+        </div>
+      </div>
+
+      <!-- Cursor -->
+      <div class="mcp-agents__panel" data-agent-panel="cursor">
+        <div class="mcp-agents__step">
+          <div class="mcp-agents__step-num">1</div>
+          <div class="mcp-agents__step-text">
+            Откройте <strong>Cursor → Settings → MCP Servers → Add Server</strong>
+          </div>
+        </div>
+        <div class="mcp-agents__step">
+          <div class="mcp-agents__step-num">2</div>
+          <div class="mcp-agents__step-text">
+            Укажите: Name = <code>edl-os</code>, Command = <code>uvx mcp-server-core</code><br>
+            Или добавьте в <code>~/.cursor/mcp.json</code>:
+            <div class="mcp-code-wrap">
+              <button class="mcp-code-copy" data-copy="cursor-cfg">Копировать</button>
+              <pre class="mcp-code" id="cursor-cfg">{
+  "mcpServers": {
+    "edl-os": {
+      "command": "uvx",
+      "args": ["mcp-server-core"],
+      "env": {
+        "EDL_OS_API_URL": "https://api.edl-os.ru/mcp/v1"
+      }
+    }
+  }
+}</pre>
+            </div>
+          </div>
+        </div>
+        <div class="mcp-agents__step">
+          <div class="mcp-agents__step-num">3</div>
+          <div class="mcp-agents__step-text">
+            Перезапустите Cursor. В чате Agent Mode напишите: <strong>«Запусти Founder OS Score»</strong>.
+          </div>
+        </div>
+      </div>
+
+      <!-- ChatGPT Desktop -->
+      <div class="mcp-agents__panel" data-agent-panel="chatgpt">
+        <div class="mcp-agents__step">
+          <div class="mcp-agents__step-num">1</div>
+          <div class="mcp-agents__step-text">
+            Откройте <strong>ChatGPT Desktop → Settings → Beta → MCP Servers</strong>
+          </div>
+        </div>
+        <div class="mcp-agents__step">
+          <div class="mcp-agents__step-num">2</div>
+          <div class="mcp-agents__step-text">
+            Нажмите <strong>"Add Server"</strong> и вставьте URL:
+            <div class="mcp-code-wrap">
+              <button class="mcp-code-copy" data-copy="chatgpt-url">Копировать</button>
+              <pre class="mcp-code" id="chatgpt-url">https://api.edl-os.ru/mcp/v1</pre>
+            </div>
+          </div>
+        </div>
+        <div class="mcp-agents__step">
+          <div class="mcp-agents__step-num">3</div>
+          <div class="mcp-agents__step-text">
+            Авторизуйтесь через OAuth 2.1. Напишите: <strong>«Founder OS Score — начинаем»</strong>.
+          </div>
+        </div>
+      </div>
+
+      <!-- Gemini CLI -->
+      <div class="mcp-agents__panel" data-agent-panel="gemini">
+        <div class="mcp-agents__step">
+          <div class="mcp-agents__step-num">1</div>
+          <div class="mcp-agents__step-text">
+            Установите Gemini CLI: <code>npm install -g @google/gemini-cli</code>
+          </div>
+        </div>
+        <div class="mcp-agents__step">
+          <div class="mcp-agents__step-num">2</div>
+          <div class="mcp-agents__step-text">
+            Добавьте MCP-сервер в конфиг <code>~/.gemini/settings.json</code>:
+            <div class="mcp-code-wrap">
+              <button class="mcp-code-copy" data-copy="gemini-cfg">Копировать</button>
+              <pre class="mcp-code" id="gemini-cfg">{
+  "mcpServers": {
+    "edl-os": {
+      "command": "uvx",
+      "args": ["mcp-server-core"],
+      "env": {
+        "EDL_OS_API_URL": "https://api.edl-os.ru/mcp/v1"
+      }
+    }
+  }
+}</pre>
+            </div>
+          </div>
+        </div>
+        <div class="mcp-agents__step">
+          <div class="mcp-agents__step-num">3</div>
+          <div class="mcp-agents__step-text">
+            Запустите <code>gemini</code> и напишите: <strong>«Founder OS Score»</strong>.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Architecture / Security ═══ -->
+    <section class="mcp-section" id="security">
+      <div class="mcp-section__label">Безопасность</div>
+      <h2 class="mcp-section__title">Zero Trust архитектура</h2>
+      <p class="mcp-section__subtitle">Сырые данные вашего бизнеса не покидают ваш контур. Модель видит только то, что вы разрешили через MCP.</p>
+
+      <!-- Architecture Diagram -->
+      <div class="mcp-arch mcp-reveal" aria-label="Архитектурная схема потока данных">
+        <div class="mcp-arch__node">
+          <div class="mcp-arch__node-icon">🤖</div>
+          <div class="mcp-arch__node-label">Ваш ИИ-агент</div>
+          <div class="mcp-arch__node-sub">Claude / Cursor / ChatGPT</div>
+        </div>
+        <div class="mcp-arch__connector">
+          <div class="mcp-arch__line"></div>
+          <div class="mcp-arch__arrow-head"></div>
+        </div>
+        <div class="mcp-arch__node mcp-arch__node--proxy">
+          <div class="mcp-arch__node-icon">🔐</div>
+          <div class="mcp-arch__node-label">EDL MCP Proxy</div>
+          <div class="mcp-arch__node-sub">OAuth 2.1 · Cloudflare</div>
+        </div>
+        <div class="mcp-arch__connector">
+          <div class="mcp-arch__line"></div>
+          <div class="mcp-arch__arrow-head"></div>
+        </div>
+        <div class="mcp-arch__node">
+          <div class="mcp-arch__node-icon">⚙️</div>
+          <div class="mcp-arch__node-label">EDL OS Hub</div>
+          <div class="mcp-arch__node-sub">Railway · Postgres · 152-ФЗ</div>
+        </div>
+        <div class="mcp-arch__connector">
+          <div class="mcp-arch__line"></div>
+          <div class="mcp-arch__arrow-head"></div>
+        </div>
+        <div class="mcp-arch__node">
+          <div class="mcp-arch__node-icon">🏢</div>
+          <div class="mcp-arch__node-label">Ваши данные</div>
+          <div class="mcp-arch__node-sub">1С · amoCRM · Битрикс</div>
+        </div>
+      </div>
+
+      <div class="mcp-security__grid mcp-reveal">
+        <div class="mcp-security__card">
+          <div class="mcp-security__card-icon">🛡</div>
+          <div class="mcp-security__card-title">PD-санитайзер</div>
+          <div class="mcp-security__card-text">Все персональные данные (email, ИНН, телефоны) маскируются перед отправкой в модель. 152-ФЗ архитектурно.</div>
+        </div>
+        <div class="mcp-security__card">
+          <div class="mcp-security__card-icon">🔑</div>
+          <div class="mcp-security__card-title">OAuth 2.1</div>
+          <div class="mcp-security__card-text">Аутентификация терминируется на Cloudflare Edge. До бэкенда доходят только авторизованные запросы с токеном.</div>
+        </div>
+        <div class="mcp-security__card">
+          <div class="mcp-security__card-icon">📋</div>
+          <div class="mcp-security__card-title">Audit Log</div>
+          <div class="mcp-security__card-text">Каждый вызов инструмента логируется. Команды <code>/delete_my_data</code> и <code>/export_my_data</code> доступны в боте.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Open Source ═══ -->
+    <section class="mcp-section" id="open-source">
+      <div class="mcp-oss mcp-reveal">
+        <div class="mcp-oss__icon">⌬</div>
+        <div>
+          <div class="mcp-oss__title">Open Source ядро · MIT License</div>
+          <div class="mcp-oss__text">
+            <code>mcp-server-core</code> — транспортный движок протокола. Форкайте, аудитьте, разворачивайте у себя.
+            Бизнес-логика, методология Founder&nbsp;OS и production-коннекторы (1С, amoCRM, Битрикс, Геткурс) — наша ИС,
+            доступны только через облако EDL&nbsp;OS по подписке.
+          </div>
+          <a href="https://github.com/edl-os/mcp-server-core"
+             target="_blank" rel="noopener"
+             class="mcp-oss__link">
+            ⎗ github.com/edl-os/mcp-server-core →
+          </a>
+          <div class="mcp-oss__badges">
+            <span class="mcp-oss__badge">MIT License</span>
+            <span class="mcp-oss__badge">Python 3.11+</span>
+            <span class="mcp-oss__badge">stdio + SSE</span>
+            <span class="mcp-oss__badge">MCP 1.0</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Footer ═══ -->
+    <footer class="mcp-footer">
+      <p>© 2026 EDL OS · <a href="mailto:hello@edl-os.ru">hello@edl-os.ru</a> · <a href="/">На главную</a> · <a href="/legal/privacy.html">Политика</a></p>
+    </footer>
+
+  </div><!-- /container -->
+
+  <script>
+  (function () {
+    /* ── Tab Switching ── */
+    const tabs = document.querySelectorAll('.mcp-agents__tab');
+    const panels = document.querySelectorAll('.mcp-agents__panel');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const agent = tab.dataset.agent;
+        tabs.forEach(t => { t.classList.remove('is-active'); t.setAttribute('aria-selected','false'); });
+        panels.forEach(p => p.classList.remove('is-active'));
+        tab.classList.add('is-active');
+        tab.setAttribute('aria-selected','true');
+        document.querySelector(`[data-agent-panel="${agent}"]`).classList.add('is-active');
+      });
+    });
+
+    /* ── Copy Buttons ── */
+    document.querySelectorAll('.mcp-code-copy').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.copy;
+        const text = document.getElementById(targetId).textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          btn.textContent = '✓ Скопировано';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = 'Копировать'; btn.classList.remove('copied'); }, 2000);
+        });
+      });
+    });
+
+    /* ── Scroll Reveal ── */
+    const revealEls = document.querySelectorAll('.mcp-reveal');
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => io.observe(el));
+
+    /* ── Terminal Typing Effect ── */
+    const termBody = document.getElementById('terminal-body');
+    const cursor = document.getElementById('term-cursor');
+
+    const lines = [
+      { cls: 'comment', text: '# Claude Desktop запрашивает инструменты...' },
+      { cls: 'prompt',  text: '→ POST /mcp/v1/tools/list' },
+      { cls: 'response',text: '' },
+      { cls: 'comment', text: '# EDL OS отвечает:' },
+      { cls: 'response',text: '{' },
+      { cls: 'key',     text: '  "tools": [' },
+      { cls: 'response',text: '    {' },
+      { cls: 'string',  text: '      "name": "start_founder_os_score",' },
+      { cls: 'string',  text: '      "description": "12 вопросов → Score 0–100"' },
+      { cls: 'response',text: '    },' },
+      { cls: 'response',text: '    {' },
+      { cls: 'string',  text: '      "name": "get_next_question",' },
+      { cls: 'string',  text: '      "description": "Получить следующий вопрос"' },
+      { cls: 'response',text: '    }' },
+      { cls: 'key',     text: '  ]' },
+      { cls: 'response',text: '}' },
+      { cls: 'response',text: '' },
+      { cls: 'prompt',  text: '→ tools/call start_founder_os_score' },
+      { cls: 'value',   text: '✓ Founder OS Score запущен. Вопрос 1/12...' },
+    ];
+
+    let lineIdx = 0;
+    let charIdx = 0;
+    let currentDiv = null;
+    const CHAR_DELAY = 22;
+    const LINE_PAUSE = 180;
+
+    function nextLine() {
+      if (lineIdx >= lines.length) {
+        cursor.style.display = 'inline-block';
+        return;
+      }
+      const l = lines[lineIdx];
+      currentDiv = document.createElement('div');
+      currentDiv.className = `mcp-terminal__line mcp-terminal__line--${l.cls}`;
+      termBody.insertBefore(currentDiv, cursor);
+      charIdx = 0;
+      typeChar(l.text);
+    }
+
+    function typeChar(text) {
+      if (charIdx <= text.length) {
+        currentDiv.textContent = text.slice(0, charIdx);
+        charIdx++;
+        setTimeout(() => typeChar(text), CHAR_DELAY);
+      } else {
+        lineIdx++;
+        setTimeout(nextLine, LINE_PAUSE);
+      }
+    }
+
+    // Start after 600ms
+    cursor.style.display = 'inline-block';
+    setTimeout(() => { cursor.style.display = 'none'; nextLine(); }, 600);
+  })();
+  </script>
+</body>
+</html>
