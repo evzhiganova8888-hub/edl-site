@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open Source roadmap · EDL OS</title>
+  <meta name="description" content="MCP-server core EDL OS будет опубликован под MIT после стабилизации API. Что войдёт, когда, и как подписаться на релиз.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://elephantdreams.ru/developer/open-source.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/main-v2.css">
+  <link rel="stylesheet" href="/css/dev-portal.css">
+
+  <link rel="icon" href="/assets/favicon.ico" sizes="any">
+  <meta name="theme-color" content="#0A0A0F">
+
+  <script src="/js/edl-track.js" defer></script>
+
+  <style>
+    .os-status {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 999px;
+      background: rgba(255, 107, 26, 0.10);
+      border: 1px solid rgba(255, 107, 26, 0.25);
+      color: var(--dev-tangerine);
+      font-size: 0.8125rem; font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 16px;
+    }
+    .os-status::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--dev-tangerine);
+    }
+
+    .os-roadmap {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin: 24px 0 32px;
+    }
+    .os-milestone {
+      padding: 16px 18px;
+      background: var(--dev-surface);
+      border: 1px solid var(--dev-border);
+      border-radius: 12px;
+      position: relative;
+    }
+    .os-milestone__date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6875rem; letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--dev-text-dim);
+      margin-bottom: 6px;
+    }
+    .os-milestone__title {
+      font-weight: 700; font-size: 0.9375rem;
+      color: var(--dev-text); margin: 0 0 6px;
+    }
+    .os-milestone__desc {
+      font-size: 0.8125rem; color: var(--dev-text-muted);
+      line-height: 1.5; margin: 0;
+    }
+    .os-milestone--current {
+      border-color: rgba(255, 107, 26, 0.4);
+      background: linear-gradient(180deg, rgba(255, 107, 26, 0.06), rgba(255, 107, 26, 0.02));
+    }
+    .os-milestone--current .os-milestone__date { color: var(--dev-tangerine); }
+
+    .os-form {
+      background: var(--dev-surface);
+      border: 1px solid var(--dev-border);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 24px 0 40px;
+    }
+    .os-form__row {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .os-form input[type="email"] {
+      flex: 1; min-width: 220px;
+      padding: 12px 14px;
+      background: var(--dev-bg);
+      border: 1px solid var(--dev-border-strong);
+      border-radius: 10px;
+      color: var(--dev-text);
+      font-family: inherit; font-size: 0.9375rem;
+    }
+    .os-form input[type="email"]:focus {
+      outline: 2px solid rgba(255, 107, 26, 0.4);
+      outline-offset: -1px;
+      border-color: var(--dev-tangerine);
+    }
+    .os-form__btn {
+      padding: 12px 22px;
+      background: linear-gradient(135deg, #D9520C 0%, #FF7B2E 100%);
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      border: none; border-radius: 10px;
+      font-weight: 700; font-family: inherit; font-size: 0.9375rem;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      transition: transform 0.15s;
+    }
+    .os-form__btn:hover { transform: translateY(-1px); }
+    .os-form__hint {
+      font-size: 0.75rem; color: var(--dev-text-dim);
+      margin-top: 10px;
+    }
+    .os-form__success {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: rgba(16, 185, 129, 0.10);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 10px;
+      color: #6EE7B7;
+      font-size: 0.875rem;
+      display: none;
+    }
+    .os-form__success.is-shown { display: block; }
+
+    /* Connector rows */
+    .os-conn {
+      display: grid;
+      grid-template-columns: 56px 1fr auto;
+      gap: 14px; align-items: center;
+      padding: 16px;
+      background: var(--dev-surface);
+      border: 1px solid var(--dev-border);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      scroll-margin-top: 100px;
+    }
+    .os-conn:target {
+      border-color: rgba(255, 107, 26, 0.5);
+      box-shadow: 0 0 0 3px rgba(255, 107, 26, 0.15);
+    }
+    .os-conn__icon {
+      width: 44px; height: 44px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--dev-border);
+      border-radius: 10px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 1.375rem;
+    }
+    .os-conn__name {
+      font-weight: 700; font-size: 0.9375rem;
+      color: var(--dev-text); margin: 0 0 2px;
+    }
+    .os-conn__desc {
+      font-size: 0.8125rem; color: var(--dev-text-muted);
+      margin: 0; line-height: 1.4;
+    }
+    .os-conn__status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6875rem; padding: 3px 10px; border-radius: 999px;
+      white-space: nowrap;
+    }
+    .os-conn__status--prod { background: rgba(16, 185, 129, 0.12); color: #6EE7B7; }
+    .os-conn__status--beta { background: rgba(255, 107, 26, 0.12); color: var(--dev-tangerine); }
+    .os-conn__status--soon { background: rgba(255, 255, 255, 0.06); color: var(--dev-text-dim); }
+  </style>
+</head>
+<body class="dev-page" data-page="dev-open-source">
+  <a href="#main" class="skip-link">Перейти к содержанию</a>
+  <div class="dev-banner">
+    <strong>Source готовится к публикации.</strong> Этой страницы достаточно, чтобы понять что войдёт в open-source ядро. <a href="#waitlist">Подпишитесь на релиз</a>.
+  </div>
+
+  <header class="header" id="header">
+    <div class="container header__inner site-header">
+      <a href="/" class="header__logo site-logo">
+        <img src="/assets/logo-192.png" alt="" width="28" height="28" aria-hidden="true">
+        <span>EDL&nbsp;OS</span>
+      </a>
+      <nav class="site-nav" id="site-nav" aria-label="Главное меню">
+        <a href="/methodology.html">Методология</a>
+        <a href="/mcp.html">Claude&nbsp;/&nbsp;MCP</a>
+        <a href="/integrations.html">Интеграции</a>
+        <a href="/developer/" aria-current="page">Docs</a>
+        <a href="/pricing.html">Цены</a>
+        <a href="/about.html">Команда</a>
+        <a href="/faq.html">FAQ</a>
+      </nav>
+      <div class="site-header__cta">
+        <a href="/developer/open-source.html#waitlist" class="btn btn--outline site-header__channel">
+          <span aria-hidden="true">⌥</span> Подписаться
+        </a>
+        <button class="header__burger" aria-label="Меню" id="burger">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="dev-shell">
+      <aside class="dev-sidebar">
+        <h4>Старт</h4>
+        <ul>
+          <li><a href="/developer/">Введение</a></li>
+          <li><a href="/developer/getting-started.html">Запуск локально</a></li>
+        </ul>
+        <h4>Разработка</h4>
+        <ul>
+          <li><a href="/developer/write-connector.html">Свой коннектор</a></li>
+          <li><a href="/developer/schema.html">JSON-RPC схема</a></li>
+        </ul>
+        <h4>Roadmap</h4>
+        <ul>
+          <li><a href="/developer/open-source.html" aria-current="page">Open Source release</a></li>
+          <li><a href="/developer/open-source.html#connectors">Коннекторы</a></li>
+          <li><a href="/developer/open-source.html#waitlist">Email-подписка</a></li>
+        </ul>
+      </aside>
+
+      <article class="dev-content">
+        <div class="dev-crumbs"><a href="/developer/">developer</a> › open-source</div>
+        <div class="os-status">статус · готовится к публикации</div>
+        <h1>Open Source ядро EDL OS</h1>
+        <p class="dev-lede">
+          MCP-server core EDL OS будет опубликован <strong>под лицензией MIT</strong> после стабилизации
+          публичного API. Эта страница — единственный источник правды о том, что войдёт в релиз,
+          когда и как получить ранний доступ.
+        </p>
+
+        <div class="dev-callout dev-callout--note">
+          <span class="dev-callout__icon" aria-hidden="true">ℹ️</span>
+          <div>
+            <strong>Зачем эта страница, если репо ещё нет?</strong> Мы строим EDL OS прозрачно.
+            Ранние подписчики получают доступ к private alpha-репо за <strong>2 месяца</strong>
+            до публичного релиза — чтобы успеть собрать коннекторы под свой стек и повлиять на API.
+          </div>
+        </div>
+
+        <h2>Roadmap</h2>
+        <div class="os-roadmap">
+          <div class="os-milestone os-milestone--current">
+            <div class="os-milestone__date">сейчас · май 2026</div>
+            <h3 class="os-milestone__title">Private alpha</h3>
+            <p class="os-milestone__desc">Внутренний прогон с 5 пилотными клиентами. API нестабилен.</p>
+          </div>
+          <div class="os-milestone">
+            <div class="os-milestone__date">июнь — июль 2026</div>
+            <h3 class="os-milestone__title">Early access</h3>
+            <p class="os-milestone__desc">Подписчики waitlist получают доступ к private GitHub-репо.</p>
+          </div>
+          <div class="os-milestone">
+            <div class="os-milestone__date">август 2026</div>
+            <h3 class="os-milestone__title">API freeze v1.0</h3>
+            <p class="os-milestone__desc">Финальная стабилизация JSON-RPC контракта. SDK для TS.</p>
+          </div>
+          <div class="os-milestone">
+            <div class="os-milestone__date">Q3 2026</div>
+            <h3 class="os-milestone__title">Public release · MIT</h3>
+            <p class="os-milestone__desc">Публикация в open access на github.com/edl-os. Объявление в каналах.</p>
+          </div>
+        </div>
+
+        <h2 id="waitlist">Подписаться на релиз</h2>
+        <div class="os-form">
+          <p style="margin: 0 0 14px; color: var(--dev-text-muted); font-size: 0.9375rem;">
+            Оставьте email — пришлём приглашение в private alpha за 2 месяца до публичного релиза
+            (без спама, ~1 письмо в месяц со статусом).
+          </p>
+          <form class="os-form__row" id="os-waitlist-form">
+            <input type="email" name="email" placeholder="you@example.com" required aria-label="Email">
+            <button type="submit" class="os-form__btn">Записаться</button>
+          </form>
+          <div class="os-form__hint">
+            Альтернатива: подпишитесь на <a href="https://t.me/edl_os" target="_blank" rel="noopener">Telegram-канал</a> — релиз там же.
+          </div>
+          <div class="os-form__success" id="os-waitlist-success">
+            ✓ Записали. Пришлём приглашение в private alpha за 2 месяца до релиза.
+          </div>
+        </div>
+
+        <h2>Что войдёт в open-source ядро</h2>
+        <p>
+          EDL OS использует подход <strong>Open Core</strong> — ядро открыто, бизнес-логика закрыта.
+          Граница проходит так:
+        </p>
+        <table>
+          <thead><tr><th>Модуль</th><th>Релиз</th><th>Лицензия</th></tr></thead>
+          <tbody>
+            <tr><td>MCP-транспорт (JSON-RPC, SSE/HTTP)</td><td>v1.0</td><td>MIT</td></tr>
+            <tr><td>Tool registry &amp; dispatcher</td><td>v1.0</td><td>MIT</td></tr>
+            <tr><td>OAuth 2.1 + PKCE handshake</td><td>v1.0</td><td>MIT</td></tr>
+            <tr><td>Audit log &amp; per-tool rate limiter</td><td>v1.0</td><td>MIT</td></tr>
+            <tr><td>SDK для написания коннекторов (TypeScript)</td><td>v1.0</td><td>MIT</td></tr>
+            <tr><td>Docker Compose · helm chart</td><td>v1.0</td><td>MIT</td></tr>
+            <tr><td>Шаблоны конфигов Claude / Cursor / ChatGPT / Gemini</td><td>v1.0</td><td>MIT</td></tr>
+            <tr><td>Промпты Founder OS Score</td><td>—</td><td>Closed · managed cloud</td></tr>
+            <tr><td>Бенчмарки 100+ компаний</td><td>—</td><td>Closed · managed cloud</td></tr>
+            <tr><td>Методология Founder OS · 4 слоя</td><td>—</td><td>Closed · managed cloud</td></tr>
+          </tbody>
+        </table>
+
+        <div class="dev-callout dev-callout--warn">
+          <span class="dev-callout__icon" aria-hidden="true">⚠️</span>
+          <div>
+            <strong>Что НЕ войдёт</strong>: промпты Claude, ключи API моделей, бенчмарки компаний и
+            промпт-формула Founder OS Score. Это сделано осознанно — open-source ядро остаётся
+            «пустым каркасом» без managed cloud. Это защита от форков, которые присвоят методологию.
+          </div>
+        </div>
+
+        <h2 id="connectors">Коннекторы — что войдёт в репо</h2>
+        <p>
+          Все коннекторы публикуются вместе с ядром под MIT. Сейчас они в private alpha и
+          итерируются с пилотными клиентами.
+        </p>
+
+        <div id="connector-1c" class="os-conn">
+          <span class="os-conn__icon" aria-hidden="true">🏢</span>
+          <div>
+            <h3 class="os-conn__name">1С</h3>
+            <p class="os-conn__desc">УТ, ERP, Бухгалтерия. Подключение через HTTP-сервис в БД или COM. Возвращает выручку, маржу, поставщиков. PII фильтруется на стороне коннектора.</p>
+          </div>
+          <span class="os-conn__status os-conn__status--prod">private alpha</span>
+        </div>
+
+        <div id="connector-amocrm" class="os-conn">
+          <span class="os-conn__icon" aria-hidden="true">💼</span>
+          <div>
+            <h3 class="os-conn__name">amoCRM</h3>
+            <p class="os-conn__desc">Сделки, контакты, пайплайны, события. OAuth 2.0 + webhooks для real-time. Hot-deals, конверсия по этапам, среднее время касания.</p>
+          </div>
+          <span class="os-conn__status os-conn__status--prod">private alpha</span>
+        </div>
+
+        <div id="connector-bitrix24" class="os-conn">
+          <span class="os-conn__icon" aria-hidden="true">🟦</span>
+          <div>
+            <h3 class="os-conn__name">Битрикс24</h3>
+            <p class="os-conn__desc">CRM + задачи + документы. Установка как локального приложения Bitrix24 + REST API. Сделки, задачи, нагрузка по сотрудникам.</p>
+          </div>
+          <span class="os-conn__status os-conn__status--prod">private alpha</span>
+        </div>
+
+        <div id="connector-getcourse" class="os-conn">
+          <span class="os-conn__icon" aria-hidden="true">🎓</span>
+          <div>
+            <h3 class="os-conn__name">GetCourse</h3>
+            <p class="os-conn__desc">Заказы, пользователи, прогресс по курсам. API-токен + webhook на оплату. LTV, прогноз churn по неактивным.</p>
+          </div>
+          <span class="os-conn__status os-conn__status--prod">private alpha</span>
+        </div>
+
+        <div id="connector-excel" class="os-conn">
+          <span class="os-conn__icon" aria-hidden="true">📊</span>
+          <div>
+            <h3 class="os-conn__name">Excel · CSV</h3>
+            <p class="os-conn__desc">Drag-and-drop файлов в кабинет. Авто-парсинг колонок, типизация. Для тех, у кого ещё нет CRM.</p>
+          </div>
+          <span class="os-conn__status os-conn__status--beta">скоро · бета</span>
+        </div>
+
+        <div id="connector-google-sheets" class="os-conn">
+          <span class="os-conn__icon" aria-hidden="true">📗</span>
+          <div>
+            <h3 class="os-conn__name">Google Sheets</h3>
+            <p class="os-conn__desc">OAuth-доступ к таблицам. Чтение + двусторонняя запись результатов AI-анализа обратно в Sheets.</p>
+          </div>
+          <span class="os-conn__status os-conn__status--beta">скоро · бета</span>
+        </div>
+
+        <div id="connector-notion" class="os-conn">
+          <span class="os-conn__icon" aria-hidden="true">📝</span>
+          <div>
+            <h3 class="os-conn__name">Notion</h3>
+            <p class="os-conn__desc">Базы, страницы, properties. Двусторонняя синхронизация задач и заметок. ETA — Q4 2026.</p>
+          </div>
+          <span class="os-conn__status os-conn__status--soon">в roadmap</span>
+        </div>
+
+        <div id="connector-hubspot" class="os-conn">
+          <span class="os-conn__icon" aria-hidden="true">🟠</span>
+          <div>
+            <h3 class="os-conn__name">HubSpot</h3>
+            <p class="os-conn__desc">Marketing Hub + Sales Hub. Контакты, deals, email-кампании. ETA — Q4 2026.</p>
+          </div>
+          <span class="os-conn__status os-conn__status--soon">в roadmap</span>
+        </div>
+
+        <div id="connector-pipedrive" class="os-conn">
+          <span class="os-conn__icon" aria-hidden="true">🟢</span>
+          <div>
+            <h3 class="os-conn__name">Pipedrive</h3>
+            <p class="os-conn__desc">Pipeline, deals, activities. ETA — Q1 2027.</p>
+          </div>
+          <span class="os-conn__status os-conn__status--soon">в roadmap</span>
+        </div>
+
+        <div id="connector-salesforce" class="os-conn">
+          <span class="os-conn__icon" aria-hidden="true">☁️</span>
+          <div>
+            <h3 class="os-conn__name">Salesforce</h3>
+            <p class="os-conn__desc">Sales Cloud, Service Cloud. OAuth 2.0 + SOQL для гибких запросов. ETA — Q1 2027.</p>
+          </div>
+          <span class="os-conn__status os-conn__status--soon">в roadmap</span>
+        </div>
+
+        <h2>Хочу свой коннектор</h2>
+        <p>
+          После публичного релиза откроется community-репо <code>edl-connectors</code> с шаблонами
+          и процессом PR. До этого момента — напишите нам, мы добавим в private alpha вместе с вами:
+        </p>
+        <ul>
+          <li>📧 <a href="mailto:hello@edl-os.ru?subject=Свой%20коннектор">hello@edl-os.ru</a></li>
+          <li>✈️ <a href="https://t.me/edl_os" target="_blank" rel="noopener">Telegram-канал</a> · напишите в чат</li>
+          <li>📐 Превью технического процесса — <a href="/developer/write-connector.html">как написать коннектор</a></li>
+        </ul>
+
+        <div class="dev-prevnext">
+          <a class="dev-prev" href="/developer/schema.html">
+            <div class="dev-prevnext__label">← назад</div>
+            <div class="dev-prevnext__title">JSON-RPC схема</div>
+          </a>
+          <a class="dev-next" href="/developer/">
+            <div class="dev-prevnext__label">в начало →</div>
+            <div class="dev-prevnext__title">Developer Portal</div>
+          </a>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="footer" style="padding: 32px 0; text-align: center;">
+    <div class="container" style="font-size: 0.8125rem;">© 2026 EDL OS · Elephant Dreams Lab</div>
+  </footer>
+
+  <script>
+    (function () {
+      const b = document.getElementById('burger');
+      const n = document.getElementById('site-nav');
+      if (b && n) {
+        b.addEventListener('click', () => {
+          const open = n.classList.toggle('is-open');
+          b.setAttribute('aria-expanded', String(open));
+        });
+      }
+
+      const form = document.getElementById('os-waitlist-form');
+      const success = document.getElementById('os-waitlist-success');
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const email = form.querySelector('input[type="email"]').value.trim();
+          if (!/^[^@]+@[^@]+\.[^@]+$/.test(email)) return;
+          // Track event — будет в DataLayer и localStorage; реальный endpoint выгружает аналитика
+          if (window.EDLTrack) {
+            window.EDLTrack('opensource_waitlist_signup', { email });
+          }
+          success.classList.add('is-shown');
+          form.style.display = 'none';
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -125,22 +125,24 @@
   position: relative;
 }
 .home-hero__btn--primary {
-  background: linear-gradient(135deg, #FF6B1A 0%, #FF8C4A 100%);
-  color: #fff;
-  box-shadow: 0 8px 24px -8px rgba(255, 107, 26, 0.4);
+  background: linear-gradient(135deg, #D9520C 0%, #FF7B2E 100%);
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+  box-shadow: 0 8px 24px -8px rgba(255, 107, 26, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 .home-hero__btn--primary::before {
   content: ''; position: absolute; inset: -2px;
   background: linear-gradient(135deg, #FF6B1A, #FF8C4A);
   border-radius: 14px; z-index: -1;
-  filter: blur(10px); opacity: 0.35;
+  filter: blur(12px); opacity: 0.25;
   transition: opacity 0.2s;
 }
 .home-hero__btn--primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 32px -8px rgba(255, 107, 26, 0.5);
+  box-shadow: 0 12px 32px -8px rgba(255, 107, 26, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
-.home-hero__btn--primary:hover::before { opacity: 0.6; }
+.home-hero__btn--primary:hover::before { opacity: 0.45; }
 
 .home-hero__btn--ghost {
   background: rgba(255, 255, 255, 0.7);
