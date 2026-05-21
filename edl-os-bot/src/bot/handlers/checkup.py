@@ -154,8 +154,8 @@ async def checkup_command(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         if app is None:
             await msg.reply_text(
                 "Чтобы пройти Бизнес-чекап, сначала нужно оформить покупку.\n\n"
-                "9 000 ₽ за Base · 14 000 ₽ за Plus (с видео-разбором от Кати).\n"
-                "Возврат 100% в течение 14 дней.",
+                "9 000 ₽ за Base · 14 000 ₽ за Plus (с видео-разбором от команды EDL OS).\n"
+                "Возврат 14 дней — условный (см. /faq).",
                 reply_markup=InlineKeyboardMarkup([
                     [InlineKeyboardButton("📋 Открыть Чекап", callback_data="menu:audit")],
                     [InlineKeyboardButton("← В меню", callback_data="menu:main")],
@@ -1192,9 +1192,9 @@ async def _handle_upgrade_info(update: Update, context: ContextTypes.DEFAULT_TYP
         "Что добавится к вашему PDF:\n"
         "• Расширенные benchmarks по сегменту × стадии (стр. 13)\n"
         "• Раздел «Что внутри Спринта применительно к вам» (стр. 14)\n"
-        "• *15-мин видео-разбор от Кати* — записывается под ваш PDF, "
-        "приходит в течение 24 часов после доплаты\n\n"
-        "Видео — это не общая «вода», а персональный walkthrough по вашим "
+        "• *15-мин видео-разбор от команды EDL OS* — записывается под "
+        "ваш PDF, приходит в течение 24 часов после доплаты\n\n"
+        "Видео — это не общая «вода», а walkthrough по вашим "
         "ответам с 3 ключевыми акцентами для вашего сегмента и стадии.\n\n"
         "Доплатить?",
         parse_mode="Markdown",
@@ -1232,7 +1232,7 @@ async def _handle_upgrade_confirm(update: Update, context: ContextTypes.DEFAULT_
     await update.effective_message.reply_text(
         "✅ Отправил заявку на доплату Иван получит уведомление и "
         "пришлёт реквизиты в течение 1 часа в рабочие часы (10–19 МСК).\n\n"
-        "После оплаты — статус Plus и видео от Кати в течение 24 часов.",
+        "После оплаты — статус Plus и видео от команды EDL OS в течение 24 часов.",
         reply_markup=InlineKeyboardMarkup([
             [InlineKeyboardButton("💬 Написать Ивану", url=f"https://t.me/{settings.sales_username}")],
             [InlineKeyboardButton("← В меню", callback_data="menu:main")],

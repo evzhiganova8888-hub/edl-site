@@ -1,8 +1,15 @@
-"""/refund — запрос возврата (§7.10 ТЗ v3 + §D.6 v3.1 — 1-click).
+"""/refund — запрос возврата (§7.10 ТЗ v3 + §D.6 v3.1).
 
-V3.1: возврат подаётся в 1 клик. Причина — опциональная, post-action,
-не блокирует процесс. Mutualism: «деньги ваши, забирайте — расскажете
-причину потом, если захотите».
+Гарантия возврата 14 дней — УСЛОВНАЯ (а не «безусловная»):
+работает только при выполнении ОБОИХ условий одновременно:
+1. ответы в Чекапе прошли рубрику качества (см. KB 08_checkup_quality_rubric);
+2. ни одну из рекомендаций отчёта клиент не может реализовать в компании.
+
+Контекст для реалистичности рекомендаций собирается во время Чекапа —
+поэтому условие №2 выполнимо только при честных ответах.
+
+Заявка подаётся в боте, Иван проверяет соответствие условиям и подтверждает
+возврат в Robokassa. Причина указывается в свободной форме.
 """
 from __future__ import annotations
 
@@ -57,18 +64,31 @@ async def refund_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
     deadline = active.refund_eligible_until.strftime("%d.%m.%Y %H:%M") if active.refund_eligible_until else "—"
     await update.effective_message.reply_text(
-        "Доступен возврат за Бизнес-чекап.\n"
-        f"Окно действует до {deadline} (UTC).\n\n"
-        "Один клик — возврат подаётся. Причину расскажете потом, если захотите.",
+        "Окно возврата по Бизнес-чекапу открыто.\n"
+        f"Действует до {deadline} (UTC).\n\n"
+        "Гарантия возврата — *условная* и работает при выполнении ОБОИХ "
+        "условий одновременно:\n"
+        "1) ваши ответы прошли рубрику качества Чекапа "
+        "(минимум слов и хотя бы одна цифра на каждый вопрос);\n"
+        "2) ни одну из 5 (Base) / 7 (Plus) рекомендаций отчёта вы не можете "
+        "реализовать в вашей компании.\n\n"
+        "Контекст для реалистичности рекомендаций мы собираем во время самого "
+        "Чекапа — поэтому условие №2 выполнимо только при честных ответах.\n\n"
+        "Если оба условия выполняются — оформите заявку кнопкой ниже и "
+        "коротко опишите, какие рекомендации и почему не применимы. "
+        "Иван проверит и подтвердит возврат в Robokassa в течение 1 рабочего "
+        "часа, средства поступят на карту до 5 рабочих дней.",
         reply_markup=keyboards.refund_keyboard(str(active.id)),
     )
 
 
 async def handle_refund_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Callback `refund:request:<application_id>` — 1-click возврат.
+    """Callback `refund:request:<application_id>` — заявка на возврат.
 
-    Сразу создаём Refund(status=requested), уведомляем Ивана, спрашиваем
-    причину как опциональный post-action (Mutualism, §D.6 v3.1).
+    Создаём Refund(status=requested) и уведомляем Ивана. Просим клиента
+    обязательно описать одним сообщением, какие рекомендации и почему он
+    не может реализовать (это условие №2 гарантии). Иван валидирует
+    и подтверждает возврат в Robokassa.
     """
     query = update.callback_query
     await query.answer()
@@ -152,36 +172,40 @@ async def handle_refund_callback(update: Update, context: ContextTypes.DEFAULT_T
             event="refund_requested",
             payload={
                 "application_id": application_id,
-                "via": "one_click",
+                "via": "conditional",
                 "refund_id": str(refund.id) if refund else None,
             },
         )
         await session.commit()
 
         brief = build_refund_request_brief(
-            user=user, application=app, reason="(причина не указана — 1-click)"
+            user=user,
+            application=app,
+            reason="(ожидаем обоснование от клиента — какие рекомендации не применимы)",
         )
         refund_id = str(refund.id) if refund else None
 
-    # Сообщаем юзеру + предлагаем (необязательно) рассказать причину
+    # Сообщаем юзеру и просим обоснование — оно ОБЯЗАТЕЛЬНО для проверки условий.
     if refund_id:
         context.user_data[KEY_REFUND_COMMENT_REFUND_ID] = refund_id
         await query.message.reply_text(
-            "✅ Возврат подаётся. Средства вернутся на карту в течение "
-            "5 рабочих дней с момента подтверждения Иваном в Robokassa.\n\n"
-            "Если хотите рассказать причину — напишите ниже одним сообщением. "
-            "Нам важно, но это необязательно.\n\n"
-            f"Если что — @{settings.sales_username}.",
-            reply_markup=keyboards.bug_report_skip_keyboard(),
+            "✅ Заявка на возврат принята. Чтобы Иван мог подтвердить её — "
+            "напишите одним сообщением: какие из рекомендаций отчёта и "
+            "почему вы не можете реализовать в вашей компании.\n\n"
+            "Это условие №2 гарантии — без обоснования возврат не оформляется.\n\n"
+            "После подтверждения Иваном средства поступят на карту в течение "
+            "5 рабочих дней.\n\n"
+            f"Если есть вопросы — @{settings.sales_username}.",
+            reply_markup=keyboards.main_menu(),
         )
     else:
         await query.message.reply_text(
-            "Запрос принят. Иван свяжется по деталям возврата.\n"
+            "Заявка зафиксирована. Иван свяжется по деталям возврата.\n"
             f"Если срочно — @{settings.sales_username}.",
             reply_markup=keyboards.main_menu(),
         )
 
-    # Бриф Ивану — сразу, не ждём причины
+    # Бриф Ивану — сразу, дальше дополним причиной от клиента
     try:
         await send_to_admin_chat(context.bot, brief)
     except Exception:
@@ -189,9 +213,11 @@ async def handle_refund_callback(update: Update, context: ContextTypes.DEFAULT_T
 
 
 async def handle_text_step(update: Update, context: ContextTypes.DEFAULT_TYPE) -> bool:
-    """Опциональный post-action: пользователь захотел рассказать причину.
+    """Сбор обязательного обоснования возврата (условие №2 гарантии).
 
-    Если он молчит / отвечает «нет» — мы ничего не блокируем.
+    Клиент должен описать, какие рекомендации и почему не применимы.
+    Текст сохраняется в Refund.reason — Иван валидирует условие до
+    подтверждения возврата.
     """
     refund_id = context.user_data.get(KEY_REFUND_COMMENT_REFUND_ID)
     if not refund_id:
@@ -217,5 +243,8 @@ async def handle_text_step(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 payload={"refund_id": refund_id, "reason": text[:200]},
             )
             await session.commit()
-    await update.effective_message.reply_text("Спасибо, добавил к заявке возврата.")
+    await update.effective_message.reply_text(
+        "Принял обоснование. Иван проверит соответствие условиям "
+        "гарантии и свяжется с вами в течение рабочего часа."
+    )
     return True

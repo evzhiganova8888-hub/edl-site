@@ -76,7 +76,7 @@ def _plan_amount(plan: str) -> float:
 
 def _plan_description(plan: str) -> str:
     if plan == PLAN_PLUS:
-        return "Бизнес-чекап Plus EDL OS · отчёт + видео-разбор от Кати"
+        return "Бизнес-чекап Plus EDL OS · отчёт + видео-разбор от команды EDL OS"
     return "Бизнес-чекап EDL OS · аналитический отчёт по 4 слоям"
 
 
