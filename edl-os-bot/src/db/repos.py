@@ -8,7 +8,15 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.db.models import Application, Event, MessageLog, PDAccessLog, QuizSubmission, User
+from src.db.models import (
+    Application,
+    CheckupAnswer,
+    Event,
+    MessageLog,
+    PDAccessLog,
+    QuizSubmission,
+    User,
+)
 
 
 async def get_or_create_user(
@@ -162,3 +170,124 @@ async def create_application(
     session.add(app)
     await session.flush()
     return app
+
+
+# ── Чекап v2 helpers ──────────────────────────────────────────────────────────
+
+async def get_checkup_answers(
+    session: AsyncSession, application_id: uuid.UUID
+) -> list[CheckupAnswer]:
+    result = await session.execute(
+        select(CheckupAnswer)
+        .where(CheckupAnswer.application_id == application_id)
+        .order_by(CheckupAnswer.answered_at.asc())
+    )
+    return list(result.scalars().all())
+
+
+async def delete_checkup_answers(
+    session: AsyncSession, application_id: uuid.UUID
+) -> int:
+    """Удаляет все ответы по application — для force-restart старого Чекапа на v2.
+
+    Возвращает количество удалённых.
+    """
+    rows = await get_checkup_answers(session, application_id)
+    for r in rows:
+        await session.delete(r)
+    return len(rows)
+
+
+async def upsert_checkup_answer(
+    session: AsyncSession,
+    *,
+    application_id: uuid.UUID,
+    user_id: int,
+    question_key: str,
+    layer: str,
+    text: str,
+    word_count: int,
+    answer_type: str,
+    quality_passed: bool = False,
+    quality_notes: str | None = None,
+    answer_score: int | None = None,
+    answer_numeric: float | None = None,
+    answer_skipped: bool = False,
+) -> CheckupAnswer:
+    """Upsert ответа по (application_id, question_key)."""
+    existing = await session.execute(
+        select(CheckupAnswer).where(
+            CheckupAnswer.application_id == application_id,
+            CheckupAnswer.question_key == question_key,
+        )
+    )
+    row = existing.scalar_one_or_none()
+    if row:
+        row.text = text
+        row.word_count = word_count
+        row.answer_type = answer_type
+        row.quality_passed = quality_passed
+        row.quality_notes = quality_notes
+        row.answer_score = answer_score
+        row.answer_numeric = answer_numeric
+        row.answer_skipped = answer_skipped
+        return row
+    row = CheckupAnswer(
+        application_id=application_id,
+        user_id=user_id,
+        question_key=question_key,
+        layer=layer,
+        text=text,
+        word_count=word_count,
+        answer_type=answer_type,
+        quality_passed=quality_passed,
+        quality_notes=quality_notes,
+        answer_score=answer_score,
+        answer_numeric=answer_numeric,
+        answer_skipped=answer_skipped,
+    )
+    session.add(row)
+    await session.flush()
+    return row
+
+
+async def load_mini_context(
+    session: AsyncSession, user: User
+) -> dict[str, Any] | None:
+    """Возвращает Mini-Чекап контекст для skip-логики и intro Чекапа.
+
+    Ищет последний QuizSubmission юзера. Возвращает dict с полями:
+    {score, stage, segment, layer_scores, growth_points, weakest_layers}
+    или None если Mini не проходился.
+    """
+    if not user.quiz_completed_at and not user.quiz_score:
+        return None
+    result = await session.execute(
+        select(QuizSubmission)
+        .where(QuizSubmission.user_id == user.id)
+        .order_by(QuizSubmission.created_at.desc())
+        .limit(1)
+    )
+    sub = result.scalar_one_or_none()
+    if sub is None:
+        # Юзер прошёл Mini, но QuizSubmission не сохранён (старый бот) — частичный
+        return {
+            "score": user.quiz_score,
+            "stage": user.quiz_stage,
+            "segment": user.segment,
+            "layer_scores": None,
+            "growth_points": None,
+            "weakest_layers": None,
+        }
+    layer_scores = sub.layer_scores or {}
+    weakest_layers = sorted(
+        layer_scores.items(), key=lambda x: x[1]
+    )[:2] if isinstance(layer_scores, dict) else []
+    return {
+        "score": sub.score,
+        "stage": sub.stage,
+        "segment": sub.segment,
+        "layer_scores": layer_scores,
+        "growth_points": sub.growth_points or [],
+        "weakest_layers": [l for l, _ in weakest_layers],
+    }

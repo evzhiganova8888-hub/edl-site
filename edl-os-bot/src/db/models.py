@@ -13,6 +13,7 @@ from sqlalchemy import (
     ForeignKey,
     Index,
     Integer,
+    Numeric,
     String,
     Text,
     func,
@@ -108,6 +109,8 @@ class Application(Base):
     plus_video_uploaded_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     plus_video_url: Mapped[str | None] = mapped_column(Text)
     plus_video_sent_to_client_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # Чекап v2: ручная ссылка на FigJam-карту (заполняет Катя через /figjam)
+    figjam_url: Mapped[str | None] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
@@ -317,6 +320,11 @@ class CheckupAnswer(Base):
     word_count: Mapped[int] = mapped_column(Integer)
     quality_passed: Mapped[bool] = mapped_column(Boolean, default=False)
     quality_notes: Mapped[str | None] = mapped_column(Text)
+    # Чекап v2: тип ответа + полезные нагрузки (миграция 0013, NULLABLE для совместимости с v1)
+    answer_type: Mapped[str | None] = mapped_column(Text)         # 'mc' | 'numeric' | 'short_text'
+    answer_score: Mapped[int | None] = mapped_column(Integer)     # 0/3/5/8/10 для MC
+    answer_numeric: Mapped[float | None] = mapped_column(Numeric(10, 2))  # для numeric
+    answer_skipped: Mapped[bool] = mapped_column(Boolean, default=False, server_default=sql_text("false"))
     answered_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     __table_args__ = (

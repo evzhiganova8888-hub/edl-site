@@ -41,10 +41,10 @@ def test_sprint_prices_in_kb():
 
 
 def test_diagnostic_price():
-    """25 000 ₽ — в KB и в тексте."""
+    """45 000 ₽ — в KB и в тексте (TZ_checkup_plus_v2.md §8.4, SoT v1.5)."""
     kb_text = _KB_PRICING.read_text(encoding="utf-8")
-    assert "25 000" in kb_text or "25000" in kb_text
-    assert "25 000" in texts.DIAGNOSTIC_INTRO
+    assert "45 000" in kb_text or "45000" in kb_text
+    assert "45 000" in texts.DIAGNOSTIC_INTRO
 
 
 def test_plan_amount_helper():
