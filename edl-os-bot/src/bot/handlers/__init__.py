@@ -22,6 +22,7 @@ from src.bot.handlers import (
     bugs,
     checkup,
     consent,
+    coupon,
     dialog,
     faq,
     feedback as feedback_handler,
@@ -122,6 +123,11 @@ def register(app: Application) -> None:
     app.add_handler(CommandHandler("figjam", figjam_command))  # Чекап v2 §9.2
     app.add_handler(CommandHandler("grant_demo", grant_demo_command))  # demo-access
     app.add_handler(CommandHandler("regenerate_pdf", regenerate_pdf_command))  # HOT-fix 19.05
+    # Coupons (ТЗ Чекап Plus v2.0 §8 + явное требование 21.05.2026 — 24h TTL)
+    app.add_handler(CommandHandler("diagnostika", coupon.diagnostika_command))
+    app.add_handler(CommandHandler("issue_coupon", coupon.issue_coupon_command))
+    app.add_handler(CommandHandler("coupon_info", coupon.coupon_info_command))
+    app.add_handler(CommandHandler("confirm_payment", coupon.confirm_payment_command))
 
     # Callback queries (inline buttons)
     app.add_handler(CallbackQueryHandler(consent.handle_consent, pattern=r"^consent:"))

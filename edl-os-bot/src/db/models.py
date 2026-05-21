@@ -362,6 +362,62 @@ class QuizSubmission(Base):
     )
 
 
+class Coupon(Base):
+    """Промокод с жёстким TTL.
+
+    Главный инвариант: купон действителен ровно `expires_at - issued_at`
+    (по умолчанию 24 часа). Проверка валидности — всегда по сравнению
+    `datetime.now(UTC) <= expires_at` И `status == 'active'`. Колонка
+    `status` синхронизируется отдельной celery-task `expire_coupons`,
+    но любые активации делают двойную проверку по времени, чтобы избежать
+    окна гонки между истечением и сменой статуса.
+    """
+
+    __tablename__ = "coupons"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    code: Mapped[str] = mapped_column(Text, unique=True, nullable=False, index=True)
+    user_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("users.id"), nullable=False)
+    application_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("applications.id"), nullable=True
+    )
+    target_product: Mapped[str] = mapped_column(Text, default="diagnostika", nullable=False)
+    discount_pct: Mapped[int] = mapped_column(Integer, default=20, nullable=False)
+    original_price_rub: Mapped[int] = mapped_column(Integer, nullable=False)
+    discounted_price_rub: Mapped[int] = mapped_column(Integer, nullable=False)
+    issued_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    used_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # 'active' | 'used' | 'expired' | 'revoked'
+    status: Mapped[str] = mapped_column(Text, default="active", nullable=False)
+
+    __table_args__ = (
+        Index("idx_coupons_user_status", "user_id", "status"),
+        Index("idx_coupons_expires_at", "expires_at"),
+    )
+
+
+class CouponUsage(Base):
+    """Историческая запись применения купона (для аналитики/аудита)."""
+
+    __tablename__ = "coupon_usages"
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    coupon_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("coupons.id"), nullable=False, index=True
+    )
+    used_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    # 'bot_diagnostika' | 'ivan_manual' | 'admin_force'
+    activated_via: Mapped[str] = mapped_column(Text, nullable=False)
+    diagnostika_application_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("applications.id"), nullable=True
+    )
+
+
 class WidgetSession(Base):
     """Сессия виджета на сайте (F4)."""
 
