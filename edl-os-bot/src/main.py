@@ -27,7 +27,10 @@ from fastapi.responses import StreamingResponse
 from telegram import Update
 from telegram.ext import Application, ApplicationBuilder
 
+from fastapi.middleware.cors import CORSMiddleware
+
 from src.admin.routes import router as admin_router
+from src.api.quiz import router as quiz_router
 from src.bot.handlers import register
 from src.core.config import settings
 
@@ -126,8 +129,23 @@ async def _run_polling(app: Application) -> None:
         logger.exception("polling failed")
 
 
-api = FastAPI(title="EDL OS Bot", version="0.3.2", lifespan=lifespan)
+api = FastAPI(title="EDL OS Bot", version="0.4.0", lifespan=lifespan)
 api.include_router(admin_router)
+api.include_router(quiz_router)
+
+# CORS для публичного API Mini-Чекапа (сайт → бот-сервер)
+api.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://elephantdreams.ru",
+        "https://www.elephantdreams.ru",
+        "http://localhost:5500",   # локальная разработка
+        "http://127.0.0.1:5500",
+    ],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type", "X-Internal-Token"],
+    max_age=3600,
+)
 
 
 @api.middleware("http")

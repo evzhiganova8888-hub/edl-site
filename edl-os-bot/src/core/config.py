@@ -78,6 +78,9 @@ class Settings(BaseSettings):
     offer_checkup_url: str = "https://elephantdreams.ru/legal/offer-checkup-2026-05.html"
     privacy_policy_version: str = "2026-05-11"
 
+    # Mini-Чекап v2: внутренний токен для GET /internal/quiz/{id}
+    internal_api_token: str = ""
+
     # Toggle (§10)
     vitaconsult_public: bool = False
 

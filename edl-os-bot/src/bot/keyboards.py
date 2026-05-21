@@ -327,3 +327,13 @@ def resume_checkup_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([
         [InlineKeyboardButton("▶️ Продолжить Чекап", url="https://t.me/edl_os_bot?start=checkup")],
     ])
+
+
+def quiz_site_cta_keyboard(quiz_session_id: str) -> InlineKeyboardMarkup:
+    """Кнопка после deep-link audit_from_score_<UUID> — пришёл с сайта."""
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton("📝 Бизнес-чекап · 9 000 ₽", callback_data="audit:start_purchase:base")],
+        [InlineKeyboardButton("🎬 Чекап Plus · 14 000 ₽", callback_data="audit:start_purchase:plus")],
+        [InlineKeyboardButton("← В меню", callback_data="menu:main")],
+        feedback_row("quiz"),
+    ])
