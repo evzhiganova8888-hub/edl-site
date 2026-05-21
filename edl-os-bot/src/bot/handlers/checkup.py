@@ -866,6 +866,31 @@ async def _handle_short_text(
 
     context.user_data[_KEY_IMPROVE_TRIES] = tries + 1
     idx = context.user_data.get(_KEY_Q_IDX, 0)
+
+    # Сохраняем «промежуточный» ответ с quality_passed=False сразу — чтобы
+    # /keep (без повторной отправки) мог его принять, и чтобы /reset не
+    # терял прогресс. При повторной отправке upsert обновит ту же строку.
+    await _save_answer(
+        update, context, q,
+        text=text,
+        word_count=len(text.split()),
+        quality_passed=False,
+        quality_notes=f"Attempt {tries + 1}: {', '.join(missing)}",
+        duration_sec=_question_duration_sec(context),
+    )
+    # _save_answer обновил checkup_current_question_index на idx+1 — откатываем
+    # это, потому что мы ещё не дошли до следующего вопроса (ждём улучшения).
+    app_id = _safe_uuid(context.user_data.get(_KEY_APP_ID))
+    if app_id:
+        async with async_session_factory()() as session:
+            result = await session.execute(select(Application).where(Application.id == app_id))
+            app = result.scalar_one_or_none()
+            if app:
+                app.checkup_current_question_index = idx
+                await session.commit()
+    # Возвращаем idx в FSM (для consistency)
+    context.user_data[_KEY_Q_IDX] = idx
+
     await update.effective_message.reply_text(
         f"Чуть глубже бы, чтобы PDF получился полезным:\n• {chr(10).join('• ' + m for m in missing)}\n\n"
         f"Дополните ответ — или оставьте как есть.",
