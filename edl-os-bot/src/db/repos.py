@@ -1,13 +1,14 @@
 """Repository helpers — узкий слой над моделями."""
 from __future__ import annotations
 
+import uuid
 from datetime import datetime, timezone
 from typing import Any
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.db.models import Application, Event, MessageLog, PDAccessLog, User
+from src.db.models import Application, Event, MessageLog, PDAccessLog, QuizSubmission, User
 
 
 async def get_or_create_user(
@@ -87,6 +88,59 @@ async def log_pd_access(
 async def record_consent_pd(session: AsyncSession, user: User, version: str) -> None:
     user.consent_pd_given_at = datetime.now(timezone.utc)
     user.consent_pd_version = version
+
+
+async def mark_quiz_completed(
+    session: AsyncSession,
+    *,
+    user: User,
+    score: int,
+    stage: str,
+    segment: str,
+    layer_scores: dict[str, Any],
+    answers: dict[str, Any],
+    growth_points: list[dict[str, Any]],
+    source: str = "bot",
+    duration_sec: int | None = None,
+    widget_session_id: uuid.UUID | None = None,
+    consent_marketing: bool = False,
+    email: str | None = None,
+    outlier_flag: str | None = None,
+    stage_confidence: str = "high",
+) -> QuizSubmission:
+    """Сохраняет результат Mini-Чекапа и обновляет users."""
+    user.quiz_score = score
+    user.quiz_stage = stage
+    user.quiz_completed_at = datetime.now(timezone.utc)
+
+    submission = QuizSubmission(
+        user_id=user.id,
+        source=source,
+        widget_session_id=widget_session_id,
+        segment=segment,
+        stage=stage,
+        stage_confidence=stage_confidence,
+        outlier_flag=outlier_flag,
+        score=score,
+        layer_scores=layer_scores,
+        answers=answers,
+        growth_points=growth_points,
+        duration_sec=duration_sec,
+        consent_marketing_at_submit=consent_marketing,
+        email=email,
+    )
+    session.add(submission)
+    await session.flush()
+    return submission
+
+
+async def get_quiz_submission(
+    session: AsyncSession, quiz_session_id: uuid.UUID
+) -> QuizSubmission | None:
+    result = await session.execute(
+        select(QuizSubmission).where(QuizSubmission.id == quiz_session_id)
+    )
+    return result.scalar_one_or_none()
 
 
 async def create_application(

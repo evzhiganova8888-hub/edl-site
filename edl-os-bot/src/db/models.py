@@ -57,6 +57,10 @@ class User(Base):
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
+    # Mini-Чекап v2 fields
+    quiz_completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    quiz_stage: Mapped[str | None] = mapped_column(Text)
+
     # Beta 12.05-19.05: подписка на e-mail отчёт «что мы сделали по ОС».
     wants_followup_report: Mapped[bool] = mapped_column(Boolean, default=False)
     # F4: виджет-источник
@@ -318,6 +322,35 @@ class CheckupAnswer(Base):
     __table_args__ = (
         Index("idx_checkup_answers_app", "application_id"),
         Index("uq_checkup_answers_app_q", "application_id", "question_key", unique=True),
+    )
+
+
+class QuizSubmission(Base):
+    """Результат Mini-Чекапа v2 — из бота или с сайта (§11 ТЗ Mini-Чекап v2.0)."""
+
+    __tablename__ = "quiz_submissions"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[int | None] = mapped_column(BigInteger, ForeignKey("users.id"), nullable=True)
+    source: Mapped[str] = mapped_column(Text, nullable=False)  # 'bot' | 'site_page' | 'site_widget'
+    widget_session_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
+    segment: Mapped[str] = mapped_column(Text, nullable=False)
+    stage: Mapped[str] = mapped_column(Text, nullable=False)
+    stage_confidence: Mapped[str] = mapped_column(Text, default="high")
+    outlier_flag: Mapped[str | None] = mapped_column(Text, nullable=True)
+    score: Mapped[int] = mapped_column(Integer, nullable=False)
+    layer_scores: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
+    answers: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
+    growth_points: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
+    duration_sec: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    consent_marketing_at_submit: Mapped[bool] = mapped_column(Boolean, default=False)
+    email: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    __table_args__ = (
+        Index("ix_quiz_submissions_user_id", "user_id"),
+        Index("ix_quiz_submissions_widget_session_id", "widget_session_id"),
+        Index("ix_quiz_submissions_created_at", "created_at"),
     )
 
 

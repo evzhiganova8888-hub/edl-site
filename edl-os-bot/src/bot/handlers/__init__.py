@@ -129,6 +129,8 @@ def register(app: Application) -> None:
     app.add_handler(CallbackQueryHandler(audit.handle_offer, pattern=r"^offer:"))
     app.add_handler(CallbackQueryHandler(refund.handle_refund_callback, pattern=r"^refund:request:"))
     app.add_handler(CallbackQueryHandler(privacy.handle_privacy_action, pattern=r"^privacy:"))
+    app.add_handler(CallbackQueryHandler(quiz.handle_p1, pattern=r"^quiz:p1:"))
+    app.add_handler(CallbackQueryHandler(quiz.handle_p2, pattern=r"^quiz:p2:"))
     app.add_handler(CallbackQueryHandler(quiz.handle_answer, pattern=r"^quiz:ans:"))
     app.add_handler(CallbackQueryHandler(quiz.handle_cancel, pattern=r"^quiz:cancel$"))
     app.add_handler(CallbackQueryHandler(faq.handle_show, pattern=r"^faq:show:"))

@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Founder OS Score — EDL OS</title>
+<meta name="description" content="Бесплатный Score по 4 слоям бизнеса за 4–7 минут. 12 вопросов + сравнение с вашим сегментом + 3 точки роста.">
 <link rel="canonical" href="https://elephantdreams.ru/quiz.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,210 +12,466 @@
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/main.css">
+<link rel="icon" href="/assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0A0A0A">
 <style>
-  body { background: var(--color-gray-50); min-height: 100vh; display: flex; flex-direction: column; }
-  .quiz-header { padding: 24px; display: flex; justify-content: space-between; align-items: center; }
-  .quiz-container { max-width: 600px; margin: 40px auto; width: 100%; padding: 0 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
-  .quiz-step { display: none; background: #fff; padding: 40px; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.05); }
-  .quiz-step.is-active { display: block; animation: fadeUp 0.4s ease-out; }
-  .quiz-title { font-size: 1.5rem; margin-bottom: 24px; }
-  .quiz-options { display: flex; flex-direction: column; gap: 12px; }
-  .quiz-option { padding: 16px 20px; border: 1px solid var(--color-gray-200); border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 500; display: flex; align-items: center; gap: 12px; }
-  .quiz-option:hover { border-color: var(--color-gray-400); background: var(--color-gray-50); }
-  .quiz-option input[type="radio"] { margin: 0; width: 20px; height: 20px; accent-color: var(--color-tangerine); }
-  .quiz-nav { display: flex; justify-content: space-between; margin-top: 32px; }
-  .quiz-progress { height: 4px; background: var(--color-gray-200); border-radius: 2px; margin-bottom: 32px; overflow: hidden; }
-  .quiz-progress-bar { height: 100%; background: var(--color-tangerine); width: 0%; transition: width 0.3s ease; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  :root {
+    --clr-red:    #EF4444;
+    --clr-orange: #F97316;
+    --clr-yellow: #EAB308;
+    --clr-green:  #22C55E;
+    --clr-score-bg-red:    #FEF2F2;
+    --clr-score-bg-orange: #FFF7ED;
+    --clr-score-bg-yellow: #FEFCE8;
+    --clr-score-bg-green:  #F0FDF4;
+  }
+  body { background: var(--color-gray-50, #F9FAFB); min-height: 100vh; display: flex; flex-direction: column; }
+  .quiz-header { padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-gray-100, #F3F4F6); background: #fff; }
+  .quiz-wrap { max-width: 620px; margin: 0 auto; width: 100%; padding: 32px 20px 80px; flex: 1; }
+  .quiz-progress-bar-wrap { height: 4px; background: var(--color-gray-200, #E5E7EB); border-radius: 2px; margin-bottom: 28px; overflow: hidden; }
+  .quiz-progress-bar { height: 100%; background: var(--color-tangerine, #F97316); width: 0%; transition: width 0.35s ease; border-radius: 2px; }
+  .quiz-step-label { font-size: 0.8rem; font-weight: 600; color: var(--color-gray-400, #9CA3AF); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .quiz-question { font-size: 1.25rem; font-weight: 700; color: var(--color-gray-900, #111827); margin-bottom: 24px; line-height: 1.4; }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-option { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border: 1.5px solid var(--color-gray-200, #E5E7EB); border-radius: 10px; cursor: pointer; transition: border-color 0.15s, background 0.15s; font-size: 0.95rem; font-weight: 500; color: var(--color-gray-800, #1F2937); user-select: none; min-height: 56px; }
+  .quiz-option:hover { border-color: var(--color-tangerine, #F97316); background: #FFF7ED; }
+  .quiz-option.selected { border-color: var(--color-tangerine, #F97316); background: #FFF7ED; }
+  .quiz-option input[type="radio"] { display: none; }
+  .quiz-radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--color-gray-300, #D1D5DB); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: border-color 0.15s; background: #fff; }
+  .quiz-option.selected .quiz-radio { border-color: var(--color-tangerine, #F97316); background: var(--color-tangerine, #F97316); }
+  .quiz-radio-dot { width: 8px; height: 8px; border-radius: 50%; background: #fff; opacity: 0; transition: opacity 0.15s; }
+  .quiz-option.selected .quiz-radio-dot { opacity: 1; }
+  .quiz-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 28px; }
+  .quiz-back { background: none; border: none; color: var(--color-gray-500, #6B7280); font-size: 0.9rem; cursor: pointer; padding: 8px 0; display: flex; align-items: center; gap: 6px; }
+  .quiz-back:hover { color: var(--color-gray-900, #111827); }
+  .quiz-card { background: #fff; border-radius: 16px; padding: 40px; box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .quiz-card { animation: fadeUp 0.3s ease-out; }
+
+  /* Result */
+  .result-score-big { font-size: 5rem; font-weight: 800; line-height: 1; color: var(--clr-score); }
+  .result-score-wrap { text-align: center; padding: 32px; border-radius: 16px; margin-bottom: 24px; }
+  .result-category { font-size: 1.1rem; font-weight: 600; margin-top: 8px; }
+  .result-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+  .result-badge { background: var(--color-gray-100, #F3F4F6); border-radius: 8px; padding: 8px 14px; font-size: 0.875rem; font-weight: 500; }
+  .result-benchmark { background: #F0F9FF; border: 1px solid #BAE6FD; border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; font-size: 0.925rem; }
+  .result-layers { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .result-layer { background: #fff; border: 1.5px solid var(--color-gray-100, #F3F4F6); border-radius: 12px; padding: 16px; }
+  .result-layer-label { font-size: 0.8rem; font-weight: 600; color: var(--color-gray-500, #6B7280); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .result-layer-score { font-size: 1.5rem; font-weight: 700; }
+  .result-layer-bar { height: 4px; border-radius: 2px; margin-top: 8px; background: var(--color-gray-200, #E5E7EB); overflow: hidden; }
+  .result-layer-bar-fill { height: 100%; border-radius: 2px; }
+  .bar-green  { background: var(--clr-green); }
+  .bar-yellow { background: var(--clr-yellow); }
+  .bar-orange { background: var(--clr-orange); }
+  .bar-red    { background: var(--clr-red); }
+  .result-gp { background: #fff; border: 1.5px solid var(--color-gray-100, #F3F4F6); border-radius: 12px; padding: 20px; margin-bottom: 12px; }
+  .result-gp-num { font-size: 0.8rem; font-weight: 700; color: var(--color-tangerine, #F97316); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .result-gp-short { font-weight: 700; margin-bottom: 6px; }
+  .result-gp-action { font-size: 0.9rem; color: var(--color-gray-700, #374151); line-height: 1.55; }
+  .result-cta { margin-top: 32px; display: flex; flex-direction: column; gap: 12px; }
+  .btn-cta-primary { display: block; text-align: center; background: var(--color-tangerine, #F97316); color: #fff; font-weight: 700; font-size: 1.05rem; padding: 18px 24px; border-radius: 12px; text-decoration: none; transition: opacity 0.2s; }
+  .btn-cta-primary:hover { opacity: 0.9; }
+  .btn-cta-secondary { display: block; text-align: center; background: var(--color-gray-100, #F3F4F6); color: var(--color-gray-800, #1F2937); font-weight: 600; padding: 14px 24px; border-radius: 12px; text-decoration: none; transition: background 0.2s; }
+  .btn-cta-secondary:hover { background: var(--color-gray-200, #E5E7EB); }
+  .result-legal { font-size: 0.8rem; color: var(--color-gray-400, #9CA3AF); margin-top: 20px; text-align: center; line-height: 1.5; }
+  .delta-pos { color: var(--clr-green); font-weight: 700; }
+  .delta-neg { color: var(--clr-red); font-weight: 700; }
+  .delta-neu { color: var(--color-gray-500, #6B7280); font-weight: 700; }
+
+  @media (max-width: 520px) {
+    .quiz-card { padding: 24px; }
+    .result-layers { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .result-score-big { font-size: 4rem; }
+  }
 </style>
-  <link rel="icon" href="/assets/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-  <meta name="theme-color" content="#0A0A0A">
 </head>
 <body>
-  <a href="#main" class="skip-link">Перейти к содержанию</a>
 
 <header class="quiz-header">
-  <a href="/" class="header__logo" style="text-decoration:none;"><img src="/assets/logo-192.png" alt="" width="28" height="28" style="border-radius:50%; vertical-align:middle; margin-right:8px;" aria-hidden="true">EDL&nbsp;OS</a>
-  <a href="/" style="color:var(--color-gray-500);text-decoration:none;font-size:0.875rem;">Закрыть ✕</a>
+  <a href="/" class="header__logo" style="text-decoration:none; display:flex; align-items:center; gap:8px;">
+    <img src="/assets/logo-192.png" alt="" width="28" height="28" style="border-radius:50%;" aria-hidden="true">
+    <span style="font-weight:700;">EDL OS</span>
+  </a>
+  <a href="/" style="color:var(--color-gray-500,#6B7280);text-decoration:none;font-size:0.875rem;">Закрыть ✕</a>
 </header>
 
-<div class="quiz-container">
-  <div class="quiz-progress"><div class="quiz-progress-bar" id="progress"></div></div>
-  
-  <form id="quiz-form">
-    <!-- Step 1 -->
-    <div class="quiz-step is-active" data-step="1">
-      <div class="badge" style="margin-bottom:16px;">Вопрос 1 из 6</div>
-      <h2 class="quiz-title">Как вы сейчас узнаёте статус бизнеса утром?</h2>
-      <div class="quiz-options">
-        <label class="quiz-option"><input type="radio" name="q1" value="a"> <span>Жду отчёты от руководителей</span></label>
-        <label class="quiz-option"><input type="radio" name="q1" value="b"> <span>Сам открываю 3-4 разных системы (CRM, банк, аналитику)</span></label>
-        <label class="quiz-option"><input type="radio" name="q1" value="c"> <span>Получаю готовую сводку в Telegram</span></label>
-      </div>
-      <div class="quiz-nav">
-        <div></div>
-        <button type="button" class="btn btn--primary next-btn" data-event="quiz_step_1_next">Далее</button>
-      </div>
-    </div>
+<div class="quiz-wrap">
+  <div class="quiz-progress-bar-wrap">
+    <div class="quiz-progress-bar" id="js-progress"></div>
+  </div>
 
-    <!-- Step 2 -->
-    <div class="quiz-step" data-step="2">
-      <div class="badge" style="margin-bottom:16px;">Вопрос 2 из 6</div>
-      <h2 class="quiz-title">Если вы уедете в отпуск на 2 недели без телефона:</h2>
-      <div class="quiz-options">
-        <label class="quiz-option"><input type="radio" name="q2" value="a"> <span>Всё остановится или сломается</span></label>
-        <label class="quiz-option"><input type="radio" name="q2" value="b"> <span>Операционка будет идти, но развитие встанет</span></label>
-        <label class="quiz-option"><input type="radio" name="q2" value="c"> <span>Команда продолжит работу по целям без потерь</span></label>
-      </div>
-      <div class="quiz-nav">
-        <button type="button" class="btn btn--secondary prev-btn" data-event="quiz_step_2_prev">Назад</button>
-        <button type="button" class="btn btn--primary next-btn" data-event="quiz_step_2_next">Далее</button>
-      </div>
-    </div>
-
-    <!-- Step 3 -->
-    <div class="quiz-step" data-step="3">
-      <div class="badge" style="margin-bottom:16px;">Вопрос 3 из 6</div>
-      <h2 class="quiz-title">Как вы используете AI в бизнесе?</h2>
-      <div class="quiz-options">
-        <label class="quiz-option"><input type="radio" name="q3" value="a"> <span>Никак, только игрался с ChatGPT</span></label>
-        <label class="quiz-option"><input type="radio" name="q3" value="b"> <span>Пишем тексты, делаем переводы</span></label>
-        <label class="quiz-option"><input type="radio" name="q3" value="c"> <span>AI анализирует данные из CRM или финансов</span></label>
-      </div>
-      <div class="quiz-nav">
-        <button type="button" class="btn btn--secondary prev-btn" data-event="quiz_step_3_prev">Назад</button>
-        <button type="button" class="btn btn--primary next-btn" data-event="quiz_step_3_next">Далее</button>
-      </div>
-    </div>
-
-    <!-- Step 4 -->
-    <div class="quiz-step" data-step="4">
-      <div class="badge" style="margin-bottom:16px;">Вопрос 4 из 6</div>
-      <h2 class="quiz-title">Сколько часов в неделю вы тратите на "тушение пожаров"?</h2>
-      <div class="quiz-options">
-        <label class="quiz-option"><input type="radio" name="q4" value="a"> <span>Больше 20 часов</span></label>
-        <label class="quiz-option"><input type="radio" name="q4" value="b"> <span>5-20 часов</span></label>
-        <label class="quiz-option"><input type="radio" name="q4" value="c"> <span>Меньше 5 часов, я занимаюсь стратегией</span></label>
-      </div>
-      <div class="quiz-nav">
-        <button type="button" class="btn btn--secondary prev-btn" data-event="quiz_step_4_prev">Назад</button>
-        <button type="button" class="btn btn--primary next-btn" data-event="quiz_step_4_next">Далее</button>
-      </div>
-    </div>
-
-    <!-- Step 5: New Question -->
-    <div class="quiz-step" data-step="5">
-      <div class="badge" style="margin-bottom:16px;">Вопрос 5 из 6</div>
-      <h2 class="quiz-title">Каков масштаб вашей команды прямо сейчас?</h2>
-      <div class="quiz-options">
-        <label class="quiz-option"><input type="radio" name="q5" value="a"> <span>До 10 человек (ищем product-market fit)</span></label>
-        <label class="quiz-option"><input type="radio" name="q5" value="b"> <span>10-50 человек (активно масштабируемся)</span></label>
-        <label class="quiz-option"><input type="radio" name="q5" value="c"> <span>50+ человек (процессы буксуют, много бюрократии)</span></label>
-      </div>
-      <div class="quiz-nav">
-        <button type="button" class="btn btn--secondary prev-btn" data-event="quiz_step_5_prev">Назад</button>
-        <button type="button" class="btn btn--primary next-btn" data-event="quiz_step_5_next">Далее</button>
-      </div>
-    </div>
-
-    <!-- Step 6: New Question -->
-    <div class="quiz-step" data-step="6">
-      <div class="badge" style="margin-bottom:16px;">Вопрос 6 из 6</div>
-      <h2 class="quiz-title">Где сейчас живет управление вашим бизнесом?</h2>
-      <div class="quiz-options">
-        <label class="quiz-option"><input type="radio" name="q6" value="a"> <span>Excel / Таблицы и хаос в чатах Telegram</span></label>
-        <label class="quiz-option"><input type="radio" name="q6" value="b"> <span>Зоопарк сервисов: Trello, CRM, Notion (всё отдельно)</span></label>
-        <label class="quiz-option"><input type="radio" name="q6" value="c"> <span>Пытались внедрить ERP (Битрикс24/1C), но не взлетело</span></label>
-      </div>
-      <div class="quiz-nav">
-        <button type="button" class="btn btn--secondary prev-btn" data-event="quiz_step_6_prev">Назад</button>
-        <button type="button" class="btn btn--primary next-btn" data-event="quiz_step_6_next">Далее</button>
-      </div>
-    </div>
-
-    <!-- Step 7: Lead Capture -->
-    <div class="quiz-step" data-step="7" style="text-align:center;">
-      <div style="font-size:3rem;margin-bottom:16px;">📩</div>
-      <h2 class="quiz-title">Почти готово! Куда отправить результат?</h2>
-      <p style="color:var(--color-gray-700);margin-bottom:24px;">Мы подготовили детальный разбор вашего Founder OS Score и рекомендации по оптимизации.</p>
-      <input type="email" id="lead-email" class="input" placeholder="Ваш рабочий email" required style="max-width:320px;margin:0 auto 16px;display:block;">
-      <label style="display:flex; align-items:center; justify-content:center; gap:8px; font-size:0.875rem; color:var(--color-gray-500); margin-bottom:24px; cursor:pointer;">
-        <input type="checkbox" id="gdpr-consent" required> Я согласен(на) на обработку персональных данных
-      </label>
-      <div class="quiz-nav" style="justify-content:center;gap:16px; margin-top:0;">
-        <button type="button" class="btn btn--secondary prev-btn" data-event="quiz_lead_prev">Назад</button>
-        <button type="button" class="btn btn--primary finish-btn" data-event="quiz_lead_submit">Получить результат</button>
-      </div>
-    </div>
-
-    <!-- Result -->
-    <div class="quiz-step" id="result-step" style="text-align:center;">
-      <div style="font-size:3rem;margin-bottom:16px;">📊</div>
-      <h2 class="quiz-title">Ваш Founder OS Score: Средний (54/100)</h2>
-      <p style="color:var(--color-gray-700);margin-bottom:32px;">Вы теряете около 15-20% прибыли из-за ручного управления и рассинхронизации данных. Узнайте, где именно вы теряете деньги на детальном чекапе вашего бизнеса.</p>
-      <a href="audit.html" class="btn btn--primary" style="width:100%;margin-bottom:16px;">Купить Бизнес-чекап за 9 000 ₽</a>
-      <a href="https://t.me/edl_os_bot?start=demo" target="_blank" rel="noopener" class="btn btn--outline" style="width:100%;margin-bottom:16px;">Бесплатное демо в Telegram</a>
-      <a href="/" style="color:var(--color-gray-500);font-size:0.875rem;text-decoration:none;">Вернуться на главную</a>
-    </div>
-  </form>
+  <div id="js-quiz-root"></div>
 </div>
 
+<script src="/js/mini-checkup-engine.js"></script>
 <script>
-  const steps = document.querySelectorAll('.quiz-step[data-step]');
-  const progressBar = document.getElementById('progress');
-  let currentStep = 0;
+(function () {
+  'use strict';
+  const STORAGE_KEY = 'edl_quiz_session_v2';
+  const API_URL = '/api/quiz/submit';
+  const BOT_USERNAME = 'edl_os_bot';
+  const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function updateView() {
-    steps.forEach((s, i) => {
-      s.classList.toggle('is-active', i === currentStep);
-    });
-    progressBar.style.width = ((currentStep + 1) / steps.length * 100) + '%';
+  let canon = null;
+  let state = {
+    phase: 'p1',   // p1 | p2 | q0..q11 | result
+    segment: null,
+    p2Option: null,
+    answers: {},
+    startTs: Date.now(),
+    quizSessionId: null,
+    result: null,
+  };
+
+  // ── Restore from localStorage ─────────────────────────────────────────────
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      // Don't restore finished sessions
+      if (saved.phase === 'result' && saved.result) {
+        state = saved;
+      } else if (saved.phase && saved.phase !== 'result') {
+        state = saved;
+      }
+    } catch (e) {}
   }
 
-  document.querySelectorAll('.next-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      // check if radio checked
-      const stepEl = steps[currentStep];
-      if (!stepEl.querySelector('input:checked')) {
-        alert('Пожалуйста, выберите вариант ответа.');
-        return;
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  // ── Progress ──────────────────────────────────────────────────────────────
+  const TOTAL_STEPS = 14; // P1 + P2 + 12
+
+  function phaseToStep(phase) {
+    if (phase === 'p1') return 0;
+    if (phase === 'p2') return 1;
+    const m = /^q(\d+)$/.exec(phase);
+    if (m) return 2 + parseInt(m[1]);
+    if (phase === 'result') return TOTAL_STEPS;
+    return 0;
+  }
+
+  function updateProgress() {
+    const step = phaseToStep(state.phase);
+    const pct = Math.round(step / TOTAL_STEPS * 100);
+    document.getElementById('js-progress').style.width = pct + '%';
+  }
+
+  // ── Render ────────────────────────────────────────────────────────────────
+  const root = document.getElementById('js-quiz-root');
+
+  function renderCard(html) {
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    card.innerHTML = html;
+    root.innerHTML = '';
+    root.appendChild(card);
+    if (!REDUCED_MOTION) card.style.animation = 'none';
+    card.offsetHeight; // reflow
+    if (!REDUCED_MOTION) card.style.animation = '';
+    updateProgress();
+  }
+
+  // ── P1: сегмент ───────────────────────────────────────────────────────────
+  function renderP1() {
+    const opts = canon.preliminary.p1.options.map(o =>
+      `<label class="quiz-option" data-val="${o.value}">
+        <div class="quiz-radio"><div class="quiz-radio-dot"></div></div>
+        <span>${o.label}</span>
+        <input type="radio" name="p1" value="${o.value}">
+      </label>`
+    ).join('');
+    renderCard(`
+      <div class="quiz-step-label">Шаг 1 из ${TOTAL_STEPS}</div>
+      <div class="quiz-question">${canon.preliminary.p1.text}</div>
+      <div class="quiz-options" id="js-p1-opts">${opts}</div>
+    `);
+    document.getElementById('js-p1-opts').addEventListener('click', function (e) {
+      const lbl = e.target.closest('.quiz-option');
+      if (!lbl) return;
+      const val = lbl.dataset.val;
+      state.segment = val;
+      state.phase = 'p2';
+      saveState();
+      setTimeout(renderP2, 220);
+    });
+    _attachOptionHighlight('js-p1-opts');
+  }
+
+  // ── P2: команда + выручка ─────────────────────────────────────────────────
+  function renderP2() {
+    const opts = canon.preliminary.p2.options.map(o =>
+      `<label class="quiz-option" data-val="${o.value}">
+        <div class="quiz-radio"><div class="quiz-radio-dot"></div></div>
+        <span>${o.label}</span>
+        <input type="radio" name="p2" value="${o.value}">
+      </label>`
+    ).join('');
+    renderCard(`
+      <div class="quiz-step-label">Шаг 2 из ${TOTAL_STEPS}</div>
+      <div class="quiz-question">${canon.preliminary.p2.text}</div>
+      <div class="quiz-options" id="js-p2-opts">${opts}</div>
+      <div class="quiz-nav">
+        <button class="quiz-back" id="js-p2-back">← Назад</button>
+      </div>
+    `);
+    document.getElementById('js-p2-back').onclick = function () {
+      state.phase = 'p1';
+      saveState();
+      renderP1();
+    };
+    document.getElementById('js-p2-opts').addEventListener('click', function (e) {
+      const lbl = e.target.closest('.quiz-option');
+      if (!lbl) return;
+      state.p2Option = lbl.dataset.val;
+      state.phase = 'q0';
+      saveState();
+      setTimeout(() => renderQuestion(0), 220);
+    });
+    _attachOptionHighlight('js-p2-opts');
+  }
+
+  // ── Основной вопрос ───────────────────────────────────────────────────────
+  function renderQuestion(idx) {
+    const q = canon.questions[idx];
+    const stepNum = 3 + idx;
+    const opts = q.options.map(o =>
+      `<label class="quiz-option${state.answers[q.key] === o.score ? ' selected' : ''}" data-val="${o.score}">
+        <div class="quiz-radio"><div class="quiz-radio-dot"></div></div>
+        <span>${o.label}</span>
+        <input type="radio" name="qans">
+      </label>`
+    ).join('');
+    renderCard(`
+      <div class="quiz-step-label">Вопрос ${idx + 1} из 12</div>
+      <div class="quiz-question">${q.text}</div>
+      <div class="quiz-options" id="js-q-opts">${opts}</div>
+      <div class="quiz-nav">
+        <button class="quiz-back" id="js-q-back">← Назад</button>
+      </div>
+    `);
+    document.getElementById('js-q-back').onclick = function () {
+      if (idx === 0) {
+        state.phase = 'p2';
+        saveState();
+        renderP2();
+      } else {
+        state.phase = 'q' + (idx - 1);
+        saveState();
+        renderQuestion(idx - 1);
       }
-      if (currentStep < steps.length - 1) {
-        currentStep++;
-        updateView();
+    };
+    document.getElementById('js-q-opts').addEventListener('click', function (e) {
+      const lbl = e.target.closest('.quiz-option');
+      if (!lbl) return;
+      const score = parseInt(lbl.dataset.val, 10);
+      state.answers[q.key] = score;
+      if (idx < 11) {
+        state.phase = 'q' + (idx + 1);
+        saveState();
+        setTimeout(() => renderQuestion(idx + 1), 300);
+      } else {
+        state.phase = 'result';
+        saveState();
+        finishQuiz();
       }
     });
-  });
+    _attachOptionHighlight('js-q-opts');
+  }
 
-  document.querySelectorAll('.prev-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (currentStep > 0) {
-        currentStep--;
-        updateView();
-      }
+  // ── Подсветка опций при клике ─────────────────────────────────────────────
+  function _attachOptionHighlight(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.querySelectorAll('.quiz-option').forEach(lbl => {
+      lbl.addEventListener('mousedown', function () {
+        container.querySelectorAll('.quiz-option').forEach(l => l.classList.remove('selected'));
+        lbl.classList.add('selected');
+      });
     });
-  });
+  }
 
-  document.querySelector('.finish-btn').addEventListener('click', () => {
-    const emailInput = document.getElementById('lead-email');
-    const gdprInput = document.getElementById('gdpr-consent');
-    if (!emailInput.value || !emailInput.value.includes('@')) {
-      alert('Пожалуйста, введите корректный email.');
-      return;
-    }
-    if (!gdprInput.checked) {
-      alert('Пожалуйста, подтвердите согласие на обработку данных.');
-      return;
-    }
-    steps.forEach(s => s.classList.remove('is-active'));
-    document.getElementById('result-step').classList.add('is-active');
-    progressBar.parentElement.style.display = 'none';
-  });
+  // ── Завершение: отправка и рендер результата ─────────────────────────────
+  function finishQuiz() {
+    renderCard(`
+      <div style="text-align:center;padding:40px 0;">
+        <div style="font-size:2.5rem;margin-bottom:16px;">⏳</div>
+        <div style="font-weight:600;font-size:1.1rem;">Считаю Score...</div>
+        <div style="color:var(--color-gray-500,#6B7280);margin-top:8px;font-size:0.9rem;">Это займёт секунду</div>
+      </div>
+    `);
 
-  updateView();
+    const duration = Math.round((Date.now() - state.startTs) / 1000);
+    const payload = {
+      source: 'site_page',
+      segment: state.segment,
+      stage_from_p2: state.p2Option,
+      answers: state.answers,
+      duration_sec: duration,
+      consent_marketing: false,
+    };
+
+    // Считаем Score локально (показываем сразу, без ожидания API)
+    const result = MiniCheckupEngine.buildResult(state.answers, state.p2Option, state.segment);
+    state.result = result;
+
+    // POST в API — в фоне
+    fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if (data && data.quiz_session_id) {
+        state.quizSessionId = data.quiz_session_id;
+        saveState();
+      }
+    })
+    .catch(() => {});
+
+    // Показываем результат через 600ms (UX — не мгновенно, даём ощущение "обработки")
+    setTimeout(() => renderResult(result), 600);
+  }
+
+  // ── Экран результата ──────────────────────────────────────────────────────
+  function renderResult(r) {
+    const colorMap = { red: '#EF4444', orange: '#F97316', yellow: '#CA8A04', green: '#16A34A' };
+    const bgMap    = { red: '#FEF2F2', orange: '#FFF7ED', yellow: '#FEFCE8', green: '#F0FDF4' };
+    const scoreColor = colorMap[r.categoryColor] || '#111827';
+    const scoreBg    = bgMap[r.categoryColor] || '#F9FAFB';
+
+    // Layers
+    const layerHtml = ['01','02','03','04'].map(l => {
+      const sc = r.layerScores[l] || 0;
+      const barCls = sc >= 75 ? 'bar-green' : sc >= 50 ? 'bar-yellow' : 'bar-orange';
+      const scColor = sc >= 75 ? colorMap.green : sc >= 50 ? '#CA8A04' : colorMap.red;
+      return `<div class="result-layer">
+        <div class="result-layer-label">${canon.layer_labels[l]}</div>
+        <div class="result-layer-score" style="color:${scColor}">${sc}</div>
+        <div class="result-layer-bar"><div class="result-layer-bar-fill ${barCls}" style="width:${sc}%"></div></div>
+      </div>`;
+    }).join('');
+
+    // Benchmark
+    let bmHtml = '';
+    if (r.benchmarkMean != null) {
+      const delta = r.benchmarkDelta;
+      const dCls = delta > 5 ? 'delta-pos' : delta < -5 ? 'delta-neg' : 'delta-neu';
+      const dSign = delta >= 0 ? '+' : '';
+      const dText = delta > 5 ? 'вы выше среднего' : delta < -5 ? 'вы ниже среднего' : 'вы близко к среднему';
+      const fallbackNote = r.benchmarkFallback ? '<br><span style="font-size:0.8rem;color:#94A3B8;">Бенчмарк по вашему сегменту в калибровке — показываем медиану по всем.</span>' : '';
+      bmHtml = `<div class="result-benchmark">
+        Средний для ${r.segmentLabel} на стадии ${r.stageLabel}: <strong>${r.benchmarkMean}</strong><br>
+        <span class="${dCls}">Δ ${dSign}${delta}</span> — ${dText}${fallbackNote}
+      </div>`;
+    }
+
+    // Growth points
+    const gpHtml = r.growthPoints.map((gp, i) =>
+      `<div class="result-gp">
+        <div class="result-gp-num">${i+1} · ${gp.layerLabel}</div>
+        <div class="result-gp-short">${gp.short}</div>
+        <div class="result-gp-action">${gp.action}</div>
+      </div>`
+    ).join('');
+
+    // CTA
+    const sessionParam = state.quizSessionId ? `audit_from_score_${state.quizSessionId}` : 'audit';
+    const tgLink = `https://t.me/${BOT_USERNAME}?start=${sessionParam}`;
+    const ctaLabels = {
+      audit:               '📝 Бизнес-чекап · 9 000 ₽',
+      audit_plus:          '🎬 Чекап Plus · 14 000 ₽ — +видео Кати',
+      diagnostic_waitlist: '📊 Диагностика — лист ожидания',
+    };
+    const secLabels = {
+      audit:      'Бизнес-чекап · 9 000 ₽',
+      audit_plus: 'Чекап Plus · 14 000 ₽',
+      demo:       'Сначала поговорить',
+    };
+    const primaryLabel = ctaLabels[r.ctaPrimary] || ctaLabels.audit;
+    const secondaryLabel = secLabels[r.ctaSecondary] || secLabels.demo;
+
+    const confNote = r.stageConfidence === 'low'
+      ? '<p style="font-size:0.8rem;color:#94A3B8;margin-top:8px;">* Стадия определена приближённо. Уточним на Чекапе.</p>'
+      : '';
+
+    root.innerHTML = '';
+    const card = document.createElement('div');
+    card.innerHTML = `
+      <!-- Score block -->
+      <div class="result-score-wrap" style="background:${scoreBg};">
+        <div class="result-score-big" style="color:${scoreColor};">${r.score}</div>
+        <div style="font-size:0.9rem;color:var(--color-gray-500,#6B7280);margin-top:4px;">/ 100</div>
+        <div class="result-category" style="color:${scoreColor};">${r.category}</div>
+      </div>
+
+      <!-- Stage + Segment -->
+      <div class="result-meta">
+        <div class="result-badge">📍 ${r.stageLabel} — ${r.stageDesc}</div>
+        <div class="result-badge">🏢 ${r.segmentDisplay}</div>
+      </div>
+      ${confNote}
+
+      <!-- Benchmark -->
+      ${bmHtml}
+
+      <!-- Layers 2×2 -->
+      <h3 style="font-size:1rem;font-weight:700;margin-bottom:12px;">Срез по слоям</h3>
+      <div class="result-layers">${layerHtml}</div>
+
+      <!-- Growth points -->
+      <h3 style="font-size:1rem;font-weight:700;margin-bottom:12px;">3 точки роста на ближайшие 30 дней</h3>
+      ${gpHtml}
+
+      <!-- CTA -->
+      <div class="result-cta">
+        <a href="${tgLink}" target="_blank" rel="noopener" class="btn-cta-primary">${primaryLabel}</a>
+        <a href="${tgLink}" target="_blank" rel="noopener" class="btn-cta-secondary">${secondaryLabel}</a>
+        <a href="${tgLink}" target="_blank" rel="noopener" class="btn-cta-secondary">💬 Сначала поговорить</a>
+      </div>
+
+      <p class="result-legal">
+        Никому не передаём ваши ответы.<br>
+        Хранение — 152-ФЗ. Удалить данные: <a href="https://t.me/${BOT_USERNAME}?start=delete_my_data" style="color:inherit;">/delete_my_data</a> в боте.
+      </p>
+    `;
+    root.appendChild(card);
+    updateProgress();
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Маршрутизация фаз ────────────────────────────────────────────────────
+  function render() {
+    const { phase } = state;
+    if (phase === 'p1') return renderP1();
+    if (phase === 'p2') return renderP2();
+    const qm = /^q(\d+)$/.exec(phase);
+    if (qm) return renderQuestion(parseInt(qm[1]));
+    if (phase === 'result' && state.result) return renderResult(state.result);
+    renderP1();
+  }
+
+  // ── Bootstrap ─────────────────────────────────────────────────────────────
+  fetch('/js/mini-checkup-canon.json')
+    .then(r => r.json())
+    .then(data => {
+      canon = data;
+      MiniCheckupEngine.setCanon(canon);
+      loadState();
+      render();
+    })
+    .catch(() => {
+      root.innerHTML = '<div class="quiz-card" style="text-align:center;padding:40px;"><p>Не удалось загрузить данные. Попробуйте обновить страницу.</p></div>';
+    });
+}());
 </script>
 </body>
 </html>
