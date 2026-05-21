@@ -17,17 +17,19 @@ def _make_answer(key: str, layer: str, order: int, text: str, passed: bool):
 
 def test_group_answers_sorted_by_order():
     """_group_answers возвращает dict[str, list[dict]], отсортированный по order."""
-    # Используем реальные ключи из CHECKUP_QUESTIONS
+    # Используем реальные v2-ключи из CHECKUP_QUESTIONS (c1..c20)
+    # _group_answers группирует по layer.text — для v2 ключей layer='01'
     answers = [
-        _make_answer("s2_bets", "strategy", 2, "ans2", True),
-        _make_answer("s1_horizon", "strategy", 1, "ans1", True),
+        _make_answer("c2_strategy_alternatives", "01", 2, "ans2", True),
+        _make_answer("c1_strategy_process", "01", 1, "ans1", True),
     ]
     grouped = _group_answers(answers)
-    assert "strategy" in grouped
-    assert len(grouped["strategy"]) == 2
-    # Первым должен быть вопрос с меньшим order (s1_horizon = order 1)
-    assert grouped["strategy"][0]["order"] == 1
-    assert grouped["strategy"][1]["order"] == 2
+    # Группа создаётся по a.layer ('01') через layers.setdefault
+    assert "01" in grouped
+    assert len(grouped["01"]) == 2
+    # Первым должен быть вопрос с меньшим order (c1 = order 1)
+    assert grouped["01"][0]["order"] == 1
+    assert grouped["01"][1]["order"] == 2
 
 
 def test_group_answers_unknown_key_skipped():

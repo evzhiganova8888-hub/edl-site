@@ -291,9 +291,9 @@ def test_render_report_v2_plus_full():
     assert "Деньги" in html
     # Plus-специфика
     assert "методологические гипотезы" in html
-    # Upsell-страница
+    # Upsell-страница (TZ_checkup_plus_v2.md §8.4 — Диагностика 45 000 ₽)
     assert "Диагност" in html
-    assert "25 000" in html
+    assert "45 000" in html
     # 3 сценария
     assert "Sniper" in html
     assert "Combo" in html

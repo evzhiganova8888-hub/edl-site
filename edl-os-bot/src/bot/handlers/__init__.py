@@ -31,8 +31,10 @@ from src.bot.handlers import (
     start,
 )
 from src.bot.handlers.admin import (
+    figjam_command,
     grant_demo_command,
     handle_admin_video_upload,
+    plus_video_command,
     regenerate_pdf_command,
     upload_plus_video_command,
 )
@@ -116,6 +118,8 @@ def register(app: Application) -> None:
     app.add_handler(CommandHandler("feedback", feedback_handler.feedback_command))
     app.add_handler(CommandHandler("reset", start.reset_command))
     app.add_handler(CommandHandler("upload_plus_video", upload_plus_video_command))  # F8
+    app.add_handler(CommandHandler("plus_video", plus_video_command))  # Чекап v2 §10.2
+    app.add_handler(CommandHandler("figjam", figjam_command))  # Чекап v2 §9.2
     app.add_handler(CommandHandler("grant_demo", grant_demo_command))  # demo-access
     app.add_handler(CommandHandler("regenerate_pdf", regenerate_pdf_command))  # HOT-fix 19.05
 

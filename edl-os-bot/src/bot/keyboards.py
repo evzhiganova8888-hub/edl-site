@@ -337,3 +337,138 @@ def quiz_site_cta_keyboard(quiz_session_id: str) -> InlineKeyboardMarkup:
         [InlineKeyboardButton("← В меню", callback_data="menu:main")],
         feedback_row("quiz"),
     ])
+
+
+# ── Чекап v2 ──────────────────────────────────────────────────────────────────
+
+def checkup_mc_keyboard(q_idx: int, options: tuple[tuple[str, int], ...]) -> InlineKeyboardMarkup:
+    """5 вариантов ответа на MC вопрос Чекапа v2.
+
+    callback_data: `checkup:mc:<q_idx>:<score>` (score = 0/3/5/8/10).
+    """
+    rows = [
+        [InlineKeyboardButton(label, callback_data=f"checkup:mc:{q_idx}:{score}")]
+        for label, score in options
+    ]
+    rows.append([InlineKeyboardButton("⏸ Перерыв", callback_data="checkup:pause")])
+    return InlineKeyboardMarkup(rows)
+
+
+def checkup_numeric_keyboard(q_idx: int, allow_skip: bool = True) -> InlineKeyboardMarkup:
+    """Под numeric вопросом — кнопки «Не знаю» (если разрешено) и «Перерыв»."""
+    rows: list[list[InlineKeyboardButton]] = []
+    if allow_skip:
+        rows.append([
+            InlineKeyboardButton("🤷 Не знаю — посчитаю позже", callback_data=f"checkup:num_skip:{q_idx}")
+        ])
+    rows.append([InlineKeyboardButton("⏸ Перерыв", callback_data="checkup:pause")])
+    return InlineKeyboardMarkup(rows)
+
+
+def checkup_section_break_keyboard(layer_code: str) -> InlineKeyboardMarkup:
+    """После Q5/Q10/Q15 — продолжить или сделать перерыв."""
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton("▶️ Продолжить", callback_data=f"checkup:continue:{layer_code}")],
+        [InlineKeyboardButton("⏸ Перерыв (вернусь позже)", callback_data="checkup:pause")],
+    ])
+
+
+def checkup_short_text_keyboard(q_idx: int) -> InlineKeyboardMarkup:
+    """Под short-text вопросом — пример и перерыв."""
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton("💡 Пример хорошего ответа", callback_data=f"checkup:example:{q_idx}")],
+        [InlineKeyboardButton("⏸ Перерыв", callback_data="checkup:pause")],
+    ])
+
+
+def checkup_quality_followup_keyboard(q_idx: int) -> InlineKeyboardMarkup:
+    """После неудачной проверки качества — «Дополнить» / «Оставить так»."""
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton("✏️ Дополнить ответ", callback_data=f"checkup:improve:{q_idx}")],
+        [InlineKeyboardButton("👌 Оставить как есть", callback_data=f"checkup:keep:{q_idx}")],
+    ])
+
+
+def checkup_resume_or_restart_keyboard(app_id: str, current_idx: int) -> InlineKeyboardMarkup:
+    """Pause/resume: продолжить с N или начать заново (если был legacy)."""
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton(
+            f"▶️ Продолжить с вопроса {current_idx + 1}/20",
+            callback_data=f"checkup:resume:{app_id}",
+        )],
+        [InlineKeyboardButton("🔄 Начать заново", callback_data=f"checkup:restart:{app_id}")],
+        [InlineKeyboardButton("← В меню", callback_data="menu:main")],
+    ])
+
+
+def checkup_v2_intro_keyboard(app_id: str, has_mini: bool) -> InlineKeyboardMarkup:
+    """Intro перед Q1: «Поехали» / «Как это устроено»."""
+    rows = [[InlineKeyboardButton("✅ Поехали", callback_data=f"checkup:start_v2:{app_id}")]]
+    rows.append([InlineKeyboardButton(
+        "📖 Сначала расскажи как устроено",
+        callback_data=f"checkup:explain:{app_id}",
+    )])
+    return InlineKeyboardMarkup(rows)
+
+
+def checkup_p1_segment_keyboard(app_id: str) -> InlineKeyboardMarkup:
+    """Pre-P1 в Чекапе если не было Mini — выбор сегмента (7 опций)."""
+    segs = [
+        ("edu",   "Онлайн-школа / EdTech"),
+        ("mp",    "Маркетплейс / e-commerce"),
+        ("it",    "IT / digital-агентство"),
+        ("prod",  "Производство / опт"),
+        ("serv",  "Услуги"),
+        ("saas",  "B2B SaaS"),
+        ("other", "Другое"),
+    ]
+    rows = [[InlineKeyboardButton(label, callback_data=f"checkup:p1:{code}")] for code, label in segs]
+    return InlineKeyboardMarkup(rows)
+
+
+def checkup_p2_stage_keyboard(app_id: str) -> InlineKeyboardMarkup:
+    """Pre-P2 — команда + выручка (6 опций)."""
+    opts = [
+        ("start",              "1–10 чел · до 15 М ₽"),
+        ("team",               "10–25 чел · 15–60 М ₽"),
+        ("structure",          "25–50 чел · 60–200 М ₽"),
+        ("maturity",           "50+ чел · 200 М+ ₽"),
+        ("outlier_small_team", "Команда меньше, чем выручка предполагает"),
+        ("outlier_big_team",   "Команда больше, чем выручка предполагает"),
+    ]
+    rows = [[InlineKeyboardButton(label, callback_data=f"checkup:p2:{code}")] for code, label in opts]
+    return InlineKeyboardMarkup(rows)
+
+
+def checkup_final_cta_keyboard(
+    *,
+    show_plus_upgrade: bool = False,
+    diagnostic_price_rub: int = 45_000,
+) -> InlineKeyboardMarkup:
+    """Финальный экран после Q20: 3 CTA (ТЗ §11.4)."""
+    rows = [
+        [InlineKeyboardButton(
+            f"📊 Хочу Диагностику · {diagnostic_price_rub:,} ₽".replace(",", " "),
+            callback_data="menu:diagnostic",
+        )],
+    ]
+    if show_plus_upgrade:
+        rows.append([InlineKeyboardButton(
+            "🎬 Доплатить до Plus · +5 000 ₽",
+            callback_data="checkup:upgrade_to_plus",
+        )])
+    rows.append([InlineKeyboardButton("💬 Вопрос Ивану", url=f"https://t.me/{settings.sales_username}")])
+    rows.append([InlineKeyboardButton("← В меню", callback_data="menu:main")])
+    rows.append(feedback_row("checkup"))
+    return InlineKeyboardMarkup(rows)
+
+
+def checkup_plus_upgrade_keyboard() -> InlineKeyboardMarkup:
+    """Upsell Base → Plus: «Доплатить» / «Не сейчас»."""
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton(
+            "✅ Доплатить 5 000 ₽ и получить Plus",
+            callback_data="checkup:confirm_upgrade",
+        )],
+        [InlineKeyboardButton("Сейчас не нужно", callback_data="checkup:decline_upgrade")],
+    ])

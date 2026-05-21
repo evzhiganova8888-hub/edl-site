@@ -825,3 +825,191 @@ async def handle_admin_video_upload(update: Update, context: ContextTypes.DEFAUL
         f"✅ Видео отправлено клиенту (tg_id={user_obj.telegram_id}).\n"
         f"Email: {user_obj.email or '—'}"
     )
+
+
+# ── Чекап v2: admin команды /plus_video и /figjam ─────────────────────────────
+
+
+async def plus_video_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """`/plus_video <application_id> <video_url>` — регистрирует ссылку на видео
+    (TZ_checkup_plus_v2.md §10.2). После этого notify_plus_video task
+    отправит ссылку клиенту.
+
+    Отличается от `/upload_plus_video <app_id>` (FSM upload видео-файла в TG):
+    эта команда — для случая когда Катя выгрузила видео на Vimeo/Yandex Disk
+    и хочет просто зарегистрировать URL.
+    """
+    msg = update.effective_message
+    tg = update.effective_user
+    if tg is None or not (is_admin(tg.id) or await _admin_session_active(tg.id)):
+        return
+
+    args = context.args or []
+    if len(args) < 2:
+        await msg.reply_text(
+            "Использование: `/plus_video <application_id> <video_url>`\n\n"
+            "Пример: `/plus_video b3c7d8a0-1234-5678-90ab-cdef01234567 https://disk.yandex.ru/i/abc123`",
+            parse_mode="Markdown",
+        )
+        return
+
+    app_id_str, video_url = args[0], args[1]
+    try:
+        app_id = UUID(app_id_str)
+    except ValueError:
+        await msg.reply_text("Невалидный application_id.")
+        return
+
+    if not (video_url.startswith("https://") or video_url.startswith("http://")):
+        await msg.reply_text("video_url должен быть HTTPS-ссылкой.")
+        return
+
+    async with async_session_factory()() as session:
+        result = await session.execute(select(Application).where(Application.id == app_id))
+        app = result.scalar_one_or_none()
+        if app is None:
+            await msg.reply_text(f"Заявка {app_id} не найдена.")
+            return
+        if app.status != "paid":
+            await msg.reply_text(f"Заявка {app_id} ещё не оплачена (status={app.status}).")
+            return
+
+        app.plus_video_url = video_url
+        app.plus_video_uploaded_at = datetime.now(timezone.utc)
+        await log_event(
+            session, user_id=app.user_id, event="checkup_plus_video_uploaded",
+            payload={
+                "app_id": str(app.id),
+                "video_url": video_url,
+                "hours_since_purchase": (
+                    (datetime.now(timezone.utc) - app.payment_succeeded_at).total_seconds() / 3600
+                    if app.payment_succeeded_at else None
+                ),
+            },
+        )
+        # Достаём клиента для отправки
+        user_result = await session.execute(select(User).where(User.id == app.user_id))
+        user_obj = user_result.scalar_one_or_none()
+        await session.commit()
+
+    # Отправляем клиенту
+    sent_ok = False
+    if user_obj:
+        try:
+            await context.bot.send_message(
+                chat_id=user_obj.telegram_id,
+                text=(
+                    "🎬 *Готово видео-разбор от Кати (15 мин)*\n\n"
+                    f"{video_url}\n\n"
+                    "Что в нём: разбор ваших 4 слоёв на видео + 3 ключевых "
+                    "акцента из вашего PDF + следующий шаг."
+                ),
+                parse_mode="Markdown",
+            )
+            sent_ok = True
+        except Exception as e:
+            logger.exception("Send plus_video to user failed: %s", e)
+
+    if sent_ok and user_obj:
+        async with async_session_factory()() as session:
+            result = await session.execute(select(Application).where(Application.id == app_id))
+            app2 = result.scalar_one_or_none()
+            if app2:
+                app2.plus_video_sent_to_client_at = datetime.now(timezone.utc)
+                await log_event(
+                    session, user_id=app2.user_id, event="checkup_plus_video_sent",
+                    payload={"app_id": str(app2.id), "video_url": video_url},
+                )
+                await session.commit()
+
+    if sent_ok:
+        await msg.reply_text(f"✅ Видео отправлено клиенту (tg={user_obj.telegram_id}).")
+    else:
+        await msg.reply_text(
+            f"✅ URL сохранён для {app_id}. ⚠️ Не удалось отправить клиенту автоматически — "
+            "напишите ему вручную."
+        )
+
+
+async def figjam_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """`/figjam <application_id> <figjam_url>` — добавляет FigJam-карту
+    к Чекапу (TZ_checkup_plus_v2.md §9.2). Бот шлёт ссылку клиенту
+    отдельным сообщением.
+    """
+    msg = update.effective_message
+    tg = update.effective_user
+    if tg is None or not (is_admin(tg.id) or await _admin_session_active(tg.id)):
+        return
+
+    args = context.args or []
+    if len(args) < 2:
+        await msg.reply_text(
+            "Использование: `/figjam <application_id> <figjam_url>`\n\n"
+            "Пример: `/figjam b3c7d8a0-1234-5678-90ab-cdef01234567 https://figma.com/board/abc123`",
+            parse_mode="Markdown",
+        )
+        return
+
+    app_id_str, figjam_url = args[0], args[1]
+    try:
+        app_id = UUID(app_id_str)
+    except ValueError:
+        await msg.reply_text("Невалидный application_id.")
+        return
+
+    if not (figjam_url.startswith("https://") or figjam_url.startswith("http://")):
+        await msg.reply_text("figjam_url должен быть HTTPS-ссылкой.")
+        return
+
+    async with async_session_factory()() as session:
+        result = await session.execute(select(Application).where(Application.id == app_id))
+        app = result.scalar_one_or_none()
+        if app is None:
+            await msg.reply_text(f"Заявка {app_id} не найдена.")
+            return
+
+        app.figjam_url = figjam_url
+        await log_event(
+            session, user_id=app.user_id, event="checkup_figjam_added",
+            payload={"app_id": str(app.id), "figjam_url": figjam_url},
+        )
+
+        # Найдём клиента и отправим ему ссылку
+        from src.db.session import async_session_factory as _sf
+        user_result = await session.execute(select(User).where(User.id == app.user_id))
+        user_obj = user_result.scalar_one_or_none()
+        await session.commit()
+
+    if user_obj:
+        try:
+            await context.bot.send_message(
+                chat_id=user_obj.telegram_id,
+                text=(
+                    "🎯 Также готова *FigJam-карта* вашего слоя проблем — "
+                    "визуальное дополнение к PDF.\n\n"
+                    f"Открыть: {figjam_url}\n\n"
+                    "На карте: проблема → причина → симптом по 4 слоям. "
+                    "Удобно показывать команде на планёрке."
+                ),
+                parse_mode="Markdown",
+            )
+        except Exception as e:
+            logger.exception("Send figjam to user failed: %s", e)
+            await msg.reply_text(
+                f"⚠️ Ссылка сохранена, но не удалось отправить клиенту "
+                f"(tg_id={user_obj.telegram_id}): {e}"
+            )
+            return
+
+    await msg.reply_text(
+        f"✅ FigJam-карта добавлена для {app_id} и отправлена клиенту."
+    )
+
+
+async def _admin_session_active(tg_id: int) -> bool:
+    """Лёгкая обёртка над is_admin_active с собственной сессией."""
+    try:
+        async with async_session_factory()() as session:
+            return await is_admin_active(session, tg_id)
+    except Exception:
+        return False

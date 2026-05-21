@@ -372,8 +372,85 @@
       <p>Это <strong>не диагностика</strong> в классическом смысле: мы не
       подключаемся к вашим системам (1С, CRM, банк) и не сверяем цифры с
       первичкой. Все рекомендации сформулированы из того, что вы сами сказали.
-      Реальные цифры из ваших систем — на этапе Диагностики (25 000 ₽).</p>
+      Реальные цифры из ваших систем — на этапе Диагностики ({{ diagnostic_price_rub }} ₽).</p>
     </div>
+  </section>
+  {% endif %}
+
+  {# ─── ЧЕКАП v2: 3 AGENT TEASERS (TZ_checkup_plus_v2.md §8.3) ────────── #}
+  {% if teasers %}
+  <section class="section--upsell" style="padding: 0;">
+    <h2>Что закроет автоматизация в Спринте</h2>
+    <p style="color:#555;margin-bottom:16px;">
+      В Чекапе мы посчитали узкие места по вашим ответам. В Спринте под каждый
+      слой настраиваются агенты, которые делают это автоматически каждую неделю.
+    </p>
+    {% for teaser in teasers %}
+    <div class="upsell" style="margin-bottom:14px; border-left: 4px solid #F47A2A; padding: 14px 16px;">
+      <h3 style="margin-top:0; color:#F47A2A;">{{ teaser.title }}</h3>
+      <div style="white-space: pre-line;">{{ teaser.body }}</div>
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  {# ─── ЧЕКАП v2: Score + Mini-сравнение (TZ §13.2) ─────────────────── #}
+  {% if checkup_v2_score is not none %}
+  <section class="section--upsell" style="padding: 0;">
+    <h2>Score Чекапа: {{ checkup_v2_score }}/100</h2>
+    {% if mini_quiz_score %}
+    <p>Mini-Чекап: <b>{{ mini_quiz_score }}/100</b> (по вашей оценке)<br>
+    Бизнес-чекап: <b>{{ checkup_v2_score }}/100</b> (с учётом цифр и качества описания узких мест)</p>
+    <p style="color:#666;">Δ {{ checkup_v2_score - mini_quiz_score }} — типовой gap «как видится» vs «как считается». В Диагностике закроется ещё точнее — на реальных данных из 1С/CRM.</p>
+    {% endif %}
+    {% if v2_layer_scores %}
+    <table style="width:100%; margin-top:8px;">
+      <tr>
+        <th>Слой</th><th style="text-align:right;">Score</th>
+      </tr>
+      {% for layer, score in v2_layer_scores.items() %}
+      <tr>
+        <td>{{ layer }} · {% if layer == '01' %}Стратегия{% elif layer == '02' %}Воронка{% elif layer == '03' %}Операционка{% else %}Деньги{% endif %}</td>
+        <td style="text-align:right; font-weight: 700;">{{ score }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+  </section>
+  {% endif %}
+
+  {# ─── ЧЕКАП v2 PLUS: расширенные benchmarks + Спринт + Видео-разбор ── #}
+  {% if is_plus and plus_video_script %}
+  <section class="section--upsell" style="padding: 0; page-break-before: always;">
+    <h2>Plus · Видео-разбор от Кати (15 мин)</h2>
+    <p>{{ plus_video_script.focus }}</p>
+    <h3>Что будет в видео:</h3>
+    <ul>
+      {% for layer_note in plus_video_script.layers %}
+      <li>{{ layer_note }}</li>
+      {% endfor %}
+    </ul>
+    <p style="color:#666; margin-top: 16px;">
+      <em>Ссылка на видео придёт в этот же чат в течение 24 часов.</em>
+    </p>
+  </section>
+  {% endif %}
+
+  {# ─── ЧЕКАП v2: CTA-блок на Диагностику (TZ §8.4) ─────────────────── #}
+  {% if cta_block %}
+  <section class="section--upsell" style="page-break-before: always;">
+    <h2>{{ cta_block.title }}</h2>
+    <p>{{ cta_block.intro }}</p>
+    <ul style="margin-top:12px;">
+      {% for bullet in cta_block.bullets %}
+      <li>✅ {{ bullet }}</li>
+      {% endfor %}
+    </ul>
+    <p style="margin-top: 16px; font-size: 1.05em;">
+      <strong>Цена:</strong> {{ "%s"|format(cta_block.price_rub) }} ₽
+      &nbsp;·&nbsp; <strong>Срок:</strong> 2 недели
+    </p>
+    <p>Записаться: <a href="{{ cta_block.deep_link }}">{{ cta_block.deep_link }}</a></p>
   </section>
   {% endif %}
 

@@ -370,7 +370,22 @@ _LAYER_LABELS = {
     "sales": "Воронка",
     "operations": "Операционка",
     "finance": "Деньги",
+    # v2: новые коды (TZ_checkup_plus_v2.md §3.2)
+    "01": "Стратегия",
+    "02": "Воронка",
+    "03": "Операционка",
+    "04": "Деньги",
 }
+
+# Маппинг новых кодов в старые для backward-compat в шаблоне/логике
+_LAYER_V2_TO_V1 = {"01": "strategy", "02": "sales", "03": "operations", "04": "finance"}
+
+
+def _canonical_layer(code: str | None) -> str:
+    """Приводит код слоя к old-style (strategy/sales/operations/finance)."""
+    if code in _LAYER_V2_TO_V1:
+        return _LAYER_V2_TO_V1[code]
+    return code or "strategy"
 
 
 # ─── Диагноз по 4 слоям ───────────────────────────────────────────────────────
@@ -656,6 +671,72 @@ def render_report_v2(
             "skipped": a.text == "[пропущено]",
         })
 
+    # ── Чекап v2 augmentation: 3 agent teasers + новая цена Диагностики 45 000 ──
+    from src.core.checkup_pdf_blocks import (
+        build_three_teasers,
+        diagnostic_cta_block,
+        extract_numeric_values,
+        DIAGNOSTIC_PRICE_RUB,
+    )
+    from src.core.checkup_score import split_answers, total_checkup_score
+    from src.core.checkup_video_script import get_video_script
+
+    # Видны ли v2-ответы? (если хотя бы один answer_type='mc'/'numeric')
+    has_v2_answers = any(
+        getattr(a, "answer_type", None) in ("mc", "numeric") for a in answers
+    )
+
+    teasers: list[dict] = []
+    cta_block: dict | None = None
+    checkup_v2_score: int | None = None
+    v2_layer_scores: dict[str, int] = {}
+    plus_video_script: dict | None = None
+
+    if has_v2_answers:
+        mc, num, txt = split_answers(answers)
+        segment_v2 = user.segment or "other"
+        stage_v2 = user.quiz_stage or "team"
+        try:
+            checkup_v2_score, v2_layer_scores = total_checkup_score(
+                mc, num, txt, segment_v2, stage_v2
+            )
+        except Exception:
+            checkup_v2_score, v2_layer_scores = None, {}
+
+        nums = extract_numeric_values(answers)
+        seg_display = {
+            "edu": "онлайн-школа", "mp": "маркетплейс", "it": "IT-агентство",
+            "prod": "производство/опт", "serv": "услуги", "saas": "B2B SaaS",
+            "other": "ваш сегмент",
+        }.get(segment_v2, segment_v2)
+
+        try:
+            teasers = build_three_teasers(
+                v2_layer_scores or {"01": 50, "02": 50, "03": 50, "04": 50},
+                margin_pct=nums.get("margin_pct"),
+                conv_pct=nums.get("conv_pct"),
+                hours_per_week=nums.get("hours_per_week"),
+                segment_display=seg_display,
+            )
+        except Exception:
+            teasers = []
+
+        weakest = None
+        if v2_layer_scores:
+            weakest = min(v2_layer_scores.items(), key=lambda x: x[1])[0]
+        try:
+            cta_block = diagnostic_cta_block(
+                checkup_v2_score or 50, weakest_layer=weakest
+            )
+        except Exception:
+            cta_block = None
+
+        if plan == "plus":
+            try:
+                plus_video_script = get_video_script(segment_v2, stage_v2)
+            except Exception:
+                plus_video_script = None
+
     ctx = {
         "company": company,
         "full_name": full_name,
@@ -674,8 +755,16 @@ def render_report_v2(
         "client_tools": all_tools(tools_by_layer),
         "priority_metrics": priority_metrics,
         "offer_url": settings.offer_checkup_url,
-        "diagnostic_price_rub": "25 000",
-        "version": "v1",
+        "diagnostic_price_rub": f"{DIAGNOSTIC_PRICE_RUB:,}".replace(",", " "),  # 45 000
+        "version": "v2" if has_v2_answers else "v1",
+        # Чекап v2 блоки (TZ_checkup_plus_v2.md §8.3, §8.4)
+        "teasers": teasers,
+        "cta_block": cta_block,
+        "checkup_v2_score": checkup_v2_score,
+        "v2_layer_scores": v2_layer_scores,
+        "mini_quiz_score": getattr(user, "quiz_score", None),
+        "plus_video_script": plus_video_script,
+        "has_v2_answers": has_v2_answers,
     }
 
     env = Environment(
@@ -704,9 +793,14 @@ def render_report_v2(
 
 
 def _vat_section_dict(answers: list[CheckupAnswer]) -> dict | None:
-    """Структурированная информация по НДС-секции (для шаблона)."""
+    """Структурированная информация по НДС-секции (для шаблона).
+
+    Работает с v1 ключами (m2_ebitda, m3_vat_2026) и v2 ключом (c20_vat_2026_scenario).
+    """
     revenue_answer = next(
-        (a for a in answers if a.question_key in ("m2_ebitda", "m3_vat_2026")),
+        (a for a in answers if a.question_key in (
+            "m2_ebitda", "m3_vat_2026", "c20_vat_2026_scenario"
+        )),
         None,
     )
     if not revenue_answer:
