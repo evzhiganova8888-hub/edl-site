@@ -109,8 +109,14 @@ class Application(Base):
     plus_video_uploaded_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     plus_video_url: Mapped[str | None] = mapped_column(Text)
     plus_video_sent_to_client_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    # Чекап v2: ручная ссылка на FigJam-карту (заполняет Катя через /figjam)
+    # Чекап v2: ручная ссылка на FigJam-карту (заполняет команда EDL OS через /figjam)
     figjam_url: Mapped[str | None] = mapped_column(Text)
+    # SPIN-Чекап v2.0 (ТЗ Plus v2.0 §10.1, миграция 0015)
+    archetype: Mapped[str | None] = mapped_column(Text)
+    report_id: Mapped[str | None] = mapped_column(Text)
+    spin_failsafe_warning_sent_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True)
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
@@ -325,6 +331,9 @@ class CheckupAnswer(Base):
     answer_score: Mapped[int | None] = mapped_column(Integer)     # 0/3/5/8/10 для MC
     answer_numeric: Mapped[float | None] = mapped_column(Numeric(10, 2))  # для numeric
     answer_skipped: Mapped[bool] = mapped_column(Boolean, default=False, server_default=sql_text("false"))
+    # SPIN-Чекап v2.0 (миграция 0015): «не знаю / не считаем» маркеры (ТЗ §3.6)
+    is_decline: Mapped[bool] = mapped_column(Boolean, default=False, server_default=sql_text("false"))
+    decline_reason: Mapped[str | None] = mapped_column(Text)
     answered_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     __table_args__ = (
