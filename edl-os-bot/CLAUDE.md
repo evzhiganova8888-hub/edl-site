@@ -1,8 +1,18 @@
 # EDL OS Bot — source of truth
 
-> Project memory для Claude Code. Описывает что реально работает в коде и в проде на 2026-05-18.
-> При расхождениях между этим документом и старыми ТЗ (`/BOT_TZ.md`, `/BOT_TZ_v3.md`) — **доверяй коду и этому файлу**.
-> Старые ТЗ оставлены для исторического контекста, но они описывают цели, а не реализацию.
+> Project memory для Claude Code. Описывает что реально работает в коде на 2026-05-22.
+> При расхождениях между этим документом и старыми ТЗ (`/BOT_TZ.md`, `/BOT_TZ_v3.md`, `TZ Чекап Plus v2.0`) — **доверяй коду и этому файлу**.
+> Старые ТЗ оставлены для исторического контекста.
+
+## Что нового с 2026-05-21 (Чекап Plus v2.0)
+
+- **Условная гарантия возврата** (PR #53): возврат при ОБОИХ условиях — ответы прошли рубрику качества И ни одну рекомендацию нельзя реализовать. Везде заменены формулировки «безусловная гарантия».
+- **Видео от команды EDL OS** (PR #53): не персонально Екатериной. ИП «Жиганова Екатерина Викторовна» оставлено как юр.идентификатор.
+- **Промокод-engine с 24ч TTL** (PR #53): `core/coupon_engine.py`, миграция `0014_coupons`, команды `/diagnostika`, `/issue_coupon`, `/coupon_info`, `/confirm_payment`. Celery beat `expire_coupons` каждые 15 минут.
+- **PDF v3** (PR #54): шаблон Екатерины (1509 строк, A4, Inter+Inter Tight, Electric Tangerine #FF6B1A, SVG-схемы) + Claude Haiku 4.5 pipeline + Pydantic-валидация + ARCHETYPE_FALLBACKS. Активация через env `CHECKUP_PDF_V3_ENABLED=1`. По умолчанию выключен.
+- **SPIN-фундамент** (PR #54): 16 SPIN-вопросов (`core/checkup_spin_questions.py`), 6 архетипов MVP + fallback (`core/checkup_archetypes.py`), миграция `0015_checkup_spin_v2` (archetype, report_id, is_decline). FSM-модуль `bot/handlers/checkup_spin.py` — **не wired в `/checkup` ещё** (TIER 1 next session).
+- **«Вижнар» → «Визионер»** (PR #55): везде в шаблоне и fallback dataset.
+- **TIER 3 polish** (PR #56): 5-мин fail-safe (celery), dormant-маркер 14д/30д, daily pilot metrics digest 9:00 МСК, auto-issue купона T+24ч после Plus-видео, auto-cheat-sheet для команды EDL в видео-брифе.
 
 ---
 
@@ -427,6 +437,7 @@ Conftest подставляет SQLite in-memory для async session. **1 skipp
 
 ---
 
-_Версия документа: 1.1_
-_Последнее обновление: 2026-05-18 МСК (Claude Sonnet 4.6)_
-_Прод-состояние: alembic_version=0011_plus_video_fields; webhook=active; pytest=184/0._
+_Версия документа: 1.2_
+_Последнее обновление: 2026-05-22 МСК (Claude Opus 4.7)_
+_Состояние: alembic_version=0015_checkup_spin_v2; webhook=active; pytest=470+/0._
+_Главные feature-flags: CHECKUP_PDF_V3_ENABLED (default OFF — нужно установить =1 + ANTHROPIC ключ + баланс на proxyapi.ru)._

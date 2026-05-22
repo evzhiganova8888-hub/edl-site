@@ -19,6 +19,10 @@ celery_app = Celery(
         "src.tasks.weekly_voc",
         "src.tasks.notify_plus_video",  # F8
         "src.tasks.expire_coupons",     # 24h TTL для купонов (21.05.2026)
+        "src.tasks.checkup_failsafe",   # 5-мин fail-safe (ТЗ AC4)
+        "src.tasks.dormant_checkup",    # EC2 — мягкое напоминание 14д + dormant 30д
+        "src.tasks.pilot_metrics",      # дневная сводка метрик пилота
+        "src.tasks.issue_plus_coupon",  # T+24ч после Plus-видео — авто-купон
     ],
 )
 celery_app.conf.update(
@@ -45,6 +49,24 @@ celery_app.conf.update(
         "coupons-expire-overdue-every-15min": {
             "task": "src.tasks.expire_coupons.run_expire_coupons",
             "schedule": crontab(minute="*/15"),
+        },
+        # 5-минутный fail-safe для активных Чекапов (ТЗ §3.6, AC4).
+        # Каждую минуту сканируем applications с тишиной > 5 мин и
+        # отправляем единожды напоминание.
+        "checkup-failsafe-every-minute": {
+            "task": "src.tasks.checkup_failsafe.run_failsafe_scan",
+            "schedule": crontab(minute="*"),
+        },
+        # Раз в сутки в 11:00 МСК проверяем dormant-Чекапы (EC2):
+        # 14 дней — мягкое напоминание, 30 дней — пометка «начать заново».
+        "dormant-checkup-daily-1100-msk": {
+            "task": "src.tasks.dormant_checkup.run_dormant_scan",
+            "schedule": crontab(hour=11, minute=0),
+        },
+        # Дневная сводка метрик пилота → в @evzhiganova/админ-чат каждое утро.
+        "pilot-metrics-daily-0900-msk": {
+            "task": "src.tasks.pilot_metrics.run_daily_digest",
+            "schedule": crontab(hour=9, minute=0),
         },
     },
 )
