@@ -1,0 +1,1587 @@
+{# =========================================================================
+   EDL OS · ЧЕКАП · PDF-шаблон
+   Базовый = 12 стр · Plus = 16 стр (4 доп. блока, размечены {% if plan == "plus" %})
+   Движок: WeasyPrint 60+. Шаблонизатор: Jinja2.
+   Шрифт: Inter (Google Fonts) — гарантированно работает в WeasyPrint.
+   Цветовая система: Electric Tangerine #FF6B1A + monochrome scale.
+   Все плейсхолдеры — в jinja-синтаксисе {{ }} / {% %}.
+   Перед каждым динамическим блоком — комментарий <!-- BOT: ... -->.
+   ========================================================================= #}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>EDL Чекап — {{ company.legal_name }}</title>
+<style>
+/* ============================================================
+   1 · ШРИФТЫ И БАЗА
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Inter+Tight:wght@600;700;800;900&display=swap');
+
+:root {
+    --c-tangerine: #FF6B1A;
+    --c-tangerine-light: #FFE8DA;
+    --c-tangerine-bg: #FFF5EE;
+    --c-ink: #0A0A0A;
+    --c-ink-soft: #1A1A1A;
+    --c-text: #2A2A2A;
+    --c-text-mute: #6B6B6B;
+    --c-text-faint: #9A9A9A;
+    --c-line: #E8E8E8;
+    --c-line-soft: #F2F2F2;
+    --c-bg-card: #FAFAFA;
+    --c-status-green: #2D9F5E;
+    --c-status-yellow: #E8A317;
+    --c-status-red: #D43F3F;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+    font-family: 'Inter', sans-serif;
+    font-size: 9pt;
+    line-height: 1.5;
+    color: var(--c-text);
+    background: white;
+    font-feature-settings: 'tnum' 1, 'ss01' 1;
+}
+
+/* ============================================================
+   2 · PAGE SETUP (WeasyPrint @page rules)
+   ============================================================ */
+@page {
+    size: A4;
+    margin: 18mm 18mm 16mm 18mm;
+
+    @top-left {
+        content: string(header-brand);
+        font-family: 'Inter', sans-serif;
+        font-size: 7.5pt;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        color: var(--c-ink);
+        padding-bottom: 6mm;
+    }
+    @top-right {
+        content: string(section);
+        font-family: 'Inter', sans-serif;
+        font-size: 7.5pt;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        color: var(--c-ink);
+        padding-bottom: 6mm;
+    }
+    @bottom-left {
+        content: "ELEPHANTDREAMS.RU · HELLO@EDL-OS.RU";
+        font-family: 'Inter', sans-serif;
+        font-size: 7pt;
+        letter-spacing: 0.08em;
+        color: var(--c-text-mute);
+        padding-top: 6mm;
+    }
+    @bottom-right {
+        content: counter(page) " / " counter(pages);
+        font-family: 'Inter', sans-serif;
+        font-size: 7pt;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        color: var(--c-tangerine);
+        padding-top: 6mm;
+    }
+}
+
+@page:first {
+    @top-left { content: none; }
+    @top-right { content: none; }
+}
+
+/* ============================================================
+   3 · СТРАНИЦА И РИТМ
+   ============================================================ */
+.page {
+    page-break-after: always;
+    min-height: 250mm;
+    position: relative;
+}
+.page:last-child { page-break-after: auto; }
+
+/* Маркер раздела для @top-right */
+.section-marker { string-set: section attr(data-section); display: none; }
+.brand-marker { string-set: header-brand attr(data-brand); display: none; }
+
+/* ============================================================
+   4 · ТИПОГРАФИЯ
+   ============================================================ */
+.eyebrow {
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--c-tangerine);
+    margin-bottom: 8mm;
+}
+.eyebrow.muted { color: var(--c-text-mute); }
+
+h1, .h1 {
+    font-family: 'Inter Tight', 'Inter', sans-serif;
+    font-size: 36pt;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--c-ink);
+    margin-bottom: 6mm;
+}
+h2, .h2 {
+    font-family: 'Inter Tight', 'Inter', sans-serif;
+    font-size: 22pt;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--c-ink);
+    margin-bottom: 5mm;
+}
+h3, .h3 {
+    font-size: 12pt;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--c-ink);
+    margin-bottom: 3mm;
+}
+h4, .h4 {
+    font-size: 9pt;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+    color: var(--c-ink);
+    margin-bottom: 2mm;
+}
+.lead {
+    font-size: 11pt;
+    line-height: 1.55;
+    color: var(--c-text);
+    font-weight: 400;
+    max-width: 130mm;
+}
+.body { font-size: 9pt; line-height: 1.55; color: var(--c-text); }
+.caption { font-size: 7.5pt; line-height: 1.4; color: var(--c-text-mute); letter-spacing: 0.02em; }
+.micro { font-size: 6.5pt; line-height: 1.3; color: var(--c-text-faint); letter-spacing: 0.04em; text-transform: uppercase; }
+.accent { color: var(--c-tangerine); }
+.strong { font-weight: 700; color: var(--c-ink); }
+.numeric { font-variant-numeric: tabular-nums; }
+
+/* ============================================================
+   5 · УТИЛИТЫ
+   ============================================================ */
+.row { display: flex; gap: 6mm; }
+.col { flex: 1; }
+.mt-4 { margin-top: 4mm; }
+.mt-6 { margin-top: 6mm; }
+.mt-8 { margin-top: 8mm; }
+.mt-10 { margin-top: 10mm; }
+.mt-14 { margin-top: 14mm; }
+.mb-4 { margin-bottom: 4mm; }
+.mb-6 { margin-bottom: 6mm; }
+.mb-8 { margin-bottom: 8mm; }
+.divider {
+    height: 1px;
+    background: var(--c-line);
+    margin: 6mm 0;
+}
+
+/* ============================================================
+   6 · ОБЛОЖКА (стр. 1)
+   ============================================================ */
+.cover {
+    padding-top: 8mm;
+}
+.cover-header {
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--c-ink);
+    margin-bottom: 10mm;
+}
+.cover-header .dot { color: var(--c-tangerine); }
+.cover-for {
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--c-ink);
+    margin-bottom: 5mm;
+}
+.cover-title {
+    font-family: 'Inter Tight', 'Inter', sans-serif;
+    font-size: 48pt;
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    color: var(--c-ink);
+    margin-bottom: 2mm;
+}
+.cover-title .accent {
+    color: var(--c-tangerine);
+    display: block;
+}
+.cover-lede {
+    font-size: 10.5pt;
+    line-height: 1.5;
+    color: var(--c-text);
+    max-width: 100mm;
+    margin-top: 6mm;
+}
+
+/* Score-ring */
+.score-block {
+    margin-top: 14mm;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.score-ring-wrap {
+    width: 70mm;
+    height: 70mm;
+    position: relative;
+}
+.score-ring-wrap svg {
+    width: 100%; height: 100%;
+}
+.score-ring-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+.score-ring-value {
+    font-family: 'Inter Tight', 'Inter', sans-serif;
+    font-size: 52pt;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--c-ink);
+    letter-spacing: -0.04em;
+}
+.score-ring-max {
+    font-size: 14pt;
+    font-weight: 500;
+    color: var(--c-text-faint);
+    margin-top: 1mm;
+}
+.score-caption {
+    margin-top: 6mm;
+    font-size: 11pt;
+    color: var(--c-text);
+    text-align: center;
+}
+.score-caption .accent { font-weight: 700; }
+.score-benchmark {
+    margin-top: 2mm;
+    font-size: 8pt;
+    color: var(--c-text-mute);
+    text-align: center;
+}
+.cover-meta {
+    margin-top: 20mm;
+    display: flex;
+    justify-content: space-between;
+    font-size: 7pt;
+    color: var(--c-text-mute);
+    letter-spacing: 0.04em;
+    padding-top: 4mm;
+    border-top: 1px solid var(--c-line);
+}
+
+/* ============================================================
+   7 · КАРТОЧКИ И МЕТРИКИ
+   ============================================================ */
+.kpi-grid {
+    display: flex;
+    gap: 4mm;
+    margin-bottom: 8mm;
+}
+.kpi-card {
+    flex: 1;
+    border: 1px solid var(--c-line);
+    padding: 5mm 5mm 5mm 5mm;
+    background: white;
+}
+.kpi-card .kpi-value {
+    font-family: 'Inter Tight', 'Inter', sans-serif;
+    font-size: 32pt;
+    font-weight: 800;
+    color: var(--c-tangerine);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 4mm;
+}
+.kpi-card .kpi-label {
+    font-size: 9pt;
+    font-weight: 600;
+    color: var(--c-ink);
+    margin-bottom: 1.5mm;
+}
+.kpi-card .kpi-meta {
+    font-size: 7pt;
+    color: var(--c-text-mute);
+    line-height: 1.4;
+}
+
+/* ============================================================
+   8 · СВЕТОФОР И СТАТУСЫ
+   ============================================================ */
+.dot-status {
+    display: inline-block;
+    width: 2.5mm;
+    height: 2.5mm;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 2mm;
+}
+.dot-green { background: var(--c-status-green); }
+.dot-yellow { background: var(--c-status-yellow); }
+.dot-red { background: var(--c-status-red); }
+.dot-grey { background: var(--c-line); }
+
+.badge {
+    display: inline-block;
+    padding: 0.8mm 2.5mm;
+    border-radius: 999px;
+    font-size: 7pt;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+.badge-green { background: #E5F4EC; color: var(--c-status-green); }
+.badge-yellow { background: #FCF3D9; color: #9C6D0D; }
+.badge-red { background: #FBE5E5; color: var(--c-status-red); }
+
+/* ============================================================
+   9 · ИНСАЙТ-БЛОК
+   ============================================================ */
+.insight {
+    border-left: 2px solid var(--c-tangerine);
+    padding: 0 0 0 5mm;
+    margin: 6mm 0;
+}
+.insight .insight-eyebrow {
+    font-size: 7pt;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--c-tangerine);
+    margin-bottom: 2mm;
+}
+.insight .insight-title {
+    font-size: 11pt;
+    font-weight: 700;
+    color: var(--c-ink);
+    margin-bottom: 2mm;
+    line-height: 1.35;
+}
+.insight .insight-body {
+    font-size: 8.5pt;
+    line-height: 1.55;
+    color: var(--c-text);
+}
+
+/* ============================================================
+   10 · СЛОЙ (стр. 5–8)
+   ============================================================ */
+.layer-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 8mm;
+    padding-bottom: 4mm;
+    border-bottom: 1px solid var(--c-line);
+}
+.layer-header-left {
+    display: flex;
+    align-items: baseline;
+    gap: 4mm;
+}
+.layer-number {
+    font-family: 'Inter Tight', 'Inter', sans-serif;
+    font-size: 42pt;
+    font-weight: 900;
+    color: var(--c-tangerine);
+    line-height: 1;
+    letter-spacing: -0.03em;
+}
+.layer-title {
+    font-family: 'Inter Tight', 'Inter', sans-serif;
+    font-size: 22pt;
+    font-weight: 800;
+    color: var(--c-ink);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+}
+.layer-subtitle {
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--c-text-mute);
+    margin-top: 1.5mm;
+}
+.layer-score-block {
+    text-align: right;
+}
+.layer-score-value {
+    font-family: 'Inter Tight', 'Inter', sans-serif;
+    font-size: 28pt;
+    font-weight: 800;
+    color: var(--c-ink);
+    line-height: 1;
+}
+.layer-score-label {
+    font-size: 7pt;
+    color: var(--c-text-mute);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 1mm;
+}
+
+.metrics-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6mm 0;
+}
+.metrics-table th, .metrics-table td {
+    text-align: left;
+    padding: 3mm 0;
+    border-bottom: 1px solid var(--c-line);
+    font-size: 8.5pt;
+}
+.metrics-table th {
+    font-size: 7pt;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-text-mute);
+    padding-bottom: 2mm;
+}
+.metrics-table td.metric-name { width: 60%; color: var(--c-text); }
+.metrics-table td.metric-value { width: 25%; font-weight: 600; color: var(--c-ink); }
+.metrics-table td.metric-status { width: 15%; text-align: right; }
+
+.connections-row {
+    display: flex;
+    gap: 4mm;
+    margin-top: 6mm;
+}
+.connection-pill {
+    flex: 1;
+    border: 1px solid var(--c-line);
+    padding: 3mm 4mm;
+    font-size: 7.5pt;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.connection-pill .conn-label {
+    font-weight: 600;
+    color: var(--c-ink);
+    letter-spacing: 0.02em;
+}
+
+/* ============================================================
+   11 · СХЕМА 4 СЛОЁВ (стр. 3) и ГРАФ СВЯЗЕЙ (стр. 9)
+   ============================================================ */
+.scheme-4layers {
+    margin: 8mm 0;
+    text-align: center;
+}
+.scheme-4layers svg {
+    width: 100%;
+    max-width: 150mm;
+}
+
+.connections-graph {
+    margin: 6mm 0;
+    text-align: center;
+}
+.connections-graph svg {
+    width: 100%;
+    max-width: 160mm;
+}
+.connections-legend {
+    display: flex;
+    justify-content: center;
+    gap: 8mm;
+    margin-top: 4mm;
+    font-size: 7pt;
+    color: var(--c-text-mute);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* ============================================================
+   12 · ТАБЛИЦА ПОТЕРЬ (стр. 10)
+   ============================================================ */
+.cost-summary {
+    display: flex;
+    align-items: baseline;
+    gap: 6mm;
+    margin-bottom: 8mm;
+    padding-bottom: 6mm;
+    border-bottom: 2px solid var(--c-ink);
+}
+.cost-summary-value {
+    font-family: 'Inter Tight', 'Inter', sans-serif;
+    font-size: 48pt;
+    font-weight: 900;
+    color: var(--c-tangerine);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.cost-summary-meta {
+    flex: 1;
+    font-size: 9pt;
+    color: var(--c-text);
+}
+.cost-summary-meta .strong { display: block; font-size: 11pt; margin-bottom: 1mm; }
+
+.cost-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.cost-table th, .cost-table td {
+    text-align: left;
+    padding: 3.5mm 0;
+    border-bottom: 1px solid var(--c-line);
+    font-size: 8.5pt;
+}
+.cost-table th {
+    font-size: 7pt;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-text-mute);
+}
+.cost-table .col-source { width: 55%; }
+.cost-table .col-amount { width: 25%; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; color: var(--c-ink); }
+.cost-table .col-share { width: 20%; text-align: right; font-variant-numeric: tabular-nums; color: var(--c-text-mute); }
+.cost-bar {
+    height: 1.5mm;
+    background: var(--c-line-soft);
+    margin-top: 1.5mm;
+    position: relative;
+}
+.cost-bar .cost-bar-fill {
+    height: 100%;
+    background: var(--c-tangerine);
+}
+
+/* ============================================================
+   13 · РЕКОМЕНДАЦИИ (стр. 11)
+   ============================================================ */
+.rec-item {
+    display: flex;
+    gap: 5mm;
+    padding: 5mm 0;
+    border-bottom: 1px solid var(--c-line);
+}
+.rec-item:last-child { border-bottom: none; }
+.rec-priority {
+    font-family: 'Inter Tight', 'Inter', sans-serif;
+    font-size: 26pt;
+    font-weight: 900;
+    color: var(--c-tangerine);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    width: 14mm;
+    flex-shrink: 0;
+}
+.rec-body { flex: 1; }
+.rec-meta {
+    display: flex;
+    gap: 4mm;
+    font-size: 7pt;
+    color: var(--c-text-mute);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 2mm;
+}
+.rec-title {
+    font-size: 11pt;
+    font-weight: 700;
+    color: var(--c-ink);
+    margin-bottom: 2mm;
+    line-height: 1.35;
+}
+.rec-description {
+    font-size: 8.5pt;
+    line-height: 1.55;
+    color: var(--c-text);
+    margin-bottom: 2mm;
+}
+.rec-impact {
+    font-size: 7.5pt;
+    color: var(--c-tangerine);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+/* ============================================================
+   14 · CTA / ПОСЛЕДНЯЯ СТРАНИЦА
+   ============================================================ */
+.cta-block {
+    background: var(--c-ink);
+    color: white;
+    padding: 12mm 10mm;
+    margin-top: 6mm;
+}
+.cta-block .eyebrow { color: var(--c-tangerine); margin-bottom: 4mm; }
+.cta-title {
+    font-family: 'Inter Tight', 'Inter', sans-serif;
+    font-size: 22pt;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: white;
+    margin-bottom: 5mm;
+}
+.cta-body {
+    font-size: 9.5pt;
+    line-height: 1.55;
+    color: #C9C9C9;
+    margin-bottom: 6mm;
+    max-width: 110mm;
+}
+.cta-row {
+    display: flex;
+    gap: 6mm;
+    align-items: baseline;
+    padding-top: 4mm;
+    border-top: 1px solid rgba(255,255,255,0.15);
+}
+.cta-price {
+    font-family: 'Inter Tight', 'Inter', sans-serif;
+    font-size: 24pt;
+    font-weight: 800;
+    color: var(--c-tangerine);
+    line-height: 1;
+}
+.cta-meta {
+    font-size: 8pt;
+    color: #9A9A9A;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+}
+.cta-meta .strong { color: white; }
+
+/* ============================================================
+   15 · PLUS-СПЕЦИФИКА
+   ============================================================ */
+.plus-badge {
+    display: inline-block;
+    background: var(--c-tangerine);
+    color: white;
+    font-size: 7pt;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    padding: 1mm 3mm;
+    margin-bottom: 4mm;
+    text-transform: uppercase;
+}
+.benchmark-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.benchmark-table th, .benchmark-table td {
+    padding: 3.5mm 0;
+    border-bottom: 1px solid var(--c-line);
+    font-size: 8.5pt;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+.benchmark-table th { font-size: 7pt; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-text-mute); }
+.benchmark-table td.bm-metric { text-align: left; color: var(--c-text); }
+.benchmark-table td.bm-you { font-weight: 700; color: var(--c-tangerine); }
+.benchmark-table td.bm-avg { color: var(--c-text); }
+.benchmark-table td.bm-top { color: var(--c-ink); font-weight: 600; }
+
+.signature-block {
+    display: flex;
+    gap: 6mm;
+    margin-top: 8mm;
+    padding-top: 6mm;
+    border-top: 1px solid var(--c-line);
+}
+.signature-avatar {
+    width: 18mm;
+    height: 18mm;
+    background: var(--c-tangerine-bg);
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter Tight', 'Inter', sans-serif;
+    font-size: 16pt;
+    font-weight: 800;
+    color: var(--c-tangerine);
+}
+.signature-text { flex: 1; font-size: 9pt; line-height: 1.55; color: var(--c-text); font-style: italic; }
+.signature-name { font-size: 8pt; font-weight: 700; color: var(--c-ink); letter-spacing: 0.04em; text-transform: uppercase; margin-top: 3mm; font-style: normal; }
+
+</style>
+</head>
+<body>
+<span class="brand-marker" data-brand="● EDL OS · ЧЕКАП {% if plan == 'plus' %}PLUS{% else %}БАЗОВЫЙ{% endif %}"></span>
+
+{# ========================================================================
+   СТРАНИЦА 1 · ОБЛОЖКА + SCORE-ДИАГНОЗ (McKinsey-подход: диагноз сразу)
+   ======================================================================== #}
+<div class="page cover">
+    <span class="section-marker" data-section="01 · ДИАГНОЗ"></span>
+
+    <div class="cover-header"><span class="dot">●</span> EDL OS · ЧЕКАП {% if plan == "plus" %}PLUS{% else %}БАЗОВЫЙ{% endif %}</div>
+
+    <!-- BOT: company.legal_name — название компании клиента (как в анкете) -->
+    <div class="cover-for">Для · {{ company.legal_name }}</div>
+
+    <h1 class="cover-title">
+        Бизнес-чекап<br>
+        <span class="accent">по 4 слоям</span>
+    </h1>
+
+    <!-- BOT: report.answers_count — количество ответов клиента в боте (обычно 16) -->
+    <p class="cover-lede">
+        Снимок вашего бизнеса на основе {{ report.answers_count }} ответов в @edl_os_bot.
+        Что увидели, где боли, что это стоит вам в ₽/мес и куда расти.
+    </p>
+
+    <div class="score-block">
+        <div class="score-ring-wrap">
+            {# BOT: score.total — от 0 до 100. Длина дуги = score / 100 * circumference. #}
+            {# circumference при r=120: 2 * 3.14159 * 120 = 753.98. Заливается через stroke-dasharray. #}
+            <svg viewBox="0 0 280 280">
+                <!-- Фоновое кольцо -->
+                <circle cx="140" cy="140" r="120" fill="none" stroke="#EEEEEE" stroke-width="22" />
+                <!-- Активная дуга, начинается с верха (rotate -90deg) -->
+                <circle cx="140" cy="140" r="120" fill="none"
+                        stroke="#FF6B1A" stroke-width="22" stroke-linecap="round"
+                        stroke-dasharray="{{ (score.total / 100 * 753.98) | round(1) }} 753.98"
+                        transform="rotate(-90 140 140)" />
+            </svg>
+            <div class="score-ring-center">
+                <div class="score-ring-value numeric">{{ score.total }}</div>
+                <div class="score-ring-max">/ 100</div>
+            </div>
+        </div>
+
+        <div class="score-caption">
+            <!-- BOT: company.stage_next — следующая стадия (Команда → Структура → Система → Масштаб). score.stage_readiness_pct — готовность в % -->
+            Готовы перейти в стадию <span class="accent">{{ company.stage_next }}</span> на <span class="accent">{{ score.stage_readiness_pct }}%</span>
+        </div>
+        <div class="score-benchmark">
+            <!-- BOT: company.segment_label, company.stage_current, score.benchmark_avg, score.delta_vs_benchmark_pct -->
+            Средний для {{ company.segment_label_genitive }} на стадии {{ company.stage_current }}: {{ score.benchmark_avg }}
+            ·
+            Ваш Score
+            {% if score.delta_vs_benchmark_pct >= 0 %}выше бенчмарка на <span class="strong">{{ score.delta_vs_benchmark_pct }}%</span>{% else %}ниже бенчмарка на <span class="strong">{{ score.delta_vs_benchmark_pct | abs }}%</span>{% endif %}
+        </div>
+    </div>
+
+    <div class="cover-meta">
+        <!-- BOT: report.date — дата формирования отчёта (формат "21 мая 2026") -->
+        <div>ОТЧЁТ ОТ {{ report.date | upper }}</div>
+        <!-- BOT: report.report_id — внутренний ID отчёта в системе EDL -->
+        <div>{{ report.report_id }}</div>
+        <div>ELEPHANTDREAMS.RU</div>
+    </div>
+</div>
+
+{# ========================================================================
+   СТРАНИЦА 2 · EXECUTIVE SUMMARY · "Три вывода для занятого читателя"
+   McKinsey-подход: диагноз для ленивого читателя получен здесь.
+   ======================================================================== #}
+<div class="page">
+    <span class="section-marker" data-section="02 · ГЛАВНОЕ"></span>
+
+    <div class="eyebrow">02 · Главное за минуту</div>
+    <h2>Три вывода для занятого читателя</h2>
+    <p class="lead">
+        Если у вас нет времени читать весь отчёт — прочитайте эту страницу.
+        Дальше идёт доказательная часть: данные, бенчмарки, методология.
+    </p>
+
+    <!-- BOT: executive_summary — массив из 3 (Basic) или 4 (Plus) объектов
+         {eyebrow, title, layer_impact, description, money_impact_rub}.
+         layer_impact — короткая фраза «Слой X ослабляет/усиливает слой Y»
+         для передачи паттерна между слоями (правка #5 Екатерины). -->
+    {% for finding in executive_summary %}
+    <div class="insight mt-8">
+        <div class="insight-eyebrow">{{ finding.eyebrow }}</div>
+        <div class="insight-title">{{ finding.title }}</div>
+        {% if finding.layer_impact %}
+        <div class="caption mt-4" style="color: var(--c-tangerine); font-weight: 600; letter-spacing: 0.04em;">
+            {{ finding.layer_impact }}
+        </div>
+        {% endif %}
+        <div class="insight-body mt-4">{{ finding.description }}</div>
+        {% if finding.money_impact_rub %}
+        <div class="insight-body mt-4" style="color: var(--c-tangerine); font-weight: 600;">
+            ≈ {{ "{:,.0f}".format(finding.money_impact_rub).replace(",", " ") }} ₽/мес устранимых потерь
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <div class="divider mt-10"></div>
+
+    <div class="row mt-6">
+        <div class="col">
+            <div class="micro mb-4">ЧТО ЭТО ЗНАЧИТ В ДЕНЬГАХ</div>
+            <!-- BOT: cost_analysis.total_monthly_leak_rub — суммарные ежемесячные потери в ₽ -->
+            <div style="font-family: 'Inter Tight'; font-size: 30pt; font-weight: 800; color: var(--c-tangerine); line-height: 1; letter-spacing: -0.02em;">
+                ~{{ "{:,.0f}".format(cost_analysis.total_monthly_leak_rub).replace(",", " ") }} ₽/мес
+            </div>
+            <div class="caption mt-4">
+                уходит на устраняемые потери. Разбивка — на странице 10.
+            </div>
+        </div>
+        <div class="col">
+            <div class="micro mb-4">ГЛАВНАЯ РЕКОМЕНДАЦИЯ</div>
+            <!-- BOT: recommendations[0].title — заголовок самой приоритетной рекомендации (первой в списке) -->
+            <div style="font-size: 11pt; font-weight: 700; color: var(--c-ink); line-height: 1.35;">
+                {{ recommendations[0].title }}
+            </div>
+            <div class="caption mt-4">
+                Полный список из {% if plan == "plus" %}7{% else %}5{% endif %} действий на 30 дней — на странице {% if plan == "plus" %}15{% else %}11{% endif %}.
+            </div>
+        </div>
+    </div>
+</div>
+
+{# ========================================================================
+   СТРАНИЦА 3 · МЕТОД · 4 слоя + связи
+   ======================================================================== #}
+<div class="page">
+    <span class="section-marker" data-section="03 · МЕТОД"></span>
+
+    <div class="eyebrow">03 · Методология</div>
+    <h2>4 слоя бизнеса.<br>Главное — связи между ними.</h2>
+    <p class="lead">
+        EDL OS смотрит на бизнес как на систему из четырёх слоёв под управлением фаундера.
+        Каждый слой можно посчитать отдельно — но сила или слабость бизнеса всегда живёт
+        в связях между ними. Чекап измеряет и слои, и связи.
+    </p>
+
+    <div class="scheme-4layers">
+        <svg viewBox="0 0 600 380" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <style>
+                    .lyr-rect { fill: white; stroke: #0A0A0A; stroke-width: 1.5; }
+                    .lyr-num { font-family: 'Inter Tight', sans-serif; font-size: 28px; font-weight: 900; fill: #FF6B1A; }
+                    .lyr-title { font-family: 'Inter Tight', sans-serif; font-size: 16px; font-weight: 800; fill: #0A0A0A; }
+                    .lyr-sub { font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600; letter-spacing: 0.1em; fill: #6B6B6B; }
+                    .vis-rect { fill: #FFF5EE; stroke: #FF6B1A; stroke-width: 1.5; }
+                    .vis-title { font-family: 'Inter Tight', sans-serif; font-size: 14px; font-weight: 800; fill: #FF6B1A; }
+                    .conn-line { stroke: #C9C9C9; stroke-width: 1; stroke-dasharray: 2 2; }
+                </style>
+            </defs>
+
+            <!-- Фаундер ВИЖНАР сверху отдельно -->
+            <rect class="vis-rect" x="200" y="20" width="200" height="50" />
+            <text class="vis-title" x="300" y="42" text-anchor="middle">ФАУНДЕР · ВИЖНАР</text>
+            <text x="300" y="58" text-anchor="middle" style="font-family: Inter; font-size: 8px; fill: #6B6B6B; letter-spacing: 0.1em;">КУДА ВЕДЁМ БИЗНЕС</text>
+
+            <!-- Соединительные линии от Фаундера к слоям -->
+            <line class="conn-line" x1="300" y1="70" x2="80" y2="110" />
+            <line class="conn-line" x1="300" y1="70" x2="230" y2="110" />
+            <line class="conn-line" x1="300" y1="70" x2="370" y2="110" />
+            <line class="conn-line" x1="300" y1="70" x2="520" y2="110" />
+
+            <!-- 4 слоя горизонтально -->
+            <g>
+                <rect class="lyr-rect" x="20" y="110" width="135" height="120" />
+                <text class="lyr-num" x="35" y="155">01</text>
+                <text class="lyr-title" x="35" y="180">СТРАТЕГИЯ</text>
+                <text class="lyr-sub" x="35" y="200">НАПРАВЛЕНИЕ</text>
+            </g>
+
+            <g>
+                <rect class="lyr-rect" x="170" y="110" width="135" height="120" />
+                <text class="lyr-num" x="185" y="155">02</text>
+                <text class="lyr-title" x="185" y="180">ВОРОНКА</text>
+                <text class="lyr-sub" x="185" y="200">КЛИЕНТЫ</text>
+            </g>
+
+            <g>
+                <rect class="lyr-rect" x="320" y="110" width="135" height="120" />
+                <text class="lyr-num" x="335" y="155">03</text>
+                <text class="lyr-title" x="335" y="180" style="font-size: 14px;">ОПЕРАЦИОНКА</text>
+                <text class="lyr-sub" x="335" y="200">ПРОЦЕССЫ</text>
+            </g>
+
+            <g>
+                <rect class="lyr-rect" x="470" y="110" width="110" height="120" />
+                <text class="lyr-num" x="485" y="155">04</text>
+                <text class="lyr-title" x="485" y="180">ДЕНЬГИ</text>
+                <text class="lyr-sub" x="485" y="200">ФИНАНСЫ</text>
+            </g>
+
+            <!-- Связи между слоями -->
+            <line class="conn-line" x1="155" y1="170" x2="170" y2="170" stroke="#FF6B1A" stroke-width="2" stroke-dasharray="0" />
+            <line class="conn-line" x1="305" y1="170" x2="320" y2="170" stroke="#FF6B1A" stroke-width="2" stroke-dasharray="0" />
+            <line class="conn-line" x1="455" y1="170" x2="470" y2="170" stroke="#FF6B1A" stroke-width="2" stroke-dasharray="0" />
+
+            <!-- Подпись внизу -->
+            <text x="300" y="290" text-anchor="middle" style="font-family: Inter; font-size: 10px; font-weight: 600; fill: #0A0A0A;">
+                Главное — не сами слои, а как они стыкуются между собой.
+            </text>
+            <text x="300" y="308" text-anchor="middle" style="font-family: Inter; font-size: 9px; fill: #6B6B6B;">
+                Стратегия без связи с воронкой = деньги в маркетинг без отдачи.
+            </text>
+            <text x="300" y="324" text-anchor="middle" style="font-family: Inter; font-size: 9px; fill: #6B6B6B;">
+                Воронка без связи с операционкой = клиенты есть, доставлять некому.
+            </text>
+        </svg>
+    </div>
+
+    <div class="divider mt-4"></div>
+    <p class="caption">
+        Прогрессия глубины: Mini-Чекап даёт Score + светофор связей.
+        Чекап (этот отчёт) — 5 метрик на слой + диагноз связей.
+        Диагностика 25k — подключение источников данных и реальные потоки.
+        Спринт 4 недели — это уже живой инструмент управления.
+    </p>
+</div>
+
+{# ========================================================================
+   СТРАНИЦА 4 · ФАУНДЕР ВИЖНАР
+   ======================================================================== #}
+<div class="page">
+    <span class="section-marker" data-section="04 · ФАУНДЕР"></span>
+
+    <div class="eyebrow">04 · Фаундер · Вижнар</div>
+    <h2>Куда вы ведёте бизнес — и видит ли это команда?</h2>
+
+    <div class="row mt-8">
+        <div class="col" style="flex: 0 0 60mm;">
+            <div class="micro mb-4">SCORE ВИЖНАРА</div>
+            <!-- BOT: founder_vision.score — от 0 до 100 -->
+            <div style="font-family: 'Inter Tight'; font-size: 64pt; font-weight: 900; color: var(--c-ink); line-height: 1; letter-spacing: -0.04em;">
+                {{ founder_vision.score }}
+            </div>
+            <div style="font-size: 10pt; color: var(--c-text-mute); margin-top: 1mm;">/ 100</div>
+
+            <div class="mt-8" style="padding-top: 4mm; border-top: 1px solid var(--c-line);">
+                <div class="micro mb-4">СТАТУС</div>
+                <!-- BOT: founder_vision.status_badge — "green" | "yellow" | "red" -->
+                <span class="badge badge-{{ founder_vision.status_badge }}">
+                    {% if founder_vision.status_badge == "green" %}Сформулировано
+                    {% elif founder_vision.status_badge == "yellow" %}Частично
+                    {% else %}Размыто{% endif %}
+                </span>
+            </div>
+        </div>
+
+        <div class="col" style="padding-left: 4mm;">
+            <!-- BOT: founder_vision.title — заголовок-диагноз по визии (1 предложение) -->
+            <h3>{{ founder_vision.title }}</h3>
+            <!-- BOT: founder_vision.diagnosis — основной текст диагноза (2-3 абзаца) -->
+            <p class="body mt-4">{{ founder_vision.diagnosis }}</p>
+
+            <div class="mt-8">
+                <div class="micro mb-4">ЧТО МЫ УВИДЕЛИ В ВАШИХ ОТВЕТАХ</div>
+                <!-- BOT: founder_vision.observations — массив строк (обычно 3-5 наблюдений) -->
+                {% for obs in founder_vision.observations %}
+                <div style="display: flex; gap: 3mm; padding: 2.5mm 0; border-bottom: 1px solid var(--c-line-soft); font-size: 8.5pt; line-height: 1.55;">
+                    <div style="color: var(--c-tangerine); font-weight: 800; flex-shrink: 0;">{{ loop.index }}.</div>
+                    <div style="color: var(--c-text);">{{ obs }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="insight mt-10">
+        <div class="insight-eyebrow">ПОЧЕМУ ЭТО ВАЖНО</div>
+        <div class="insight-body">
+            Вижнар — это не миссия для сайта. Это рабочая гипотеза о том, куда вы ведёте бизнес
+            на горизонте 18–36 месяцев. Если эту гипотезу не разделяют люди, которые принимают
+            у вас 60% операционных решений — каждое из этих решений работает против вас, не зная об этом.
+        </div>
+    </div>
+</div>
+
+{# ========================================================================
+   СТРАНИЦЫ 5–8 · 4 СЛОЯ (цикл по layers)
+   Каждый слой = одинаковая структура: header → метрики → связи → диагноз
+   ======================================================================== #}
+{% for layer in layers %}
+<div class="page">
+    <span class="section-marker" data-section="0{{ loop.index + 4 }} · {{ layer.title }}"></span>
+
+    <div class="layer-header">
+        <div class="layer-header-left">
+            <div class="layer-number">{{ layer.number }}</div>
+            <div>
+                <div class="layer-title">{{ layer.title }}</div>
+                <div class="layer-subtitle">{{ layer.subtitle }}</div>
+            </div>
+        </div>
+        <div class="layer-score-block">
+            <!-- BOT: layer.score — от 0 до 100 для конкретного слоя -->
+            <div class="layer-score-value numeric">{{ layer.score }}</div>
+            <div class="layer-score-label">SCORE СЛОЯ · / 100</div>
+        </div>
+    </div>
+
+    <!-- BOT: layer.diagnosis — текст диагноза слоя (1-2 абзаца, ~400-600 знаков) -->
+    <p class="lead">{{ layer.diagnosis }}</p>
+
+    <div class="mt-10">
+        <div class="micro mb-4">5 КЛЮЧЕВЫХ МЕТРИК СЛОЯ</div>
+        <table class="metrics-table">
+            <thead>
+                <tr>
+                    <th>Метрика</th>
+                    <th>Состояние</th>
+                    <th style="text-align: right;">Статус</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- BOT: layer.metrics — массив из 5 объектов {name, value, status} где status = "green"|"yellow"|"red" -->
+                {% for m in layer.metrics %}
+                <tr>
+                    <td class="metric-name">{{ m.name }}</td>
+                    <td class="metric-value">{{ m.value }}</td>
+                    <td class="metric-status">
+                        <span class="badge badge-{{ m.status }}">
+                            {% if m.status == "green" %}В норме
+                            {% elif m.status == "yellow" %}Внимание
+                            {% else %}Критично{% endif %}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-8">
+        <div class="micro mb-4">СВЯЗИ С ДРУГИМИ СЛОЯМИ</div>
+        <div class="connections-row">
+            <!-- BOT: layer.connections — массив объектов {label, status} (3 шт, без связи слоя с самим собой) -->
+            {% for conn in layer.connections %}
+            <div class="connection-pill">
+                <span class="conn-label">{{ conn.label }}</span>
+                <span class="dot-status dot-{{ conn.status }}"></span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if layer.key_insight %}
+    <div class="insight mt-8">
+        <div class="insight-eyebrow">КЛЮЧЕВОЕ НАБЛЮДЕНИЕ</div>
+        <!-- BOT: layer.key_insight — главный инсайт по слою (1 абзац, опционально) -->
+        <div class="insight-body">{{ layer.key_insight }}</div>
+    </div>
+    {% endif %}
+</div>
+{% endfor %}
+
+{# ========================================================================
+   СТРАНИЦА 9 · СВЯЗИ МЕЖДУ СЛОЯМИ · главный визуал
+   ======================================================================== #}
+<div class="page">
+    <span class="section-marker" data-section="09 · СВЯЗИ"></span>
+
+    <div class="eyebrow">09 · Связи между слоями</div>
+    <h2>Где рвётся ваша система</h2>
+    <p class="lead">
+        Слои в норме поодиночке — это ещё не работающий бизнес. Бизнес работает,
+        когда стратегия передаёт ICP в воронку, воронка передаёт спрос в операционку,
+        операционка передаёт юнит-экономику в финансы, и финансы возвращают сигнал в стратегию.
+        Вот где у вас рвутся эти передачи.
+    </p>
+
+    <div class="connections-graph">
+        <svg viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <style>
+                    .node-circ { fill: white; stroke: #0A0A0A; stroke-width: 1.5; }
+                    .node-label { font-family: 'Inter Tight', sans-serif; font-size: 11px; font-weight: 800; fill: #0A0A0A; }
+                    .node-num { font-family: 'Inter Tight', sans-serif; font-size: 9px; font-weight: 700; fill: #FF6B1A; }
+                    .edge-green { stroke: #2D9F5E; stroke-width: 3; fill: none; }
+                    .edge-yellow { stroke: #E8A317; stroke-width: 3; fill: none; }
+                    .edge-red { stroke: #D43F3F; stroke-width: 3; fill: none; }
+                    .edge-label { font-family: 'Inter', sans-serif; font-size: 8px; font-weight: 600; fill: #6B6B6B; }
+                </style>
+            </defs>
+
+            <!-- Фаундер сверху -->
+            <circle class="node-circ" cx="300" cy="50" r="35" />
+            <text class="node-num" x="300" y="42" text-anchor="middle">ФАУНДЕР</text>
+            <text class="node-label" x="300" y="58" text-anchor="middle">ВИЖНАР</text>
+
+            <!-- 4 слоя по углам прямоугольника -->
+            <!-- Стратегия (слева сверху) -->
+            <circle class="node-circ" cx="120" cy="180" r="40" />
+            <text class="node-num" x="120" y="172" text-anchor="middle">01</text>
+            <text class="node-label" x="120" y="188" text-anchor="middle">СТРАТЕГИЯ</text>
+
+            <!-- Воронка (справа сверху) -->
+            <circle class="node-circ" cx="480" cy="180" r="40" />
+            <text class="node-num" x="480" y="172" text-anchor="middle">02</text>
+            <text class="node-label" x="480" y="188" text-anchor="middle">ВОРОНКА</text>
+
+            <!-- Операционка (слева снизу) -->
+            <circle class="node-circ" cx="120" cy="290" r="40" />
+            <text class="node-num" x="120" y="282" text-anchor="middle">03</text>
+            <text class="node-label" x="120" y="298" text-anchor="middle">ОПЕРАЦИОНКА</text>
+
+            <!-- Деньги (справа снизу) -->
+            <circle class="node-circ" cx="480" cy="290" r="40" />
+            <text class="node-num" x="480" y="282" text-anchor="middle">04</text>
+            <text class="node-label" x="480" y="298" text-anchor="middle">ДЕНЬГИ</text>
+
+            {# BOT: connections_analysis.edges — массив {from, to, status} где status = "green"|"yellow"|"red". #}
+            {# Связей всего 10: 4 от Фаундера к слоям + 6 между слоями. Можно отрисовать вручную ниже. #}
+
+            <!-- Связи Фаундер → Слои -->
+            <line class="edge-{{ connections_analysis.edges.founder_to_strategy }}" x1="280" y1="75" x2="155" y2="160" />
+            <line class="edge-{{ connections_analysis.edges.founder_to_funnel }}" x1="320" y1="75" x2="445" y2="160" />
+            <line class="edge-{{ connections_analysis.edges.founder_to_ops }}" x1="285" y1="80" x2="155" y2="270" />
+            <line class="edge-{{ connections_analysis.edges.founder_to_money }}" x1="315" y1="80" x2="445" y2="270" />
+
+            <!-- Связи между слоями (горизонтальные и диагональные) -->
+            <line class="edge-{{ connections_analysis.edges.strategy_to_funnel }}" x1="160" y1="180" x2="440" y2="180" />
+            <line class="edge-{{ connections_analysis.edges.ops_to_money }}" x1="160" y1="290" x2="440" y2="290" />
+            <line class="edge-{{ connections_analysis.edges.strategy_to_ops }}" x1="120" y1="220" x2="120" y2="250" />
+            <line class="edge-{{ connections_analysis.edges.funnel_to_money }}" x1="480" y1="220" x2="480" y2="250" />
+            <line class="edge-{{ connections_analysis.edges.strategy_to_money }}" x1="155" y1="200" x2="445" y2="270" style="stroke-width: 1.2; opacity: 0.5;" stroke-dasharray="3 4" />
+            <line class="edge-{{ connections_analysis.edges.funnel_to_ops }}" x1="445" y1="200" x2="155" y2="270" style="stroke-width: 1.2; opacity: 0.5;" stroke-dasharray="3 4" />
+
+            <!-- Подписи к ключевым связям (можно опустить, если перегружают) -->
+            <text class="edge-label" x="300" y="172" text-anchor="middle">передача ICP</text>
+            <text class="edge-label" x="300" y="285" text-anchor="middle">юнит-экономика</text>
+        </svg>
+    </div>
+
+    <div class="connections-legend">
+        <div><span class="dot-status dot-green"></span> ПЕРЕДАЧА РАБОТАЕТ</div>
+        <div><span class="dot-status dot-yellow"></span> ЕСТЬ ПОТЕРИ</div>
+        <div><span class="dot-status dot-red"></span> РАЗРЫВ</div>
+    </div>
+
+    <div class="mt-8">
+        <h3>Критические разрывы</h3>
+        <!-- BOT: connections_analysis.critical_list — массив объектов {label, description, money_impact_rub} обычно 2-3 элемента -->
+        {% for c in connections_analysis.critical_list %}
+        <div style="padding: 4mm 0; border-bottom: 1px solid var(--c-line);">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2mm;">
+                <div style="font-size: 10pt; font-weight: 700; color: var(--c-ink);">{{ c.label }}</div>
+                <div style="font-size: 9pt; font-weight: 700; color: var(--c-tangerine); font-variant-numeric: tabular-nums;">
+                    {{ "{:,.0f}".format(c.money_impact_rub).replace(",", " ") }} ₽/мес
+                </div>
+            </div>
+            <div class="body" style="font-size: 8.5pt;">{{ c.description }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{# ========================================================================
+   PLUS-БЛОК 10а · РАСШИРЕННЫЙ ДИАГНОЗ САМОГО КРАСНОГО СЛОЯ
+   ======================================================================== #}
+{% if plan == "plus" %}
+<div class="page">
+    <span class="section-marker" data-section="10 · PLUS · СЛОЙ ПОД МИКРОСКОПОМ"></span>
+
+    <div class="plus-badge">PLUS · РАСШИРЕННЫЙ ДИАГНОЗ</div>
+    <div class="eyebrow">10 · Слой под микроскопом</div>
+    <!-- BOT: deep_dive_layer.title — заголовок диагноза слабого слоя -->
+    <h2>{{ deep_dive_layer.title }}</h2>
+    <!-- BOT: deep_dive_layer.lede — лид-абзац (1-2 предложения) -->
+    <p class="lead">{{ deep_dive_layer.lede }}</p>
+
+    <!-- BOT: deep_dive_layer.sections — массив объектов {heading, body} (3-5 секций) -->
+    {% for sec in deep_dive_layer.sections %}
+    <div class="mt-8">
+        <h3>{{ sec.heading }}</h3>
+        <p class="body mt-4">{{ sec.body }}</p>
+    </div>
+    {% endfor %}
+
+    {% if deep_dive_layer.data_points %}
+    <div class="kpi-grid mt-10">
+        <!-- BOT: deep_dive_layer.data_points — массив 3-4 {value, label, meta} для подкрепления цифрами -->
+        {% for dp in deep_dive_layer.data_points %}
+        <div class="kpi-card">
+            <div class="kpi-value">{{ dp.value }}</div>
+            <div class="kpi-label">{{ dp.label }}</div>
+            <div class="kpi-meta">{{ dp.meta }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+
+{# ========================================================================
+   PLUS-БЛОК 10б · РАСШИРЕННЫЙ ДИАГНОЗ ТОКСИЧНОЙ СВЯЗИ
+   ======================================================================== #}
+{% if plan == "plus" %}
+<div class="page">
+    <span class="section-marker" data-section="11 · PLUS · СВЯЗЬ ПОД МИКРОСКОПОМ"></span>
+
+    <div class="plus-badge">PLUS · РАСШИРЕННЫЙ ДИАГНОЗ</div>
+    <div class="eyebrow">11 · Связь под микроскопом</div>
+    <!-- BOT: deep_dive_connection.title -->
+    <h2>{{ deep_dive_connection.title }}</h2>
+    <!-- BOT: deep_dive_connection.lede -->
+    <p class="lead">{{ deep_dive_connection.lede }}</p>
+
+    <div class="row mt-10">
+        <div class="col">
+            <div class="micro mb-4">ЧТО ПЕРЕДАЁТСЯ</div>
+            <!-- BOT: deep_dive_connection.what_transfers — что должно передаваться по этой связи -->
+            <p class="body">{{ deep_dive_connection.what_transfers }}</p>
+        </div>
+        <div class="col">
+            <div class="micro mb-4">ГДЕ ТЕРЯЕТСЯ</div>
+            <!-- BOT: deep_dive_connection.where_lost — конкретная точка разрыва -->
+            <p class="body">{{ deep_dive_connection.where_lost }}</p>
+        </div>
+    </div>
+
+    <div class="insight mt-10">
+        <div class="insight-eyebrow">ЦЕНА ВОПРОСА</div>
+        <!-- BOT: deep_dive_connection.cost_explanation — как этот разрыв превращается в потерянные деньги -->
+        <div class="insight-body">{{ deep_dive_connection.cost_explanation }}</div>
+    </div>
+
+    {% if deep_dive_connection.alternatives %}
+    <div class="mt-10">
+        <h3>Паттерн · три пути решения</h3>
+        <!-- BOT: deep_dive_connection.alternatives — правка #7 Екатерины.
+             Три пути: own / hiring / agents с временем, стоимостью, сроком.
+             Запрет на маркетинговые формулировки про возврат инвестиций — см. system prompt. -->
+        <p class="body mt-4">{{ deep_dive_connection.alternatives.intro }}</p>
+
+        {% for key in ['path_1_own', 'path_2_hiring', 'path_3_agents'] %}
+        {% set path = deep_dive_connection.alternatives[key] %}
+        {% if path %}
+        <div class="mt-8" style="border-left: 2px solid var(--c-line); padding-left: 5mm;">
+            <div class="micro mb-4" style="color: var(--c-tangerine);">
+                ПУТЬ {{ loop.index }} · {{ path.name }}
+            </div>
+            <div class="body mb-4"><strong>Что делать:</strong> {{ path.what_to_do }}</div>
+            <table style="width: 100%; font-size: 8pt; color: var(--c-text-mute);">
+                <tr>
+                    <td style="padding: 1mm 0;"><strong style="color: var(--c-ink);">Время фаундера:</strong> {{ path.founder_time_hours }}</td>
+                    <td style="padding: 1mm 0;"><strong style="color: var(--c-ink);">Стоимость:</strong> {{ path.cost_rub }}</td>
+                    <td style="padding: 1mm 0;"><strong style="color: var(--c-ink);">Срок до результата:</strong> {{ path.time_to_result }}</td>
+                </tr>
+            </table>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+        {% if deep_dive_connection.alternatives.outro %}
+        <p class="body mt-8">{{ deep_dive_connection.alternatives.outro }}</p>
+        {% endif %}
+    </div>
+    {% elif deep_dive_connection.fix_pattern %}
+    <div class="mt-10">
+        <h3>Паттерн, которым это чинят</h3>
+        <p class="body mt-4">{{ deep_dive_connection.fix_pattern }}</p>
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+
+{# ========================================================================
+   СТРАНИЦА 10/12 · ₽/МЕС · ЧТО ЭТО СТОИТ
+   ======================================================================== #}
+<div class="page">
+    <span class="section-marker" data-section="{% if plan == 'plus' %}12{% else %}10{% endif %} · ЦЕНА ВОПРОСА"></span>
+
+    <div class="eyebrow">{% if plan == "plus" %}12{% else %}10{% endif %} · Что это стоит вам</div>
+    <h2>Утечка по слабым связям</h2>
+    <p class="lead">
+        Это не точная финансовая модель — у нас нет доступа к вашим транзакциям.
+        Это оценка по бенчмаркам и индустриальным паттернам, которая показывает
+        порядок величины. Точные цифры — на Диагностике 25k, где мы подключаемся к источникам.
+    </p>
+
+    <div class="cost-summary mt-10">
+        <!-- BOT: cost_analysis.total_monthly_leak_rub -->
+        <div class="cost-summary-value numeric">~{{ "{:,.0f}".format(cost_analysis.total_monthly_leak_rub).replace(",", " ") }}</div>
+        <div class="cost-summary-meta">
+            <span class="strong">₽ в месяц на устранимых потерях</span>
+            <!-- BOT: cost_analysis.annual_leak_rub -->
+            ≈ {{ "{:,.0f}".format(cost_analysis.annual_leak_rub).replace(",", " ") }} ₽ в год при текущей конфигурации
+        </div>
+    </div>
+
+    <table class="cost-table">
+        <thead>
+            <tr>
+                <th class="col-source">Источник потери</th>
+                <th class="col-amount">₽/МЕС</th>
+                <th class="col-share">ДОЛЯ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- BOT: cost_analysis.breakdown — массив объектов {source, amount_rub, share_pct} (3-5 строк) -->
+            {% for item in cost_analysis.breakdown %}
+            <tr>
+                <td class="col-source">
+                    <div style="font-weight: 600; color: var(--c-ink); margin-bottom: 1mm;">{{ item.source }}</div>
+                    <div class="cost-bar"><div class="cost-bar-fill" style="width: {{ item.share_pct }}%"></div></div>
+                </td>
+                <td class="col-amount">{{ "{:,.0f}".format(item.amount_rub).replace(",", " ") }}</td>
+                <td class="col-share">{{ item.share_pct }}%</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="caption mt-8">
+        Методика оценки: индустриальные бенчмарки по сегменту "{{ company.segment_label }}",
+        отнесённые к вашей выручке и стадии. Источники приведены в приложении.
+    </div>
+</div>
+
+{# ========================================================================
+   PLUS-БЛОК 13 · РАСШИРЕННЫЙ БЕНЧМАРК
+   ======================================================================== #}
+{% if plan == "plus" %}
+<div class="page">
+    <span class="section-marker" data-section="13 · PLUS · БЕНЧМАРК"></span>
+
+    <div class="plus-badge">PLUS · РАСШИРЕННОЕ СРАВНЕНИЕ</div>
+    <div class="eyebrow">13 · Где вы относительно рынка</div>
+    <h2>Не средний — а верхний квартиль</h2>
+    <p class="lead">
+        Сравнение со «средним по сегменту» полезно для самоуспокоения, но средний бизнес
+        не растёт. Полезнее сравнение с верхним квартилем — компаниями, которые в вашей
+        нише делают лучшие 25% результата. Туда вы целитесь, не в среднее.
+    </p>
+
+    <table class="benchmark-table mt-10">
+        <thead>
+            <tr>
+                <th class="bm-metric" style="text-align: left;">МЕТРИКА</th>
+                <th>ВЫ</th>
+                <th>СРЕДНИЙ</th>
+                <th>ВЕРХНИЙ КВАРТИЛЬ</th>
+                <th>РАЗРЫВ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- BOT: extended_benchmark.comparison — массив {metric, you, avg, top_quartile, gap_label} (~5-8 строк) -->
+            {% for row in extended_benchmark.comparison %}
+            <tr>
+                <td class="bm-metric">{{ row.metric }}</td>
+                <td class="bm-you">{{ row.you }}</td>
+                <td class="bm-avg">{{ row.avg }}</td>
+                <td class="bm-top">{{ row.top_quartile }}</td>
+                <td>{{ row.gap_label }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="mt-10">
+        <div class="micro mb-4">ИСТОЧНИКИ ДАННЫХ</div>
+        <!-- BOT: extended_benchmark.sources — массив строк с источниками -->
+        {% for s in extended_benchmark.sources %}
+        <div class="caption" style="padding: 1.5mm 0;">— {{ s }}</div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{# ========================================================================
+   СТРАНИЦА 11 / 15 · РЕКОМЕНДАЦИИ
+   Basic: 5 шт. Plus: 7 шт.
+   ======================================================================== #}
+<div class="page">
+    <span class="section-marker" data-section="{% if plan == 'plus' %}14{% else %}11{% endif %} · РЕКОМЕНДАЦИИ"></span>
+
+    <div class="eyebrow">{% if plan == "plus" %}14{% else %}11{% endif %} · {% if plan == "plus" %}7{% else %}5{% endif %} действий на 30 дней</div>
+    <h2>Что делать в ближайший месяц</h2>
+    <p class="lead">
+        Не «как починить бизнес целиком». Конкретные шаги на 30 дней, привязанные
+        к слоям и связям. По убыванию приоритета — первый шаг даёт самый быстрый эффект.
+    </p>
+
+    <div class="mt-8">
+        <!-- BOT: recommendations — массив объектов {priority, layer_label, horizon_days, title, description, expected_impact}. Длина: 5 для Basic, 7 для Plus -->
+        {% for rec in recommendations %}
+        <div class="rec-item">
+            <div class="rec-priority numeric">{{ "%02d" | format(rec.priority) }}</div>
+            <div class="rec-body">
+                <div class="rec-meta">
+                    <span>СЛОЙ · {{ rec.layer_label }}</span>
+                    <span>·</span>
+                    <span>ГОРИЗОНТ · {{ rec.horizon_days }} ДНЕЙ</span>
+                </div>
+                <div class="rec-title">{{ rec.title }}</div>
+                <div class="rec-description">{{ rec.description }}</div>
+                <div class="rec-impact">→ {{ rec.expected_impact }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{# ========================================================================
+   PLUS-БЛОК 16 · ПЕРСОНАЛЬНЫЙ КОММЕНТАРИЙ КАТИ + ВИДЕОРАЗБОР
+   ======================================================================== #}
+{% if plan == "plus" %}
+<div class="page">
+    <span class="section-marker" data-section="15 · PLUS · ВИДЕОРАЗБОР"></span>
+
+    <div class="plus-badge">PLUS · ПЕРСОНАЛЬНЫЙ РАЗБОР</div>
+    <div class="eyebrow">15 · От команды EDL OS</div>
+    <h2>15 минут разговора с вами</h2>
+
+    <div class="row mt-10">
+        <div class="col" style="flex: 0 0 70mm;">
+            <div style="border: 1px solid var(--c-line); aspect-ratio: 1; padding: 8mm; display: flex; flex-direction: column; justify-content: space-between;">
+                <!-- BOT: personal_comment.video_qr_svg — SVG-разметка QR-кода или ссылки на видео-разбор -->
+                <div style="background: var(--c-tangerine-bg); aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-family: 'Inter Tight'; font-size: 14pt; font-weight: 800; color: var(--c-tangerine); letter-spacing: 0.05em;">
+                    QR → ВИДЕО
+                </div>
+                <div class="caption mt-4" style="text-align: center;">
+                    Отсканируйте или откройте<br>
+                    {{ personal_comment.video_url }}
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <h3>{{ personal_comment.title }}</h3>
+            <!-- BOT: personal_comment.intro_text — что в видеоразборе будет сказано (тизер на ~2 абзаца) -->
+            <p class="body mt-4">{{ personal_comment.intro_text }}</p>
+
+            <div class="signature-block">
+                <div class="signature-avatar">EDL</div>
+                <div class="signature-text">
+                    <!-- BOT: personal_comment.quote — короткая цитата от команды EDL OS (1-2 предложения) -->
+                    «{{ personal_comment.quote }}»
+                    <div class="signature-name">{{ personal_comment.signature_name | default("Команда EDL OS") }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{# ========================================================================
+   СТРАНИЦА 12 / 16 · ЧТО ДАЛЬШЕ · CTA + КОНТАКТЫ
+   ======================================================================== #}
+<div class="page">
+    <span class="section-marker" data-section="{% if plan == 'plus' %}16{% else %}12{% endif %} · ЧТО ДАЛЬШЕ"></span>
+
+    <div class="eyebrow">{% if plan == "plus" %}16{% else %}12{% endif %} · Что дальше</div>
+    <h2>Чекап — это снимок.<br>Сборка — следующий шаг.</h2>
+    <p class="lead">
+        Этот отчёт показывает, где у вас связи в норме, а где рвутся. Дальше — два варианта.
+        Можно взять рекомендации со страницы {% if plan == "plus" %}14{% else %}11{% endif %} и работать с ними самостоятельно.
+        Или сделать Диагностику — мы подключаемся к вашим реальным данным и собираем точную картину,
+        чтобы дальше построить из неё рабочий инструмент управления.
+    </p>
+
+    <div class="cta-block mt-10">
+        <div class="eyebrow">СЛЕДУЮЩИЙ ШАГ</div>
+        <div class="cta-title">
+            <!-- BOT: next_step.ticket_name (обычно "Диагностика") -->
+            {{ next_step.ticket_name }}
+        </div>
+        <div class="cta-body">
+            Подключаемся к вашим источникам — 1C, CRM, Sheets — и смотрим реальные потоки данных,
+            а не ответы в анкете. Результат: точная картина связей между слоями и план на 4-недельный Спринт.
+        </div>
+        <div class="cta-row">
+            <!-- BOT: next_step.ticket_price (45 000 ₽) и опц. coupon_price (36 000 ₽ для Plus) -->
+            <div>
+                <div class="cta-price">{{ next_step.ticket_price }}</div>
+                {% if next_step.coupon_price %}
+                <div class="caption mt-4" style="color: var(--c-tangerine);">
+                    с купоном Plus −20%: <strong>{{ next_step.coupon_price }}</strong>
+                </div>
+                {% endif %}
+            </div>
+            <div class="cta-meta">
+                <span class="strong">{{ next_step.duration }}</span><br>
+                <!-- BOT: next_step.contact_name, next_step.contact_telegram -->
+                Запись через {{ next_step.contact_name }} · {{ next_step.contact_telegram }}<br>
+                {{ next_step.calendly_url }}
+            </div>
+        </div>
+    </div>
+
+    {# Правка #1 Екатерины — юридически корректная гарантия #}
+    {% if guarantee %}
+    <div class="mt-14" style="border: 1px solid var(--c-line); padding: 8mm;">
+        <div class="row" style="align-items: center;">
+            <div class="col" style="flex: 0 0 30mm;">
+                <div style="font-family: 'Inter Tight'; font-size: 48pt; font-weight: 900; color: var(--c-tangerine); line-height: 1; letter-spacing: -0.03em;">
+                    {{ guarantee.icon_number }}
+                </div>
+                <div class="caption mt-4">КАЛЕНДАРНЫХ ДНЕЙ</div>
+            </div>
+            <div class="col">
+                <h3>{{ guarantee.title }}</h3>
+                {% for paragraph in guarantee.body %}
+                <p class="body mt-4">{{ paragraph }}</p>
+                {% endfor %}
+                <ul class="mt-6" style="list-style: none; padding: 0;">
+                    {% for cond in guarantee.conditions %}
+                    <li class="caption" style="padding: 1.5mm 0; padding-left: 5mm; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--c-tangerine);">·</span>
+                        {{ cond }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% if guarantee.legal_basis %}
+                <p class="caption mt-6" style="font-style: italic;">{{ guarantee.legal_basis }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {# Правка #4 Екатерины — расширенный юр-футер на финальной странице #}
+    {% if legal_footer %}
+    <div class="mt-14" style="padding-top: 6mm; border-top: 1px solid var(--c-line);">
+        <div class="micro mb-4">ВАЖНО · ЮРИДИЧЕСКИЕ ОГОВОРКИ</div>
+        {% for item in legal_footer %}
+        <div class="caption" style="padding: 1.5mm 0;">{{ item }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="row mt-14" style="padding-top: 6mm; border-top: 1px solid var(--c-line);">
+        <div class="col">
+            <div class="micro mb-4">ОБ ОТЧЁТЕ</div>
+            <div class="caption">
+                Отчёт сформирован {{ report.date }}.<br>
+                ID отчёта · {{ report.report_id }}<br>
+                Основан на {{ report.answers_count }} ответах клиента в @edl_os_bot.
+            </div>
+        </div>
+        <div class="col">
+            <div class="micro mb-4">КОНТАКТЫ</div>
+            <div class="caption">
+                ELEPHANTDREAMS.RU<br>
+                HELLO@EDL-OS.RU<br>
+                @edl_os_bot
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
