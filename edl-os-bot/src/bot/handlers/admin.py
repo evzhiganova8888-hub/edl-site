@@ -812,7 +812,7 @@ async def handle_admin_video_upload(update: Update, context: ContextTypes.DEFAUL
         )
         return
 
-    # Фиксируем время отправки
+    # Фиксируем время отправки + планируем купон T+24ч (= T+48ч от завершения Чекапа)
     factory2 = async_session_factory()
     async with factory2() as session2:
         app2 = await session2.get(Application, app_uuid)
@@ -820,10 +820,19 @@ async def handle_admin_video_upload(update: Update, context: ContextTypes.DEFAUL
             app2.plus_video_sent_to_client_at = datetime.now(timezone.utc)
         await session2.commit()
 
+    # ТЗ §4.7: купон −20% выдаётся через 24ч после Plus-видео
+    try:
+        from src.tasks.issue_plus_coupon import schedule_plus_coupon
+        schedule_plus_coupon.apply_async(args=[str(app_uuid)], countdown=24 * 3600)
+        logger.info("Plus coupon scheduled for app %s in 24h", app_uuid)
+    except Exception:
+        logger.exception("Failed to schedule plus coupon for %s", app_uuid)
+
     context.user_data.pop(_PLUS_VIDEO_UPLOAD_KEY, None)
     await msg.reply_text(
         f"✅ Видео отправлено клиенту (tg_id={user_obj.telegram_id}).\n"
-        f"Email: {user_obj.email or '—'}"
+        f"Email: {user_obj.email or '—'}\n\n"
+        f"🎟 Купон −20% на Диагностику будет автоматически выдан через 24 часа."
     )
 
 

@@ -15,18 +15,59 @@ from src.tasks.celery_app import celery_app
 
 logger = logging.getLogger(__name__)
 
-_VIDEO_RECS_TEMPLATE = """📋 Структура видео-разбора:
+_VIDEO_RECS_TEMPLATE = """📋 Структура видео-разбора (15 мин по ТЗ §7.1):
 
-1. Кратко о компании (30 сек) — подтверди, что знаешь их нишу
-2. Стратегия: что у них хорошо → одна точка роста
-3. Воронка: что у них хорошо → одна точка роста
-4. Операционка: что у них хорошо → одна точка роста
-5. Деньги: что у них хорошо → НДС-флажок (если релевантно)
-6. Главный вывод: ТОП-1 приоритет на ближайшие 90 дней
-7. Призыв к действию (10 сек)
+0:00–2:00 · Контекст бизнеса — сегмент, стадия, типичный кризис.
+2:00–7:00 · 3 ключевые точки разбора — что они означают в ощущениях, не в цифрах.
+7:00–11:00 · Что бы сделали на их месте — 3 шага на 90 дней.
+11:00–14:00 · Hook на Диагностику — что нельзя увидеть в Чекапе, видно в Диагностике.
+14:00–15:00 · 14-дневная гарантия + Иван @lvanKhudyakov для Диагностики.
 
-Рекомендуемая длина: 10–15 минут.
+ТОН: медицинский диагноз, не маркетинг.
+ЗАПРЕЩЕНО: «окупается», «революционн», «купите», «обязательно возьмите».
 """
+
+
+def _build_cheat_sheet(answers: list) -> str:
+    """Авто-шпаргалка по 3 самым «цифровым» ответам клиента.
+
+    Эвристика: берём ответы с цифрами, по одному из каждого слоя
+    (приоритет — money / operations / strategy / funnel). Это часто
+    самые продаваемые акценты для видео — конкретные числа клиента.
+    """
+    by_layer: dict[str, list] = {}
+    for a in answers:
+        text = (a.text or "").strip()
+        if not text:
+            continue
+        if getattr(a, "is_decline", False):
+            continue
+        has_digit = any(c.isdigit() for c in text)
+        if not has_digit:
+            continue
+        by_layer.setdefault(a.layer or "other", []).append(a)
+
+    # Приоритет слоёв для видео — финансы и операционка обычно самые
+    # дорогие в плане потерь
+    priority = ("money", "operations", "strategy", "funnel", "finance", "sales", "other")
+    snippets: list[str] = []
+    for layer in priority:
+        bucket = by_layer.get(layer, [])
+        if not bucket:
+            continue
+        # Берём самый длинный ответ в слое — обычно самый содержательный
+        best = max(bucket, key=lambda a: len(a.text or ""))
+        text = (best.text or "")[:240].rstrip()
+        if len(best.text or "") > 240:
+            text += "…"
+        snippets.append(f"• [{layer.upper()}] {text}")
+        if len(snippets) >= 3:
+            break
+
+    if not snippets:
+        return "💬 Цифровых ответов не найдено — смотрите PDF целиком."
+
+    return "💬 ТОП-3 ответа клиента с цифрами (для прямых цитат в видео):\n" + "\n\n".join(snippets)
 
 
 @celery_app.task(name="src.tasks.notify_plus_video.schedule_plus_video_brief")
@@ -87,13 +128,17 @@ async def _async_send_brief(application_id: str) -> None:
     pdf_url = app.checkup_pdf_url or "—"
     email = user.email or "—"
     answers_count = len(answers)
+    archetype = getattr(app, "archetype", None) or "—"
+    cheat_sheet = _build_cheat_sheet(answers)
 
     text = (
         f"🎬 Plus-видео для клиента\n\n"
         f"Application: {application_id}\n"
         f"Email: {email}\n"
+        f"Сегмент × стадия: {user.segment or '—'} × {user.stage or '—'} (архетип: {archetype})\n"
         f"Ответов в чекапе: {answers_count}/20\n"
         f"PDF-отчёт: {pdf_url}\n\n"
+        f"{cheat_sheet}\n\n"
         f"{_VIDEO_RECS_TEMPLATE}\n"
         f"Когда запишете — используйте:\n"
         f"/upload_plus_video {application_id}"
